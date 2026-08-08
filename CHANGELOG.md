@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-08-08: Complete-suite cost evidence
+
+### Added
+
+- Added a controlled Sol Medium and Terra Medium no-Skill versus four-Skill
+  benchmark with three runs per condition and model.
+- Added per-run and aggregate provider-token usage, quality-qualified success
+  rates, exact source hashes, and a machine-readable result summary.
+
+### Findings
+
+- The complete suite improved the strict integrated success rate from 3/6 to
+  5/6 and produced validator-clean canonical profiles in 6/6 family runs.
+- Across both models, family runs consumed 4,165,413 provider tokens versus
+  987,905 native tokens; uncached input rose 124.1% and cached input rose
+  389.4%.
+- The result supports independent routing and does not justify loading the
+  complete family for tasks that do not need all four Skills.
+- A second Plan-loading candidate reduced family Skill payload from 23,201 to
+  21,386.5 median tokens and repeated payload from 1,812 to 605.5. Its frozen
+  adoption gate still rejected the series because one scheduled family-baseline
+  run had no provider usage; the released Skill remains unchanged.
+- A transport probe observed duplicate structured result fields. Provider-side
+  double counting remains unknown; the candidate benchmark used unstructured
+  Skill results and reports direct cached, uncached, output, and total usage
+  separately from literal Skill payload.
+
 ## 2026-08-08: Read-only native profile validator
 
 ### Added

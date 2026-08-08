@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-08",
+  "series": "scoville-plan-candidate-ab-v3",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "medium",
+  "scheduled_calls": 20,
+  "valid_model_calls": 19,
+  "repetitions_per_route_condition": {
+    "narrow": 4,
+    "family": 6
+  },
+  "invalid_run": {
+    "run_id": "family-baseline-r2",
+    "condition": "baseline",
+    "route": "family",
+    "reason": "The model requested scoville-code-anti-ai-slop instead of the allowed full logical ID and the broker rejected the unexpected Skill read.",
+    "retried_or_replaced": false
+  },
+  "conditions": {
+    "narrow": {
+      "baseline": {
+        "metric_runs": 4,
+        "strict_passes": 4,
+        "record_profile_passes": 4,
+        "cached_input_median": 124032,
+        "uncached_input_median": 15631,
+        "output_median": 824.5,
+        "provider_total_median": 136783.5,
+        "skill_payload_median": 2840,
+        "plan_repeated_read_count_median": 0,
+        "plan_repeated_payload_median": 0
+      },
+      "candidate": {
+        "metric_runs": 4,
+        "strict_passes": 4,
+        "record_profile_passes": 4,
+        "cached_input_median": 125312,
+        "uncached_input_median": 21567.5,
+        "output_median": 945,
+        "provider_total_median": 153199,
+        "skill_payload_median": 2546,
+        "plan_repeated_read_count_median": 0,
+        "plan_repeated_payload_median": 0
+      }
+    },
+    "family": {
+      "baseline": {
+        "scheduled_runs": 6,
+        "metric_runs": 5,
+        "strict_passes": 3,
+        "record_profile_passes": 4,
+        "cached_input_median": 473088,
+        "uncached_input_median": 55695,
+        "output_median": 9158,
+        "provider_total_median": 538805,
+        "skill_payload_median": 23201,
+        "plan_repeated_read_count_median": 2,
+        "plan_repeated_read_count_max": 4,
+        "plan_repeated_payload_median": 1812
+      },
+      "candidate": {
+        "scheduled_runs": 6,
+        "metric_runs": 6,
+        "strict_passes": 3,
+        "record_profile_passes": 6,
+        "cached_input_median": 375552,
+        "uncached_input_median": 47212,
+        "output_median": 8651.5,
+        "provider_total_median": 430165,
+        "skill_payload_median": 21386.5,
+        "plan_repeated_read_count_median": 0.5,
+        "plan_repeated_read_count_max": 2,
+        "plan_repeated_payload_median": 605.5
+      }
+    }
+  },
+  "candidate_plan_failure_classes": [],
+  "frozen_gates": {
+    "metric_completeness": false,
+    "strict_noninferiority": true,
+    "record_profile_noninferiority": true,
+    "no_new_candidate_plan_failure_class": true,
+    "plan_repeated_payload_median": false,
+    "plan_repeated_read_max": false,
+    "narrow_skill_payload_lower": true,
+    "skill_payload_range": false,
+    "uncached_input_range": false,
+    "note": "The family repeat and range gates are false because the frozen analyzer requires complete metrics before evaluating their otherwise passing numerical comparisons."
+  },
+  "outlier": {
+    "run_id": "family-candidate-r3",
+    "cached_input_tokens": 856320,
+    "agent_message_cycles": 7,
+    "comparison_agent_message_cycles": 5,
+    "successful_skill_payload_tokens": 20016,
+    "plan_repeated_read_count": 0,
+    "cause": "Two additional late model continuations replayed the enlarged cached context after a malformed Skill call and a premature fixture read.",
+    "per_request_usage_available": false
+  },
+  "hashes": {
+    "protocol_sha256": "BEAEC1F633AFD6CDDEB2443A2C5910EE213C93FC13AC59D508AB20B014605109",
+    "analyzer_sha256": "00B9C9F6D0CE6252DBCF44714664AAF8AEF0F9FB16B989CD5B2056DD9860E727",
+    "results_sha256": "4F899B3AA86759EBA40B6967AE1BF91F59B1AEE5323DAAA22DA48B064F845153",
+    "product_results_sha256": "0CDAD4D472134A69B0A6EDFE83C291970B8470132DF7BE110B148408062A76E5",
+    "profile_results_sha256": "0B79C34BADE977213C3AD122874573A5A8EC783EF1B06B05A14B8B7B6DC6DF35",
+    "browser_results_sha256": "EAD5D0D33D0B4AF30C1036B40D6AACD4BD4CC65A67D3EF269FCBC68B44210EA8",
+    "candidate_skill_sha256": "4E54CEE8576C4476CE335FDE792A041C2A26C8EC112D5EB3025808897946C60F",
+    "candidate_native_editing_sha256": "9E9FB2158D4FED0DC48398B1896E78FC641BE4A0842F6A7F4C0622B68033C4C9",
+    "restored_skill_sha256": "D2D4B1738F890DA233CDDFD8D24B85CFD176810C96355400662DD2831CE59EBD",
+    "restored_native_editing_sha256": "3F77900E77B8E813E17FBEEC581890F1B6C0F2079AD451A99F513997EC43D932"
+  },
+  "retained_evidence_root": "Z:\\Projekts\\AI\\docs\\evaluations\\scoville-plan-candidate-ab-v3",
+  "disposition": "released baseline restored",
+  "verdict": "reject"
+}

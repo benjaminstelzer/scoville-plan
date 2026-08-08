@@ -155,6 +155,32 @@ the quality and proof of the implementation and artifacts needed to deliver
 that direction. A Plan acceptance boundary may require their evidence without
 copying their rules into the Plan.
 
+### Measured complete-suite cost
+
+The complete suite improved strict success from 3/6 to 5/6. Uncached input was
+379,745 tokens versus 169,464 without Skills (+124.1%); cached input was
+3,709,440 versus 758,016 (+389.4%).
+
+Activate each Skill only when its concern is active. See the
+[complete benchmark](docs/benchmarks/scoville-suite-native-ab-v2.md) for the
+test design, quality results, and limits.
+
+### Plan loading experiment
+
+A revised Plan candidate was formally rejected because one of six scheduled
+family-baseline runs had no provider usage. The 19 measurable runs showed no
+Plan/profile regression and lower candidate family payload. Medians are direct
+provider usage except the separately tokenized Skill payload.
+
+| Route | Condition | Cached | Uncached | Output | Provider total | Skill payload |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Narrow | Baseline | 124,032 | 15,631 | 824.5 | 136,783.5 | 2,840 |
+| Narrow | Candidate | 125,312 | 21,567.5 | 945 | 153,199 | 2,546 |
+| Family | Baseline | 473,088 | 55,695 | 9,158 | 538,805 | 23,201 |
+| Family | Candidate | 375,552 | 47,212 | 8,651.5 | 430,165 | 21,386.5 |
+
+See the [Plan loading benchmark](docs/benchmarks/scoville-plan-loading-candidate-ab-v3.md).
+
 ## Design
 
 Scoville Plan first resolves the existing planning owner and decides whether
@@ -225,12 +251,10 @@ evaluation cases for ownership, setup, recovery, granularity, Decision
 authority, lifecycle, evidence, validation routing, and non-activation
 behavior.
 
-In the current Terra Medium Scoville-family benchmark, eight of eight completed
-Plan-related answers were semantically source-correct; a ninth attempt failed
-in the benchmark broker before a final answer. The same run exposed two excess
-reference loads in decomposition-only cases and one false activation in a
-small-task non-trigger case. These are known routing limits, so the release does
-not claim perfect activation or reference selection across hosts.
+The complete-family benchmark passed 5/6 strict quality gates versus 3/6
+without Skills, while uncached input rose 124.1% and cached input rose 389.4%.
+Skills should therefore be activated by concern rather than as a permanent
+bundle.
 
 ## License
 

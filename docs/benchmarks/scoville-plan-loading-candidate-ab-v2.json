@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-08",
+  "series": "scoville-plan-candidate-ab-v2",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "medium",
+  "repetitions_per_route_condition": 3,
+  "scheduled_calls": 12,
+  "valid_model_calls": 12,
+  "protocol_sha256": "0B97FBEECE503E8DC799392CEA42FC050BA5FADE172955A74BFF2912D2A5CAD0",
+  "results_sha256": "9842A0752A4AE670F36A124FA0A12DA8A61FD4F33FD2C5E359B4B6B922194FAB",
+  "corrected_analyzer_sha256": "8102631E1A19E5D38B45772CFEB54987CF2368A726A8CAE003F3A1192E55D1AA",
+  "transport": {
+    "structured_envelope_duplication": "observed",
+    "provider_request_double_counting": "unknown",
+    "benchmark_structured_output": false,
+    "transport_probe_results_sha256": "D3E03507173A605DA87749100920D442AC879FE031509206951CA64A22B3585A"
+  },
+  "conditions": {
+    "narrow": {
+      "baseline": {
+        "quality_passes": 3,
+        "cached_input_median": 133120,
+        "uncached_input_median": 18620,
+        "output_median": 930,
+        "provider_total_median": 156753,
+        "skill_payload_median": 2840,
+        "repeated_payload_median": 0
+      },
+      "candidate": {
+        "quality_passes": 3,
+        "cached_input_median": 130816,
+        "uncached_input_median": 14266,
+        "output_median": 950,
+        "provider_total_median": 151702,
+        "skill_payload_median": 2410,
+        "repeated_payload_median": 0
+      }
+    },
+    "family": {
+      "baseline": {
+        "quality_passes": 1,
+        "profile_passes": 3,
+        "test_passes": 1,
+        "build_passes": 3,
+        "browser_passes": 3,
+        "cached_input_median": 454912,
+        "uncached_input_median": 47631,
+        "output_median": 8180,
+        "provider_total_median": 514228,
+        "skill_payload_median": 22897,
+        "repeated_payload_median": 1812
+      },
+      "candidate": {
+        "quality_passes": 1,
+        "profile_passes": 2,
+        "test_passes": 2,
+        "build_passes": 3,
+        "browser_passes": 3,
+        "cached_input_median": 397312,
+        "uncached_input_median": 49801,
+        "output_median": 9172,
+        "provider_total_median": 447454,
+        "skill_payload_median": 23741,
+        "repeated_payload_median": 3149
+      }
+    }
+  },
+  "gates": {
+    "quality_parity": false,
+    "no_candidate_repeat_regression": false,
+    "repeated_payload_median": false,
+    "skill_payload": false,
+    "uncached_input": true
+  },
+  "verdict": "reject",
+  "invalid_predecessor": {
+    "series": "scoville-plan-candidate-ab-v1",
+    "protocol_sha256": "4BA11F2342FD80922A5B2CAD6A586556A4B8072565E280F5C104A126EE492BF3",
+    "scheduled_calls_retained": 12,
+    "reason": "recoverable tool calls were aborted and a punctuation-only evaluator produced false negatives"
+  }
+}

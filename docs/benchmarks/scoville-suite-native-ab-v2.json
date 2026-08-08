@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-08",
+  "series": "scoville-family-native-ab-v2",
+  "models": ["gpt-5.6-sol", "gpt-5.6-terra"],
+  "reasoning_effort": "medium",
+  "repetitions_per_model_condition": 3,
+  "conditions": {
+    "native": {"skills": []},
+    "family": {
+      "skills": [
+        "scoville-code-anti-ai-slop@v1.0.6",
+        "scoville-scribe-anti-ai-slop@v1.0.6",
+        "scoville-ui-anti-ai-slop@v1.0.6",
+        "scoville-plan@v1.2.0"
+      ]
+    }
+  },
+  "source_hashes": {
+    "task_sha256": "91C4C3910827C2E4E88D9B1EF55E276741368D9C2E540C29E75EBBF835661B7A",
+    "fixture_sha256": "3320D627FB91990F38C39482FCBA8B4636A7CE5B533F997FFFB427E083B92E6F",
+    "native_prompt_sha256": "9620E5EF3FFEE1F486A9D7B5B7FBA32901C84E6482055F022AA544854A0D9428",
+    "family_prompt_sha256": "CA107E6DB789527D0890519C2598D6DE90CD7F893BBD0364F2F660BCF7C387D8",
+    "protocol_sha256": "E3A7144C97FFA351D7E82ED452B555EE2BE4F30422DAA0567A99EFDEC5517CC7",
+    "frozen_analyzer_sha256": "49929647D8315627DBC461E2F998EACD6F0D99518FB89E623F6E7AD23414AA43",
+    "corrected_analyzer_sha256": "5B9107E4A9690F65DC1A9B76CED657352CF2C0B152A02E22404099450AC5E8C9"
+  },
+  "quality": {
+    "native": {
+      "valid_calls": 6,
+      "plan_and_decision_passes": 6,
+      "canonical_profile_passes": 0,
+      "profile_validator_passes": 0,
+      "authored_test_passes": 5,
+      "production_build_passes": 6,
+      "browser_quality_passes": 4,
+      "strict_integrated_passes": 3
+    },
+    "family": {
+      "valid_calls": 6,
+      "plan_and_decision_passes": 6,
+      "canonical_profile_passes": 6,
+      "profile_validator_passes": 6,
+      "authored_test_passes": 5,
+      "production_build_passes": 6,
+      "browser_quality_passes": 5,
+      "strict_integrated_passes": 5
+    }
+  },
+  "aggregates": {
+    "gpt-5.6-sol": {
+      "native": {"total_tokens": 468724, "uncached_input_tokens": 94323, "cached_input_tokens": 337408, "output_tokens": 36993, "reasoning_output_tokens": 7422, "median_elapsed_seconds": 285.073},
+      "family": {"total_tokens": 2530064, "uncached_input_tokens": 217492, "cached_input_tokens": 2267136, "output_tokens": 45436, "reasoning_output_tokens": 14040, "median_elapsed_seconds": 401.019}
+    },
+    "gpt-5.6-terra": {
+      "native": {"total_tokens": 519181, "uncached_input_tokens": 75141, "cached_input_tokens": 420608, "output_tokens": 23432, "reasoning_output_tokens": 4003, "median_elapsed_seconds": 178.106},
+      "family": {"total_tokens": 1635349, "uncached_input_tokens": 162253, "cached_input_tokens": 1442304, "output_tokens": 30792, "reasoning_output_tokens": 7334, "median_elapsed_seconds": 229.575}
+    },
+    "native_both_models": {"total_tokens": 987905, "uncached_input_tokens": 169464, "cached_input_tokens": 758016, "output_tokens": 60425, "reasoning_output_tokens": 11425},
+    "family_both_models": {"total_tokens": 4165413, "uncached_input_tokens": 379745, "cached_input_tokens": 3709440, "output_tokens": 76228, "reasoning_output_tokens": 21374},
+    "complete_benchmark": {"total_tokens": 5153318, "input_tokens": 5016665, "uncached_input_tokens": 549209, "cached_input_tokens": 4467456, "output_tokens": 136653, "reasoning_output_tokens": 32799}
+  },
+  "runs": [
+    {"run_id": "sol-native-r1", "model": "gpt-5.6-sol", "condition": "native", "total_tokens": 129905, "uncached_input_tokens": 36837, "cached_input_tokens": 80384, "output_tokens": 12684, "reasoning_output_tokens": 2507},
+    {"run_id": "sol-family-r1", "model": "gpt-5.6-sol", "condition": "family", "total_tokens": 940929, "uncached_input_tokens": 72850, "cached_input_tokens": 852480, "output_tokens": 15599, "reasoning_output_tokens": 4570},
+    {"run_id": "terra-family-r1", "model": "gpt-5.6-terra", "condition": "family", "total_tokens": 492221, "uncached_input_tokens": 51084, "cached_input_tokens": 432384, "output_tokens": 8753, "reasoning_output_tokens": 2443},
+    {"run_id": "terra-native-r1", "model": "gpt-5.6-terra", "condition": "native", "total_tokens": 198237, "uncached_input_tokens": 33751, "cached_input_tokens": 154624, "output_tokens": 9862, "reasoning_output_tokens": 1433},
+    {"run_id": "sol-family-r2", "model": "gpt-5.6-sol", "condition": "family", "total_tokens": 696589, "uncached_input_tokens": 73344, "cached_input_tokens": 608768, "output_tokens": 14477, "reasoning_output_tokens": 4980},
+    {"run_id": "sol-native-r2", "model": "gpt-5.6-sol", "condition": "native", "total_tokens": 170559, "uncached_input_tokens": 30193, "cached_input_tokens": 127488, "output_tokens": 12878, "reasoning_output_tokens": 2515},
+    {"run_id": "terra-native-r2", "model": "gpt-5.6-terra", "condition": "native", "total_tokens": 142159, "uncached_input_tokens": 16486, "cached_input_tokens": 119296, "output_tokens": 6377, "reasoning_output_tokens": 1179},
+    {"run_id": "terra-family-r2", "model": "gpt-5.6-terra", "condition": "family", "total_tokens": 561864, "uncached_input_tokens": 59283, "cached_input_tokens": 489984, "output_tokens": 12597, "reasoning_output_tokens": 2070},
+    {"run_id": "sol-native-r3", "model": "gpt-5.6-sol", "condition": "native", "total_tokens": 168260, "uncached_input_tokens": 27293, "cached_input_tokens": 129536, "output_tokens": 11431, "reasoning_output_tokens": 2400},
+    {"run_id": "sol-family-r3", "model": "gpt-5.6-sol", "condition": "family", "total_tokens": 892546, "uncached_input_tokens": 71298, "cached_input_tokens": 805888, "output_tokens": 15360, "reasoning_output_tokens": 4490},
+    {"run_id": "terra-family-r3", "model": "gpt-5.6-terra", "condition": "family", "total_tokens": 581264, "uncached_input_tokens": 51886, "cached_input_tokens": 519936, "output_tokens": 9442, "reasoning_output_tokens": 2821},
+    {"run_id": "terra-native-r3", "model": "gpt-5.6-terra", "condition": "native", "total_tokens": 178785, "uncached_input_tokens": 24904, "cached_input_tokens": 146688, "output_tokens": 7193, "reasoning_output_tokens": 1391}
+  ]
+}
