@@ -8,15 +8,25 @@ Planning slop looks organized while making the work harder to resume:
 - Implementation, testing, review, and release become separate Work Items even
   though none produces an independently resumable result.
 - A new journal or runtime plan appears beside the repository's real plan.
+- A choice already settled by a human remains trapped in chat or project rules
+  instead of becoming a linked Decision record.
 - An item becomes `done` because files exist, not because its acceptance result
   was observed.
 - `Next action` still says "implement" after the implementation was written.
 
 Scoville Plan is an Agent Skill for creating, maintaining, resuming, auditing,
-and handing off durable project Plans and Work Items through direct Markdown
-and YAML edits. It preserves one canonical planning owner, keeps Work Items
-behavior-complete, and separates authored state from observed evidence. It does
-not require a planning CLI, MCP server, database, journal, or hidden state.
+and handing off durable project Plans, Work Items, and Decisions through direct
+Markdown and YAML edits. It preserves one canonical planning owner, records
+clear human choices without redundant approval loops, keeps Work Items
+behavior-complete, and separates authored state from observed evidence. It
+does not require a planning CLI, MCP server, database, journal, or hidden state.
+
+Its native `format_version: 1` profile provides the complete Skill-only
+workflow: setup, read-only recovery, Plan and Work Item operations, Decision
+proposals and lifecycle, blockers, evidence, activation, completion, and narrow
+repair. Without an executable it has no publication gate, typed requests,
+expected-hash writer, rollback, or multi-file atomicity; native editing
+compensates but does not rename those missing guarantees into existence.
 
 The plan is a map of unfinished outcomes, not a scrapbook of agent activity.
 
@@ -69,9 +79,10 @@ no durable planning requirement. Scoville Plan should not initialize a profile
 or turn the change into a planning exercise.
 
 **What it costs.** Skill discovery exposes only the name and description. After
-activation, the core loads first and selects planning granularity, native format,
-and native editing guidance only when the operation needs them. Provider token
-usage also depends on the host and conversation.
+activation, the core loads first and selects planning granularity, Plan format,
+Decision format, batch-transition, and native editing guidance only when the
+operation needs them. Provider token usage also depends on the host and
+conversation.
 
 ## What it enforces
 
@@ -94,11 +105,28 @@ usage also depends on the host and conversation.
 - **A real next action.** `Next action` names the first concrete action not yet
   performed. After implementation, it advances to the next unobserved test,
   build, browser check, review, or evaluator-owned verification.
+- **Complete native lifecycle.** The skill initializes a wholly absent profile,
+  creates and refines Plans, inserts, moves, selects, blocks, advances, and
+  removes eligible Work Items, activates replacement Plans, and completes final
+  work into a valid idle project.
+- **Visible unresolved direction.** Every material open choice becomes a linked
+  `proposed` Decision and is repeated at handoff until accepted, rejected, or
+  revised. Only dependent work stops.
 - **Honest native editing.** Direct edits use narrow reads, context-bound
   patches, complete diff inspection, and manual invariant checks. The skill
   never claims transactional or typed CLI guarantees it does not possess.
-- **No invented authority.** The skill does not choose product direction or
-  create, transition, accept, reject, or supersede Decision records.
+- **Decisions without approval theatre.** An explicit user choice or an
+  applicable project rule that unmistakably records a human-selected direction
+  becomes an accepted Decision without asking again. The skill links it from
+  affected mutable Work Items.
+- **Proposals before inferred authority.** When analysis reveals a material
+  possible Decision, the skill stores it as `proposed`, links affected mutable
+  Work Items, reports its recommendation, alternatives, tradeoffs, and
+  practical effect, then asks for `accept`, `reject`, or `revise`. It never
+  treats creating the proposal as acceptance.
+- **No invented lifecycle authority.** Draft-only requests remain `proposed`.
+  Rejection, deprecation, and supersession require the corresponding explicit
+  human choice; implementation and silence never count.
 
 The full rules live in [SKILL.md](scoville-plan/SKILL.md).
 
@@ -124,26 +152,40 @@ copying their rules into the Plan.
 ## Design
 
 Scoville Plan first resolves the existing planning owner and decides whether
-the task warrants durable state. It conditionally loads three focused guides:
+the task warrants durable state. It conditionally loads eight focused guides:
 
 - [references/planning-granularity.md](scoville-plan/references/planning-granularity.md)
   distinguishes independently resumable outcomes from subordinate steps and
   acceptance checks.
 - [references/native-plan-format.md](scoville-plan/references/native-plan-format.md)
   defines the supported `format_version: 1` Plan and Work Item file contract.
+- [references/native-decision-format.md](scoville-plan/references/native-decision-format.md)
+  defines Decision records, links, and explicitly authorized lifecycle
+  transitions.
+- [references/native-decision-batches.md](scoville-plan/references/native-decision-batches.md)
+  adds deterministic metadata only for an explicitly authorized multi-Decision
+  accept-or-reject transition.
+- [references/read-only.md](scoville-plan/references/read-only.md)
+  recovers current state and unresolved proposals without loading write
+  contracts.
+- [references/native-work-items.md](scoville-plan/references/native-work-items.md)
+  owns Work Item refinement, current selection, blockers, progress, and
+  `complete_and_advance`.
+- [references/native-project-lifecycle.md](scoville-plan/references/native-project-lifecycle.md)
+  owns setup, Plan creation, activation, cancellation, and final completion.
 - [references/native-editing.md](scoville-plan/references/native-editing.md)
-  covers direct editing, lifecycle transitions, blockers, evidence, and manual
-  integrity checks.
+  owns exact-byte guards, native publication limits, recovery stops, and manual
+  integrity checks shared by every write route.
 
-For a read-only direction query, the agent reads the project index, active Plan,
-current Work Item, and only its referenced Decisions. It does not preload format
-details. Creating or restructuring a Plan needs all three guides; changing
-lifecycle state needs the native format and editing guides; an audit adds the
-granularity guide only when it judges decomposition.
+For a read-only direction query, the agent loads only the read-only guide and
+then reads the project index, active Plan, current Work Item, referenced
+Decisions, and unresolved proposal summaries. Work Item, project-lifecycle,
+Decision, batch, and recovery details load only for their matching operations.
+An audit adds only the format and decomposition guidance its target needs.
 
 The native profile remains usable without the skill installed. Scoville Plan
-writes the Plan subset of the ReasonKeep `format_version: 1` file format, but it
-has no ReasonKeep executable dependency and does not manage Decision lifecycle.
+owns its `format_version: 1` Plans, Work Items, and Decisions and has no
+executable dependency.
 
 ## Sources and inspirations
 
@@ -158,7 +200,7 @@ has no ReasonKeep executable dependency and does not manage Decision lifecycle.
 
 ## Repository contents
 
-The installable `scoville-plan/` directory contains the core skill, three
+The installable `scoville-plan/` directory contains the core skill, eight
 conditionally loaded references, and display metadata. This README, the
 changelog, the evaluation cases, and the MIT license remain outside that
 directory and are not loaded as skill instructions. The repository contains no
@@ -167,8 +209,9 @@ executable software, network integration, planning service, or generated state.
 ## Status
 
 The installable directory passes the canonical Agent Skill validator, and the
-repository includes six static evaluation cases for ownership, granularity,
-lifecycle, evidence, and non-activation behavior.
+repository includes sixteen static evaluation cases plus a native
+feature-contract map for ownership, setup, recovery, granularity, Decision
+authority, lifecycle, evidence, and non-activation behavior.
 
 In the current Terra Medium Scoville-family benchmark, eight of eight completed
 Plan-related answers were semantically source-correct; a ninth attempt failed

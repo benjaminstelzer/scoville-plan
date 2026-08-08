@@ -55,6 +55,96 @@
         "Implement and validate the contained change directly.",
         "Use a lightweight runtime plan only when the host independently requires one, without making it canonical."
       ]
+    },
+    {
+      "id": "explicit-user-decision-is-recorded",
+      "given": "The user states, 'We will use SQLite for local storage. Record that in the project rules,' while the affected Work Items are still todo.",
+      "expect": [
+        "Create the Decision as proposed and apply the authorized accepted transition without asking the user to repeat the choice.",
+        "Ground the Decision rationale in the stated direction and available repository evidence without inventing facts.",
+        "Link the accepted Decision from every affected todo Work Item and no unrelated item."
+      ]
+    },
+    {
+      "id": "clear-project-rule-is-recorded",
+      "given": "An applicable project instruction unmistakably says that the human maintainers selected offline-only operation, but no canonical Decision records it.",
+      "expect": [
+        "Treat the applicable human-authored project rule as an already selected direction and record the corresponding accepted Decision without asking again.",
+        "Do not extend this authority to ordinary documentation, implementation, source code, current behavior, or silence.",
+        "Preserve the project rule as the source of the choice and do not invent broader scope."
+      ]
+    },
+    {
+      "id": "possible-decision-becomes-proposal",
+      "given": "Analysis identifies a material cache-backend choice, but neither the user nor an applicable project rule has selected an alternative.",
+      "expect": [
+        "Create a complete proposed Decision and link it from every affected mutable Work Item.",
+        "Report its recommendation, real alternatives, tradeoffs, practical effect, and affected Work Items, then ask the user to accept, reject, or revise it.",
+        "Do not accept it; stop only dependent work while allowing independent work to continue."
+      ]
+    },
+    {
+      "id": "draft-only-decision-remains-proposed",
+      "given": "The user asks to preserve an unresolved storage choice as a draft Decision but explicitly postpones selecting an alternative.",
+      "expect": [
+        "Create a complete proposed Decision and link it from every affected mutable Work Item.",
+        "Report its ID, recommendation, practical effect, and the accept, reject, or revise choice still required.",
+        "Do not accept the proposal or continue work whose direction depends on it."
+      ]
+    },
+    {
+      "id": "read-only-surfaces-proposals",
+      "given": "A supported profile has one active Work Item and two unrelated proposed Decisions. The user asks for current direction without requesting writes.",
+      "expect": [
+        "Use the read-only route without loading native write-format references.",
+        "Read the current Work Item and inventory Decision frontmatter, then read and report both proposals with ID, title, recommended choice, and practical effect.",
+        "Ask for accept, reject, or revise choices while allowing unrelated work to continue."
+      ]
+    },
+    {
+      "id": "initialize-wholly-absent-profile",
+      "given": "A repository has none of the three canonical profile paths, and the user explicitly requests a durable Plan with complete Goal, Non-goals, and initial Work Item facts.",
+      "expect": [
+        "Create docs/plans, docs/decisions, PLAN-0001 with W-001, and PROJECT_INDEX.md as one prepared native profile.",
+        "Make PLAN-0001 active, W-001 todo and current, and keep its dependency, blocker, Decision, and Evidence lists empty.",
+        "Create the index last and stop with an exact partial-state report if any member fails."
+      ]
+    },
+    {
+      "id": "complete-and-advance-is-compound",
+      "given": "The current in-progress Work Item has observed acceptance evidence and an explicit ready todo successor with no blockers.",
+      "expect": [
+        "Prepare completion of the current item and start of the exact successor as one compound result.",
+        "Apply ordinary completion, current-selection, dependency, and start rules to the complete proposed Plan.",
+        "Publish neither transition if either side is invalid."
+      ]
+    },
+    {
+      "id": "activate-plan-resolves-outgoing-work",
+      "given": "A project has an active Plan with current in-progress work and a draft replacement Plan. The user explicitly selects the target current item, outgoing Plan status, and pause action.",
+      "expect": [
+        "Prepare the index, target Plan, and outgoing Plan together.",
+        "Pause the outgoing current Work Item, preserve its authored fields, activate the target Plan, and select but do not start its explicit current item.",
+        "Stop as an incomplete transaction if any member is invalid or only partly written."
+      ]
+    },
+    {
+      "id": "final-work-completes-to-idle",
+      "given": "The final current Work Item is in progress, all dependencies are done, all acceptance results were observed, evidence is available, and every other item is terminal.",
+      "expect": [
+        "Complete the Work Item and active Plan and set active_plan to null as one prepared Plan-and-index change.",
+        "Remove current_item, clear explicitly named blockers, retain evidence, and create no successor Work Item or Plan.",
+        "Report native structural inspection separately from the observed acceptance evidence."
+      ]
+    },
+    {
+      "id": "transaction-incomplete-needs-authority",
+      "given": "Only part of a prior activation, final completion, supersession, or Decision batch is present in the canonical files.",
+      "expect": [
+        "Identify and report the exact partial cross-file state.",
+        "Do not autonomously complete, revert, validate away, or bypass the interrupted lifecycle result.",
+        "Stop for explicit user authority while preserving all existing bytes."
+      ]
     }
   ]
 }

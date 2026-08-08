@@ -1,16 +1,24 @@
 # Native Plan format
 
-This Skill writes the Plan subset of ReasonKeep native profile
-`format_version: 1` directly. It does not manage Decision lifecycle. Existing
-Decision files remain owned by the project's established mechanism.
+This Skill writes the Plan and Work Item part of the Scoville Plan native profile
+`format_version: 1` directly. Load [native-decision-format.md](native-decision-format.md)
+only when the operation creates, changes, transitions, or audits a Decision.
+
+## Contents
+
+- Files and encoding
+- IDs and filenames
+- Project index
+- Plan profile
+- Work Item block
+- State invariants
 
 ## Files and encoding
 
 - Use UTF-8 without a byte-order mark and LF line endings.
 - `PROJECT_INDEX.md` owns the format version and active Plan routing.
 - `docs/plans/` contains one Plan per Markdown file.
-- `docs/decisions/` must exist for a complete profile, but this Skill does not
-  create or transition Decision records.
+- `docs/decisions/` contains one Decision per Markdown file.
 - Generated files, caches, runtime plans, and UI state own no project facts.
 
 ## IDs and filenames
@@ -20,7 +28,7 @@ inside their Plan. Plan filenames use the numeric ID followed by a lowercase
 ASCII kebab-case subject, for example:
 
 ```text
-docs/plans/0007-build-reasonkeep.md
+docs/plans/0007-ship-local-app.md
 ```
 
 Allocate the next Plan ID as the highest valid Plan ID plus one. Allocate a new

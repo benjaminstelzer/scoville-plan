@@ -1,4 +1,4 @@
 interface:
   display_name: "Scoville Plan"
-  short_description: "Native plans without a planning CLI"
-  default_prompt: "Use $scoville-plan to create and maintain a repository-native project plan."
+  short_description: "Native project planning without a CLI"
+  default_prompt: "Use $scoville-plan to maintain the full native Plan, Work Item, and Decision lifecycle without a planning CLI."

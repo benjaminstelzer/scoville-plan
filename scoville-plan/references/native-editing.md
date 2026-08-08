@@ -1,87 +1,86 @@
-# Native editing and lifecycle
+# Native editing safety
 
-Direct edits have no ReasonKeep publication gate, expected-hash writer, typed
-request validation, or multi-file atomicity. Compensate with narrow reads,
-context-bound patches, complete proposed-state inspection, and honest reporting.
+Direct edits are the only Scoville Plan write path. They have no publication
+gate, expected-hash writer, typed request validation, rollback, or multi-file
+atomicity. Compensate with narrow reads, exact-byte checks, complete
+proposed-state inspection, and honest reporting.
+
+## Contents
+
+- Read before writing
+- Guard the write
+- Preserve the profile
+- Handle invalid or changing state
+- Verify and report
 
 ## Read before writing
 
-1. When profile existence is unknown, list the workspace root. Do not read a
-   canonical file until its presence is established.
-2. For an existing profile, resolve the nearest project root containing
-   `PROJECT_INDEX.md`, `docs/plans/`, and `docs/decisions/`, then read the index
-   and confirm `format_version: 1`.
-3. Resolve the active Plan. Read its current Work Item and only the related
-   existing Decision records needed by the task.
-4. Inventory all Plan IDs only when allocating a Plan. Inventory all Work Item
-   IDs in the affected Plan only when allocating an item.
-5. Re-read the exact affected bytes immediately before applying a context-bound
-   patch.
+1. Resolve the nearest project root containing `PROJECT_INDEX.md`,
+   `docs/plans/`, and `docs/decisions/`. When profile existence is unknown,
+   list the workspace root before reading a canonical path.
+2. Read the index and require `format_version: 1`. Resolve the active Plan and
+   current Work Item when present, its referenced Decisions, and every
+   `proposed` Decision. Load other records only for the selected operation's
+   relation checks.
+3. Inventory all valid records only when allocating an ID, validating the
+   complete profile, or checking a cross-record relation.
+4. Capture the exact bytes and SHA-256 of every affected existing file. Re-read
+   those exact bytes immediately before applying a context-bound patch.
 
-For an explicitly requested new profile whose index is confirmed absent, use
-the current workspace as the setup root. Create the two directories, one draft
-Plan, and an idle index first. Never probe the absent index with a file read.
-Activate only when the user or binding project workflow authorizes activation
-and the selected current Work Item is explicit.
+Within one conversation, retain the resolved path and SHA-256 of each loaded
+Skill reference. Compare hashes before a later operation and reload only a
+changed reference. Reread live project state; do not reload the full Plan or
+unrelated accepted Decisions merely because another turn began.
 
-## Preserve authored history
+## Guard the write
 
-- Edit, move, or physically remove only a `todo` Work Item. Removal also
-  requires at least one remaining Work Item and no incoming dependency.
-- Once an item leaves `todo`, retain its ID, title, dependencies, Decisions,
-  Outcome, Acceptance, Steps, and document position.
-- Update live execution through status, Blocked by, Evidence, and `Next action`.
-- Move one complete H3 block without renumbering it or any sibling.
-- Do not create, edit, accept, reject, deprecate, supersede, or delete Decision
-  records through this Skill.
+- Prepare every member of a multi-file change and inspect the complete proposed
+  profile before applying any member. Publish the canonical routing file last
+  when that reduces, but cannot eliminate, partial-state risk.
+- Create new files exclusively after rechecking ID and path collisions. Never
+  overwrite another record or reuse an interior ID gap.
+- Use context-bound patches for existing files. If affected bytes changed,
+  stop and reconcile instead of replaying a stale edit.
+- For physical deletion, validate the complete proposed project with the exact
+  file or Work Item absent before removing it.
+- Never describe direct multi-file edits as atomic. If only a proper subset is
+  written, report the exact partial state and stop.
 
-## Progress safely
+## Preserve the profile
 
-- Start only the active Plan's current `todo` item whose dependencies are done
-  and blockers empty; change it to `in_progress`.
-- Pause `in_progress` to `paused`; resume the current `paused` item only when
-  dependencies are done and blockers empty.
-- Complete `todo` or `in_progress` only after observed acceptance evidence.
-  Clear blockers explicitly, remove `Next action`, add Evidence, and select an
-  explicit ready replacement when work remains.
-- A paused item must resume before completion.
-- Cancel only with evidence. `done` and `cancelled` are terminal, and cancelled
-  work never satisfies a dependency.
-- After implementation exists, set `Next action` to the first unobserved test,
-  build, browser check, review, or evaluator-owned verification before handing
-  off.
+- Preserve UTF-8 without BOM, LF endings, exact frontmatter and section order,
+  Work Item key order, stable IDs, authored H3 order, optional Steps, retained
+  batch metadata, and every lifecycle invariant in the routed format guides.
+- Keep canonical paths relative to the project root. Reject traversal,
+  cross-project targets, redirected canonical files, and symlink escapes.
+- Use the operation date for each permitted change. It may equal but never
+  precede the affected record's stored date. A no-op changes no bytes or date.
+- Verify every dependency, Decision, supersession, blocker, `current_item`, and
+  active-Plan reference against the complete proposed profile.
+- Never invent authored text, evidence, authority, status, acceptance, or a
+  lifecycle result to make the profile valid.
 
-When the final real Work Item completes, update that item, set the Plan to
-`completed`, remove `current_item`, and set the index to `active_plan: null` as
-one prepared change. Do not invent a successor or handoff Work Item to keep the
-project active.
+## Handle invalid or changing state
 
-## Blockers
+Stop on an unsupported version, foreign or partial profile, ambiguous root,
+path-security failure, ID exhaustion, changed bytes, or a write whose result is
+unknown. Do not create a parallel profile or edit around the failure.
 
-Add an absent valid blocker label together with an updated Next action. Resolve
-exactly the named label, append observed evidence for the resolution, and set
-the next concrete action. A blocker is not evidence and a failed check is not
-completion.
+Repair invalid state autonomously only when an observed diagnostic identifies
+one specific format defect and the repair changes no authored choice, scope,
+acceptance, lifecycle result, or evidence. Never autonomously complete or
+revert an interrupted multi-file transition. Interrupted activation,
+completion, supersession, or Decision-batch state requires explicit user
+authority.
 
-## Guard and inspect the change
+## Verify and report
 
-Prepare every member of a multi-file lifecycle change before applying any one
-file. If relevant bytes changed concurrently, stop and reconcile rather than
-overwriting. After editing, reread every changed file and inspect the complete
-scoped diff.
+After writing, reread every changed canonical file, inspect the complete scoped
+diff, and recheck the affected graph and lifecycle invariants. Run an
+independently available repository validator when authorized, but never make it
+a dependency of this Skill.
 
-Manually check:
-
-- index format and active-Plan ownership;
-- exact Plan frontmatter and section order;
-- Work Item field order and lifecycle invariants;
-- one-or-zero `in_progress` item matching `current_item`;
-- dependency existence, authored order, and acyclicity;
-- existing Decision references and blocker syntax;
-- terminal Evidence and absence of terminal `Next action`;
-- non-terminal `Next action` reflecting the first action not yet performed;
-- UTF-8 without BOM and LF endings.
-
-An invalid partial transition is a stop. Do not repair it autonomously when the
-repair would choose activation, cancellation, completion, evidence, scope, or
-another authored lifecycle outcome.
+Report exact changed records, manual checks, validator output when actually
+observed, unresolved proposals, partial-state risk, and the next concrete
+action. Say `native structural inspection passed`; do not imply executable,
+transactional, or typed validation that did not occur.

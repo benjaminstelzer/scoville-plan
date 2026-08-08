@@ -1,5 +1,37 @@
 # Changelog
 
+## 2026-08-08: Native Decisions and complete lifecycle
+
+### Changed
+
+- Added native `format_version: 1` Decision records and lifecycle guidance to
+  Scoville Plan without adding a CLI dependency.
+- Expanded Scoville Plan to its complete native feature surface:
+  read-only recovery, profile initialization, Plan lifecycle, Work Item
+  mutations, blockers, evidence, proposals, Decision lifecycle, and narrow
+  repair through direct files.
+- Clear user choices and applicable project rules that unmistakably record a
+  human-selected direction are now written and accepted without asking for the
+  same choice again.
+- Material possible Decisions inferred during analysis are stored as
+  `proposed`, linked from affected mutable Work Items, and surfaced for an
+  explicit accept, reject, or revise choice.
+- Added focused Decision routing so Plan-only operations do not load the
+  Decision format reference.
+- Split accept-or-reject batch metadata into a batch-only reference.
+- Expanded the static evaluation set from six to sixteen cases and added a
+  native feature-contract map.
+
+### Validation
+
+- The canonical Agent Skill validator and repository diff checks pass.
+- A complete Fable review of all four Scoville cores and their thirteen
+  references found no P0 or P1 issue and judged standalone and family operation
+  coherent; its two P2 wording and navigation findings were corrected.
+- Three isolated `gpt-5.6-terra` medium-effort cases passed exact behavior and
+  exact reference-routing checks with all 58 ambient Skills disabled.
+- The tested repository copy and the locally installed Skill are byte-identical.
+
 ## 2026-08-08: Initial release
 
 ### Added

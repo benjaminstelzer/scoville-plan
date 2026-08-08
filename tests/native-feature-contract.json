@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "baseline": "Scoville Plan format_version: 1 native feature contract",
+  "excluded_executable_guarantees": [
+    "CLI command transport",
+    "typed request validation",
+    "expected-hash writer",
+    "shared/exclusive publication gate",
+    "rollback",
+    "multi-file atomicity"
+  ],
+  "features": [
+    {"id":"read-current","sources":["SKILL.md","references/read-only.md"]},
+    {"id":"list-plans-and-decisions","sources":["references/read-only.md"]},
+    {"id":"surface-proposals","sources":["SKILL.md","references/read-only.md"]},
+    {"id":"initialize-wholly-absent-profile","sources":["references/native-project-lifecycle.md","references/native-plan-format.md","references/native-editing.md"]},
+    {"id":"classify-partial-foreign-unsupported-invalid","sources":["references/native-project-lifecycle.md","references/native-editing.md"]},
+    {"id":"create-update-and-cancel-draft-plan","sources":["references/native-project-lifecycle.md","references/native-plan-format.md"]},
+    {"id":"activate-plan-from-idle-or-active","sources":["references/native-project-lifecycle.md","references/native-work-items.md"]},
+    {"id":"complete-final-work-and-enter-idle","sources":["references/native-project-lifecycle.md","references/native-work-items.md"]},
+    {"id":"insert-update-move-delete-work-item","sources":["references/native-work-items.md","references/native-plan-format.md"]},
+    {"id":"set-current-and-next-action","sources":["references/native-work-items.md"]},
+    {"id":"add-and-resolve-blocker","sources":["references/native-work-items.md","references/native-plan-format.md"]},
+    {"id":"start-pause-resume-complete-cancel-work","sources":["references/native-work-items.md","references/native-plan-format.md"]},
+    {"id":"complete-and-advance","sources":["references/native-work-items.md"]},
+    {"id":"create-update-delete-decision-proposal","sources":["references/native-decision-format.md","references/native-editing.md"]},
+    {"id":"accept-reject-deprecate-supersede-decision","sources":["references/native-decision-format.md","references/native-editing.md"]},
+    {"id":"accept-or-reject-decision-batch","sources":["references/native-decision-batches.md","references/native-decision-format.md","references/native-editing.md"]},
+    {"id":"preserve-record-history-and-relations","sources":["references/native-decision-format.md","references/native-work-items.md","references/native-editing.md"]},
+    {"id":"dependency-order-blocker-evidence-and-date-invariants","sources":["references/native-plan-format.md","references/native-work-items.md","references/native-editing.md"]},
+    {"id":"narrow-format-repair","sources":["references/native-editing.md"]},
+    {"id":"transaction-incomplete-stop","sources":["references/native-editing.md","references/native-project-lifecycle.md","references/native-decision-batches.md"]},
+    {"id":"behavior-complete-planning-granularity","sources":["references/planning-granularity.md"]}
+  ]
+}
