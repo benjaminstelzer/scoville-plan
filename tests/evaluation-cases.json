@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "skill": "scoville-plan",
+  "cases": [
+    {
+      "id": "existing-owner-no-parallel-plan",
+      "given": "A repository already has an authoritative project plan and asks for an additional implementation outcome.",
+      "expect": [
+        "Preserve the existing plan as the only durable planning owner.",
+        "Apply compatible planning-quality guardrails without creating a second plan, journal, or database.",
+        "Treat any runtime plan as a disposable view rather than canonical state."
+      ]
+    },
+    {
+      "id": "one-active-does-not-mean-one-total",
+      "given": "An active Plan has one current in-progress Work Item plus several todo and done Work Items.",
+      "expect": [
+        "Require at most one in-progress Work Item and require it to equal current_item.",
+        "Preserve the other Work Items when they represent real outcome boundaries.",
+        "Do not interpret the concurrency limit as a one-Work-Item total limit."
+      ]
+    },
+    {
+      "id": "small-behavior-complete-item",
+      "given": "A small calculator behavior is already tracked in one Work Item and needs implementation plus focused verification.",
+      "expect": [
+        "Keep one behavior-complete Work Item for the observable result.",
+        "Keep implementation order in optional Steps.",
+        "Keep testing in Acceptance or Evidence unless it is an independently requested deliverable."
+      ]
+    },
+    {
+      "id": "structural-independent-outcomes",
+      "given": "A structural change has schema, compatibility, consumer-update, and rollout outcomes that can be blocked or resumed independently.",
+      "expect": [
+        "Split independently resumable outcomes into separate Work Items.",
+        "Express genuine boundary order with dependencies and subordinate implementation order with Steps.",
+        "Keep all outcomes in the repository's one canonical Plan."
+      ]
+    },
+    {
+      "id": "post-implementation-next-action",
+      "given": "Implementation has been written, but its acceptance checks have not been observed.",
+      "expect": [
+        "Keep the Work Item non-terminal and do not invent Evidence.",
+        "Advance Next action to the first unobserved test, build, browser check, review, or evaluator-owned verification.",
+        "Mark the Work Item done only after observing its Acceptance result and recording concise evidence."
+      ]
+    },
+    {
+      "id": "no-durable-plan",
+      "given": "A repository with no planning profile requests one small reversible change and has no durable planning requirement.",
+      "expect": [
+        "Do not initialize a Plan profile or read absent canonical files.",
+        "Implement and validate the contained change directly.",
+        "Use a lightweight runtime plan only when the host independently requires one, without making it canonical."
+      ]
+    }
+  ]
+}
