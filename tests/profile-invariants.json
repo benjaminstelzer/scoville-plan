@@ -1,0 +1,77 @@
+{
+  "format_version": 1,
+  "invariants": [
+    {
+      "id": "index-active-plan-routing",
+      "source": "native-plan-format.md#project-index",
+      "diagnostic_codes": ["INDEX_ACTIVE_PLAN_MISSING", "INDEX_ACTIVE_PLAN_STATUS", "PROFILE_ACTIVE_PLAN_COUNT"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "active-plan-current-item",
+      "source": "native-plan-format.md#plan-profile",
+      "diagnostic_codes": ["PLAN_CURRENT_ITEM_REQUIRED", "PLAN_CURRENT_ITEM_MISSING", "PLAN_CURRENT_ITEM_STATUS"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "in-progress-cardinality-and-routing",
+      "source": "native-plan-format.md#state-invariants",
+      "diagnostic_codes": ["PLAN_IN_PROGRESS_COUNT", "PLAN_IN_PROGRESS_CURRENT_MISMATCH", "PLAN_NONACTIVE_IN_PROGRESS"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "completed-plan-terminal-work",
+      "source": "native-plan-format.md#state-invariants",
+      "diagnostic_codes": ["PLAN_COMPLETED_NONTERMINAL"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "work-item-presence-and-identity",
+      "source": "native-plan-format.md#work-item-block",
+      "diagnostic_codes": ["WORK_ITEM_MISSING", "WORK_ITEM_ID_DUPLICATE"],
+      "test": "test_relationship_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "work-item-dependency-graph",
+      "source": "native-plan-format.md#state-invariants",
+      "diagnostic_codes": ["WORK_DEPENDENCY_MISSING", "WORK_DEPENDENCY_ORDER", "WORK_DEPENDENCY_CYCLE", "WORK_DEPENDENCY_CANCELLED", "WORK_CURRENT_DEPENDENCY_NOT_DONE"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "work-item-decision-links",
+      "source": "native-decision-format.md#links-and-lifecycle",
+      "diagnostic_codes": ["WORK_DECISION_MISSING"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "work-item-terminal-fields",
+      "source": "native-plan-format.md#state-invariants",
+      "diagnostic_codes": ["WORK_TERMINAL_EVIDENCE_REQUIRED", "WORK_TERMINAL_BLOCKED", "WORK_NEXT_ACTION_FORBIDDEN", "WORK_NEXT_ACTION_REQUIRED"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "decision-acceptance-lifecycle",
+      "source": "native-decision-format.md#decision-profile",
+      "diagnostic_codes": ["DECISION_ACCEPTED_REQUIRED", "DECISION_ACCEPTED_FORBIDDEN", "DECISION_PROPOSAL_METADATA_FORBIDDEN"],
+      "test": "test_cross_record_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "decision-supersession-graph",
+      "source": "native-decision-format.md#links-and-lifecycle",
+      "diagnostic_codes": ["DECISION_SUPERSESSION_STATUS", "DECISION_SUPERSESSION_MISSING", "DECISION_SUPERSESSION_ASYMMETRIC", "DECISION_SUPERSESSION_CYCLE"],
+      "test": "test_relationship_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "decision-transition-batch",
+      "source": "native-decision-batches.md",
+      "diagnostic_codes": ["DECISION_BATCH_PAIR_REQUIRED", "DECISION_BATCH_HASH_INVALID", "DECISION_BATCH_MEMBER_INVALID", "DECISION_BATCH_MEMBER_MISSING", "DECISION_BATCH_ASYMMETRIC"],
+      "test": "test_relationship_invariants_have_isolated_fixtures"
+    },
+    {
+      "id": "global-record-identity",
+      "source": "native-plan-format.md#ids-and-filenames",
+      "diagnostic_codes": ["RECORD_ID_DUPLICATE"],
+      "test": "test_relationship_invariants_have_isolated_fixtures"
+    }
+  ]
+}

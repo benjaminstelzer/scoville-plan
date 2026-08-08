@@ -1,5 +1,36 @@
 # Changelog
 
+## 2026-08-08: Read-only native profile validator
+
+### Added
+
+- Added an optional standard-library Python validator for complete native
+  `format_version: 1` profiles with deterministic JSON diagnostics and text
+  output.
+- Added no-follow path inspection, consistent-read detection, local record
+  parsing, cross-record graph checks, Decision lifecycle and batch validation,
+  and stable exit semantics for valid, invalid, incomplete, and internal-error
+  results.
+- Added a focused validation guide that tells agents when to run the tool, how
+  to interpret diagnostics, when human direction is required, and how to fall
+  back to manual inspection without Python.
+
+### Changed
+
+- Full-profile diagnosis now loads the validation guide first and routes to
+  only the native reference needed for a reported defect instead of preloading
+  every format and lifecycle guide.
+- Native post-write verification now uses the bundled validator when already
+  available while retaining complete Skill-only operation without it.
+
+### Validation
+
+- Added immutable fixtures, recursive pre/post byte and path snapshots, a
+  machine-readable result contract, and a complete cross-record invariant map.
+- The local validator suite currently passes 36 tests, including valid terminal
+  profiles, incomplete reads, redirected paths, concurrent changes,
+  deterministic multi-defect output, and adversarial write-option rejection.
+
 ## 2026-08-08: Native Decisions and complete lifecycle
 
 ### Changed

@@ -76,9 +76,10 @@ authority.
 ## Verify and report
 
 After writing, reread every changed canonical file, inspect the complete scoped
-diff, and recheck the affected graph and lifecycle invariants. Run an
-independently available repository validator when authorized, but never make it
-a dependency of this Skill.
+diff, and recheck the affected graph and lifecycle invariants. When the bundled
+read-only validator and Python are available, run it as described in
+[profile-validation.md](profile-validation.md). Otherwise preserve the manual
+inspection fallback; never make an executable a dependency of this Skill.
 
 Report exact changed records, manual checks, validator output when actually
 observed, unresolved proposals, partial-state risk, and the next concrete

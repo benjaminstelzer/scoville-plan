@@ -30,6 +30,7 @@
     {"id":"dependency-order-blocker-evidence-and-date-invariants","sources":["references/native-plan-format.md","references/native-work-items.md","references/native-editing.md"]},
     {"id":"narrow-format-repair","sources":["references/native-editing.md"]},
     {"id":"transaction-incomplete-stop","sources":["references/native-editing.md","references/native-project-lifecycle.md","references/native-decision-batches.md"]},
-    {"id":"behavior-complete-planning-granularity","sources":["references/planning-granularity.md"]}
+    {"id":"behavior-complete-planning-granularity","sources":["references/planning-granularity.md"]},
+    {"id":"read-only-profile-validator","sources":["SKILL.md","references/profile-validation.md","scripts/validate_profile.py"]}
   ]
 }

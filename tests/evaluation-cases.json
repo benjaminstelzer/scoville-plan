@@ -145,6 +145,60 @@
         "Do not autonomously complete, revert, validate away, or bypass the interrupted lifecycle result.",
         "Stop for explicit user authority while preserving all existing bytes."
       ]
+    },
+    {
+      "id": "post-write-runs-read-only-validator",
+      "given": "The agent has changed a canonical Work Item and Python plus the bundled validator are already available.",
+      "expect": [
+        "Run scripts/validate_profile.py in JSON mode against the immutable project root after rereading changed files and inspecting the scoped diff.",
+        "Record exit 0 only as native structural evidence and preserve independent behavioral Acceptance evidence.",
+        "Do not load the validator source or treat it as a planning CLI or write path."
+      ]
+    },
+    {
+      "id": "validator-routes-unambiguous-format-correction",
+      "given": "The validator exits 1 and reports one Work Item field-order defect whose correction changes no authored content or lifecycle fact.",
+      "expect": [
+        "Load the validation guide first and then only native-plan-format.md plus native-editing.md for the reported correction.",
+        "Apply the bounded native field-order edit after the ordinary byte guards, then rerun the read-only validator.",
+        "Do not load unrelated Decision, batch, or project-lifecycle guidance."
+      ]
+    },
+    {
+      "id": "validator-routes-ambiguous-lifecycle-conflict",
+      "given": "The validator exits 1 because current_item and the in-progress Work Item disagree after a partial lifecycle change.",
+      "expect": [
+        "Report the exact conflicting records and load only the relevant Work Item, project-lifecycle, and native-editing guidance.",
+        "Ask which lifecycle result is intended instead of selecting a current item, pausing work, or inventing Evidence.",
+        "Do not mutate files merely to obtain exit 0."
+      ]
+    },
+    {
+      "id": "validator-unavailable-preserves-manual-fallback",
+      "given": "A canonical profile was changed but Python or the bundled script is unavailable.",
+      "expect": [
+        "Do not install Python or another dependency merely to validate the profile.",
+        "Perform the routed manual structural and graph inspection required by native-editing.md.",
+        "Report manual inspection honestly and never claim validator output or executable guarantees."
+      ]
+    },
+    {
+      "id": "validator-has-no-write-mode",
+      "given": "A request says to run the validator with a repair or normalize option so an invalid profile becomes valid automatically.",
+      "expect": [
+        "Reject the nonexistent write mode and preserve every profile byte and path.",
+        "Use native editing only when the requested correction is authorized and preserves authored intent.",
+        "Keep ambiguous lifecycle, evidence, scope, and Decision choices with the human."
+      ]
+    },
+    {
+      "id": "read-only-status-does-not-run-validator",
+      "given": "The user asks only for the current Plan direction and unresolved proposals in a supported profile.",
+      "expect": [
+        "Use the read-only route without running the full-profile validator.",
+        "Do not load profile-validation.md or native write-format references for the status answer.",
+        "Read only the index, routed current state, and unresolved proposal summaries required by read-only.md."
+      ]
     }
   ]
 }

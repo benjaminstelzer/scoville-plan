@@ -24,9 +24,11 @@ does not require a planning CLI, MCP server, database, journal, or hidden state.
 Its native `format_version: 1` profile provides the complete Skill-only
 workflow: setup, read-only recovery, Plan and Work Item operations, Decision
 proposals and lifecycle, blockers, evidence, activation, completion, and narrow
-repair. Without an executable it has no publication gate, typed requests,
-expected-hash writer, rollback, or multi-file atomicity; native editing
-compensates but does not rename those missing guarantees into existence.
+repair. An optional standard-library Python validator checks the complete
+profile without changing it. Direct writes still have no publication gate,
+typed requests, expected-hash writer, rollback, or multi-file atomicity; native
+editing compensates but does not rename those missing guarantees into
+existence.
 
 The plan is a map of unfinished outcomes, not a scrapbook of agent activity.
 
@@ -115,6 +117,10 @@ conversation.
 - **Honest native editing.** Direct edits use narrow reads, context-bound
   patches, complete diff inspection, and manual invariant checks. The skill
   never claims transactional or typed CLI guarantees it does not possess.
+- **Optional read-only validation.** A bundled Python script reports stable
+  JSON diagnostics for local format, cross-record links, lifecycle invariants,
+  unsafe paths, incomplete reads, and concurrent changes. It has no repair
+  mode and never replaces behavioral evidence or human authority.
 - **Decisions without approval theatre.** An explicit user choice or an
   applicable project rule that unmistakably records a human-selected direction
   becomes an accepted Decision without asking again. The skill links it from
@@ -152,7 +158,7 @@ copying their rules into the Plan.
 ## Design
 
 Scoville Plan first resolves the existing planning owner and decides whether
-the task warrants durable state. It conditionally loads eight focused guides:
+the task warrants durable state. It conditionally loads nine focused guides:
 
 - [references/planning-granularity.md](scoville-plan/references/planning-granularity.md)
   distinguishes independently resumable outcomes from subordinate steps and
@@ -176,6 +182,9 @@ the task warrants durable state. It conditionally loads eight focused guides:
 - [references/native-editing.md](scoville-plan/references/native-editing.md)
   owns exact-byte guards, native publication limits, recovery stops, and manual
   integrity checks shared by every write route.
+- [references/profile-validation.md](scoville-plan/references/profile-validation.md)
+  owns optional validator invocation, result interpretation, progressive
+  diagnostic routing, proof limits, and manual fallback.
 
 For a read-only direction query, the agent loads only the read-only guide and
 then reads the project index, active Plan, current Work Item, referenced
@@ -185,7 +194,8 @@ An audit adds only the format and decomposition guidance its target needs.
 
 The native profile remains usable without the skill installed. Scoville Plan
 owns its `format_version: 1` Plans, Work Items, and Decisions and has no
-executable dependency.
+required executable dependency. When Python is absent, the complete manual
+inspection route remains available.
 
 ## Sources and inspirations
 
@@ -200,18 +210,20 @@ executable dependency.
 
 ## Repository contents
 
-The installable `scoville-plan/` directory contains the core skill, eight
-conditionally loaded references, and display metadata. This README, the
-changelog, the evaluation cases, and the MIT license remain outside that
-directory and are not loaded as skill instructions. The repository contains no
-executable software, network integration, planning service, or generated state.
+The installable `scoville-plan/` directory contains the core skill, nine
+conditionally loaded references, one optional standard-library Python
+validator, and display metadata. This README, the changelog, the evaluation
+cases, and the MIT license remain outside that directory and are not loaded as
+skill instructions. The repository contains no network integration, planning
+service, mutating command, or generated project state.
 
 ## Status
 
 The installable directory passes the canonical Agent Skill validator, and the
-repository includes sixteen static evaluation cases plus a native
-feature-contract map for ownership, setup, recovery, granularity, Decision
-authority, lifecycle, evidence, and non-activation behavior.
+repository includes validator contract and invariant suites plus focused static
+evaluation cases for ownership, setup, recovery, granularity, Decision
+authority, lifecycle, evidence, validation routing, and non-activation
+behavior.
 
 In the current Terra Medium Scoville-family benchmark, eight of eight completed
 Plan-related answers were semantically source-correct; a ninth attempt failed

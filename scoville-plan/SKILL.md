@@ -36,10 +36,11 @@ system already owns state, use it and apply only this Skill's planning-quality
 guardrails where compatible. A runtime plan is a disposable mirror, never a
 second canonical owner.
 
-This Skill has no executable dependency and never invokes a planning CLI.
-Do not claim CLI validation, locking, atomic multi-file publication, or typed
-mutation safety. Use ordinary scoped file tools and report the manual checks
-actually performed.
+This Skill has no required executable dependency and never invokes a planning
+CLI. Its bundled Python validator is an optional strictly read-only structural
+check, never a write path. Do not claim locking, atomic multi-file publication,
+typed mutation safety, or semantic proof. Use ordinary scoped file tools and
+report only the checks actually performed.
 
 This Skill works independently. Never require, install, or simulate Code, UI,
 or Scribe. When a sibling is independently applicable, compose only its owned
@@ -67,7 +68,7 @@ Classify the operation before loading details:
 | Activate, complete, or cancel a Plan | [native-plan-format.md](references/native-plan-format.md), [native-project-lifecycle.md](references/native-project-lifecycle.md), [native-work-items.md](references/native-work-items.md) when current work changes, and [native-editing.md](references/native-editing.md) |
 | Audit native Plan structure or lifecycle | [native-plan-format.md](references/native-plan-format.md); add [planning-granularity.md](references/planning-granularity.md) only when judging decomposition |
 | Audit native Decision structure or lifecycle | [native-decision-format.md](references/native-decision-format.md) |
-| Diagnose or recover a complete supported profile | [native-plan-format.md](references/native-plan-format.md), [native-decision-format.md](references/native-decision-format.md), [native-decision-batches.md](references/native-decision-batches.md), [native-work-items.md](references/native-work-items.md), [native-project-lifecycle.md](references/native-project-lifecycle.md), and [native-editing.md](references/native-editing.md) |
+| Validate after native writes or diagnose a complete supported profile | Run the bundled check through [profile-validation.md](references/profile-validation.md), then load only the native reference needed for a reported diagnostic or correction |
 
 Do not preload format details for a read-only status answer.
 
@@ -143,8 +144,10 @@ After writing:
 3. check index ownership, active-Plan count, current-item status, Work Item key
    order, dependency order and cycles, Decision and Plan references, blockers,
    lifecycle fields, Evidence, and `Next action`;
-4. run the repository's validator only when it is independently available and
-   authorized, never as a dependency of this Skill; and
+4. run the bundled optional validator through
+   [profile-validation.md](references/profile-validation.md) when its script and
+   Python are already available, otherwise perform and report the scoped manual
+   inspection; and
 5. record only observed acceptance evidence.
 
 Stop on unsupported format, concurrent changes, ambiguous lifecycle authority,
