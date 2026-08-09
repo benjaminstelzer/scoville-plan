@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-09: README scope
+
+### Changed
+
+- Kept the README focused on installation, composition, design, and usage by
+  removing embedded benchmark results and cost tables. The complete benchmark
+  artifacts remain available under `docs/benchmarks`.
+
 ## 2026-08-08: Complete-suite cost evidence
 
 ### Added
