@@ -76,6 +76,10 @@ Work Item `Decisions` lists are the sole canonical Plan-to-Decision links.
 Decision frontmatter never stores incoming Plan links. Add a new proposal to
 every affected `todo` item and no unrelated item. Preserve the immutable list
 on items that have left `todo` and report that format-version-1 limitation.
+Proposal status never removes a link: a proposed or otherwise unresolved
+Decision links every mutable Work Item whose implementation, sequencing,
+Acceptance, or Evidence could change under a viable alternative. Do not link a
+Work Item when no such effect is established.
 
 Creating a Decision always produces `proposed`. When the current user has
 already selected the direction or an applicable project instruction clearly
@@ -105,9 +109,13 @@ metadata.
 
 Implement an explicitly authorized edit of an accepted or deprecated Decision
 as one supersession result, not an in-place rewrite. Every affected mutable Work
-Item must replace the old Decision ID explicitly. If that would require editing
-an immutable started Work Item, stop and report the format limitation rather
-than publishing an inconsistent replacement.
+Item must replace the old Decision ID explicitly. Block only an affected
+started or otherwise immutable Work Item whose still-relevant implementation,
+sequencing, Acceptance, or Evidence would have to adopt the replacement
+Decision. A terminal historical Work Item is not a blocked item merely because
+its unchanged Decision link remains as history. If a required replacement would
+edit an immutable Work Item, stop and report the format limitation rather than
+publishing an inconsistent replacement.
 
 For an explicitly authorized accept-or-reject batch, additionally load
 [native-decision-batches.md](native-decision-batches.md). Do not load that

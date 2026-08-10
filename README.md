@@ -24,11 +24,11 @@ does not require a planning CLI, MCP server, database, journal, or hidden state.
 Its native `format_version: 1` profile provides the complete Skill-only
 workflow: setup, read-only recovery, Plan and Work Item operations, Decision
 proposals and lifecycle, blockers, evidence, activation, completion, and narrow
-repair. An optional standard-library Python validator checks the complete
-profile without changing it. Direct writes still have no publication gate,
-typed requests, expected-hash writer, rollback, or multi-file atomicity; native
-editing compensates but does not rename those missing guarantees into
-existence.
+repair. Optional standard-library Python helpers validate a complete profile
+and compute exact Decision-batch metadata without changing project files.
+Direct writes still have no publication gate, typed requests, expected-hash
+writer, rollback, or multi-file atomicity; native editing compensates but does
+not rename those missing guarantees into existence.
 
 The plan is a map of unfinished outcomes, not a scrapbook of agent activity.
 
@@ -52,6 +52,7 @@ Usually, let your coding agent install the skill. Send it this prompt:
 ```text
 Install this Agent Skill from GitHub and make it available for my project planning work:
 https://github.com/benjaminstelzer/scoville-plan/tree/main/scoville-plan
+Use Terra 5.6 Medium or a comparably capable executor such as Opus 4.8; this is the minimum supported capability level for this Skill.
 ```
 
 Add "for all my projects" or "only for this project" when the installation
@@ -80,11 +81,18 @@ As a negative check, ask for one small reversible change in a repository with
 no durable planning requirement. Scoville Plan should not initialize a profile
 or turn the change into a planning exercise.
 
-**What it costs.** Skill discovery exposes only the name and description. After
+**What it costs.** Compatible hosts expose compact discovery metadata before
+loading the full Skill instructions. After
 activation, the core loads first and selects planning granularity, Plan format,
 Decision format, batch-transition, and native editing guidance only when the
 operation needs them. Provider token usage also depends on the host and
-conversation.
+conversation. In the final frozen Terra Medium A/B, the qualified Core used
+1,819 `o200k_base` tokens versus 2,207 for its reliability-equivalent control
+(-17.58%); the whole package used 27,312 versus 27,700 (-1.40%). Each active
+case therefore loaded exactly 388 fewer literal Core tokens. Across 30 cases
+per arm, loaded Skill tokens fell 7.81%; observed provider usage fell 1.04%,
+which also includes generation and cache variance. See
+[benchmark evidence](docs/benchmark-evidence.md) for the full gate and limits.
 
 ## What it enforces
 
@@ -169,8 +177,8 @@ the task warrants durable state. It conditionally loads nine focused guides:
   defines Decision records, links, and explicitly authorized lifecycle
   transitions.
 - [references/native-decision-batches.md](scoville-plan/references/native-decision-batches.md)
-  adds deterministic metadata only for an explicitly authorized multi-Decision
-  accept-or-reject transition.
+  routes an explicitly authorized multi-Decision accept-or-reject transition
+  through a deterministic read-only metadata helper when available.
 - [references/read-only.md](scoville-plan/references/read-only.md)
   recovers current state and unresolved proposals without loading write
   contracts.
@@ -211,24 +219,25 @@ inspection route remains available.
 ## Repository contents
 
 The installable `scoville-plan/` directory contains the core skill, nine
-conditionally loaded references, one optional standard-library Python
-validator, and display metadata. This README, the changelog, the evaluation
-cases, and the MIT license remain outside that directory and are not loaded as
-skill instructions. The repository contains no network integration, planning
+conditionally loaded references, two optional standard-library Python helpers,
+and display metadata. This README, the changelog, the evaluation cases, and the
+MIT license remain outside that directory and are not loaded as skill
+instructions. The repository contains no network integration, planning
 service, mutating command, or generated project state.
 
 ## Status
 
-The installable directory passes the canonical Agent Skill validator, and the
-repository includes validator contract and invariant suites plus focused static
-evaluation cases for ownership, setup, recovery, granularity, Decision
-authority, lifecycle, evidence, validation routing, and non-activation
-behavior.
-
-The complete-family benchmark passed 5/6 strict quality gates versus 3/6
-without Skills, while uncached input rose 124.1% and cached input rose 389.4%.
-Skills should therefore be activated by concern rather than as a permanent
-bundle.
+The installable directory passes the canonical Agent Skill validator. It was
+optimized with a project-local, reliability-first, token-saving extension of
+[Microsoft SkillOpt](https://github.com/microsoft/SkillOpt): `gpt-5.6-sol` at
+`xhigh` handled optimization and routing, and `gpt-5.6-terra` at `medium`
+executed the frozen A/B benchmark. Across the four-Skill program, **797 run
+artifacts** were recorded, including **742 technically valid benchmark runs**,
+before the final packages were selected. This Skill passed **30/30** final
+Train, Validation, and sealed-Test cases and loaded **7.81% fewer Skill
+instruction tokens** than its paired control. Terra 5.6 Medium or a comparably
+capable executor such as Opus 4.8 is the minimum supported level. See
+[benchmark evidence](docs/benchmark-evidence.md).
 
 ## License
 

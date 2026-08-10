@@ -5,158 +5,151 @@ description: Repository-native planning guardrail for creating, maintaining, res
 
 # Scoville Plan
 
-Keep project direction in reviewable repository files without requiring a
-planning CLI, MCP server, database, journal, or hidden state. This Skill owns
-planning discipline and native Plan and Decision maintenance. It records
-choices humans have already made and preserves a material unresolved choice as
-a proposal before asking for its lifecycle decision. It does not grant inferred
-choices authority or prove that reported work happened.
+Maintain repository direction through direct Markdown and YAML edits. Preserve
+supported native `format_version: 1` behavior: setup, read-only
+recovery, Plans, Work Items, Decisions, proposals, lifecycles, blockers,
+evidence, and narrow repair. Require no CLI, MCP server, database, journal, or
+hidden state; remove or reinterpret no project-knowledge feature.
 
-Keep the complete supported `format_version: 1` feature surface: read-only
-recovery, setup, Plans, Work Items, Decisions, proposals, lifecycle, blockers,
-evidence, and narrow repair. Use direct native edits without removing or
-reinterpreting a project-knowledge feature.
+Record human choices; preserve a material unresolved choice as `proposed`
+pending its lifecycle decision. Inference grants no authority; a
+record does not prove work.
 
-On explicit opt-out, do not read references, create or change planning files,
-or make Skill-derived claims. If a higher-priority project instruction requires
-this Plan system, report that exact conflict. A sibling Scoville opt-out excludes
-only that sibling.
+On explicit opt-out: read no references; do not create or change planning files;
+make no Skill-derived claims. Report any exact conflict with a higher-priority
+project instruction requiring this Plan system. A sibling opt-out excludes only
+that sibling.
 
-## Follow the existing owner
+## Ownership and limits
 
-Resolve planning requirements in this order:
+Apply this precedence:
 
-1. system, safety, and explicit instructions for the current request;
-2. repository instructions and its existing canonical planning mechanism;
-3. an existing supported native profile; and
-4. this Skill's defaults for what remains unspecified.
+1. system, safety, and explicit current-request instructions;
+2. repository instructions and their canonical planning mechanism;
+3. an existing supported native profile;
+4. these defaults for gaps.
 
-Never create a second plan beside a project-owned plan. If another durable plan
-system already owns state, use it and apply only this Skill's planning-quality
-guardrails where compatible. A runtime plan is a disposable mirror, never a
-second canonical owner.
+Use an existing durable owner; never create a parallel Plan. Apply only
+compatible guardrails. A runtime plan is a disposable mirror.
 
-This Skill has no required executable dependency and never invokes a planning
-CLI. Its bundled Python validator is an optional strictly read-only structural
-check, never a write path. Do not claim locking, atomic multi-file publication,
-typed mutation safety, or semantic proof. Use ordinary scoped file tools and
-report only the checks actually performed.
+Never invoke a planning CLI or require executables. The optional bundled
+validator is strictly read-only and structural, never a write path. Claim no
+locking, atomic multi-file publication, typed mutation safety, or semantic
+proof; report only observed checks.
 
-This Skill works independently. Never require, install, or simulate Code, UI,
-or Scribe. When a sibling is independently applicable, compose only its owned
-implementation, interface, or wording concern; its absence does not weaken
-Plan structure, lifecycle, authority, or evidence rules.
+Never require, install, or simulate Code, UI, or Scribe. Compose an applicable
+sibling only for owned implementation, interface, or wording; its
+absence changes no Plan structure, lifecycle, authority, or evidence rule.
 
-## Decide whether durable planning is warranted
+## Choose planning and route references
 
-Use a repository Plan for multiple dependent outcomes, material sequencing,
-work that must survive interruption or handoff, or a binding project workflow.
-For one small reversible change, implement and validate directly unless the
-project already requires a tracked Work Item.
+Use a Plan for dependent outcomes, material sequencing, durable
+handoff, or a binding workflow. Implement one small reversible change directly
+unless the project requires a tracked Work Item.
 
-Classify the operation before loading details:
+Exact reference codes: `R` [read-only.md](references/read-only.md); `G`
+[planning-granularity.md](references/planning-granularity.md); `P`
+[native-plan-format.md](references/native-plan-format.md); `L`
+[native-project-lifecycle.md](references/native-project-lifecycle.md); `E`
+[native-editing.md](references/native-editing.md); `W`
+[native-work-items.md](references/native-work-items.md); `D`
+[native-decision-format.md](references/native-decision-format.md); `B`
+[native-decision-batches.md](references/native-decision-batches.md); `V`
+[profile-validation.md](references/profile-validation.md).
+
+Classify the operation, then load exactly its route:
 
 | Operation | Load |
 | --- | --- |
-| Read current direction or list records without writing | [read-only.md](references/read-only.md) |
-| Initialize a wholly absent profile | [planning-granularity.md](references/planning-granularity.md), [native-plan-format.md](references/native-plan-format.md), [native-project-lifecycle.md](references/native-project-lifecycle.md), and [native-editing.md](references/native-editing.md) |
-| Create or restructure a Plan | [planning-granularity.md](references/planning-granularity.md), [native-plan-format.md](references/native-plan-format.md), [native-project-lifecycle.md](references/native-project-lifecycle.md), and [native-editing.md](references/native-editing.md) |
-| Insert, refine, move, select, block, advance, or remove a Work Item | [native-plan-format.md](references/native-plan-format.md), [native-work-items.md](references/native-work-items.md), and [native-editing.md](references/native-editing.md) |
-| Record an explicit human choice or a material possible Decision | [native-decision-format.md](references/native-decision-format.md), [native-plan-format.md](references/native-plan-format.md), and [native-editing.md](references/native-editing.md) |
-| Apply an explicitly authorized Decision transition | [native-decision-format.md](references/native-decision-format.md), [native-plan-format.md](references/native-plan-format.md), and [native-editing.md](references/native-editing.md) |
-| Apply an explicitly authorized accept-or-reject batch | [native-decision-format.md](references/native-decision-format.md), [native-decision-batches.md](references/native-decision-batches.md), [native-plan-format.md](references/native-plan-format.md), and [native-editing.md](references/native-editing.md) |
-| Activate, complete, or cancel a Plan | [native-plan-format.md](references/native-plan-format.md), [native-project-lifecycle.md](references/native-project-lifecycle.md), [native-work-items.md](references/native-work-items.md) when current work changes, and [native-editing.md](references/native-editing.md) |
-| Audit native Plan structure or lifecycle | [native-plan-format.md](references/native-plan-format.md); add [planning-granularity.md](references/planning-granularity.md) only when judging decomposition |
-| Audit native Decision structure or lifecycle | [native-decision-format.md](references/native-decision-format.md) |
-| Validate after native writes or diagnose a complete supported profile | Run the bundled check through [profile-validation.md](references/profile-validation.md), then load only the native reference needed for a reported diagnostic or correction |
+| Read direction or list records; no write | R |
+| Initialize a wholly absent profile | G, P, L, E |
+| Create or restructure Plan | G, P, L, E |
+| Insert, refine, move, select, block, advance, or remove Work Item | P, W, E |
+| Record explicit human choice or possible material Decision | D, P, E |
+| Apply explicitly authorized Decision transition | D, P, E |
+| Apply explicitly authorized accept-or-reject batch | D, B, P, E |
+| Activate, complete, or cancel Plan | P, L, W only if current work changes, E |
+| Audit Plan structure or lifecycle | P; add G only for decomposition judgment |
+| Audit Decision structure or lifecycle | D |
+| Validate after writes or diagnose a complete supported profile | Run V; then only the native reference for a reported diagnostic or correction |
 
-Do not preload format details for a read-only status answer.
+For read-only, preload no format guides. If profile existence is unknown,
+list the root before canonical reads; never probe absent
+`PROJECT_INDEX.md`. For an explicitly requested new durable Plan, use the
+workspace as setup root, classify the whole profile, and initialize only if all
+three canonical paths are absent. Otherwise report absence. Preserve and stop
+on partial, foreign, unsupported, invalid, or intent-invalid state unless the
+route permits intent-preserving repair.
 
-When profile existence is unknown, list the project root before reading any
-canonical path. If `PROJECT_INDEX.md` is absent, do not attempt to read it. For
-an explicitly requested new durable Plan, treat the current workspace as the
-setup root, classify the complete profile, and initialize only when all three
-canonical paths are wholly absent. If creation was not requested, report that
-no profile exists instead of initializing one implicitly. Preserve and stop on
-a partial, foreign, unsupported, or intent-invalid profile.
+## Preserve authority and lifecycle
 
-## Preserve authority and evidence
+| Input or state | Required treatment |
+| --- | --- |
+| Goal, Non-goals, blocker, dependency, acceptance result, evidence, or lifecycle choice | Never invent. Implementation, ordinary documentation, source, silence, and current behavior are evidence, not authorization. |
+| Activation, cancellation, changed scope, weaker Acceptance, ambiguous successor, or adoption of a possible material choice | Ask before changing durable state. |
+| User selects a direction, asks to preserve it in project rules, or applicable project instruction clearly records the human-selected direction | Create and accept its Decision without re-asking; link every affected mutable Work Item. |
+| Analysis reveals a possible material Decision about scope, architecture, public behavior, stored data, security, dependencies, reversibility, Acceptance, migration, or rollout | Create `proposed`; link affected mutable Work Items; report recommendation, alternatives, tradeoffs, and effect; ask to accept, reject, or revise. Do not pre-accept. |
 
-- Never invent the Goal, Non-goals, acceptance result, blocker, dependency,
-  evidence, or an accepted lifecycle choice. Treat implementation, ordinary
-  documentation, source code, silence, and current behavior as evidence, not as
-  human authorization.
-- Ask before activation, cancellation, changed scope, weaker acceptance, an
-  ambiguous successor, or adopting a merely possible material choice.
-- When the user explicitly selects a direction, asks to preserve it in project
-  rules, or an applicable project instruction unmistakably states a
-  human-selected direction, create and accept the corresponding Decision
-  without asking again. Link every affected mutable Work Item.
-- When analysis only reveals a possible material Decision about scope,
-  architecture, public behavior, stored data, security, dependencies,
-  reversibility, acceptance, migration, or rollout, create it as `proposed`,
-  link every affected mutable Work Item, report its recommendation,
-  alternatives, tradeoffs, and practical effect, then ask the user to accept,
-  reject, or revise it. Do not accept it before that answer.
-- A request to draft a proposal creates `proposed`. A clear choice to record
-  the stated direction authorizes its acceptance. Never reject, deprecate, or
-  supersede a Decision without that explicit lifecycle choice.
-- At the start of project work, inventory Decision frontmatter, read every
-  proposal, report its ID, title, recommended choice, and practical effect, and
-  ask the user to accept, reject, or revise it. Repeat unresolved proposals at
-  handoff. Only dependent work stops.
-- Mark a Work Item `done` only after observing its Acceptance result and adding
-  concise evidence. A file-shape check proves structure only.
-- Keep failed or partial work `in_progress`, `paused`, or explicitly blocked.
+A proposal request creates `proposed`; a clear request to record the stated
+choice authorizes acceptance. Reject, deprecate, supersede, activate, or cancel
+only with the explicit lifecycle choice required by the route. For an
+authorized multi-Decision accept-or-reject transition, use B and its helper
+route; never substitute single-transition or audit behavior.
 
-## Keep behavior-complete Work Items
+At project-work start, inventory Decision frontmatter and read every proposal.
+Report ID, title, recommended choice, and practical effect; request accept,
+reject, or revise. Repeat unresolved proposals at handoff; stop only dependent
+work.
 
+Mark a Work Item `done` only after observing Acceptance and adding concise
+evidence. A captured structural-validation result supports only structural
+judgment and reporting, never acceptance evidence or mutation authority. Keep
+failed or partial work `in_progress`, `paused`, or explicitly blocked.
+
+## Keep behavior-complete work
+
+- Split independently resumable outcomes when Acceptance, dependencies,
+  ownership, or rollout timing differs. Put subordinate order in optional
+  Steps. Put testing, review, documentation, and release checks in Acceptance
+  or Evidence unless independently requested as resumable outcomes.
 - Keep at most one Work Item `in_progress`, equal to `current_item`. This limits
-  concurrent execution; it does not limit a Plan to one Work Item in total.
-- Split independently resumable outcomes with distinct acceptance boundaries,
-  dependencies, owners, or rollout timing into separate Work Items.
-- Keep implementation order inside optional Steps. Testing, review,
-  documentation, and release checks belong in Acceptance or Evidence unless
-  independently requested deliverables need their own resumable outcome.
-- Change authored content or ordering only while an item is `todo`. After it
-  starts, preserve its starting approach and update only live state.
-- Keep `Next action` equal to the first concrete action not yet performed. Once
-  implementation exists, advance it to the next unobserved test, build, browser
-  check, review, or evaluator-owned verification.
-- Select new current work only when its dependencies are done and the successor
-  is explicit. Use `complete_and_advance` only when completion and the exact
-  replacement start are both valid as one prepared result.
-- When final real work completes, complete its Work Item and Plan and set the
-  project index to idle. Never invent a successor merely to keep it active.
+  concurrency, not total Plan items.
+- Change authored content or order only while `todo`. After start, preserve the
+  starting approach and change only live state allowed by the route.
+- `Next action` is the first unperformed concrete action. After implementation,
+  advance to the first unobserved test, build, browser check, review, or
+  evaluator-owned verification.
+- Select current work only when dependencies are done and the successor is
+  explicit. Use `complete_and_advance` only when completion and the exact
+  replacement start form one valid prepared result.
+- When final real work finishes, complete its Work Item and Plan and set the
+  index idle. Never invent a successor to keep the Plan active.
 
-## Work natively and narrowly
+## Mutate narrowly and verify
 
-Before writing, confirm the project root, supported format, active Plan,
-current Work Item, affected bytes, observable outcome, and acceptance evidence.
-Use context-bound patches and preserve unrelated work. Prepare a complete
-multi-file change before applying any member, while acknowledging that direct
-edits are not atomic.
+Before writing, confirm root, format, active Plan, current Work Item, affected
+bytes, outcome, and required acceptance evidence. Use context-bound patches;
+preserve unrelated work. Prepare and inspect the full multi-file result before
+applying any member; direct edits remain non-atomic.
 
 After writing:
 
-1. reread every changed canonical file;
-2. inspect the complete scoped diff;
+1. reread each changed canonical file;
+2. inspect the scoped diff;
 3. check index ownership, active-Plan count, current-item status, Work Item key
    order, dependency order and cycles, Decision and Plan references, blockers,
    lifecycle fields, Evidence, and `Next action`;
-4. run the bundled optional validator through
-   [profile-validation.md](references/profile-validation.md) when its script and
-   Python are already available, otherwise perform and report the scoped manual
-   inspection; and
-5. record only observed acceptance evidence.
+4. when its script and Python are already available, run the optional validator
+   through V; otherwise perform and report the scoped manual inspection;
+5. record only acceptance evidence observed for the mutation.
 
 Stop on unsupported format, concurrent changes, ambiguous lifecycle authority,
-invalid state whose repair would alter intent, or a partial multi-file
-transition. Do not overwrite the problem into apparent validity.
+invalid state whose repair changes intent, or a partial multi-file transition.
+Do not overwrite a problem into apparent validity.
 
-## Report the durable state
+## Report durable state
 
-Lead with the current Plan outcome. Name changed canonical files, active and
-blocked work, observed checks, recorded evidence, unresolved material choices,
-and the next concrete action. Distinguish native structural inspection from
-behavioral verification. Do not narrate routine file operations.
+Lead with Plan outcome. Name changed canonical files, active and blocked
+work, observed checks, recorded evidence, unresolved material choices, and the
+next action. Distinguish native structural inspection from behavioral
+verification; omit routine file-operation narration.

@@ -25,7 +25,7 @@
     {"id":"complete-and-advance","sources":["references/native-work-items.md"]},
     {"id":"create-update-delete-decision-proposal","sources":["references/native-decision-format.md","references/native-editing.md"]},
     {"id":"accept-reject-deprecate-supersede-decision","sources":["references/native-decision-format.md","references/native-editing.md"]},
-    {"id":"accept-or-reject-decision-batch","sources":["references/native-decision-batches.md","references/native-decision-format.md","references/native-editing.md"]},
+    {"id":"accept-or-reject-decision-batch","sources":["references/native-decision-batches.md","references/native-decision-format.md","references/native-editing.md","scripts/compute_decision_batch.py"]},
     {"id":"preserve-record-history-and-relations","sources":["references/native-decision-format.md","references/native-work-items.md","references/native-editing.md"]},
     {"id":"dependency-order-blocker-evidence-and-date-invariants","sources":["references/native-plan-format.md","references/native-work-items.md","references/native-editing.md"]},
     {"id":"narrow-format-repair","sources":["references/native-editing.md"]},

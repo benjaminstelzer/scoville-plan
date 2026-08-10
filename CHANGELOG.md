@@ -1,5 +1,34 @@
 # Changelog
 
+## 2026-08-10: Reliability-first Plan compression
+
+### Added
+
+- Added a strictly read-only Decision-batch helper that hashes exact
+  pre-mutation file bytes and produces deterministic ordered batch metadata.
+- Added focused helper tests and a repository evidence summary for the frozen
+  compression qualification.
+
+### Changed
+
+- Compressed the activated Core from 2,207 to 1,819 `o200k_base` tokens while
+  preserving the complete native Plan, Work Item, Decision, authority,
+  lifecycle, evidence, and recovery behavior.
+- Clarified proposal link coverage and limited supersession blocking to
+  immutable Work Items whose still-relevant behavior must adopt the replacement
+  Decision.
+- Routed authorized Decision batches through the deterministic helper when
+  available, with a byte-exact fallback only when the helper cannot run.
+
+### Evidence
+
+- Control and compressed arms each passed 18/18 Train, 9/9 Validation, and 3/3
+  sealed Test rows in Hard, Route, Semantic, Process, and Efficiency gates.
+- All 60 rows were agent- and provider-complete, every read ledger was
+  exact-once, and no route retry or shell call occurred.
+- The qualified Core is 17.58% smaller; the complete package is 1.40% smaller
+  because all routed references and helpers remain behavior-complete.
+
 ## 2026-08-09: README scope
 
 ### Changed
