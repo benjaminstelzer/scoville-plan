@@ -42,8 +42,9 @@ usage fell from 1,013,578 to 1,003,085 tokens (-1.0352%); provider totals also
 include generation and cache variance and are not a deterministic compression
 measure.
 
-The public previous-release comparison uses the same Core counts: `v1.2.2`
-used 2,207 tokens and `v1.2.3` uses 1,819, a reduction of 388 tokens (-17.58%).
+The public pre-optimization comparison uses the same Core counts: `v1.2.2` used
+2,207 tokens and the qualified Skill uses 1,819, a reduction of 388 tokens
+(-17.58%).
 
 ## Reproducibility bindings
 

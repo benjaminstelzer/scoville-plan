@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-10: Clearer usage trade-offs
+
+### Changed
+
+- Explain that activating the Skill adds prompt context and is best suited to
+  work where durable direction, explicit Decision authority, consistent
+  lifecycles, recovery, and handoff justify the additional token cost.
+- Remove the positive and negative inline verification examples and clarify
+  that the public token comparison uses the pre-optimization release.
+
 ## 2026-08-10: Reliability-first Plan compression
 
 ### Added

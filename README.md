@@ -71,23 +71,18 @@ For Claude Code, `<skills-dir>` is `~/.claude/skills/` for all projects or
 `.claude/skills/` inside a repository for that project only. For other agents,
 consult their documentation; paths differ per agent.
 
-**Verify it works.** Ask the agent: *"Use Scoville Plan to review whether a
-migration's schema, compatibility, consumer update, and rollout outcomes should
-be separate Work Items. Do not change files."* The agent should distinguish
-independently resumable outcomes from subordinate implementation steps, retain
-the repository's existing planning owner, and avoid creating a parallel plan.
-
-As a negative check, ask for one small reversible change in a repository with
-no durable planning requirement. Scoville Plan should not initialize a profile
-or turn the change into a planning exercise.
-
 **What it costs.** Compatible hosts expose compact discovery metadata before
 loading the full Skill instructions. After
 activation, the core loads first and selects planning granularity, Plan format,
 Decision format, batch-transition, and native editing guidance only when the
 operation needs them. Provider token usage also depends on the host and
-conversation. Compared with `v1.2.2`, the always-loaded core fell from 2,207 to
-1,819 tokens (-17.58%). See
+conversation. Compared with pre-optimization `v1.2.2`, the always-loaded core
+fell from 2,207 to 1,819 tokens (-17.58%). Activating any Skill adds instructions
+to the prompt and can use materially more tokens than working without one. That
+overhead buys durable project direction, explicit Decision authority,
+consistent lifecycles, and reliable recovery and handoff. Use Scoville Plan
+when those safeguards matter; leave it inactive for a small, fast project with
+no durable planning need when minimizing token use matters more. See
 [benchmark evidence](docs/benchmark-evidence.md) for the full gate and limits.
 
 ## What it enforces
@@ -227,8 +222,8 @@ service, mutating command, or generated project state.
 prioritize reliability before compression. Across the Scoville family, **797
 runs and supporting artifacts** were recorded, including **742 valid benchmark
 runs**. This Skill passed **30/30** final cases. Its always-loaded instructions
-use **17.58% fewer tokens than v1.2.2**. Minimum executor: Terra 5.6 Medium or
-comparable, such as Opus 4.8. See
+use **17.58% fewer tokens than pre-optimization v1.2.2**. Minimum executor:
+Terra 5.6 Medium or comparable, such as Opus 4.8. See
 [benchmark evidence](docs/benchmark-evidence.md).
 
 ## License
