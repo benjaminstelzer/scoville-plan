@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-10: Scoville Handoff sibling
+
+### Changed
+
+- Added Scoville Handoff to the optional family composition guide and clarified
+  that Handoff transfers a snapshot while Plan retains durable ownership.
+- Reconciled the public run total across all five Scoville Skills.
+
 ## 2026-08-10: Clearer usage trade-offs
 
 ### Changed

@@ -148,11 +148,16 @@ for interface hierarchy, framework alignment, accessibility, responsiveness,
 and rendered evidence. Use
 [Scoville Scribe Anti-AI-Slop](https://github.com/benjaminstelzer/scoville-scribe-anti-ai-slop)
 for reader-facing wording, terminology, factual meaning, and source fidelity.
+Use [Scoville Handoff](https://github.com/benjaminstelzer/scoville-handoff) to
+transfer a compact current-state snapshot to another agent or session. Handoff
+points the receiver back to Plan's canonical records instead of becoming a
+second owner for Plans, Work Items, Decisions, or lifecycle.
 
 Plan owns durable direction and Work Item lifecycle. Code, UI, and Scribe own
 the quality and proof of the implementation and artifacts needed to deliver
-that direction. A Plan acceptance boundary may require their evidence without
-copying their rules into the Plan.
+that direction. Handoff owns only the portable snapshot. A Plan acceptance
+boundary may require sibling evidence without copying sibling rules into the
+Plan.
 
 ## Design
 
@@ -219,9 +224,9 @@ service, mutating command, or generated project state.
 ## Status
 
 [Microsoft SkillOpt](https://github.com/microsoft/SkillOpt) was extended to
-prioritize reliability before compression. Across the Scoville family, **797
-runs and supporting artifacts** were recorded, including **742 valid benchmark
-runs**. This Skill passed **30/30** final cases. Its always-loaded instructions
+prioritize reliability before compression. Across the five Scoville Skills,
+development recorded **1,019 optimization and evaluation runs**. This Skill
+passed **30/30** final cases. Its always-loaded instructions
 use **17.58% fewer tokens than pre-optimization v1.2.2**. Minimum executor:
 Terra 5.6 Medium or comparable, such as Opus 4.8. See
 [benchmark evidence](docs/benchmark-evidence.md).
