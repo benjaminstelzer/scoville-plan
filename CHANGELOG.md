@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-08-11: Standalone family contract (v1.2.7)
+
+### Changed
+
+- Clarified that every Scoville Skill works independently and that family
+  discovery does not imply installation, activation, applicability, or a
+  dependency.
+- Added all five current siblings with scoped ownership and kept sibling
+  opt-out local to that sibling.
+- Reduced repeated Core wording while retaining the existing activation
+  metadata, native profile contract, authority rules, and lifecycle invariants.
+
+### Validation
+
+- The central family-contract test passed all six packages and rejected all
+  five synthetic drift cases; Agent Skill and native profile validation also
+  passed.
+- No new model-behavior benchmark was run for this patch release.
+
 ## 2026-08-11: Scoville Brainstorm sibling (v1.2.6)
 
 ### Changed

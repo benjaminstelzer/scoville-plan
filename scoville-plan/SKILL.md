@@ -11,35 +11,36 @@ recovery, Plans, Work Items, Decisions, proposals, lifecycles, blockers,
 evidence, and narrow repair. Require no CLI, MCP server, database, journal, or
 hidden state; remove or reinterpret no project-knowledge feature.
 
-Record human choices; preserve a material unresolved choice as `proposed`
-pending its lifecycle decision. Inference grants no authority; a
-record does not prove work.
+A record does not prove work.
 
 On explicit opt-out: read no references; do not create or change planning files;
 make no Skill-derived claims. Report any exact conflict with a higher-priority
-project instruction requiring this Plan system. A sibling opt-out excludes only
-that sibling.
+project instruction requiring this Plan system.
 
 ## Ownership and limits
 
-Apply this precedence:
+Precedence:
 
 1. system, safety, and explicit current-request instructions;
 2. repository instructions and their canonical planning mechanism;
 3. an existing supported native profile;
 4. these defaults for gaps.
 
-Use an existing durable owner; never create a parallel Plan. Apply only
-compatible guardrails. A runtime plan is a disposable mirror.
+Use the existing durable owner; never create a parallel Plan. Apply compatible
+guardrails only; runtime plans are disposable mirrors.
 
-Never invoke a planning CLI or require executables. The optional bundled
+Never invoke a planning CLI. The optional bundled
 validator is strictly read-only and structural, never a write path. Claim no
-locking, atomic multi-file publication, typed mutation safety, or semantic
-proof; report only observed checks.
+locking, atomic publication, typed mutation, or semantic proof; report
+observations only.
 
-Never require, install, or simulate Code, UI, or Scribe. Compose an applicable
-sibling only for owned implementation, interface, or wording; its
-absence changes no Plan structure, lifecycle, authority, or evidence rule.
+Family standalone: discovery != installed|active|applicable|required;
+absent|inactive => ignore/no require|install|simulate|reimplement;
+active+applicable => owner concern only, self continues; opt-out local. Owners:
+`scoville-brainstorm` divergence;
+`scoville-code-anti-ai-slop` engineering/proof; `scoville-ui-anti-ai-slop`
+interface/rendered proof; `scoville-scribe-anti-ai-slop` wording/fidelity;
+`scoville-handoff` transfer.
 
 ## Choose planning and route references
 
@@ -87,8 +88,10 @@ route permits intent-preserving repair.
 | --- | --- |
 | Goal, Non-goals, blocker, dependency, acceptance result, evidence, or lifecycle choice | Never invent. Implementation, ordinary documentation, source, silence, and current behavior are evidence, not authorization. |
 | Activation, cancellation, changed scope, weaker Acceptance, ambiguous successor, or adoption of a possible material choice | Ask before changing durable state. |
-| User selects a direction, asks to preserve it in project rules, or applicable project instruction clearly records the human-selected direction | Create and accept its Decision without re-asking; link every affected mutable Work Item. |
-| Analysis reveals a possible material Decision about scope, architecture, public behavior, stored data, security, dependencies, reversibility, Acceptance, migration, or rollout | Create `proposed`; link affected mutable Work Items; report recommendation, alternatives, tradeoffs, and effect; ask to accept, reject, or revise. Do not pre-accept. |
+| User selects a direction, asks to preserve it in project rules, or applicable project instruction clearly records the human-selected direction | Create and accept its Decision without re-asking. |
+| Analysis reveals a possible material Decision about scope, architecture, public behavior, stored data, security, dependencies, reversibility, Acceptance, migration, or rollout | Create `proposed`; report recommendation, alternatives, tradeoffs, and effect; ask to accept, reject, or revise. Do not pre-accept. |
+
+Link each created Decision to every affected mutable Work Item.
 
 A proposal request creates `proposed`; a clear request to record the stated
 choice authorizes acceptance. Reject, deprecate, supersede, activate, or cancel
@@ -96,10 +99,9 @@ only with the explicit lifecycle choice required by the route. For an
 authorized multi-Decision accept-or-reject transition, use B and its helper
 route; never substitute single-transition or audit behavior.
 
-At project-work start, inventory Decision frontmatter and read every proposal.
-Report ID, title, recommended choice, and practical effect; request accept,
-reject, or revise. Repeat unresolved proposals at handoff; stop only dependent
-work.
+At work start, inventory Decision frontmatter and read every proposal. Report
+ID/title/recommendation/effect; request accept|reject|revise. Repeat unresolved
+proposals at handoff; stop only dependent work.
 
 Mark a Work Item `done` only after observing Acceptance and adding concise
 evidence. A captured structural-validation result supports only structural
@@ -130,7 +132,7 @@ failed or partial work `in_progress`, `paused`, or explicitly blocked.
 Before writing, confirm root, format, active Plan, current Work Item, affected
 bytes, outcome, and required acceptance evidence. Use context-bound patches;
 preserve unrelated work. Prepare and inspect the full multi-file result before
-applying any member; direct edits remain non-atomic.
+applying any member.
 
 After writing:
 
@@ -143,13 +145,12 @@ After writing:
    through V; otherwise perform and report the scoped manual inspection;
 5. record only acceptance evidence observed for the mutation.
 
-Stop on unsupported format, concurrent changes, ambiguous lifecycle authority,
-invalid state whose repair changes intent, or a partial multi-file transition.
+During mutation, also stop on concurrent changes, ambiguous lifecycle authority,
+or a partial multi-file transition.
 Do not overwrite a problem into apparent validity.
 
 ## Report durable state
 
-Lead with Plan outcome. Name changed canonical files, active and blocked
-work, observed checks, recorded evidence, unresolved material choices, and the
-next action. Distinguish native structural inspection from behavioral
-verification; omit routine file-operation narration.
+Lead with Plan outcome. Name changed canonical files, active/blocked work,
+observed checks/evidence, unresolved choices, and next action. Distinguish native
+structural inspection from behavioral verification; omit routine file narration.
