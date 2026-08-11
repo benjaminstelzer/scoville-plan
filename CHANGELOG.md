@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-11: Scoville Brainstorm sibling (v1.2.6)
+
+### Changed
+
+- Added Scoville Brainstorm to the optional family composition guide and
+  clarified that Brainstorm stops before Plan records a selected direction.
+- Added copy-ready examples for creating, resuming, and auditing durable Plans.
+- Reduced installation, cost, mechanism, and family documentation while
+  retaining the Scoville name rationale, sources, and benchmark evidence.
+- Added a family run ledger and reconciled the public total across all six
+  Scoville Skills.
+
 ## 2026-08-10: Scoville Handoff sibling
 
 ### Changed
