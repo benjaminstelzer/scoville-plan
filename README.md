@@ -22,7 +22,7 @@ Decision records. It is useful when work spans dependent outcomes, must survive
 interruption, or needs explicit lifecycle and completion evidence. It preserves
 the repository's existing planning owner and does not create a parallel
 journal, database, or hidden state. Small reversible changes normally need no
-durable Plan; not every checkbox needs a permanent address.
+durable Plan. Not every checkbox needs a permanent address.
 
 A Plan is a map of unfinished outcomes, not a scrapbook that happens to contain
 YAML.
@@ -67,10 +67,10 @@ The final path must end in `<skills-dir>/scoville-plan/SKILL.md`. For Claude
 Code, use `~/.claude/skills/` globally or `.claude/skills/` inside one project.
 Other hosts use their supported Skills directory.
 
-**What it costs.** The 1,819-token Core is 17.58% smaller than `v1.2.2`; format
+**What it costs.** The 1,819-token Core is 17.58% smaller than `v1.2.2`. Format
 guidance loads only when needed. The Skill can still use materially more tokens
 than no Skill, buying durable direction, explicit Decision authority, and
-reliable recovery. Use it for long-lived or interruptible work; skip it for a
+reliable recovery. Use it for long-lived or interruptible work. Skip it for a
 small change with no durable planning need. See
 [benchmark evidence](docs/benchmark-evidence.md).
 The [family run ledger](docs/optimization-history.md) shows the complete count.
@@ -79,14 +79,14 @@ The [family run ledger](docs/optimization-history.md) shows the complete count.
 
 - **One planning owner.** Existing repository instructions and records stay
   authoritative.
-- **Outcome-sized Work Items.** Separately resumable outcomes become items;
-  implementation steps and checks remain steps or acceptance evidence.
+- **Outcome-sized Work Items.** Separately resumable outcomes become items.
+  Implementation steps and checks remain steps or acceptance evidence.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
   Plan's `current_item`.
 - **Evidence before completion.** Files and passing structure checks do not
   substitute for the observed acceptance result.
-- **Explicit decisions.** Human choices are recorded without asking twice;
-  inferred choices remain proposed rather than silently accepted.
+- **Explicit decisions.** Human choices are recorded without asking twice.
+  Inferred choices remain proposed rather than silently accepted.
 - **A real next action.** The Plan points to the first unperformed action and
   becomes idle when final work is actually complete.
 - **No invented guarantees.** Direct Markdown/YAML edits are validated, but
@@ -100,7 +100,7 @@ The Skill first resolves the existing planning owner and whether durable state
 is justified. It then loads only the format and lifecycle guidance required for
 the requested operation, edits the native `format_version: 1` Markdown/YAML
 records directly, and checks links and invariants. Optional standard-library
-Python helpers provide read-only validation; the profile remains usable without
+Python helpers provide read-only validation. The profile remains usable without
 them or without the Skill installed.
 
 ## Scoville family
