@@ -3,6 +3,20 @@
 A plan should make project direction recoverable. Once planning becomes the
 project, it has missed its own point.
 
+It usually looks harmless:
+
+- A small reversible change receives a Plan, five Decisions, and fourteen Work
+  Items before anyone opens the file that owns it.
+- A Work Item becomes `done` because the expected file exists, although nobody
+  observed the acceptance result.
+- A second tracker appears beside the repository's existing Plan because the
+  first source of truth was apparently lonely.
+- The next action says "continue the work." The map has reached the useful
+  precision of a sign marked "somewhere ahead."
+
+That is planning slop: structure expands while direction becomes harder to
+recover. Eventually the map needs its own map.
+
 Scoville Plan is an Agent Skill for repository-owned Plans, Work Items, and
 Decision records. It is useful when work spans dependent outcomes, must survive
 interruption, or needs explicit lifecycle and completion evidence. It preserves
