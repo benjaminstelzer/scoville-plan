@@ -1,13 +1,14 @@
 # Scoville Plan
 
-Keeps project direction recoverable without turning planning into the project.
+A plan should make project direction recoverable. Once planning becomes the
+project, it has missed its own point.
 
 Scoville Plan is an Agent Skill for repository-owned Plans, Work Items, and
 Decision records. It is useful when work spans dependent outcomes, must survive
 interruption, or needs explicit lifecycle and completion evidence. It preserves
-the repository's existing planning owner and does not create a parallel journal,
-database, or hidden state. Small reversible changes normally need no durable
-Plan.
+the repository's existing planning owner and does not create a parallel
+journal, database, or hidden state. Small reversible changes normally need no
+durable Plan; not every checkbox needs a permanent address.
 
 A Plan is a map of unfinished outcomes, not a scrapbook that happens to contain
 YAML.
