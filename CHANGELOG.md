@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-08-19: Public validation wording (v1.2.12)
+
+### Changed
+
+- Removed external model-review approval from the historical validation record.
+- Kept the technical validation statements, Skill package, and behavior
+  unchanged.
+
+### Validation
+
+- Changelog no longer uses external approval as completion evidence.
+- The unchanged Agent Skill package passes canonical validation.
+
 ## 2026-08-11: Concrete slop examples (v1.2.9)
 
 ### Changed
@@ -205,9 +218,6 @@
 ### Validation
 
 - The canonical Agent Skill validator and repository diff checks pass.
-- A complete Fable review of all four Scoville cores and their thirteen
-  references found no P0 or P1 issue and judged standalone and family operation
-  coherent; its two P2 wording and navigation findings were corrected.
 - Three isolated `gpt-5.6-terra` medium-effort cases passed exact behavior and
   exact reference-routing checks with all 58 ambient Skills disabled.
 - The tested repository copy and the locally installed Skill are byte-identical.
