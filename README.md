@@ -24,12 +24,9 @@ the repository's existing planning owner and does not create a parallel
 journal, database, or hidden state. Small reversible changes normally need no
 durable Plan. Not every checkbox needs a permanent address.
 
-A Plan is a map of unfinished outcomes, not a scrapbook that happens to contain
-YAML.
-
 ## Why "Scoville"?
 
-The family is named for useful signal that survives dilution. In planning, the
+The family is named for useful signal that remains detectable after dilution. In planning, the
 heat is the direction another agent can still recover: the active outcome,
 authority, blocker, evidence, and next action.
 
@@ -54,26 +51,39 @@ Skill invocation.
 
 ## Install
 
-Use an Agent Skills-compatible host and Terra 5.6 Medium or a comparably
-capable executor such as Opus 4.8. Ask the agent to install:
+### Install this Skill
+
+In a local Codex or Claude Code session, ask:
 
 ```text
-Install this Agent Skill and refresh the available Skill list:
+Install this Agent Skill for all my projects from this exact package directory:
 https://github.com/benjaminstelzer/scoville-plan/tree/main/scoville-plan
-Keep the installed directory name scoville-plan. Use Terra 5.6 Medium or a comparably capable executor such as Opus 4.8.
+Preserve existing customizations and ask before overwriting conflicting files.
+Report the installed location and whether the host discovers the Skill.
 ```
 
-The final path must end in `<skills-dir>/scoville-plan/SKILL.md`. For Claude
-Code, use `~/.claude/skills/` globally or `.claude/skills/` inside one project.
-Other hosts use their supported Skills directory.
+The agent needs source access and permission to write to its personal Skills
+location. Manual fallback: [Codex Skills guide](https://learn.chatgpt.com/docs/build-skills)
+or [Claude Code Skills guide](https://code.claude.com/docs/en/skills).
 
-**What it costs.** The 1,819-token Core is 17.58% smaller than `v1.2.2`. Format
-guidance loads only when needed. The Skill can still use materially more tokens
-than no Skill, buying durable direction, explicit Decision authority, and
-reliable recovery. Use it for long-lived or interruptible work. Skip it for a
-small change with no durable planning need. See
-[benchmark evidence](docs/benchmark-evidence.md).
-The [family run ledger](docs/optimization-history.md) shows the complete count.
+Install only the linked package for the focused option.
+
+### Install the complete Scoville suite
+
+```text
+Install the complete Scoville Skill suite for all my projects. Fetch and install every exact package directory below:
+
+https://github.com/benjaminstelzer/scoville-brainstorm/tree/main/scoville-brainstorm
+https://github.com/benjaminstelzer/scoville-research/tree/main/scoville-research
+https://github.com/benjaminstelzer/scoville-code-anti-ai-slop/tree/main/scoville-code-anti-ai-slop
+https://github.com/benjaminstelzer/scoville-design-anti-ai-slop/tree/main/scoville-design-anti-ai-slop
+https://github.com/benjaminstelzer/scoville-ui-anti-ai-slop/tree/main/scoville-ui-anti-ai-slop
+https://github.com/benjaminstelzer/scoville-scribe-anti-ai-slop/tree/main/scoville-scribe-anti-ai-slop
+https://github.com/benjaminstelzer/scoville-plan/tree/main/scoville-plan
+https://github.com/benjaminstelzer/scoville-handoff/tree/main/scoville-handoff
+
+Preserve existing customizations and ask before overwriting conflicting files. Report every installed location and whether the host discovers each Skill.
+```
 
 ## What it enforces
 
@@ -103,6 +113,9 @@ records directly, and checks links and invariants. Optional standard-library
 Python helpers provide read-only validation. The profile remains usable without
 them or without the Skill installed.
 
+For repository structure and development tools, see
+[maintenance notes](docs/maintenance.md).
+
 ## Scoville family
 
 Each Skill works independently. Combine only the concerns the task actually
@@ -128,12 +141,13 @@ needs:
 
 ## Status
 
-A reliability-first extension of
-[Microsoft SkillOpt](https://github.com/microsoft/SkillOpt) tested the six
-Scoville Skills across **1,201 optimization and evaluation runs**. Scoville
-Plan passed **30/30 final cases** and its always-loaded instructions use
-**17.58% fewer tokens than v1.2.2**. See
+The historical package qualified on 2026-08-10 passed 30/30 final cases.
+Its exact Core and package hashes are retained in
 [benchmark evidence](docs/benchmark-evidence.md).
+
+The current source has changed since that qualification. Historical scores and
+token reductions do not qualify it. Read-only helper tests establish the
+contracts they exercised, not general agent behavior or transactional writes.
 
 ## Sources
 
@@ -146,4 +160,4 @@ Plan passed **30/30 final cases** and its always-loaded instructions use
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

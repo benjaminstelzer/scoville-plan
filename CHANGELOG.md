@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.13 - 2026-09-05
+
+- Shortened the README, moved contributor layout notes to docs/maintenance.md, and made agent installation the primary path. Safety and evidence limits remain explicit.
+- Added separate prompts for this Skill and the complete live-verified Scoville suite.
+- Fixed Decision batch inspection on Windows volumes where path and descriptor metadata expose different ctime values. File identity, size, mtime, within-API change detection, and redirect guards remain checked.
+- Documented package and development boundaries and excluded regenerated Python caches from version control.
+- Bound README benchmark and token claims to their historical qualified package rather than the current source.
+- Included the repository license in the independently copied Skill directory.
+- Fourteen Decision batch tests passed, including the Windows metadata regression. This is helper evidence, not a new agent qualification.
+
 ## 2026-08-19: Public validation wording (v1.2.12)
 
 ### Changed

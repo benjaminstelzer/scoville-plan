@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import os
 import subprocess
@@ -8,10 +9,27 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 
 REPOSITORY = Path(__file__).resolve().parent.parent
 SCRIPT = REPOSITORY / "scoville-plan" / "scripts" / "compute_decision_batch.py"
+SPEC = importlib.util.spec_from_file_location("decision_batch", SCRIPT)
+assert SPEC is not None and SPEC.loader is not None
+batch = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = batch
+SPEC.loader.exec_module(batch)
+
+
+def changed_stat(info: os.stat_result, **changes: int) -> SimpleNamespace:
+    fields = {
+        key: getattr(info, key, 0)
+        for key in ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns",
+                    "st_mode", "st_file_attributes")
+    }
+    fields.update(changes)
+    return SimpleNamespace(**fields)
 
 
 class ComputeDecisionBatchCliTests(unittest.TestCase):
@@ -88,6 +106,70 @@ class ComputeDecisionBatchCliTests(unittest.TestCase):
         completed = self.run_cli(*self.arguments("ADR-0001:accept:../outside.md"))
         self.assertEqual(2, completed.returncode)
         self.assertIn("normalized repository-relative", completed.stderr)
+
+    def test_windows_path_and_descriptor_ctime_may_differ(self) -> None:
+        path = self.write("docs/decisions/0001-first.md")
+        info = os.lstat(path)
+        descriptor_info = changed_stat(info, st_ctime_ns=info.st_ctime_ns + 100)
+        transition = batch.parse_transition("ADR-0001:accept:docs/decisions/0001-first.md")
+        with mock.patch.object(batch.sys, "platform", "win32"), mock.patch.object(
+            batch.os, "fstat", return_value=descriptor_info
+        ):
+            self.assertEqual(hashlib.sha256(b"fixture\n").hexdigest(), batch.hash_member(self.root, transition))
+
+    def test_posix_cross_api_ctime_change_is_rejected(self) -> None:
+        path = self.write("docs/decisions/0001-first.md")
+        info = os.lstat(path)
+        transition = batch.parse_transition("ADR-0001:accept:docs/decisions/0001-first.md")
+        with mock.patch.object(batch.sys, "platform", "linux"), mock.patch.object(
+            batch.os, "fstat", return_value=changed_stat(info, st_ctime_ns=info.st_ctime_ns + 100)
+        ):
+            with self.assertRaisesRegex(batch.CliError, "changed during inspection"):
+                batch.hash_member(self.root, transition)
+
+    def test_windows_still_rejects_identity_size_or_mtime_changes(self) -> None:
+        path = self.write("docs/decisions/0001-first.md")
+        info = os.lstat(path)
+        transition = batch.parse_transition("ADR-0001:accept:docs/decisions/0001-first.md")
+        for field in ("st_dev", "st_ino", "st_size", "st_mtime_ns"):
+            with self.subTest(field=field), mock.patch.object(batch.sys, "platform", "win32"), mock.patch.object(
+                batch.os, "fstat", return_value=changed_stat(info, **{field: getattr(info, field) + 1})
+            ):
+                with self.assertRaisesRegex(batch.CliError, "changed during inspection"):
+                    batch.hash_member(self.root, transition)
+
+    def test_windows_rejects_descriptor_ctime_change_during_read(self) -> None:
+        path = self.write("docs/decisions/0001-first.md")
+        info = os.lstat(path)
+        transition = batch.parse_transition("ADR-0001:accept:docs/decisions/0001-first.md")
+        with mock.patch.object(batch.sys, "platform", "win32"), mock.patch.object(
+            batch.os, "fstat", side_effect=[info, changed_stat(info, st_ctime_ns=info.st_ctime_ns + 100)]
+        ):
+            with self.assertRaisesRegex(batch.CliError, "changed during inspection"):
+                batch.hash_member(self.root, transition)
+
+    def test_rejects_path_change_after_read(self) -> None:
+        path = self.write("docs/decisions/0001-first.md")
+        transition = batch.parse_transition("ADR-0001:accept:docs/decisions/0001-first.md")
+        real_lstat, real_read = os.lstat, os.read
+        read_started = False
+
+        def read(descriptor: int, size: int) -> bytes:
+            nonlocal read_started
+            read_started = True
+            return real_read(descriptor, size)
+
+        def lstat(target: object, *args: object, **kwargs: object) -> object:
+            info = real_lstat(target, *args, **kwargs)
+            if read_started and Path(target) == path:
+                return changed_stat(info, st_ctime_ns=info.st_ctime_ns + 100)
+            return info
+
+        with mock.patch.object(batch.os, "read", side_effect=read), mock.patch.object(
+            batch.os, "lstat", side_effect=lstat
+        ):
+            with self.assertRaisesRegex(batch.CliError, "changed during inspection"):
+                batch.hash_member(self.root, transition)
 
     def test_rejects_duplicate_decision_id(self) -> None:
         first = "docs/decisions/0001-first.md"

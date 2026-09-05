@@ -104,6 +104,13 @@ def snapshot(info: os.stat_result) -> tuple[int, int, int, int, int]:
     return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
 
 
+def same_opened_file(path_info: os.stat_result, opened_info: os.stat_result) -> bool:
+    # Windows lstat/fstat can expose different ctime semantics. Compare ctime
+    # only within each API there, retaining the other cross-API invariants.
+    fields = 4 if sys.platform == "win32" else 5
+    return snapshot(path_info)[:fields] == snapshot(opened_info)[:fields]
+
+
 def resolve_root(value: str) -> Path:
     raw = Path(os.path.abspath(os.path.expanduser(value)))
     try:
@@ -154,7 +161,7 @@ def hash_member(root: Path, transition: Transition) -> str:
         if (
             is_redirect(opened_info)
             or not stat.S_ISREG(opened_info.st_mode)
-            or snapshot(opened_info) != before
+            or not same_opened_file(info, opened_info)
         ):
             raise CliError(f"transition file for {transition.decision_id} changed during inspection")
         digest = hashlib.sha256()
@@ -166,6 +173,9 @@ def hash_member(root: Path, transition: Transition) -> str:
             or not stat.S_ISREG(after_info.st_mode)
             or snapshot(after_info) != snapshot(opened_info)
         ):
+            raise CliError(f"transition file for {transition.decision_id} changed during inspection")
+        path_after = os.lstat(candidate)
+        if is_redirect(path_after) or snapshot(path_after) != before:
             raise CliError(f"transition file for {transition.decision_id} changed during inspection")
         return digest.hexdigest()
     except CliError:
