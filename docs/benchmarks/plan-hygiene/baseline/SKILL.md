@@ -136,7 +136,7 @@ applying any member.
 
 After writing:
 
-1. reread changed frontmatter and complete affected Work Item or Decision blocks;
+1. reread each changed canonical file;
 2. inspect the scoped diff;
 3. check index ownership, active-Plan count, current-item status, Work Item key
    order, dependency order and cycles, Decision and Plan references, blockers,
@@ -144,9 +144,6 @@ After writing:
 4. when its script and Python are already available, run the optional validator
    through V; otherwise perform and report the scoped manual inspection;
 5. record only acceptance evidence observed for the mutation.
-
-Use E's scoped-read rules: complete byte and structural checks need not print
-unchanged history. Widen reads when the operation or a diagnostic requires it.
 
 During mutation, also stop on concurrent changes, ambiguous lifecycle authority,
 or a partial multi-file transition.

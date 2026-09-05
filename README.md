@@ -113,6 +113,10 @@ records directly, and checks links and invariants. Optional standard-library
 Python helpers provide read-only validation. The profile remains usable without
 them or without the Skill installed.
 
+Routine updates read the relevant complete blocks without printing unrelated
+history. Full-file change detection and complete structural checks remain in
+place. Completed records stay in their original Plans, available when needed.
+
 For repository structure and development tools, see
 [maintenance notes](docs/maintenance.md).
 
@@ -148,6 +152,10 @@ Its exact Core and package hashes are retained in
 The current source has changed since that qualification. Historical scores and
 token reductions do not qualify it. Read-only helper tests establish the
 contracts they exercised, not general agent behavior or transactional writes.
+
+The [selective-read comparison](docs/benchmarks/plan-hygiene.md) covers synthetic
+profiles and deterministic checks. It measures returned text for scripted
+operations, not provider tokens, cost savings, or actual agent compliance.
 
 ## Sources
 

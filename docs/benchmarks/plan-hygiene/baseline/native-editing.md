@@ -18,40 +18,14 @@ proposed-state inspection, and honest reporting.
 1. Resolve the nearest project root containing `PROJECT_INDEX.md`,
    `docs/plans/`, and `docs/decisions/`. When profile existence is unknown,
    list the workspace root before reading a canonical path.
-2. Read the index and resolved Plan frontmatter and require `format_version: 1`
-   in each. Read the current and affected complete Work Item blocks, the title,
-   Goal and Non-goals needed to interpret the work, referenced Decisions, and
-   every `proposed` Decision found through a frontmatter inventory. Load other
-   records only for the selected operation's relation or evidence checks.
+2. Read the index and require `format_version: 1`. Resolve the active Plan and
+   current Work Item when present, its referenced Decisions, and every
+   `proposed` Decision. Load other records only for the selected operation's
+   relation checks.
 3. Inventory all valid records only when allocating an ID, validating the
    complete profile, or checking a cross-record relation.
 4. Capture the exact bytes and SHA-256 of every affected existing file. Re-read
-   and compare those exact bytes immediately before a context-bound patch.
-   Keep complete byte snapshots in the execution environment; return the hash
-   or comparison result, not unchanged file bodies, to model context. A hash
-   detects change; it proves neither valid content nor permission to write.
-
-### Scope output without narrowing checks
-
-For identity, order, or graph checks, extract ordered H3 headings and `Status`,
-`Depends on`, and `Decisions` lines. For current work, changed authored text,
-acceptance, or evidence, read the complete relevant blocks. ID allocation must
-still inspect all IDs in its namespace. Proposal discovery still covers every
-Decision. A selected slice never proves that unrelated records are valid.
-
-Machine reads may cover whole files or the complete proposed profile while
-returning only selected blocks, hashes, scoped diffs, and validator diagnostics.
-Preserve the full captured bytes for unchanged-content comparisons. Verify
-proposed and written structure completely when required; do not replace this
-with a grep result, a zero-length diff, or an old validator result.
-
-Without the optional validator, use shell searches, range reads, and byte/hash
-comparisons plus manual inspection of the required invariants. Expand to full
-records wherever those checks cannot establish structure or relation validity.
-Use full reads for full-content audits and relevant malformed-state diagnosis.
-If extraction boundaries or output completeness are uncertain, widen the read;
-never interpret truncated output as absence. This changes output scope, not
-format, history retention, concurrency checks, or the manual proof boundary.
+   those exact bytes immediately before applying a context-bound patch.
 
 Within one conversation, retain the resolved path and SHA-256 of each loaded
 Skill reference. Compare hashes before a later operation and reload only a
@@ -101,10 +75,8 @@ authority.
 
 ## Verify and report
 
-After writing, reread changed frontmatter and the complete affected Work Item
-or Decision blocks, inspect the complete scoped diff, and compare full resulting
-bytes with the prepared result so unexpected edits outside those blocks are
-not hidden. Recheck the affected graph and lifecycle invariants. When the bundled
+After writing, reread every changed canonical file, inspect the complete scoped
+diff, and recheck the affected graph and lifecycle invariants. When the bundled
 read-only validator and Python are available, run it as described in
 [profile-validation.md](profile-validation.md). Otherwise preserve the manual
 inspection fallback; never make an executable a dependency of this Skill.

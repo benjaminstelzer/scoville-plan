@@ -31,11 +31,6 @@ Use JSON for agent work. `--format text` is an optional human-readable view and
 does not change exit semantics. The validator accepts no write, repair,
 formatting, normalization, migration, allocation, or transition mode.
 
-The validator reads the complete profile internally. Return its result and
-diagnostics without appending the Plan bodies it inspected. Scoped model output
-does not narrow validation coverage; a selected Work Item alone cannot replace
-this check or the corresponding manual inspection.
-
 ## Interpret the result
 
 Read both the process exit code and JSON `valid` field:

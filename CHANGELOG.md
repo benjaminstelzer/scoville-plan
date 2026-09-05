@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.14 - 2026-09-05
+
+- Clarified selective reads for routine Plan recovery and progress edits. Return the relevant complete blocks instead of printing unrelated history.
+- Preserved full-file change detection, complete structural validation, explicit proposal discovery, and access to original acceptance evidence.
+- Kept completed records in their version-1 Plans. No archive format or automatic project conversion was introduced.
+- Added seven deterministic hygiene tests and a bounded synthetic comparison. Returned-text reductions are not measured agent compliance, provider-token savings, or monetary savings.
+
 ## v1.2.13 - 2026-09-05
 
 - Shortened the README, moved contributor layout notes to docs/maintenance.md, and made agent installation the primary path. Safety and evidence limits remain explicit.

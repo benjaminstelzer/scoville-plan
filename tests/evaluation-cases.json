@@ -199,6 +199,25 @@
         "Do not load profile-validation.md or native write-format references for the status answer.",
         "Read only the index, routed current state, and unresolved proposal summaries required by read-only.md."
       ]
+    },
+    {
+      "id": "large-plan-progress-selective-output",
+      "given": "A valid version-1 Plan contains 160 Work Items and a small current progress edit. Completed historical bodies are irrelevant to that edit.",
+      "expect": [
+        "Read required direction, current and affected blocks, relevant relations, and unresolved proposals without dumping unrelated history.",
+        "Keep full pre-write byte comparison and full post-write equality with the prepared result, returning hashes or comparison results instead of file bodies.",
+        "Run the complete optional structural validator when available; compact model output does not narrow its coverage.",
+        "Without the validator, inspect required invariants manually and expand reads wherever a graph view cannot establish validity."
+      ]
+    },
+    {
+      "id": "history-retention-and-full-audit",
+      "given": "The user asks to inspect old acceptance evidence or audit a complete version-1 Plan after routine selective reads.",
+      "expect": [
+        "Read the original complete evidence block or all requested audit content as appropriate.",
+        "Do not treat a prior selected slice as complete validation or delete, summarize in place, or move terminal blocks into unsupported archives.",
+        "Use a successor Plan only at a real completed-goal boundary under the ordinary lifecycle."
+      ]
     }
   ]
 }
