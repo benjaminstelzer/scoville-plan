@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.15 - 2026-09-05
+
+- Move repository development into `development/` and keep the installable Skill in its own top-level directory.
+- Update current paths while retaining historical evidence and its path mapping.
+
 ## v1.2.14 - 2026-09-05
 
 - Clarified selective reads for routine Plan recovery and progress edits. Return the relevant complete blocks instead of printing unrelated history.

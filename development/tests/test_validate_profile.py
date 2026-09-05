@@ -16,7 +16,7 @@ from unittest import mock
 
 
 REPOSITORY = Path(__file__).resolve().parent.parent
-SCRIPT = REPOSITORY / "scoville-plan" / "scripts" / "validate_profile.py"
+SCRIPT = REPOSITORY.parent / "scoville-plan" / "scripts" / "validate_profile.py"
 FIXTURE = REPOSITORY / "tests" / "fixtures" / "valid-profile"
 CONTRACT = REPOSITORY / "tests" / "validator-contract.json"
 INVARIANTS = REPOSITORY / "tests" / "profile-invariants.json"

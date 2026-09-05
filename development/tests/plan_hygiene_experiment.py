@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 EVIDENCE = ROOT / 'docs/benchmarks/plan-hygiene'
-VALIDATOR = ROOT / 'scoville-plan/scripts/validate_profile.py'
+VALIDATOR = ROOT.parent / 'scoville-plan/scripts/validate_profile.py'
 PLAN_PATH = 'docs/plans/0001-synthetic-history.md'
 OPERATIONS = ('resume', 'progress', 'prerequisite', 'history', 'inventory', 'audit')
 
@@ -197,9 +197,10 @@ def rollover_measurement(root: Path, count: int) -> dict:
 
 
 def run() -> dict:
-    protocol = json.loads((EVIDENCE / 'protocol.json').read_text(encoding='utf-8'))
+    protocol_path = EVIDENCE / 'protocol-structure-2026-09-05.json'
+    protocol = json.loads(protocol_path.read_text(encoding='utf-8'))
     for rel, expected in protocol['frozen_sources'].items():
-        if digest((ROOT / rel).read_bytes()) != expected:
+        if digest((ROOT.parent / rel).read_bytes()) != expected:
             raise ValueError(f'frozen source changed: {rel}')
     rows = []
     traces = []
@@ -243,7 +244,7 @@ def run() -> dict:
                              'fixture_sha256': {key: digest(value.encode('utf-8')) for key, value in files.items()},
                              'operations': views})
             rollover.append(rollover_measurement(Path(temporary) / f'rollover-{count}', count))
-    return {'schema_version': 1, 'protocol_sha256': digest((EVIDENCE / 'protocol.json').read_bytes()),
+    return {'schema_version': 1, 'protocol_sha256': digest(protocol_path.read_bytes()),
             'kind': 'deterministic scripted returned-text measurement; no agent runs',
             'tokenizer': None, 'provider_usage': None, 'monetary_savings': None,
             'rows': rows, 'guard_traces': traces,

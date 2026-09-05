@@ -118,7 +118,7 @@ history. Full-file change detection and complete structural checks remain in
 place. Completed records stay in their original Plans, available when needed.
 
 For repository structure and development tools, see
-[maintenance notes](docs/maintenance.md).
+[maintenance notes](development/docs/maintenance.md).
 
 ## Scoville family
 
@@ -147,15 +147,17 @@ needs:
 
 The historical package qualified on 2026-08-10 passed 30/30 final cases.
 Its exact Core and package hashes are retained in
-[benchmark evidence](docs/benchmark-evidence.md).
+[benchmark evidence](development/docs/benchmark-evidence.md).
 
 The current source has changed since that qualification. Historical scores and
 token reductions do not qualify it. Read-only helper tests establish the
 contracts they exercised, not general agent behavior or transactional writes.
 
-The [selective-read comparison](docs/benchmarks/plan-hygiene.md) covers synthetic
+The [selective-read comparison](development/docs/benchmarks/plan-hygiene.md) covers synthetic
 profiles and deterministic checks. It measures returned text for scripted
 operations, not provider tokens, cost savings, or actual agent compliance.
+
+Repository development and the current path mapping are in [development/](development/README.md).
 
 ## Sources
 

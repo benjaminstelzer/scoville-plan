@@ -14,7 +14,7 @@ from unittest import mock
 
 
 REPOSITORY = Path(__file__).resolve().parent.parent
-SCRIPT = REPOSITORY / "scoville-plan" / "scripts" / "compute_decision_batch.py"
+SCRIPT = REPOSITORY.parent / "scoville-plan" / "scripts" / "compute_decision_batch.py"
 SPEC = importlib.util.spec_from_file_location("decision_batch", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 batch = importlib.util.module_from_spec(SPEC)
