@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { invoke } from "@tauri-apps/api/core";
   import { open } from "@tauri-apps/plugin-dialog";
   import { Button } from "$lib/components/ui/button";
@@ -18,6 +18,7 @@
   import { demoSnapshot } from "./lib/demo";
   import type { Decision, ProjectRegistry, ProjectSnapshot, SavedProject, WorkItem, WorkStatus } from "./lib/types";
   const isDemo = import.meta.env.DEV && new URLSearchParams(window.location.search).has("demo");
+  const PAGE_SIZE = 100;
 
   let projects: SavedProject[] = [];
   let selectedId = "";
@@ -25,6 +26,8 @@
   let selectedPlanId = "";
   let workFilter: "all" | WorkStatus | "blocked" = "all";
   let decisionFilter: "current" | "proposed" | "history" | "all" = "current";
+  let workPage = 1;
+  let decisionPage = 1;
   let compactPane: "plan" | "decisions" = "plan";
   let loading = false;
   let message = "";
@@ -44,8 +47,14 @@
     : null;
   $: activeCurrentItem = activePlan?.work_items.find((item) => item.id === activePlan.current_item) ?? null;
   $: visibleItems = selectedPlan?.work_items.filter((item) => matchesWorkFilter(item, workFilter)) ?? [];
+  $: workPageCount = Math.max(1, Math.ceil(visibleItems.length / PAGE_SIZE));
+  $: if (workPage > workPageCount) workPage = workPageCount;
+  $: pagedItems = visibleItems.slice((workPage - 1) * PAGE_SIZE, workPage * PAGE_SIZE);
   $: progress = summarizeWork(selectedPlan?.work_items ?? []);
   $: visibleDecisions = snapshot?.decisions.filter((decision) => matchesDecisionFilter(decision, decisionFilter)) ?? [];
+  $: decisionPageCount = Math.max(1, Math.ceil(visibleDecisions.length / PAGE_SIZE));
+  $: if (decisionPage > decisionPageCount) decisionPage = decisionPageCount;
+  $: pagedDecisions = visibleDecisions.slice((decisionPage - 1) * PAGE_SIZE, decisionPage * PAGE_SIZE);
   $: linkedDecisionIds = new Set(activeCurrentItem?.decisions ?? []);
 
   onMount(() => {
@@ -125,6 +134,8 @@
       selectedId = nextSelected;
       snapshot = loaded;
       selectedPlanId = loaded.active_plan ?? loaded.plans[0]?.id ?? "";
+      workPage = 1;
+      decisionPage = 1;
       message = `${loaded.name} added`;
     } catch (cause) {
       error = readableError(cause);
@@ -150,6 +161,8 @@
     selectedId = id;
     snapshot = null;
     selectedPlanId = "";
+    workPage = 1;
+    decisionPage = 1;
     error = "";
     if (isDemo) {
       if (id === "demo") {
@@ -282,6 +295,32 @@
     return ["superseded", "deprecated", "rejected"].includes(decision.status);
   }
 
+  function selectPlan(id: string) {
+    selectedPlanId = id;
+    workPage = 1;
+    decisionPage = 1;
+  }
+
+  function selectWorkFilter(filter: typeof workFilter) {
+    workFilter = filter;
+    workPage = 1;
+  }
+
+  function selectDecisionFilter(filter: typeof decisionFilter) {
+    decisionFilter = filter;
+    decisionPage = 1;
+  }
+
+  async function selectPage(kind: "work" | "decision", page: number) {
+    if (kind === "work") workPage = page;
+    else decisionPage = page;
+    await tick();
+    const pane = document.getElementById(kind === "work" ? "plan-panel" : "decisions-panel");
+    const topbarHeight = document.querySelector<HTMLElement>(".topbar")?.offsetHeight ?? 0;
+    if (pane) window.scrollTo({ top: pane.getBoundingClientRect().top + window.scrollY - topbarHeight - 16 });
+    pane?.querySelector<HTMLElement>(kind === "work" ? ".work-summary" : ".decision-summary")?.focus({ preventScroll: true });
+  }
+
   function workStatusLabel(status: WorkStatus) {
     return ({ todo: "Upcoming", in_progress: "In progress", paused: "Paused", done: "Completed", cancelled: "Cancelled" })[status];
   }
@@ -334,7 +373,7 @@
     {#if snapshot?.plans.length}
       <div class="plan-selector">
         <label for="plan-select">Plan history</label>
-        <Select.Root type="single" bind:value={selectedPlanId}>
+        <Select.Root type="single" value={selectedPlanId} onValueChange={(value) => value && selectPlan(value)}>
           <Select.Trigger id="plan-select" class="plan-select"><span class="select-label">{selectedPlan ? `${selectedPlan.id} · ${selectedPlan.title}` : "Choose plan"}</span></Select.Trigger>
           <Select.Content>{#each snapshot.plans as plan}<Select.Item value={plan.id} label={`${plan.id} · ${plan.title} · ${plan.status}`} />{/each}</Select.Content>
         </Select.Root>
@@ -497,13 +536,13 @@
             <div><p class="eyebrow">Ordered work</p><h2 id="work-heading">Plan points</h2></div>
             <div class="filter-row" aria-label="Filter plan points">
               {#each [["all", "All"], ["in_progress", "Active"], ["todo", "Upcoming"], ["done", "Completed"], ["blocked", "Blocked"]] as option}
-                <Button size="sm" aria-pressed={workFilter === option[0]} variant={workFilter === option[0] ? "default" : "ghost"} onclick={() => workFilter = option[0] as typeof workFilter}>{option[1]}</Button>
+                <Button size="sm" aria-pressed={workFilter === option[0]} variant={workFilter === option[0] ? "default" : "ghost"} onclick={() => selectWorkFilter(option[0] as typeof workFilter)}>{option[1]}</Button>
               {/each}
             </div>
           </div>
 
           <div class="work-list">
-            {#each visibleItems as item, index (item.id)}
+            {#each pagedItems as item, index (item.id)}
               <Collapsible.Root class="work-item {item.status}" open={openWorkItems.has(item.id)} onOpenChange={(open) => setWorkItemOpen(item.id, open)}>
                 <Collapsible.Trigger class="work-summary">
                   <span class="step-number">{stepNumber(selectedPlan?.work_items.indexOf(item) ?? index, selectedPlan?.work_items.length ?? 0)}</span>
@@ -540,6 +579,14 @@
             {:else}
               <p class="inline-empty">No Plan points match this filter.</p>
             {/each}
+            {#if visibleItems.length > PAGE_SIZE}
+              <nav class="pagination" aria-label="Plan point pages">
+                <span>{(workPage - 1) * PAGE_SIZE + 1}–{Math.min(workPage * PAGE_SIZE, visibleItems.length)} of {visibleItems.length}</span>
+                <Button size="sm" variant="outline" aria-label="Previous Plan point page" disabled={workPage === 1} onclick={() => void selectPage("work", workPage - 1)}>Previous</Button>
+                <span aria-live="polite" aria-atomic="true">Page {workPage} of {workPageCount}</span>
+                <Button size="sm" variant="outline" aria-label="Next Plan point page" disabled={workPage === workPageCount} onclick={() => void selectPage("work", workPage + 1)}>Next</Button>
+              </nav>
+            {/if}
           </div>
         </div>
 
@@ -549,12 +596,12 @@
           </div>
           <div class="decision-filters" aria-label="Filter decisions">
             {#each [["current", "Current"], ["proposed", "Proposed"], ["history", "History"], ["all", "All"]] as option}
-              <Button size="sm" aria-pressed={decisionFilter === option[0]} variant={decisionFilter === option[0] ? "default" : "ghost"} onclick={() => decisionFilter = option[0] as typeof decisionFilter}>{option[1]}</Button>
+              <Button size="sm" aria-pressed={decisionFilter === option[0]} variant={decisionFilter === option[0] ? "default" : "ghost"} onclick={() => selectDecisionFilter(option[0] as typeof decisionFilter)}>{option[1]}</Button>
             {/each}
           </div>
 
           <div class="decision-list">
-            {#each visibleDecisions as decision (decision.id)}
+            {#each pagedDecisions as decision (decision.id)}
               <Collapsible.Root class="decision-item {decision.status}" open={openDecisions.has(decision.id)} onOpenChange={(open) => setDecisionOpen(decision.id, open)}>
                 <Collapsible.Trigger class="decision-summary">
                   <span class="decision-status" aria-hidden="true"></span>
@@ -579,6 +626,14 @@
             {:else}
               <p class="inline-empty">No Decisions match this filter.</p>
             {/each}
+            {#if visibleDecisions.length > PAGE_SIZE}
+              <nav class="pagination" aria-label="Decision pages">
+                <span>{(decisionPage - 1) * PAGE_SIZE + 1}–{Math.min(decisionPage * PAGE_SIZE, visibleDecisions.length)} of {visibleDecisions.length}</span>
+                <Button size="sm" variant="outline" aria-label="Previous Decision page" disabled={decisionPage === 1} onclick={() => void selectPage("decision", decisionPage - 1)}>Previous</Button>
+                <span aria-live="polite" aria-atomic="true">Page {decisionPage} of {decisionPageCount}</span>
+                <Button size="sm" variant="outline" aria-label="Next Decision page" disabled={decisionPage === decisionPageCount} onclick={() => void selectPage("decision", decisionPage + 1)}>Next</Button>
+              </nav>
+            {/if}
           </div>
         </div>
       </div>
