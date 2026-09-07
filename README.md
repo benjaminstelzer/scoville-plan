@@ -30,6 +30,26 @@ The family is named for useful signal that remains detectable after dilution. In
 heat is the direction another agent can still recover: the active outcome,
 authority, blocker, evidence, and next action.
 
+## Companion app
+
+The optional Scoville Plan Viewer turns the repository records into a compact,
+read-only desktop overview. Point it at a project containing
+`PROJECT_INDEX.md`, `docs/plans`, and `docs/decisions` to see the active Plan
+point, completed and upcoming work, paused, blocked, or cancelled steps, and
+the current and historical Decisions. It rereads visible projects every four
+seconds while the window is active, so edits made by an agent or editor appear
+without a second tracking system.
+
+[Download the current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
+for Windows x64, macOS Apple Silicon or Intel, and Linux x64. Windows offers a
+portable EXE and installers; macOS offers DMGs and zipped apps; Linux offers a
+portable binary, AppImage, DEB, and RPM packages.
+
+The saved project list is one `scoville-plan-viewer.xml` file beside a portable
+application. Installed copies in read-only system folders use the platform user
+configuration directory for the same XML file. Removing a project from the
+Viewer never changes its repository.
+
 ## How to use
 
 Name Scoville Plan when the work needs durable repository state:
@@ -84,21 +104,6 @@ https://github.com/benjaminstelzer/scoville-handoff/tree/main/scoville-handoff
 
 Preserve existing customizations and ask before overwriting conflicting files. Report every installed location and whether the host discovers each Skill.
 ```
-
-### Download the Plan Viewer
-
-The desktop viewer reads existing Scoville Plan projects without changing them.
-Download the file that matches your system from the
-[current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest):
-
-- Windows x64: portable EXE, MSI, or setup EXE.
-- macOS Apple Silicon and Intel: DMG or zipped app.
-- Linux x64: portable binary, AppImage, DEB, or RPM.
-
-The project list stays portable in `scoville-plan-viewer.xml` beside the
-application. macOS stores it beside the app bundle. AppImage builds store it
-beside the AppImage file. Installed copies in read-only system folders use the
-platform user configuration directory for the same XML file.
 
 ## What it enforces
 
