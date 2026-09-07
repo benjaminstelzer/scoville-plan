@@ -1,10 +1,9 @@
 ---
 format_version: 1
 id: PLAN-0007
-status: active
+status: completed
 created: 2026-09-07
 updated: 2026-09-07
-current_item: W-002
 ---
 
 # Publish the cross-platform Plan Viewer release
@@ -37,7 +36,7 @@ Evidence: [Rendered wide 900px 720px 520px 420px and 360px views have no page ov
 
 ### W-002 Prepare versioned cross-platform release assets
 
-Status: in_progress
+Status: done
 Depends on: [W-001]
 Blocked by: []
 Decisions: []
@@ -47,12 +46,11 @@ Steps:
 1. Align application and repository release versions.
 2. Stage deterministic per-platform asset names in GitHub Actions.
 3. Validate source, package structure, and workflow configuration before publication.
-Evidence: [Viewer version owners agree on 1.3.0, Windows portable EXE MSI and NSIS packages were rebuilt and the final EXE launched responsively with product and file version 1.3.0, Portable builds keep executable-adjacent XML while read-only installed locations fall back to the platform user configuration directory, Workflow stages portable and native package downloads for Windows x64 Linux x64 macOS Apple Silicon and macOS Intel, Current official runner labels are used for both macOS architectures, Astra High found no remaining P1 or P2 release blockers after the storage and expanded-title corrections]
-Next action: Commit the validated candidate and run all four GitHub Actions package jobs from that commit.
+Evidence: [Viewer version owners agree on 1.3.0, Windows portable EXE MSI and NSIS packages were rebuilt and the final EXE launched responsively with product and file version 1.3.0, Portable builds keep executable-adjacent XML while read-only installed locations fall back to the platform user configuration directory, Workflow stages portable and native package downloads for Windows x64 Linux x64 macOS Apple Silicon and macOS Intel, Current official runner labels are used for both macOS architectures, GitHub Actions run 34133861138 built all four platform targets successfully from release commit 85b408ec7db7406feb1a1bfaa8314f6d66ab6018, Eleven native downloads plus the Skill archive and checksum files were staged with stable versioned names, Astra High found no remaining P1 or P2 release blockers after the storage expanded-title and pagination corrections]
 
 ### W-003 Publish and verify the GitHub Release
 
-Status: todo
+Status: done
 Depends on: [W-002]
 Blocked by: []
 Decisions: []
@@ -62,5 +60,4 @@ Steps:
 1. Commit and push the validated candidate to the default branch.
 2. Build all platform assets from that commit and publish the replacement release.
 3. Verify every asset and checksum before deleting the prior release and tag, then run the publication audit.
-Evidence: []
-Next action: Wait for the versioned platform builds after the release commit is pushed.
+Evidence: [Annotated tag v1.3.0 resolves to release commit 85b408ec7db7406feb1a1bfaa8314f6d66ab6018, Stable GitHub Release v1.3.0 publishes fourteen uploaded assets with direct platform links, Remote asset sizes and SHA-256 digests match every locally verified release file, Release notes copy the README Skill-install prompts and identify local versus runner validation boundaries, Prior release and release-version tag v1.2.15 were removed only after the replacement passed its pre-cleanup audit, Final publication audit reports one published release one release-version tag zero warnings and zero issues, Repository structure profile placement and all eight Scoville family members pass]
