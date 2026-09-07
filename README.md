@@ -97,7 +97,8 @@ Download the file that matches your system from the
 
 The project list stays portable in `scoville-plan-viewer.xml` beside the
 application. macOS stores it beside the app bundle. AppImage builds store it
-beside the AppImage file.
+beside the AppImage file. Installed copies in read-only system folders use the
+platform user configuration directory for the same XML file.
 
 ## What it enforces
 

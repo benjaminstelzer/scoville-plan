@@ -4,6 +4,7 @@ use std::collections::HashSet;
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use tauri::Manager;
 
 const CONFIG_NAME: &str = "scoville-plan-viewer.xml";
 
@@ -85,12 +86,19 @@ fn format_version() -> u8 {
     1
 }
 
-fn config_path() -> Result<PathBuf, String> {
+fn portable_config_path() -> Result<PathBuf, String> {
     let executable = std::env::current_exe()
         .map_err(|error| format!("Cannot locate the application executable: {error}"))?;
     portable_directory(&executable)
         .map(|directory| directory.join(CONFIG_NAME))
         .ok_or_else(|| "Cannot locate the portable application directory.".to_owned())
+}
+
+fn user_config_path(app: &tauri::AppHandle) -> Result<PathBuf, String> {
+    app.path()
+        .app_config_dir()
+        .map(|directory| directory.join(CONFIG_NAME))
+        .map_err(|error| format!("Cannot locate the user configuration directory: {error}"))
 }
 
 fn portable_directory(executable: &Path) -> Option<PathBuf> {
@@ -171,14 +179,37 @@ fn validate_registry(registry: &ProjectRegistry) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub fn load_project_registry() -> Result<ProjectRegistry, String> {
-    read_registry(&config_path()?)
+pub fn load_project_registry(app: tauri::AppHandle) -> Result<ProjectRegistry, String> {
+    let portable = portable_config_path()?;
+    let user = user_config_path(&app)?;
+    if portable.exists() || !user.exists() {
+        read_registry(&portable)
+    } else {
+        read_registry(&user)
+    }
 }
 
 #[tauri::command]
-pub fn save_project_registry(mut registry: ProjectRegistry) -> Result<(), String> {
+pub fn save_project_registry(
+    app: tauri::AppHandle,
+    mut registry: ProjectRegistry,
+) -> Result<(), String> {
     registry.version = format_version();
-    write_registry(&config_path()?, &registry)
+    let portable = portable_config_path()?;
+    let portable_exists = portable.exists();
+    match write_registry(&portable, &registry) {
+        Ok(()) => return Ok(()),
+        Err(error) if portable_exists => return Err(error),
+        Err(_) => {}
+    }
+
+    let user = user_config_path(&app)?;
+    let directory = user
+        .parent()
+        .ok_or_else(|| "Cannot locate the user configuration directory.".to_owned())?;
+    fs::create_dir_all(directory)
+        .map_err(|error| format!("Cannot create {}: {error}", directory.display()))?;
+    write_registry(&user, &registry)
 }
 
 #[cfg(test)]

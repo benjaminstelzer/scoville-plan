@@ -11,8 +11,12 @@
   import RefreshCwIcon from "@lucide/svelte/icons/refresh-cw";
   import Trash2Icon from "@lucide/svelte/icons/trash-2";
   import ChevronDownIcon from "@lucide/svelte/icons/chevron-down";
+  import PauseIcon from "@lucide/svelte/icons/pause";
+  import XIcon from "@lucide/svelte/icons/x";
+  import CircleIcon from "@lucide/svelte/icons/circle";
+  import PlayIcon from "@lucide/svelte/icons/play";
   import { demoSnapshot } from "./lib/demo";
-  import type { Decision, Plan, ProjectRegistry, ProjectSnapshot, SavedProject, WorkItem, WorkStatus } from "./lib/types";
+  import type { Decision, ProjectRegistry, ProjectSnapshot, SavedProject, WorkItem, WorkStatus } from "./lib/types";
   const isDemo = import.meta.env.DEV && new URLSearchParams(window.location.search).has("demo");
 
   let projects: SavedProject[] = [];
@@ -38,10 +42,11 @@
   $: currentItem = selectedPlan?.status === "active"
     ? selectedPlan.work_items.find((item) => item.id === selectedPlan.current_item) ?? null
     : null;
+  $: activeCurrentItem = activePlan?.work_items.find((item) => item.id === activePlan.current_item) ?? null;
   $: visibleItems = selectedPlan?.work_items.filter((item) => matchesWorkFilter(item, workFilter)) ?? [];
   $: progress = summarizeWork(selectedPlan?.work_items ?? []);
   $: visibleDecisions = snapshot?.decisions.filter((decision) => matchesDecisionFilter(decision, decisionFilter)) ?? [];
-  $: linkedDecisionIds = new Set(currentItem?.decisions ?? []);
+  $: linkedDecisionIds = new Set(activeCurrentItem?.decisions ?? []);
 
   onMount(() => {
     if (isDemo) {
@@ -281,6 +286,10 @@
     return ({ todo: "Upcoming", in_progress: "In progress", paused: "Paused", done: "Completed", cancelled: "Cancelled" })[status];
   }
 
+  function stepNumber(index: number, total: number) {
+    return String(index + 1).padStart(Math.max(2, String(total).length), "0");
+  }
+
   function decisionStatusLabel(status: Decision["status"]) {
     return ({ proposed: "Proposed", accepted: "Current", rejected: "Rejected", deprecated: "Deprecated", superseded: "Superseded" })[status];
   }
@@ -333,7 +342,7 @@
     {/if}
 
     <div class="top-actions">
-      <Button onclick={() => void addProject()} disabled={loading || isDemo}><PlusIcon /> <span class="button-label">Add project</span></Button>
+      <Button aria-label="Add project" onclick={() => void addProject()} disabled={loading || isDemo}><PlusIcon /> <span class="button-label">Add project</span></Button>
       <Button variant="outline" size="icon" title="Refresh project" aria-label="Refresh project" onclick={() => void refreshProject(false)} disabled={!selectedProject || loading || isDemo}><RefreshCwIcon /></Button>
       <Button variant="ghost" size="icon" title="Remove project from viewer" aria-label="Remove project from viewer" onclick={() => void removeProject()} disabled={!selectedProject || loading || isDemo}><Trash2Icon /></Button>
     </div>
@@ -417,6 +426,7 @@
     <main class="dashboard">
       <section class="project-heading" aria-labelledby="project-title">
         <div>
+          <p class="project-name">{snapshot.name}</p>
           <p class="eyebrow">{selectedPlan?.status === "active" ? `Active Plan · ${selectedPlan.id}` : selectedPlan ? `Plan history · ${selectedPlan.id}` : "Project idle"}</p>
           <h1 id="project-title">{selectedPlan?.title ?? snapshot.name}</h1>
           {#if selectedPlan}
@@ -437,7 +447,7 @@
 
       {#if selectedPlan?.status === "active" && currentItem}
         <section class="current-card" aria-labelledby="current-title">
-          <div class="current-index" aria-hidden="true">{String(selectedPlan.work_items.findIndex((item) => item.id === currentItem.id) + 1).padStart(2, "0")}</div>
+          <div class="current-index" aria-hidden="true">{stepNumber(selectedPlan.work_items.findIndex((item) => item.id === currentItem.id), selectedPlan.work_items.length)}</div>
           <div class="current-main">
             <div class="current-meta">
               <Badge variant={currentItem.status === "in_progress" ? "default" : "secondary"} class="status-pill {currentItem.status}">{workStatusLabel(currentItem.status)}</Badge>
@@ -469,6 +479,7 @@
             <span class="done" style:width={`${(progress.done / selectedPlan.work_items.length) * 100}%`}></span>
             <span class="active" style:width={`${(progress.in_progress / selectedPlan.work_items.length) * 100}%`}></span>
             <span class="paused" style:width={`${(progress.paused / selectedPlan.work_items.length) * 100}%`}></span>
+            <span class="cancelled" style:width={`${(progress.cancelled / selectedPlan.work_items.length) * 100}%`}></span>
           {/if}
         </div>
       </section>
@@ -476,7 +487,7 @@
       <Tabs.Root bind:value={compactPane} class="compact-tabs">
         <Tabs.List variant="line" aria-label="Project information">
           <Tabs.Trigger id="plan-tab" aria-controls="plan-panel" value="plan">Plan</Tabs.Trigger>
-          <Tabs.Trigger id="decisions-tab" aria-controls="decisions-panel" value="decisions">Decisions <Badge variant="secondary">{snapshot.decisions.length}</Badge></Tabs.Trigger>
+          <Tabs.Trigger id="decisions-tab" aria-controls="decisions-panel" value="decisions">Decisions</Tabs.Trigger>
         </Tabs.List>
       </Tabs.Root>
 
@@ -495,9 +506,23 @@
             {#each visibleItems as item, index (item.id)}
               <Collapsible.Root class="work-item {item.status}" open={openWorkItems.has(item.id)} onOpenChange={(open) => setWorkItemOpen(item.id, open)}>
                 <Collapsible.Trigger class="work-summary">
-                  <span class="timeline-marker" aria-hidden="true">{item.status === "done" ? "✓" : String(selectedPlan?.work_items.indexOf(item)! + 1).padStart(2, "0")}</span>
+                  <span class="step-number">{stepNumber(selectedPlan?.work_items.indexOf(item) ?? index, selectedPlan?.work_items.length ?? 0)}</span>
+                  <span class="timeline-marker" aria-hidden="true">
+                    {#if item.status === "done"}✓
+                    {:else if item.status === "paused"}<PauseIcon />
+                    {:else if item.status === "cancelled"}<XIcon />
+                    {:else if item.status === "in_progress"}<PlayIcon />
+                    {:else}<CircleIcon />
+                    {/if}
+                  </span>
                   <span class="item-title"><small>{item.id} · {workStatusLabel(item.status)}</small><strong>{item.title}</strong></span>
-                  {#if item.blocked_by.length}<span class="blocked-label">Blocked</span>{/if}
+                  {#if item.status === "paused" || item.status === "cancelled" || item.blocked_by.length}
+                    <span class="work-labels">
+                      {#if item.status === "paused"}<Badge variant="secondary" class="status-pill paused">Paused</Badge>{/if}
+                      {#if item.status === "cancelled"}<Badge variant="secondary" class="status-pill cancelled">Cancelled</Badge>{/if}
+                      {#if item.blocked_by.length}<Badge variant="secondary" class="blocked-label">Blocked</Badge>{/if}
+                    </span>
+                  {/if}
                   <ChevronDownIcon class="disclosure" aria-hidden="true" />
                 </Collapsible.Trigger>
                 <Collapsible.Content class="item-detail">
@@ -519,9 +544,8 @@
         </div>
 
         <div id="decisions-panel" role="tabpanel" class="pane decisions-pane" class:compact-hidden={compactPane !== "decisions"} aria-labelledby="decisions-tab">
-          <div class="section-heading decision-title">
+          <div class="section-heading">
             <div><p class="eyebrow">Project direction</p><h2 id="decision-heading">Decisions</h2></div>
-            <span class="count">{visibleDecisions.length}</span>
           </div>
           <div class="decision-filters" aria-label="Filter decisions">
             {#each [["current", "Current"], ["proposed", "Proposed"], ["history", "History"], ["all", "All"]] as option}
@@ -534,12 +558,10 @@
               <Collapsible.Root class="decision-item {decision.status}" open={openDecisions.has(decision.id)} onOpenChange={(open) => setDecisionOpen(decision.id, open)}>
                 <Collapsible.Trigger class="decision-summary">
                   <span class="decision-status" aria-hidden="true"></span>
-                  <span><small>{decision.id} · {decision.scope}</small><strong>{decision.title}</strong></span>
-                  {#if linkedDecisionIds.has(decision.id)}<span class="linked-label">Current item</span>{/if}
+                  <span><small>{decision.id} · {decisionStatusLabel(decision.status)} · {decision.scope}</small><strong>{decision.title}</strong></span>
                   <ChevronDownIcon class="disclosure" aria-hidden="true" />
                 </Collapsible.Trigger>
                 <Collapsible.Content class="decision-detail">
-                  <Badge variant={decision.status === "accepted" ? "default" : "secondary"} class="status-pill decision-{decision.status}">{decisionStatusLabel(decision.status)}</Badge>
                   <p>{decision.decision}</p>
                   {#if decision.superseded_by}
                     <div class="supersession"><span>Replaced by</span><strong>{decision.superseded_by} · {decisionById(decision.superseded_by)?.title ?? "Decision not found"}</strong></div>
@@ -547,6 +569,8 @@
                     <div class="supersession"><span>Replaces</span><strong>{decision.supersedes} · {decisionById(decision.supersedes)?.title ?? "Decision not found"}</strong></div>
                   {/if}
                   <dl>
+                    <div><dt>Status</dt><dd>{decisionStatusLabel(decision.status)}{decision.status === "accepted" ? " · accepted and currently applicable" : ""}</dd></div>
+                    <div><dt>Active Plan point</dt><dd>{linkedDecisionIds.has(decision.id) && activeCurrentItem ? `Linked to ${activeCurrentItem.id}` : "Not linked"}</dd></div>
                     <div><dt>Consequences</dt><dd>{decision.consequences}</dd></div>
                     <div><dt>Revisit when</dt><dd>{decision.revisit_when}</dd></div>
                   </dl>
