@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-capability",
+  "description": "Permissions for the main Scoville Plan Viewer window",
+  "windows": ["main"],
+  "permissions": ["core:default", "dialog:allow-open"]
+}

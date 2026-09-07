@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Scoville Plan Viewer",
+  "version": "1.3.0",
+  "identifier": "dev.scoville.plan-viewer",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Scoville Plan Viewer",
+        "width": 1380,
+        "height": 900,
+        "minWidth": 360,
+        "minHeight": 600,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "See what is current, completed, and next in Scoville Plan projects.",
+    "longDescription": "A local read-only project switcher and status viewer for Scoville Plan format-version-1 projects.",
+    "windows": {
+      "wix": { "language": "en-US" }
+    }
+  }
+}

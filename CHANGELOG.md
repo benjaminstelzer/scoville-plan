@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.3.0 - 2026-09-07
+
+- Add the responsive Scoville Plan Viewer for Windows, macOS, and Linux.
+- Show active, completed, paused, blocked, and upcoming Plan points together with current and historical Decisions.
+- Keep the project registry in a portable XML file beside the application.
+- Add native release assets for Windows x64, macOS Apple Silicon and Intel, and Linux x64.
+- Preserve the existing Agent Skill package as a separate release download.
+
 ## v1.2.15 - 2026-09-05
 
 - Move repository development into `development/` and keep the installable Skill in its own top-level directory.

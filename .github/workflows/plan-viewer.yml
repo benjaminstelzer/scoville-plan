@@ -1,0 +1,124 @@
+name: Plan Viewer
+
+env:
+  VIEWER_VERSION: 1.3.0
+
+on:
+  pull_request:
+    paths:
+      - "development/viewer/**"
+      - ".github/workflows/plan-viewer.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x64
+            platform: ubuntu-22.04
+            args: ""
+            asset_id: linux-x64
+            target_dir: src-tauri/target/release
+          - name: Windows x64
+            platform: windows-latest
+            args: ""
+            asset_id: windows-x64
+            target_dir: src-tauri/target/release
+          - name: macOS Apple Silicon
+            platform: macos-15
+            args: "--target aarch64-apple-darwin"
+            asset_id: macos-arm64
+            target_dir: src-tauri/target/aarch64-apple-darwin/release
+          - name: macOS Intel
+            platform: macos-15-intel
+            args: "--target x86_64-apple-darwin"
+            asset_id: macos-x64
+            target_dir: src-tauri/target/x86_64-apple-darwin/release
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: development/viewer/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ startsWith(matrix.platform, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install Linux system dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf rpm xdg-utils
+
+      - name: Install frontend dependencies
+        working-directory: development/viewer
+        run: npm ci
+
+      - name: Check frontend
+        working-directory: development/viewer
+        run: npm run check
+
+      - name: Test project reader
+        working-directory: development/viewer
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: Build native bundle
+        uses: tauri-apps/tauri-action@v1
+        with:
+          projectPath: development/viewer
+          tauriScript: npm run tauri
+          args: ${{ matrix.args }}
+          uploadWorkflowArtifacts: false
+
+      - name: Stage Windows downloads
+        if: matrix.asset_id == 'windows-x64'
+        shell: pwsh
+        run: |
+          $source = "development/viewer/${{ matrix.target_dir }}"
+          $target = "development/viewer/release-assets"
+          New-Item -ItemType Directory -Force -Path $target | Out-Null
+          Copy-Item "$source/scoville-plan-viewer.exe" "$target/scoville-plan-viewer-v$env:VIEWER_VERSION-windows-x64.exe"
+          Copy-Item (Get-ChildItem "$source/bundle/msi/*.msi" | Select-Object -First 1) "$target/scoville-plan-viewer-v$env:VIEWER_VERSION-windows-x64.msi"
+          Copy-Item (Get-ChildItem "$source/bundle/nsis/*-setup.exe" | Select-Object -First 1) "$target/scoville-plan-viewer-v$env:VIEWER_VERSION-windows-x64-setup.exe"
+
+      - name: Stage Linux downloads
+        if: matrix.asset_id == 'linux-x64'
+        shell: bash
+        run: |
+          set -euo pipefail
+          source="development/viewer/${{ matrix.target_dir }}"
+          target="development/viewer/release-assets"
+          mkdir -p "$target"
+          install -m 755 "$source/scoville-plan-viewer" "$target/scoville-plan-viewer-v${VIEWER_VERSION}-linux-x64"
+          cp "$(find "$source/bundle/appimage" -maxdepth 1 -type f -name '*.AppImage' -print -quit)" "$target/scoville-plan-viewer-v${VIEWER_VERSION}-linux-x64.AppImage"
+          cp "$(find "$source/bundle/deb" -maxdepth 1 -type f -name '*.deb' -print -quit)" "$target/scoville-plan-viewer-v${VIEWER_VERSION}-linux-x64.deb"
+          cp "$(find "$source/bundle/rpm" -maxdepth 1 -type f -name '*.rpm' -print -quit)" "$target/scoville-plan-viewer-v${VIEWER_VERSION}-linux-x64.rpm"
+
+      - name: Stage macOS downloads
+        if: startsWith(matrix.asset_id, 'macos-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          source="development/viewer/${{ matrix.target_dir }}"
+          target="development/viewer/release-assets"
+          mkdir -p "$target"
+          app="$(find "$source/bundle/macos" -maxdepth 1 -type d -name '*.app' -print -quit)"
+          dmg="$(find "$source/bundle/dmg" -maxdepth 1 -type f -name '*.dmg' -print -quit)"
+          ditto -c -k --sequesterRsrc --keepParent "$app" "$target/scoville-plan-viewer-v${VIEWER_VERSION}-${{ matrix.asset_id }}.app.zip"
+          cp "$dmg" "$target/scoville-plan-viewer-v${VIEWER_VERSION}-${{ matrix.asset_id }}.dmg"
+
+      - name: Retain release downloads
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.asset_id }}
+          path: development/viewer/release-assets/*
+          if-no-files-found: error

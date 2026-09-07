@@ -85,6 +85,20 @@ https://github.com/benjaminstelzer/scoville-handoff/tree/main/scoville-handoff
 Preserve existing customizations and ask before overwriting conflicting files. Report every installed location and whether the host discovers each Skill.
 ```
 
+### Download the Plan Viewer
+
+The desktop viewer reads existing Scoville Plan projects without changing them.
+Download the file that matches your system from the
+[current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest):
+
+- Windows x64: portable EXE, MSI, or setup EXE.
+- macOS Apple Silicon and Intel: DMG or zipped app.
+- Linux x64: portable binary, AppImage, DEB, or RPM.
+
+The project list stays portable in `scoville-plan-viewer.xml` beside the
+application. macOS stores it beside the app bundle. AppImage builds store it
+beside the AppImage file.
+
 ## What it enforces
 
 - **One planning owner.** Existing repository instructions and records stay
