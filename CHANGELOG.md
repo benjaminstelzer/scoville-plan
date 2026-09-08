@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.3.1 - 2026-09-08
+
+- Give native Plans, Work Items, and Decisions their own compact writing rules and a required check for precision, necessary detail, and repetition.
+- Keep facts, uncertainty, verification criteria, and immutable history intact when shortening permitted text. Add explicit routes for wording audits and rewrites.
+- If Scribe is installed, keep native record wording with Plan unless the user explicitly requests Scribe. Plan works independently.
+- Keep the structural validator unchanged. No numeric prose limit or automated quality claim is added.
+- All 57 repository tests passed. One record-writing execution shortened a synthetic Plan and Decision while preserving required meaning and immutable bytes, with eight successful structural checks. This does not establish general reliability or token savings.
+- Fresh Terra Medium cases covered nine routing scenarios. Two explicit-use gaps were corrected and checked in targeted fresh runs. Invalid discovery runs and a separate wording caveat remain documented in the routing evidence.
+- Retain the unchanged Viewer v1.3.0 downloads with verified hashes in this release.
+
 ## v1.3.0 - 2026-09-07
 
 - Add the responsive Scoville Plan Viewer for Windows, macOS, and Linux.
@@ -7,6 +17,9 @@
 - Keep the project registry in a portable XML file beside the application.
 - Add native release assets for Windows x64, macOS Apple Silicon and Intel, and Linux x64.
 - Preserve the existing Agent Skill package as a separate release download.
+- Refresh visible projects every four seconds and paginate Plan points and Decisions after 100 entries, moving keyboard focus after a page change.
+- Use the platform application-data directory when an installed app cannot write its portable XML beside the executable.
+- The original release built all four platform targets in GitHub Actions and launched Windows locally. macOS and Linux were checked by their runners, not launched locally.
 
 ## v1.2.15 - 2026-09-05
 

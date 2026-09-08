@@ -1,6 +1,6 @@
 ---
 name: scoville-plan
-description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Use when a task invokes Scoville Plan, requests repository-owned implementation planning or decision records, must survive interruption or compaction, or works in a format-version-1 project with PROJECT_INDEX.md, docs/plans, and docs/decisions. Do not use for a small contained task that needs no durable plan, or when the user explicitly opts out of Scoville Plan.
+description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned implementation planning or decision records, must survive interruption or compaction, or works in a format-version-1 project with PROJECT_INDEX.md, docs/plans, and docs/decisions. Do not use for a small contained task that needs no durable plan, or when the user explicitly opts out of Scoville Plan.
 ---
 
 # Scoville Plan
@@ -42,6 +42,13 @@ active+applicable => owner concern only, self continues; opt-out local. Owners:
 interface/rendered proof; `scoville-scribe-anti-ai-slop` wording/fidelity;
 `scoville-handoff` transfer.
 
+Plan owns wording and fidelity of its native records. If Scribe is installed,
+do not additionally activate, load, or apply it to their creation, rewriting,
+or wording audit. An explicit user request to use Scribe takes precedence for
+wording. Plan still owns permitted edits, format, and lifecycle unless opted out.
+If Scribe is active for another text segment, keep it scoped there. Plan works
+without Scribe and never requires its installation.
+
 ## Choose planning and route references
 
 Use a Plan for dependent outcomes, material sequencing, durable
@@ -58,7 +65,8 @@ Exact reference codes: `R` [read-only.md](references/read-only.md); `G`
 [native-decision-batches.md](references/native-decision-batches.md); `V`
 [profile-validation.md](references/profile-validation.md).
 
-Classify the operation, then load exactly its route:
+Classify the operation and edited record, then load exactly its route. An edit
+inside a Work Item uses the Work Item route even though its file is a Plan.
 
 | Operation | Load |
 | --- | --- |
@@ -72,6 +80,10 @@ Classify the operation, then load exactly its route:
 | Activate, complete, or cancel Plan | P, L, W only if current work changes, E |
 | Audit Plan structure or lifecycle | P; add G only for decomposition judgment |
 | Audit Decision structure or lifecycle | D |
+| Audit record wording | P for Plans or Work Items; D for Decisions |
+| Rewrite Plan Goal or Non-goals | P, L, E |
+| Rewrite Work Item wording | P, W, E |
+| Rewrite Decision wording | D, P, E |
 | Validate after writes or diagnose a complete supported profile | Run V; then only the native reference for a reported diagnostic or correction |
 
 For read-only, preload no format guides. If profile existence is unknown,
@@ -129,6 +141,24 @@ failed or partial work `in_progress`, `paused`, or explicitly blocked.
 
 ## Mutate narrowly and verify
 
+### Write compact records
+
+Keep facts needed to choose, resume, verify, or revisit the work. Use direct
+sentences and compact bullets where the format permits. State each fact in its
+owning field, repeating it only when needed for correct interpretation. Remove
+filler, irrelevant chronology, and repeated rationale. Keep already concise
+text. Do not trade readability for abbreviations or long compressed sentences.
+
+Before writing and during a wording audit, check that every sentence adds
+necessary information and that shortening preserves facts, constraints,
+alternatives, tradeoffs, uncertainty, exact identifiers, acceptance criteria,
+and evidence. Review only the requested scope. Brevity never authorizes changing
+immutable history, weakening Acceptance, or claiming unobserved verification.
+Report audit findings without editing. No fixed word or sentence count proves
+quality, and the structural validator does not perform this semantic check.
+
+### Apply and check edits
+
 Before writing, confirm root, format, active Plan, current Work Item, affected
 bytes, outcome, and required acceptance evidence. Use context-bound patches;
 preserve unrelated work. Prepare and inspect the full multi-file result before
@@ -137,7 +167,7 @@ applying any member.
 After writing:
 
 1. reread changed frontmatter and complete affected Work Item or Decision blocks;
-2. inspect the scoped diff;
+2. inspect the scoped diff and check changed prose against the compact-record rules;
 3. check index ownership, active-Plan count, current-item status, Work Item key
    order, dependency order and cycles, Decision and Plan references, blockers,
    lifecycle fields, Evidence, and `Next action`;

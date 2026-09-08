@@ -108,6 +108,9 @@ Preserve existing customizations and ask before overwriting conflicting files. R
 
 - **One planning owner.** Existing repository instructions and records stay
   authoritative.
+- **Compact records.** Plan owns their writing and checks precision, necessary
+  detail, and repetition. If Scribe is installed, native record work does not
+  add it unless explicitly requested. Plan remains usable on its own.
 - **Outcome-sized Work Items.** Separately resumable outcomes become items.
   Implementation steps and checks remain steps or acceptance evidence.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
@@ -161,6 +164,10 @@ needs:
   work to another agent or session.
 
 ## Status
+
+The [record-writing check](development/docs/evaluations/record-writing-v1.md)
+and [Terra Medium routing cases](development/docs/evaluations/record-routing-terra-medium/README.md)
+document the new rules, observed corrections, and remaining evidence limits.
 
 The historical package qualified on 2026-08-10 passed 30/30 final cases.
 Its exact Core and package hashes are retained in

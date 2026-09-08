@@ -218,6 +218,33 @@
         "Do not treat a prior selected slice as complete validation or delete, summarize in place, or move terminal blocks into unsupported archives.",
         "Use a successor Plan only at a real completed-goal boundary under the ordinary lifecycle."
       ]
+    },
+    {
+      "id": "compact-records-preserve-required-meaning",
+      "given": "Tighten a verbose todo Work Item and proposed Decision with repeated rationale, exact report IDs, timestamps, interrupted-write checks, rollback constraints, and uncertain atomic-rename support.",
+      "expect": [
+        "Remove filler and unnecessary repetition while retaining every requirement, condition, actual alternative, material tradeoff, and uncertainty.",
+        "Keep result, proof, next action, and rationale in their owning fields, without hard word limits or weakening native structure.",
+        "Keep already concise text unchanged. Report semantic review separately from structural validation."
+      ]
+    },
+    {
+      "id": "record-wording-audit-and-history",
+      "given": "Audit wording in an accepted Decision and a started Work Item, then request stylistic shortening without authorizing a lifecycle change.",
+      "expect": [
+        "Use routed record format guides and report precise findings without edits.",
+        "Preserve immutable authored bytes after the shortening request and explain the supported lifecycle boundary.",
+        "Do not weaken Acceptance, manufacture verification, or overwrite history for brevity."
+      ]
+    },
+    {
+      "id": "standalone-native-writing-owner",
+      "given": "Create, rewrite, and audit native records with Plan alone, with Scribe installed, and with Scribe active for another segment.",
+      "expect": [
+        "Plan owns record writing without requiring or loading Scribe.",
+        "Keep mixed-task prose in its own route. For explicit Scribe use, retain available applicable Plan's Core and edit references for format and lifecycle checks.",
+        "If Plan is absent or inactive, do not impose its rules or require its installation."
+      ]
     }
   ]
 }

@@ -70,6 +70,13 @@ manufacture facts, approval, confirmation evidence, or certainty.
 `Confirmation` states how the choice can be verified, not that verification
 already happened.
 
+Give each section distinct content. Decision states the choice, Problem the
+need, Drivers the constraints, Considered alternatives the actual options and
+material tradeoffs, Consequences the resulting benefits and costs, Confirmation
+the verification method, and Revisit when a concrete reconsideration trigger.
+Use short sentences or compact bullets. Do not retell the same rationale across
+sections or pad a section with invented alternatives or generic claims.
+
 ## Links and lifecycle
 
 Work Item `Decisions` lists are the sole canonical Plan-to-Decision links.

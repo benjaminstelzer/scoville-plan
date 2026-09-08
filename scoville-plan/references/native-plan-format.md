@@ -82,6 +82,8 @@ Work items
 ```
 
 Goal and Non-goals must be explicit and non-empty.
+State the target result in Goal and only actual scope exclusions in Non-goals.
+Keep implementation order and rationale in their owning fields or Decisions.
 
 ## Work Item block
 
@@ -112,6 +114,13 @@ When present, Steps contain consecutive numbered, non-empty, single-line prose
 starting at `1.` with no blank lines inside the block. Steps express order only;
 they have no IDs, status, dependencies, blockers, evidence, checkboxes, or
 completion semantics. `Next action` is the sole current move.
+
+Keep Outcome to the observable result, Acceptance to the checks and expected
+results that establish it, and Next action to the first unperformed action.
+Prefer a short direct sentence where sufficient. One physical line may contain
+several sentences when necessary criteria would otherwise be lost. Steps add
+subordinate order, not another description of the outcome. Evidence records the
+observed result and a precise reference when needed, not an execution diary.
 
 ## State invariants
 

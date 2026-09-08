@@ -108,6 +108,8 @@ not hidden. Recheck the affected graph and lifecycle invariants. When the bundle
 read-only validator and Python are available, run it as described in
 [profile-validation.md](profile-validation.md). Otherwise preserve the manual
 inspection fallback; never make an executable a dependency of this Skill.
+Also review changed prose using the core compact-record rules. Structural
+validity alone does not establish precision, sufficiency, or lack of repetition.
 
 Report exact changed records, manual checks, validator output when actually
 observed, unresolved proposals, partial-state risk, and the next concrete
