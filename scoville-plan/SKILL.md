@@ -1,6 +1,7 @@
 ---
 name: scoville-plan
 description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned implementation planning or decision records, must survive interruption or compaction, or works in a format-version-1 project with PROJECT_INDEX.md, docs/plans, and docs/decisions. Do not use for a small contained task that needs no durable plan, or when the user explicitly opts out of Scoville Plan.
+compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no CLI, MCP server, database or network. Optional structural validator needs Python 3. Developed for Codex and Claude Code; other hosts untested."
 ---
 
 # Scoville Plan

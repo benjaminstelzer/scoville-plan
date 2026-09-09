@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Added the `compatibility` frontmatter field declaring host and tool requirements. No behavior change.
+
 ## v1.3.1 - 2026-09-08
 
 - Give native Plans, Work Items, and Decisions their own compact writing rules and a required check for precision, necessary detail, and repetition.
