@@ -69,6 +69,10 @@ Use Scoville Plan to audit the existing Plan and Decision records for lifecycle,
 Explicit `$scoville-plan` invocation also works on hosts that support named
 Skill invocation.
 
+## Compatibility
+
+Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no CLI, MCP server, database or network. Optional structural validator needs Python 3. Developed for Codex and Claude Code; other hosts untested.
+
 ## Install
 
 ### Install this Skill
