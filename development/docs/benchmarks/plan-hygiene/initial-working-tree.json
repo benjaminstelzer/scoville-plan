@@ -1,9 +1,0 @@
-{
-  "README.md": "275eaccc9eb2d2aee7989679864c387fca6bc0fe721aa874e13a7e6fc7a95a39",
-  "CHANGELOG.md": "eae12ba4483c7de0793ad009be5cc693ba9b188a8f3067e006d8412d65001a89",
-  "scoville-plan/scripts/compute_decision_batch.py": "6f5265617a8add19405dde613e874482dba475211e8010352beb5d6d37c407a4",
-  "tests/test_compute_decision_batch.py": "7f2a45bc9685615e1eeddba2e94eefdf9e50a971daeab885a5947ef9d5caf29e",
-  ".gitignore": "599e8d09a18b6bac6f70ed12bf96f67e49c4d992ee2601bc173d92fbcb64b11d",
-  "docs/maintenance.md": "a4cd3c336a4fd9ad05d853705e233b687690d480e43d7c0e3068acf2e6c184be",
-  "scoville-plan/LICENSE": "9ad694bcec64de4030c474a389a3473d2a2669f25177f2ba9db49956b38b4bf1"
-}

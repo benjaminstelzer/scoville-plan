@@ -1,38 +1,25 @@
 # Development
 
-The only installable Skill source is [`scoville-plan/`](../scoville-plan/).
-This directory owns repository development and is not an installation package.
+The only installable package is [`scoville-plan/`](../scoville-plan/). The profile validator, regression fixtures, and optional desktop viewer are maintained here and are not part of the Skill installation.
 
-## Current layout
+## Validate
 
-Paths recorded before the 2026-09-05 structure change are historical. Use this mapping
-for current local files; frozen evidence retains its original contents and hashes.
+Run the Python contract suite from the repository root:
 
-| Former repository path | Current repository path |
-| --- | --- |
-| `docs` | `development/docs` |
-| `tests` | `development/tests` |
-| `PROJECT_INDEX.md` | `development/PROJECT_INDEX.md` |
+```text
+python -B -m unittest discover -s development/tests -v
+```
 
-Run development commands from this directory unless the command specifies otherwise.
-The installable package is one directory above. Tests, when present, run with
-`python -B -m unittest discover -s tests` in the existing development environment.
-This move does not add dependencies or establish new model or host qualification.
+For viewer changes, run from `development/viewer`:
 
-The executable Plan-hygiene experiment uses `docs/benchmarks/plan-hygiene/protocol-structure-2026-09-05.json`
-with hashes for the relocated sources. The original `protocol.json` and
-`results.json` remain historical evidence. Run `python -B tests/plan_hygiene_experiment.py`
-to produce a new result without overwriting them.
+```text
+npm ci
+npm run check
+cargo test --manifest-path src-tauri/Cargo.toml
+```
 
-The native planning root is this directory: [`PROJECT_INDEX.md`](PROJECT_INDEX.md),
-`docs/plans/` and `docs/decisions/` moved together.
+These checks cover native profile structure and viewer behavior. They do not prove agent compliance or transactional filesystem writes.
 
-## Frozen control texts
+## Retention
 
-These files are evaluation inputs, not additional installable Skills. Their bytes
-are unchanged. A new evaluation must copy the chosen control into its isolated
-run directory as `SKILL.md`; never restore that name in this repository.
-
-| Former path after directory move | Stored fixture path |
-| --- | --- |
-| `development/docs/benchmarks/plan-hygiene/baseline/SKILL.md` | `development/docs/benchmarks/plan-hygiene/baseline/SKILL.fixture.md` |
+Keep current tests, fixtures, viewer source, dependency locks, and this maintenance summary. Create benchmark profiles, token measurements, model outputs, audits, and review packets in temporary storage. Retain evaluation evidence only as a concise repository-owned summary when a published release links it.

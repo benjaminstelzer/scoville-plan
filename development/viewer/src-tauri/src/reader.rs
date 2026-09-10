@@ -785,16 +785,4 @@ mod tests {
         assert!(error.contains("leaves the selected project"));
     }
 
-    #[test]
-    fn reads_the_repository_development_profile() {
-        let development_root = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .unwrap()
-            .parent()
-            .unwrap();
-        let snapshot = read_project(development_root).unwrap();
-        assert!(!snapshot.plans.is_empty());
-        assert!(!snapshot.decisions.is_empty());
-        assert!(snapshot.plans.iter().any(|plan| plan.id == "PLAN-0006"));
-    }
 }
