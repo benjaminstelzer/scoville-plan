@@ -113,8 +113,12 @@ authorized multi-Decision accept-or-reject transition, use B and its helper
 route; never substitute single-transition or audit behavior.
 
 At work start, inventory Decision frontmatter and read every proposal. Report
-ID/title/recommendation/effect; request accept|reject|revise. Repeat unresolved
-proposals at handoff; stop only dependent work.
+ID/title/recommendation/effect, including proposals unrelated to current work.
+Request accept|reject|revise when the requested work depends on that choice or
+the user asks to handle Decisions. A status/listing request does not require a
+decision answer. Preserve unresolved proposals at handoff; do not repeat an
+unchanged decision question merely because another status turn occurs. New
+decision-relevant evidence may warrant asking again. Stop only dependent work.
 
 Mark a Work Item `done` only after observing Acceptance and adding concise
 evidence. A captured structural-validation result supports only structural

@@ -98,7 +98,8 @@
       "expect": [
         "Use the read-only route without loading native write-format references.",
         "Read the current Work Item and inventory Decision frontmatter, then read and report both proposals with ID, title, recommended choice, and practical effect.",
-        "Ask for accept, reject, or revise choices while allowing unrelated work to continue."
+        "Do not demand accept, reject, or revise choices for this status-only request; preserve visibility of both proposals and allow unrelated work to continue.",
+        "Ask before later requested work that depends on a proposal, or when the user asks to handle Decisions; never infer acceptance from silence."
       ]
     },
     {

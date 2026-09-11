@@ -42,11 +42,15 @@ referenced record cannot be resolved unambiguously.
 
 ## Surface proposals
 
-For every `proposed` Decision, report its ID, title, recommended choice, and
-practical effect, then ask the user to accept, reject, or revise it. Repeat
-unresolved proposals at handoff. Continue unrelated work, but stop before work
-whose direction depends on one. Never infer acceptance from silence, continued
-work, or implementation that follows the recommendation.
+For every `proposed` Decision, including unrelated proposals, report its ID,
+title, recommended choice, and practical effect. Ask for accept, reject, or
+revise only when requested work depends on the choice or the user asks to handle
+Decisions. A status/listing request does not require a decision answer. Preserve
+unresolved proposals at handoff without repeating unchanged decision questions
+on each status turn. New decision-relevant evidence may warrant asking again.
+Continue unrelated work, but stop before work whose direction depends on a
+proposal. Never infer acceptance from silence, continued work, or implementation
+that follows the recommendation.
 
 ## Report the boundary
 

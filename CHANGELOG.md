@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.4 - 2026-09-11
+
+- Report every proposed Decision without requiring a decision response to a status request. Ask for acceptance, rejection or revision when work depends on the proposal or the user requests decision handling.
+- Behavioral acceptance remains deferred. This release adds no live-model or cross-host qualification.
+
 ## v1.3.1 - 2026-09-08
 
 - Added compact writing rules and wording checks for native Plans, Work Items,
