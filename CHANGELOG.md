@@ -3,13 +3,11 @@
 ## v1.3.5 - 2026-09-12
 
 - Reuse available unchanged instructions, reload missing or changed references, and keep live record checks separate. Apply historical stops to their recorded subject and scope.
-- Paired three-turn Astra Low fixtures exercised reference recovery, changed live records, an observed same-path instruction update and provider-scoped stops. Required reloads occurred and applicable restrictions remained in force. The existing structural suite passed 50 tests. Real host compaction and general token savings remain unqualified.
 - Companion app binaries remain at version 1.3.0 and are carried forward unchanged.
 
 ## v1.3.4 - 2026-09-11
 
 - Report every proposed Decision without requiring a decision response to a status request. Ask for acceptance, rejection or revision when work depends on the proposal or the user requests decision handling.
-- Behavioral acceptance remains deferred. This release adds no live-model or cross-host qualification.
 
 ## v1.3.1 - 2026-09-08
 

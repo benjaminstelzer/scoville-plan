@@ -1,34 +1,20 @@
 # Scoville Plan
 
-A plan should make project direction recoverable. Once planning becomes the
-project, it has missed its own point.
+A useful plan lets you pick up the work again without reconstructing the whole
+conversation. It says what is active, which decisions apply and what needs to
+happen next. If maintaining the plan becomes most of the work, the structure
+is getting in the way.
 
-It usually looks harmless:
-
-- A small reversible change receives a Plan, five Decisions, and fourteen Work
-  Items before anyone opens the file that owns it.
-- A Work Item becomes `done` because the expected file exists, although nobody
-  observed the acceptance result.
-- A second tracker appears beside the repository's existing Plan because the
-  first source of truth was apparently lonely.
-- The next action says "continue the work." The map has reached the useful
-  precision of a sign marked "somewhere ahead."
-
-That is planning slop: structure expands while direction becomes harder to
-recover. Eventually the map needs its own map.
-
-Scoville Plan is an Agent Skill for repository-owned Plans, Work Items, and
-Decision records. It is useful when work spans dependent outcomes, must survive
-interruption, or needs explicit lifecycle and completion evidence. It preserves
-the repository's existing planning owner and does not create a parallel
-journal, database, or hidden state. Small reversible changes normally need no
-durable Plan. Not every checkbox needs a permanent address.
+Scoville Plan keeps Plans, Work Items and Decisions in the repository. Use it
+when work spans dependent outcomes, needs explicit decisions or must survive
+interruption. It preserves the existing planning owner and keeps completion
+tied to an observed result, rather than the presence of a file or a checked box.
+Small reversible changes usually need no durable Plan.
 
 ## Why "Scoville"?
 
-The family is named for useful signal that remains detectable after dilution. In planning, the
-heat is the direction another agent can still recover: the active outcome,
-authority, blocker, evidence, and next action.
+The family is named for useful signal that remains detectable after dilution.
+In Plan, that means keeping the direction of the work recoverable across sessions.
 
 ## Companion app
 
@@ -144,23 +130,20 @@ Routine updates read the relevant complete blocks without printing unrelated
 history. Full-file change detection and complete structural checks remain in
 place. Completed records stay in their original Plans, available when needed.
 
-Repository validation and retention rules are in [development](development/README.md).
-
 ## How it was developed
 
-Plan has been developed through real project records, structural tests and
-comparisons of how agents recover and update work. Earlier
-[optimization work](https://github.com/benjaminstelzer/scoville-plan/blob/6efa0c0c3ee566a5874206a1709c8079758f6108/CHANGELOG.md)
-examined shorter instructions and selective loading while preserving Decision
-authority, lifecycle rules and completion evidence.
+Plan developed through real project records and the difficulty of picking work
+up again. The records need to say what is active, which decisions apply and
+what remains to be done. More structure is useful only while it makes those
+answers easier to recover.
 
-I analyze complete task histories to find unnecessary rereading, stale state
-and planning that consumes tokens without moving the task forward. Those
-findings inform revisions such as scoped record reads and reuse of available
-instructions. [Recent paired fixtures](development/validation-v1.3.5.md)
-exercised required reloads and changing live records across several turns.
-They support those specific checks, while real host compaction and general
-token savings remain unqualified.
+I compare complete task histories with the records agents read and change.
+That shows unnecessary rereading, stale state and planning that consumes time
+without moving the work forward. Earlier
+[optimization work](https://github.com/benjaminstelzer/scoville-plan/blob/6efa0c0c3ee566a5874206a1709c8079758f6108/CHANGELOG.md)
+explored shorter instructions and selective loading. Later changes narrowed
+routine reads while retaining checks for changed records and missing
+instructions.
 
 ## Scoville family
 
@@ -184,15 +167,6 @@ needs:
   Work Items, Decisions, and lifecycle state.
 - [Handoff](https://github.com/benjaminstelzer/scoville-handoff) transfers active
   work to another agent or session.
-
-## Status
-
-The current repository retains deterministic profile, record-writing, and
-viewer tests. Historical model runs and loading comparisons are summarized in
-the changelog; they do not qualify the current source, prove agent compliance,
-or establish provider-token or cost savings.
-
-Focused release checks are recorded in [the v1.3.5 validation summary](development/validation-v1.3.5.md). Native discovery and real compaction remain unqualified.
 
 ## Sources
 

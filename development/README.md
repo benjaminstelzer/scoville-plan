@@ -22,4 +22,6 @@ These checks cover native profile structure and viewer behavior. They do not pro
 
 ## Retention
 
-Keep current tests, fixtures, viewer source, dependency locks, and this maintenance summary. Create benchmark profiles, token measurements, model outputs, audits, and review packets in temporary storage. Retain evaluation evidence only as a concise repository-owned summary when a published release links it.
+Keep current tests, fixtures, viewer source, dependency locks, and this maintenance summary. Create benchmark profiles, token measurements, model outputs, audits, and review packets in temporary storage. Retain a concise evaluation summary only when it explains a useful result or
+development lesson and a published release links it. Routine checks and
+inconclusive miniature runs stay temporary.
