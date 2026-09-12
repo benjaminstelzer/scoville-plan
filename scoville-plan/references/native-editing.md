@@ -53,10 +53,14 @@ If extraction boundaries or output completeness are uncertain, widen the read;
 never interpret truncated output as absence. This changes output scope, not
 format, history retention, concurrency checks, or the manual proof boundary.
 
-Within one conversation, retain the resolved path and SHA-256 of each loaded
-Skill reference. Compare hashes before a later operation and reload only a
-changed reference. Reread live project state; do not reload the full Plan or
-unrelated accepted Decisions merely because another turn began.
+Reuse relevant Skill instructions while their contents remain available and
+their source identity is current. Reload missing contents even when a retained
+hash is unchanged. Observed edits, version changes or stale-source signals
+require reloading the affected reference before dependent work; if freshness is
+uncertain, inspect that source. Do not hash or reload every reference merely
+because another operation began. Reread the required live project records and
+preserve their exact-byte write guards above; unchanged instructions do not
+establish unchanged project state.
 
 ## Guard the write
 

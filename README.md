@@ -176,6 +176,8 @@ viewer tests. Historical model runs and loading comparisons are summarized in
 the changelog; they do not qualify the current source, prove agent compliance,
 or establish provider-token or cost savings.
 
+Focused release checks are recorded in [the v1.3.5 validation summary](development/validation-v1.3.5.md). Native discovery and real compaction remain unqualified.
+
 ## Sources
 
 - [Agent Skills specification](https://agentskills.io/specification) for the

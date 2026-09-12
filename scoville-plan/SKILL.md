@@ -106,6 +106,12 @@ route permits intent-preserving repair.
 
 Link each created Decision to every affected mutable Work Item.
 
+Apply a historical stop to its recorded subject and scope. Compare it with the
+current authorized work before blocking a different workflow; a stop for one
+provider does not automatically stop another. Preserve applicable restrictions.
+If their scope is material and unresolved, ask only about the dependent action;
+do not infer permission from silence or discard a stop because it is old.
+
 A proposal request creates `proposed`; a clear request to record the stated
 choice authorizes acceptance. Reject, deprecate, supersede, activate, or cancel
 only with the explicit lifecycle choice required by the route. For an
