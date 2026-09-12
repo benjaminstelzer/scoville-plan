@@ -146,6 +146,22 @@ place. Completed records stay in their original Plans, available when needed.
 
 Repository validation and retention rules are in [development](development/README.md).
 
+## How it was developed
+
+Plan has been developed through real project records, structural tests and
+comparisons of how agents recover and update work. Earlier
+[optimization work](https://github.com/benjaminstelzer/scoville-plan/blob/6efa0c0c3ee566a5874206a1709c8079758f6108/CHANGELOG.md)
+examined shorter instructions and selective loading while preserving Decision
+authority, lifecycle rules and completion evidence.
+
+I analyze complete task histories to find unnecessary rereading, stale state
+and planning that consumes tokens without moving the task forward. Those
+findings inform revisions such as scoped record reads and reuse of available
+instructions. [Recent paired fixtures](development/validation-v1.3.5.md)
+exercised required reloads and changing live records across several turns.
+They support those specific checks, while real host compaction and general
+token savings remain unqualified.
+
 ## Scoville family
 
 Each Skill works independently. Combine only the concerns the task actually
