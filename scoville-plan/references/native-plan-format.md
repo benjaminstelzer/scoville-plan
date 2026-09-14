@@ -115,6 +115,14 @@ starting at `1.` with no blank lines inside the block. Steps express order only;
 they have no IDs, status, dependencies, blockers, evidence, checkboxes, or
 completion semantics. `Next action` is the sole current move.
 
+When a Plan is being shaped for later Scoville Workflow use, each Step may act
+as one subplan dispatch point. Keep materially different routing needs in
+separate Steps and optionally start the prose with one
+`[route: ultra_low|low|medium|high|ultra_high]` prefix. This annotation remains
+ordinary Step prose: it adds no field, lifecycle, or structural guarantee. Do
+not store a model or reasoning level; the live Workflow configuration owns that
+mapping. Without Steps, the Work Item is one dispatch unit.
+
 Keep Outcome to the observable result, Acceptance to the checks and expected
 results that establish it, and Next action to the first unperformed action.
 Prefer a short direct sentence where sufficient. One physical line may contain

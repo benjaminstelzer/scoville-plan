@@ -43,6 +43,14 @@ active+applicable => owner concern only, self continues; opt-out local. Owners:
 interface/rendered proof; `scoville-scribe-anti-ai-slop` wording/fidelity;
 `scoville-handoff` transfer.
 
+When `scoville-workflow` is available, Plan may make optional Steps usable as
+later dispatch units without activating or loading that Workflow. Group each
+Step around one coherent outcome slice with comparable routing risk and
+reasoning demand. Separate a trivial text edit from a complex structural change;
+do not split code, UI, browser work, or other activities that share the same
+outcome, risk, authorization, and Acceptance boundary. The Workflow still
+selects the live model and reasoning when explicitly invoked.
+
 Plan owns wording and fidelity of its native records. If Scribe is installed,
 do not additionally activate, load, or apply it to their creation, rewriting,
 or wording audit. An explicit user request to use Scribe takes precedence for
@@ -137,6 +145,11 @@ failed or partial work `in_progress`, `paused`, or explicitly blocked.
   ownership, or rollout timing differs. Put subordinate order in optional
   Steps. Put testing, review, documentation, and release checks in Acceptance
   or Evidence unless independently requested as resumable outcomes.
+- For later Scoville Workflow use, one Step is one subplan dispatch point. Give
+  each Step a single routing class when confidently known, using an optional
+  `[route: ultra_low|low|medium|high|ultra_high]` prefix. Never mix materially
+  different routing needs in one Step or hard-code a model. Without Steps, the
+  whole Work Item remains one dispatch unit.
 - Keep at most one Work Item `in_progress`, equal to `current_item`. This limits
   concurrency, not total Plan items.
 - Change authored content or order only while `todo`. After start, preserve the

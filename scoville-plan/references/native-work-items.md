@@ -35,6 +35,11 @@ progress transitions.
   `todo` or `paused` replacement in the same prepared patch.
 - Preserve subordinate implementation order in Steps. Steps never receive IDs,
   status, checkboxes, blockers, evidence, or completion semantics.
+- When preparing for later Scoville Workflow execution, keep each Step suitable
+  for one worker dispatch with one routing class. Separate materially different
+  risk or reasoning demand, but keep activities together when they share the
+  same outcome and Acceptance boundary. A `[route: CLASS]` prefix is optional
+  prose and may change only while the Work Item remains `todo`.
 
 ## Select and advance work
 

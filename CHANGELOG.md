@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.8 - 2026-09-14
+
+- Shape optional Steps as later Scoville Workflow dispatch units, separating
+  materially different routing needs while keeping related code, UI, copy, and
+  browser work together. Workflow availability alone does not activate it.
+- Store an optional routing class instead of a model or reasoning level. A Work
+  Item without Steps remains one dispatch unit.
+- Companion app binaries remain at version 1.3.0 and are carried forward unchanged.
+
 ## v1.3.5 - 2026-09-12
 
 - Reuse available unchanged instructions, reload missing or changed references, and keep live record checks separate. Apply historical stops to their recorded subject and scope.

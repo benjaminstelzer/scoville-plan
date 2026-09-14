@@ -104,6 +104,9 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   add it unless explicitly requested. Plan remains usable on its own.
 - **Outcome-sized Work Items.** Separately resumable outcomes become items.
   Implementation steps and checks remain steps or acceptance evidence.
+- **Workflow-ready Steps.** When Scoville Workflow is available, optional Steps
+  can carry one routing class each. A simple text edit and complex redesign stay
+  separate, while code, UI, and browser checks for one result stay together.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
   Plan's `current_item`.
 - **Evidence before completion.** Files and passing structure checks do not
