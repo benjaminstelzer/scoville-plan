@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.9 - 2026-09-14
+
+- Fix the release archive so the installable package has one `scoville-plan`
+  root instead of a duplicated directory level.
+
 ## v1.3.8 - 2026-09-14
 
 - Shape optional Steps as later Scoville Workflow dispatch units, separating
