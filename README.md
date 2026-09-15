@@ -118,6 +118,9 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   after an immediate redirect. Explicit stops, redirects, and execution-changing
   corrections still take effect immediately. Pure questions that require no
   retained action create no Plan work.
+- **Non-recursive Plan maintenance.** Requests to add, remove, reorder, or clean
+  up Plan points change the records directly. Only a requested substantive
+  outcome becomes a Work Item; maintaining the Plan never becomes one itself.
 - **Evidence before completion.** Files and passing structure checks do not
   substitute for the observed acceptance result.
 - **Explicit decisions.** Human choices are recorded without asking twice.

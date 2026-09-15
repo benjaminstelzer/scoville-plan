@@ -23,6 +23,7 @@
     {"id":"add-and-resolve-blocker","sources":["references/native-work-items.md","references/native-plan-format.md"]},
     {"id":"start-pause-resume-complete-cancel-work","sources":["references/native-work-items.md","references/native-plan-format.md"]},
     {"id":"complete-and-advance","sources":["references/native-work-items.md"]},
+    {"id":"direct-plan-maintenance-without-recursion","sources":["SKILL.md","references/native-work-items.md"]},
     {"id":"classify-and-queue-mid-task-requests","sources":["SKILL.md","references/planning-granularity.md","references/native-work-items.md"]},
     {"id":"create-update-delete-decision-proposal","sources":["references/native-decision-format.md","references/native-editing.md"]},
     {"id":"accept-reject-deprecate-supersede-decision","sources":["references/native-decision-format.md","references/native-editing.md"]},

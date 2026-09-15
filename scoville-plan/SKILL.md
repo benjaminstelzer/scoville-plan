@@ -1,6 +1,6 @@
 ---
 name: scoville-plan
-description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned implementation planning or decision records, must survive interruption or compaction, works in a format-version-1 project, or receives a new instruction while an active Plan is running. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
+description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned planning or decision records, must survive interruption or compaction, works in a format-version-1 project, receives a new instruction while an active Plan is running, or asks to add, remove, reorder, or clean up Plan points. Apply Plan-record maintenance directly and never create a Work Item whose only outcome is maintaining the Plan. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
 compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no CLI, MCP server, database or network. Optional structural validator needs Python 3. Developed for Codex and Claude Code; other hosts untested."
 ---
 
@@ -83,7 +83,7 @@ inside a Work Item uses the Work Item route even though its file is a Plan.
 | Initialize a wholly absent profile | G, P, L, E |
 | Create or restructure Plan | G, P, L, E |
 | Queue additive work received during active work | G, P, W, E |
-| Insert, refine, move, select, block, advance, or remove Work Item | P, W, E |
+| Directly insert, refine, move, select, block, advance, or remove Work Item | P, W, E |
 | Record explicit human choice or possible material Decision | D, P, E |
 | Apply explicitly authorized Decision transition | D, P, E |
 | Apply explicitly authorized accept-or-reject batch | D, B, P, E |
@@ -139,6 +139,23 @@ Mark a Work Item `done` only after observing Acceptance and adding concise
 evidence. A captured structural-validation result supports only structural
 judgment and reporting, never acceptance evidence or mutation authority. Keep
 failed or partial work `in_progress`, `paused`, or explicitly blocked.
+
+## Apply Plan maintenance without recursion
+
+A request to add, remove, reorder, rewrite, or clean up Plan records is a direct
+Plan-maintenance operation, not additive project work. Apply the permitted
+record mutation through its normal route. Never create or queue a Work Item
+whose Outcome is to maintain, update, or clean up the Plan.
+
+When the user asks to add a Plan point for substantive future work, create or
+refine only the Work Item that represents that substantive outcome. Do not add
+a wrapper item such as "add the Plan point" or "update the Plan." A request
+that only removes or reorganizes records creates no replacement Work Item.
+
+Classify this direct-maintenance case before the mid-task rules below. Preserve
+all ordinary lifecycle, history, dependency, Decision, and validation limits;
+the recursion guard does not authorize deleting or rewriting a started or
+terminal Work Item.
 
 ## Handle messages received during active work
 

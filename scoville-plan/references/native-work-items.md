@@ -23,6 +23,18 @@ progress transitions.
 - Move one complete H3 block without renumbering any item. Dependencies must
   exist, precede their dependents in authored order, and remain acyclic.
 
+## Apply direct Plan maintenance
+
+When the user asks to add, refine, reorder, remove, or clean up Work Items,
+perform the permitted mutation directly. The maintenance action is not a
+project outcome and must never become a queued or ordinary Work Item.
+
+If the request adds substantive future work, create or refine exactly that
+outcome once. Do not create a second item for adding or maintaining it. If the
+request only removes, reorders, or rewrites records, create no new item. Apply
+the history, dependency, current-selection, and lifecycle rules in this
+reference before changing the record.
+
 ## Refine todo work
 
 - Insert one `todo` block at the end, before an anchor, or after an anchor.

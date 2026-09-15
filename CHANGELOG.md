@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1 - 2026-09-15
+
+- Apply requests to add, remove, reorder, rewrite, or clean up Plan points
+  directly. Only substantive future work becomes a Work Item; maintaining the
+  Plan never creates another Plan point.
+
 ## v1.4.0 - 2026-09-15
 
 - Classify messages received during active work before changing execution or

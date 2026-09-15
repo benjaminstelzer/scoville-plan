@@ -67,6 +67,15 @@
       ]
     },
     {
+      "id": "plan-maintenance-does-not-recurse",
+      "given": "While W-001 is in progress, the user says, 'Clean up the Plan, remove obsolete Plan points, and add a Plan point for updating invoice exports after W-001.'",
+      "expect": [
+        "Classify the request as direct Plan maintenance before applying the additive-work queue rules.",
+        "Remove only Work Items that the existing todo-history, dependency, and current-selection rules permit, while retaining started and terminal history.",
+        "Create exactly one Work Item for the substantive invoice-export outcome and no wrapper Work Item for cleaning up, updating, or adding to the Plan."
+      ]
+    },
+    {
       "id": "mid-task-mixed-correction-and-addition",
       "given": "The user corrects a misunderstanding that invalidates current execution and also requests an independent small follow-up after the corrected task.",
       "expect": [
