@@ -30,7 +30,7 @@ Staging requires temporary storage and lets validation precede publication. Impl
 
 ## Confirmation
 
-Verify preserved reports, IDs, and timestamps after migration. Simulate an interrupted write and check original reports remain available. Supply malformed source data and confirm no migrated data is published. Run read-only commands and confirm no migration occurs. Compare the original cache before and after migration and each failure case to establish byte identity and rollback availability.
+First run python -m unittest tests.test_cache_migration to verify preserved reports, IDs, and timestamps after migration and to simulate interrupted writes, malformed source data, and read-only commands. Then compare the original cache before and after migration and each failure case to establish byte identity and rollback availability. The tests are located in tests/test_cache_migration.py.
 
 ## Revisit when
 

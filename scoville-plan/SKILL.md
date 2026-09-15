@@ -1,6 +1,6 @@
 ---
 name: scoville-plan
-description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned implementation planning or decision records, must survive interruption or compaction, or works in a format-version-1 project with PROJECT_INDEX.md, docs/plans, and docs/decisions. Do not use for a small contained task that needs no durable plan, or when the user explicitly opts out of Scoville Plan.
+description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned implementation planning or decision records, must survive interruption or compaction, works in a format-version-1 project, or receives a new instruction while an active Plan is running. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
 compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no CLI, MCP server, database or network. Optional structural validator needs Python 3. Developed for Codex and Claude Code; other hosts untested."
 ---
 
@@ -82,6 +82,7 @@ inside a Work Item uses the Work Item route even though its file is a Plan.
 | Read direction or list records; no write | R |
 | Initialize a wholly absent profile | G, P, L, E |
 | Create or restructure Plan | G, P, L, E |
+| Queue additive work received during active work | G, P, W, E |
 | Insert, refine, move, select, block, advance, or remove Work Item | P, W, E |
 | Record explicit human choice or possible material Decision | D, P, E |
 | Apply explicitly authorized Decision transition | D, P, E |
@@ -139,6 +140,44 @@ evidence. A captured structural-validation result supports only structural
 judgment and reporting, never acceptance evidence or mutation authority. Keep
 failed or partial work `in_progress`, `paused`, or explicitly blocked.
 
+## Handle messages received during active work
+
+When a supported active Plan owns running work and the user sends a message
+before that work finishes, classify each part before changing execution or
+native state:
+
+- An explicit stop, pause, cancellation, or immediate redirect stops the live
+  work at once. Apply only the lifecycle change the user actually authorized.
+  When the user explicitly requires a later return to paused work, preserve
+  that return in its live `Next action` through the Work Item route.
+- A correction that invalidates or materially changes current execution stops
+  that execution before more work is performed. Reconcile its effect through
+  the ordinary Work Item or Decision routes. Do not rewrite started authored
+  fields or infer cancellation from the need to stop.
+- An additive request is work to perform after the current task. A plain
+  imperative such as "do X" is additive unless the user makes it immediate or
+  it corrects current execution. Persist it through the deferred-work operation
+  without pausing, cancelling, or replacing the current item, and without
+  beginning the deferred work.
+- A pure informational or status question that requires no retained action
+  receives the requested response and creates no Work Item. Continue the
+  current work unless another part of the message changes it.
+
+Classify mixed messages by part. Handle an interrupting correction first and
+queue any independent additive part, so neither intent hides the other. For
+additive work, make only the planning mutation needed to persist the queue,
+verify that mutation, identify the affected Work Item to the user, and resume
+the unchanged current work. Never acknowledge work as queued before its native
+record is durable. Keep queue and explicit successor provenance visible in the
+native Work Item titles defined by the deferred-work route, never only in chat.
+
+This queue behavior requires a complete supported active native Plan. If the
+request would exceed its Goal, violate its Non-goals, or require an unresolved
+scope or lifecycle choice, keep the current work unchanged and ask only for
+that choice while independent work continues. Do not claim a durable queue,
+initialize a profile, or broaden the Plan implicitly. An explicit stop or
+immediate redirect still governs live execution.
+
 ## Keep behavior-complete work
 
 - Split independently resumable outcomes when Acceptance, dependencies,
@@ -165,21 +204,35 @@ failed or partial work `in_progress`, `paused`, or explicitly blocked.
 
 ## Mutate narrowly and verify
 
-### Write compact records
+### Write compact worker-ready records
 
-Keep facts needed to choose, resume, verify, or revisit the work. Use direct
-sentences and compact bullets where the format permits. State each fact in its
-owning field, repeating it only when needed for correct interpretation. Remove
-filler, irrelevant chronology, and repeated rationale. Keep already concise
-text. Do not trade readability for abbreviations or long compressed sentences.
+Before drafting or refining a Plan, Work Item, or Decision:
 
-Before writing and during a wording audit, check that every sentence adds
-necessary information and that shortening preserves facts, constraints,
-alternatives, tradeoffs, uncertainty, exact identifiers, acceptance criteria,
-and evidence. Review only the requested scope. Brevity never authorizes changing
-immutable history, weakening Acceptance, or claiming unobserved verification.
-Report audit findings without editing. No fixed word or sentence count proves
-quality, and the structural validator does not perform this semantic check.
+1. Keep only facts needed to choose, execute, review, resume, or verify the work.
+2. Assign each fact once to its owning field or section.
+3. Put prerequisites before dependent actions and checks after the behavior they prove.
+4. Remove any sentence that changes no choice, action, order, constraint, check, or recovery fact.
+
+State the concept first in Goal, Outcome, or Decision. Use compact bullets for
+equal-rank facts and numbered Steps for execution order. Each Step names one
+concrete action, its target, and the necessary result. When a repository-relative
+file is already known, cite it directly in the Step that changes or checks it.
+When the owner is unknown, prefer bounded read-only discovery before starting
+the item, then refine its `todo` Steps with the observed path. If discovery must
+happen after start, keep its ownership criterion in the immutable Step and put
+the observed path in Evidence and the next concrete action. Never invent a path.
+
+Write for a worker with lower reasoning and no hidden conversation context. The
+worker and reviewer must be able to identify the result, scope, applicable
+choices, exact order, targets, blockers, and proof without reconstructing omitted
+intent. Split a dense compound instruction instead of compressing it into an
+ambiguous sentence. Do not repeat rationale to make a record look complete.
+
+Preserve constraints, alternatives, tradeoffs, uncertainty, exact identifiers,
+Acceptance, and Evidence. Brevity never authorizes immutable-history changes,
+weaker proof, or invented verification. Keep already concise text. Use no fixed
+word or sentence count as a quality substitute. The structural validator does
+not perform this semantic check.
 
 ### Apply and check edits
 

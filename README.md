@@ -99,9 +99,10 @@ Preserve existing customizations and ask before overwriting conflicting files. R
 
 - **One planning owner.** Existing repository instructions and records stay
   authoritative.
-- **Compact records.** Plan owns their writing and checks precision, necessary
-  detail, and repetition. If Scribe is installed, native record work does not
-  add it unless explicitly requested. Plan remains usable on its own.
+- **Compact worker-ready records.** State each necessary fact once, put equal-rank
+  facts in bullets, and write required execution order as numbered Steps. Each
+  known file appears directly in the Step that changes it. Plan remains usable
+  without Scribe.
 - **Outcome-sized Work Items.** Separately resumable outcomes become items.
   Implementation steps and checks remain steps or acceptance evidence.
 - **Workflow-ready Steps.** When Scoville Workflow is available, optional Steps
@@ -109,6 +110,14 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   separate, while code, UI, and browser checks for one result stay together.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
   Plan's `current_item`.
+- **Durable deferred work.** Mid-task additions leave current work running,
+  batch compatible small changes into one queued item, and keep complex or
+  independently resumable changes separate. Visible Work Item title prefixes
+  preserve deferred anchors and explicit successor priority across sessions.
+  A paused item's live Next action preserves an explicitly requested return
+  after an immediate redirect. Explicit stops, redirects, and execution-changing
+  corrections still take effect immediately. Pure questions that require no
+  retained action create no Plan work.
 - **Evidence before completion.** Files and passing structure checks do not
   substitute for the observed acceptance result.
 - **Explicit decisions.** Human choices are recorded without asking twice.

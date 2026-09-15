@@ -23,6 +23,7 @@
     {"id":"add-and-resolve-blocker","sources":["references/native-work-items.md","references/native-plan-format.md"]},
     {"id":"start-pause-resume-complete-cancel-work","sources":["references/native-work-items.md","references/native-plan-format.md"]},
     {"id":"complete-and-advance","sources":["references/native-work-items.md"]},
+    {"id":"classify-and-queue-mid-task-requests","sources":["SKILL.md","references/planning-granularity.md","references/native-work-items.md"]},
     {"id":"create-update-delete-decision-proposal","sources":["references/native-decision-format.md","references/native-editing.md"]},
     {"id":"accept-reject-deprecate-supersede-decision","sources":["references/native-decision-format.md","references/native-editing.md"]},
     {"id":"accept-or-reject-decision-batch","sources":["references/native-decision-batches.md","references/native-decision-format.md","references/native-editing.md","scripts/compute_decision_batch.py"]},
@@ -31,6 +32,7 @@
     {"id":"narrow-format-repair","sources":["references/native-editing.md"]},
     {"id":"transaction-incomplete-stop","sources":["references/native-editing.md","references/native-project-lifecycle.md","references/native-decision-batches.md"]},
     {"id":"behavior-complete-planning-granularity","sources":["references/planning-granularity.md"]},
+    {"id":"compact-worker-ready-records","sources":["SKILL.md","references/native-plan-format.md","references/planning-granularity.md","references/native-work-items.md","references/native-decision-format.md"]},
     {"id":"read-only-profile-validator","sources":["SKILL.md","references/profile-validation.md","scripts/validate_profile.py"]}
   ]
 }

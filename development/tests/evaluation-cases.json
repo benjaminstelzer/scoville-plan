@@ -30,6 +30,133 @@
       ]
     },
     {
+      "id": "mid-task-explicit-redirect-stops-now",
+      "given": "While W-001 is in progress, the user says, 'Do W-004 now, then return to W-001,' without reporting an error.",
+      "expect": [
+        "Classify this as an explicit immediate redirect and stop further W-001 execution at once.",
+        "Pause W-001 through the ordinary transition and preserve its first unperformed action in a Next action condition that explicitly requires resuming W-001 after W-004.",
+        "Select and start W-004 only when eligible, and apply no lifecycle change beyond the message and native state.",
+        "Do not treat the imperative as an additive after-current request or infer cancellation of W-001."
+      ]
+    },
+    {
+      "id": "explicit-return-to-paused-work-survives-restart",
+      "given": "W-004 is current after an immediate redirect. Paused W-001 has Next action 'After W-004 completes, resume W-001 and perform ACTION.' A fresh session begins before W-004 completes.",
+      "expect": [
+        "Recover the explicit return obligation from paused W-001's native Next action and distinguish it from an ordinary indefinite pause.",
+        "After observing W-004 Acceptance, complete W-004 through ordinary completion while selecting W-001, then guarded-resume W-001 and restore ACTION as its concrete Next action.",
+        "Do not use complete_and_advance for the paused target or bypass a blocker, invalid dependency, missing target, or conflicting return instruction."
+      ]
+    },
+    {
+      "id": "mid-task-status-does-not-queue",
+      "given": "While a current Work Item is in progress, the user asks what has completed and whether any check has failed.",
+      "expect": [
+        "Classify the message as informational or status-only and answer from observed state.",
+        "Create no Work Item and make no lifecycle transition for the question alone.",
+        "Continue the current work after answering unless another part of the message changes it."
+      ]
+    },
+    {
+      "id": "activation-distinguishes-instruction-from-pure-question",
+      "given": "A format-version-1 Plan is active. One follow-up message adds work to perform later; another only asks for information and requires no retained action.",
+      "expect": [
+        "The frontmatter description makes the new instruction discoverable as Scoville Plan work while the active Plan is running.",
+        "The pure informational question does not activate planning work or create a Work Item.",
+        "Classify a mixed message by part so a question cannot hide an accompanying instruction."
+      ]
+    },
+    {
+      "id": "mid-task-mixed-correction-and-addition",
+      "given": "The user corrects a misunderstanding that invalidates current execution and also requests an independent small follow-up after the corrected task.",
+      "expect": [
+        "Stop the invalid current execution and reconcile its effect through ordinary immutable-history and lifecycle rules.",
+        "Classify the independent follow-up separately and durably queue it without beginning it.",
+        "Do not let the queued addition hide the correction or treat stopping execution as implicit cancellation authority."
+      ]
+    },
+    {
+      "id": "deferred-compatible-small-requests-batch",
+      "given": "W-001 is in progress. Two successive additive requests are small, share one outcome, Acceptance, dependencies, Decisions, blockers, owner, rollout, authorization, and risk, and neither changes W-001.",
+      "expect": [
+        "Preserve W-001 and current_item while persisting both additions in one queued todo Work Item.",
+        "Keep their order explicit in Steps and make Outcome, Acceptance, and Next action cover both requests without a vague follow-up bucket.",
+        "Acknowledge the affected Work Item ID only after the guarded write and structural inspection, then resume W-001."
+      ]
+    },
+    {
+      "id": "deferred-complex-work-stays-separate",
+      "given": "A small deferred batch is followed by a complex independently resumable request and then another small request compatible with the first batch.",
+      "expect": [
+        "Give the complex request its own todo Work Item because it has an independent outcome and Acceptance boundary.",
+        "Start a new small batch for the later request rather than moving it across the intervening complex item.",
+        "Preserve arrival order in authored Work Item order and recover the exact successor from native version-1 records without chat-only state or new fields."
+      ]
+    },
+    {
+      "id": "deferred-existing-successor-and-scope-boundary",
+      "given": "Current work has a previously explicit successor priority, and a new plain additive request would either displace it or exceed the active Plan's Goal.",
+      "expect": [
+        "Recover the visible Prioritized after W-NNN title from native state, preserve the current item, and do not silently override the explicit successor or broaden the Plan.",
+        "Ask only for the conflicting priority or scope choice while independent current work continues.",
+        "Do not claim a durable queue until an authorized native representation has been written and inspected."
+      ]
+    },
+    {
+      "id": "deferred-boundary-survives-restart",
+      "given": "W-001 is running before ordinary future W-002. Additive X was inserted as a Deferred after W-001 todo item before W-002. After a fresh session starts, compatible additive Y arrives.",
+      "expect": [
+        "Recover X as W-001's deferred segment from its visible title prefix and authored position without using chat history or an allocation watermark.",
+        "Batch Y into X when all compatibility rules hold; otherwise insert Y after X and before unmarked W-002.",
+        "Preserve W-001, current_item, stable arrival order, and every unrelated W-002 field."
+      ]
+    },
+    {
+      "id": "explicit-successor-survives-restart",
+      "given": "A todo Work Item is visibly titled Prioritized after W-001 before a fresh session begins. While W-001 runs, a plain additive request arrives.",
+      "expect": [
+        "Recover the explicit successor priority from the title and do not displace it with the default after-current insertion rule.",
+        "Ask for the priority choice; if the user preserves it, anchor the deferred request after that prioritized item.",
+        "Never infer an explicit priority for an unmarked item or retain two priority prefixes for the same anchor."
+      ]
+    },
+    {
+      "id": "deferred-successor-blocked-or-decision-dependent",
+      "given": "Current Acceptance is observed and the exact queued successor has satisfied dependencies but retains an external blocker or depends on an unresolved proposed Decision.",
+      "expect": [
+        "Do not use complete_and_advance or start the queued Work Item.",
+        "Use ordinary completion only when valid to select the queued successor without starting it, preserving its blocker or proposal.",
+        "Do not clear the blocker, accept the Decision, invent Evidence, skip the item, or complete the Plan."
+      ]
+    },
+    {
+      "id": "deferred-later-prerequisite-or-no-successor",
+      "given": "A deferred request has a genuine unfinished prerequisite that must appear later than current work, or current completion has no unambiguous eligible replacement.",
+      "expect": [
+        "Place the deferred Work Item at the earliest dependency-valid position after its prerequisite and report that it cannot be immediate next work.",
+        "Keep the current item non-terminal when no exact eligible replacement can be selected and request the required choice.",
+        "Do not invent dependencies, reorder immutable work, fabricate readiness, or force terminal Plan completion."
+      ]
+    },
+    {
+      "id": "deferred-queue-requires-supported-active-plan",
+      "given": "A plain additive message arrives during live work, but the repository has no complete supported active native Plan.",
+      "expect": [
+        "Do not initialize a profile, create a chat-only queue, or claim durable queueing from the additive message alone.",
+        "Preserve the live work unless the message independently stops or redirects it, and ask only for the authority or scope fact needed for durable planning.",
+        "Keep any unsupported, partial, foreign, or invalid native paths unchanged."
+      ]
+    },
+    {
+      "id": "deferred-queue-write-failure",
+      "given": "A valid additive request is prepared for native queueing, but the guarded write is rejected, partial, concurrent, or has an unknown result.",
+      "expect": [
+        "Report that the request is not durably queued and identify the exact write or profile problem.",
+        "Do not acknowledge the Work Item as queued, begin the deferred work, or replay a stale mutation.",
+        "Preserve or reconcile the current native state through ordinary editing safety rules without inventing success."
+      ]
+    },
+    {
       "id": "structural-independent-outcomes",
       "given": "A structural change has schema, compatibility, consumer-update, and rollout outcomes that can be blocked or resumed independently.",
       "expect": [
@@ -227,6 +354,60 @@
         "Remove filler and unnecessary repetition while retaining every requirement, condition, actual alternative, material tradeoff, and uncertainty.",
         "Keep result, proof, next action, and rationale in their owning fields, without hard word limits or weakening native structure.",
         "Keep already concise text unchanged. Report semantic review separately from structural validation."
+      ]
+    },
+    {
+      "id": "compact-plan-is-worker-ready",
+      "given": "A Plan has one clear concept and three ordered changes in known files src/cache/migrate.py, src/cache/reader.py, and tests/test_cache_migration.py, but its draft repeats rationale and says only to update relevant files.",
+      "expect": [
+        "State the concept once in Goal and Outcome, and remove prose that changes no action, constraint, check, or recovery fact.",
+        "Write consecutive 1., 2., 3. Steps in dependency-safe execution order and cite each known repository-relative file in its action Step.",
+        "Keep Acceptance decisive and non-duplicative so a lower-reasoning worker can execute and a reviewer can trace every Step without chat context."
+      ]
+    },
+    {
+      "id": "compact-decision-sections-stay-distinct",
+      "given": "A proposed Decision repeats its recommendation in Problem, Drivers, Consequences, and Revisit when, while three real alternatives and an ordered confirmation procedure are known.",
+      "expect": [
+        "State the recommendation once, the need once, one supplied constraint per Driver bullet, and one material tradeoff per alternative bullet.",
+        "Keep only new benefits, costs, and limits in Consequences, and use numbered Confirmation steps for the required verification order.",
+        "Preserve every material fact and causal link without introductory prose, invented alternatives, arbitrary length limits, or repeated rationale."
+      ]
+    },
+    {
+      "id": "unknown-target-is-not-invented",
+      "given": "A Plan needs to change the canonical cache reader, but repository inspection has not identified its file.",
+      "expect": [
+        "Do not invent or guess a repository path.",
+        "Prefer bounded read-only owner discovery before starting, then refine the todo Steps with the observed path.",
+        "If discovery must happen after start, keep a criterion-based immutable Step and record the observed path through permitted Evidence and Next action updates."
+      ]
+    },
+    {
+      "id": "started-owner-discovery-uses-live-state",
+      "given": "An in-progress Work Item has an immutable criterion-based Step to locate the canonical cache reader, and execution observes src/cache/reader.py as that owner.",
+      "expect": [
+        "Preserve the started title, Outcome, Acceptance, Steps, dependencies, and Decisions.",
+        "Append the observed owner path as concise Evidence and set Next action to the first concrete action on src/cache/reader.py.",
+        "Do not return the item to todo, rewrite later Steps, or rely on chat history for the discovered target."
+      ]
+    },
+    {
+      "id": "known-file-can-still-require-contract-inspection",
+      "given": "The Plan already knows that src/cache/reader.py owns reads, but its migration trigger and compatibility contract have not been inspected.",
+      "expect": [
+        "Skip redundant owner-location work but retain a bounded contract-inspection Step before dependent edits.",
+        "State which behavior or relation the inspection must establish for the next Step.",
+        "Do not infer understood behavior merely from a known path."
+      ]
+    },
+    {
+      "id": "compact-fixture-preserves-failure-outcomes",
+      "given": "A verbose migration record requires interruption to preserve original reports, malformed input to publish nothing, read-only commands not to migrate, and original bytes to remain identical after success and failures.",
+      "expect": [
+        "Retain every expected failure outcome explicitly in the compact Acceptance or Confirmation contract.",
+        "Use the exact test command without treating a passing category name as a substitute for the required assertion.",
+        "Remove repeated wording only after the compact record still distinguishes preservation, nonpublication, nonmigration, byte identity, and rollback."
       ]
     },
     {

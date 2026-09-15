@@ -10,7 +10,7 @@ scope: cli/cache
 
 ## Decision
 
-Recommend writing migrated data to a temporary sibling file and renaming it after validation.
+Recommend writing migrated data to a temporary sibling file and renaming it after validation. Implementation remains unauthorized.
 
 ## Problem
 
@@ -18,20 +18,24 @@ Existing cached reports must survive the migration to schema 2.
 
 ## Drivers
 
-Preserve report IDs and timestamps. Read-only commands must not trigger migration. Keep the original cache available for rollback.
+- Preserve report IDs and timestamps.
+- Prevent read-only commands from triggering migration.
+- Keep the original cache available for rollback.
 
 ## Considered alternatives
 
-Migrate in place: needs less temporary storage but risks an interrupted write damaging cached data.
+- Migrate in place: uses less temporary storage but an interrupted write can damage cached data.
 
 ## Consequences
 
-Staging requires temporary storage and lets validation precede publication. Implementation has not been authorized.
+- Requires temporary storage.
+- Lets validation precede publication.
 
 ## Confirmation
 
-Verify preserved reports, IDs, and timestamps after migration. Simulate an interrupted write and check original reports remain available. Supply malformed source data and confirm no migrated data is published. Run read-only commands and confirm no migration occurs. Compare the original cache before and after migration and each failure case to establish byte identity and rollback availability.
+1. Run `python -m unittest tests.test_cache_migration`; confirm migration preserves report IDs and timestamps, interruption preserves original reports, malformed input publishes nothing, and read-only commands do not migrate.
+2. Compare original cache bytes after success and every failure; require byte identity and rollback availability.
 
 ## Revisit when
 
-Atomic rename is unsupported.
+- The target filesystem does not support atomic rename.

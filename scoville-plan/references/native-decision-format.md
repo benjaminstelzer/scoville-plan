@@ -70,12 +70,24 @@ manufacture facts, approval, confirmation evidence, or certainty.
 `Confirmation` states how the choice can be verified, not that verification
 already happened.
 
-Give each section distinct content. Decision states the choice, Problem the
-need, Drivers the constraints, Considered alternatives the actual options and
-material tradeoffs, Consequences the resulting benefits and costs, Confirmation
-the verification method, and Revisit when a concrete reconsideration trigger.
-Use short sentences or compact bullets. Do not retell the same rationale across
-sections or pad a section with invented alternatives or generic claims.
+Give each section distinct compact content:
+
+- `Decision`: state the selected or recommended choice once.
+- `Problem`: state the unresolved need in one sentence.
+- `Drivers`: use one bullet per supplied or observed constraint.
+- `Considered alternatives`: use one bullet per real option in the form
+  `Option: material tradeoff.`
+- `Consequences`: use separate bullets for new benefits, costs, and limits.
+- `Confirmation`: use numbered `1.`, `2.`, `3.` steps when verification order
+  matters; otherwise use compact bullets. Name known commands and files directly.
+- `Revisit when`: use one sentence or one bullet per concrete trigger.
+
+Do not introduce a section with prose, restate the choice as rationale, repeat
+a driver as a consequence, or pad the record with invented alternatives or
+generic claims. Preserve causal links and material tradeoffs, but remove a
+sentence when its deletion changes no choice, review judgment, verification, or
+reconsideration trigger. A lower-reasoning reviewer must be able to compare the
+choice and alternatives without reconstructing omitted facts.
 
 ## Links and lifecycle
 

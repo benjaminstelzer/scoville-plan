@@ -23,6 +23,49 @@ Split an outcome when at least one of these differs materially:
 Do not split merely by activity. Implementing, testing, reviewing, documenting,
 and releasing one behavior normally belong to the same Work Item.
 
+## Write the execution sequence
+
+Use numbered Steps when order affects correctness or when several file changes
+must be coordinated. Keep the concept in Goal and Outcome; Steps contain only
+the ordered work needed to realize it.
+
+1. Place prerequisites and canonical-owner changes before dependent consumers.
+2. Name each known repository-relative file in the Step that changes it.
+3. Keep one action slice per Step so a lower-reasoning worker can stop and resume safely.
+4. Put proof in Acceptance and observed results in Evidence, not in duplicate Steps.
+
+Do not add a Step solely to locate an owner or file that is already known. Keep
+bounded behavior or contract inspection when its result can change the
+implementation or when it is an explicit prerequisite. When ownership is
+unknown, prefer bounded read-only discovery before the Work Item starts and
+refine its `todo` Steps with the observed path. If discovery must occur during
+execution, keep the ownership criterion in the immutable Step and continue
+through permitted live fields. A reviewer must be able to follow the Step order
+and map each action to the outcome without inferring missing intermediate work.
+
+## Batch deferred additions
+
+When the core classifies a mid-task request as additive, combine it with the
+latest queued `todo` Work Item only when all requested changes remain one small,
+behavior-complete outcome. They must share the same observable result,
+Acceptance boundary, dependencies, Decisions, blockers, ownership, rollout
+timing, authorization, and material risk. One joint check must be able to prove
+every included change. Size alone never makes unrelated work compatible.
+
+Keep the requests in arrival order as Steps when subordinate order matters, and
+rewrite the batch Outcome, Acceptance, and Next action so every addition remains
+explicit. Never use a vague maintenance or follow-up bucket. Merge only into a
+`todo` item and only when doing so does not move the new request across an
+earlier separate queued item. Preserve the visible deferred title prefix while
+refining the batch. The prefix records queue provenance, while the remaining
+title and Outcome still name the observable result.
+
+Create a separate Work Item when the new request is complex, independently
+resumable, separately acceptable, differently dependent or blocked, owned by a
+different component, subject to another Decision or rollout, or materially
+different in risk or routing demand. A small request that arrives after such an
+item starts a new small batch rather than jumping ahead to an older batch.
+
 ## Workflow-ready subplan points
 
 When Scoville Workflow is available, shape optional Steps so the Workflow can

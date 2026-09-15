@@ -83,7 +83,9 @@ Work items
 
 Goal and Non-goals must be explicit and non-empty.
 State the target result in Goal and only actual scope exclusions in Non-goals.
-Keep implementation order and rationale in their owning fields or Decisions.
+Use one sentence for one concept and compact bullets for several equal-rank
+facts. Keep implementation order and rationale in their owning fields or
+Decisions.
 
 ## Work Item block
 
@@ -115,6 +117,26 @@ starting at `1.` with no blank lines inside the block. Steps express order only;
 they have no IDs, status, dependencies, blockers, evidence, checkboxes, or
 completion semantics. `Next action` is the sole current move.
 
+Use Steps whenever execution requires two or more ordered actions. Write them in
+the exact order a worker should perform them. Each Step starts with a concrete
+verb and names its target. Cite every known repository-relative file in the Step
+that changes or checks it, for example:
+
+```text
+Steps:
+1. Update `src/cache/migrate.py` to stage schema-2 output before publication.
+2. Update `src/cache/reader.py` to call the staged migration after validation.
+3. Add interruption coverage in `tests/test_cache_migration.py`.
+```
+
+Do not write vague Steps such as "make the changes" or "update the relevant
+files." Resolve an unknown canonical target through bounded read-only discovery
+before starting when practical, then add the observed path while the item is
+still `todo`. If discovery must occur after start, keep a criterion-based Step
+and use the live-state procedure in native-work-items.md. Do not invent a path.
+Use unordered bullets only for equal-rank Goal or Non-goal facts, never for a
+required execution sequence.
+
 When a Plan is being shaped for later Scoville Workflow use, each Step may act
 as one subplan dispatch point. Keep materially different routing needs in
 separate Steps and optionally start the prose with one
@@ -129,6 +151,8 @@ Prefer a short direct sentence where sufficient. One physical line may contain
 several sentences when necessary criteria would otherwise be lost. Steps add
 subordinate order, not another description of the outcome. Evidence records the
 observed result and a precise reference when needed, not an execution diary.
+The concept and sequence together must let a lower-reasoning worker execute and
+a reviewer trace every Step to the result and Acceptance without chat context.
 
 ## State invariants
 

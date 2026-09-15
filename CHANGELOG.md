@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.0 - 2026-09-15
+
+- Classify messages received during active work before changing execution or
+  Plan state. Stops, redirects, and execution-changing corrections act now;
+  pure questions without a retained action create no Plan work.
+- Queue additive requests without replacing current work. Batch compatible
+  small changes, separate complex outcomes, preserve stable order and explicit
+  successor priority, and keep blockers, Decisions, and dependencies intact.
+- Preserve an explicitly requested return after immediate redirection in the
+  paused Work Item's live Next action without rewriting started history.
+- Write Plans and Work Items with the concept in Goal or Outcome, equal-rank
+  facts as bullets, exact `1.`, `2.`, `3.` execution Steps, and every known file
+  named in the Step that changes or checks it. Unknown owners use bounded
+  discovery instead of invented paths.
+- Keep Decision sections distinct, use bullets for comparable facts, and number
+  Confirmation actions when their order matters. Records must remain clear to
+  lower-reasoning workers and independently reviewable without chat context.
+
 ## v1.3.9 - 2026-09-14
 
 - Fix the release archive so the installable package has one `scoville-plan`
