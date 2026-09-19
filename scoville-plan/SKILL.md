@@ -55,8 +55,9 @@ later dispatch units without activating or loading that Workflow. Group each
 Step around one coherent outcome slice with comparable routing risk and
 reasoning demand. Separate a trivial text edit from a complex structural change;
 do not split code, UI, browser work, or other activities that share the same
-outcome, risk, authorization, and Acceptance boundary. The Workflow still
-selects the live model and reasoning when explicitly invoked.
+outcome, risk, authorization, and Acceptance boundary. A user-selected executor
+model or reasoning effort may be recorded only through the strict Step
+annotation in the native format; otherwise the Workflow owns the live pair.
 
 Plan owns wording and fidelity of its native records. If Scribe is installed,
 do not additionally activate, load, or apply it to their creation, rewriting,
@@ -227,12 +228,19 @@ immediate redirect still governs live execution.
   result forces a new dispatch. A bundle adds no Plan field and changes no
   authored order or Acceptance ownership. Give each Step a single routing class
   when confidently known, using an optional
-  `[route: ultra_low|low|medium|high|ultra_high]` prefix. Never hard-code a
-  model. Without Steps, the whole Work Item remains one dispatch unit.
+  `[route: ultra_low|low|medium|high|ultra_high]` prefix. Record an explicit
+  user-selected executor model or reasoning effort only through the optional
+  Step execution annotation defined by P and W. When a still-`todo` Work Item
+  has no Steps, add one behavior-complete annotated Step only if an explicit
+  point choice must be retained. Without Steps, the whole Work Item remains one
+  default-routed dispatch unit.
 - Keep at most one Work Item `in_progress`, equal to `current_item`. This limits
   concurrency, not total Plan items.
 - Change authored content or order only while `todo`. After start, preserve the
-  starting approach and change only live state allowed by the route.
+  starting approach and change only live state allowed by the route, except
+  that W permits an explicit user choice to replace only the execution
+  annotation of one named unperformed Step while preserving its action, route,
+  and completed or running history.
 - `Next action` is the first unperformed concrete action. After implementation,
   advance to the first unobserved test, build, browser check, review, or
   evaluator-owned verification.
@@ -252,6 +260,20 @@ Before drafting or refining a Plan, Work Item, or Decision:
 2. Assign each fact once to its owning field or section.
 3. Put prerequisites before dependent actions and checks after the behavior they prove.
 4. Remove any sentence that changes no choice, action, order, constraint, check, or recovery fact.
+
+Before any Goal write, classify every fact in the complete proposed Goal, not
+only the changed sentences. Goal owns only the current target, its boundary,
+and genuinely plan-wide constraints. Route exclusions to Non-goals, material
+choices to Decisions, point-specific scope, order, checks, model, or reasoning
+to the affected Work Item or Step, observed results to Evidence, the next move
+to Next action, and repository policy to its canonical project instruction;
+omit irrelevant prose. Operational messages that change none of the Goal-owned
+semantics leave its bytes unchanged. A separately authorized normalization may
+relocate existing Goal facts only after checking that every affected future
+dispatch can still reach each needed requirement through its selected Work
+Item, a referenced Decision, or a demonstrated loaded repository contract. Do
+not create a second requirement registry, truncate selector output, or use a
+size limit as a substitute for ownership.
 
 State the concept first in Goal, Outcome, or Decision. Use compact bullets for
 equal-rank facts and numbered Steps for execution order. Each Step names one

@@ -49,7 +49,12 @@ Create each later Plan as `draft` with the next highest Plan ID and at least one
 `todo` Work Item. Every initial Decision reference must already exist. A generic
 Plan update changes only title, Goal, and Non-goals, preserves ID, lifecycle,
 dates, current selection, and all Work Items, and advances `updated` only on a
-real change.
+real change. Before a Goal write, classify the complete proposed Goal by its
+canonical owners as required by `SKILL.md`. Operational-only messages leave
+Goal bytes unchanged. A separately authorized normalization may move existing
+facts only when every future dispatch that needs them can still reach them
+through its Work Item, a referenced Decision, or a demonstrated loaded
+repository contract.
 
 Cancel a draft only after an explicit user choice. Completed and cancelled
 Plans are terminal retained history.

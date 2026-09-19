@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.6.0 - 2026-09-19
+
+- Keep Goal as normalized current direction: target, boundary, and genuinely
+  plan-wide constraints. Operational history, point-specific execution,
+  evidence, and next actions remain with their canonical owners, and required
+  facts move only when affected workers can still reach them.
+- Record an explicitly selected executor model or reasoning level through one
+  strict `[execute: ...]` annotation on a Step. Route risk remains separate,
+  malformed or duplicated annotations fail validation, and started history is
+  immutable except for an explicit change to one unperformed Step's execution
+  annotation.
+
 ## v1.5.0 - 2026-09-19
 
 - Add an optional deterministic read-only selector that emits only the active

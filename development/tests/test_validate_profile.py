@@ -108,6 +108,62 @@ class ValidatorTest(unittest.TestCase):
         self.assertEqual([], result["diagnostics"])
         self.assertEqual({"errors": 0, "warnings": 0, "files_checked": 3, "plans": 1, "work_items": 2, "decisions": 1}, result["summary"])
 
+    def test_step_execution_annotations_accept_complete_and_partial_strict_forms(self) -> None:
+        plan = "docs/plans/0001-validate-profile.md"
+        self.replace(
+            plan,
+            "1. Read the canonical files.",
+            "1. [route: high] [execute: reasoning=xhigh] Read the canonical files.",
+        )
+        completed, result = self.run_json()
+        self.assertEqual(0, completed.returncode, completed.stdout)
+        self.assertTrue(result["valid"])
+
+    def test_step_execution_annotations_reject_malformed_duplicate_and_misordered_forms(self) -> None:
+        plan = "docs/plans/0001-validate-profile.md"
+        cases = [
+            (
+                "1. Read the canonical files.",
+                "1. [execute: model=gpt-6-astra; model=gpt-5.6-sol] Read the canonical files.",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+            (
+                "1. Read the canonical files.",
+                "1. Read [execute: reasoning=medium] the canonical files.",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+            (
+                "1. Read the canonical files.",
+                "1. [execute: reasoning=medium] [route: high] Read the canonical files.",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+            (
+                "1. Read the canonical files.",
+                "1. [route: high] [execute: reasoning=medium] [route: low] Read the canonical files.",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+            (
+                "1. Read the canonical files.",
+                "1. [execute : reasoning=medium] Read the canonical files.",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+            (
+                "1. Read the canonical files.",
+                "1. [route : high] Read the canonical files.",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+            (
+                "1. Read the canonical files.",
+                "1. [execute: reasoning=medium]   ",
+                "WORK_STEP_EXECUTION_INVALID",
+            ),
+        ]
+        for old, new, expected in cases:
+            with self.subTest(expected=expected):
+                self.reset_fixture()
+                self.replace(plan, old, new)
+                self.assert_code(expected)
+
     def test_text_output_is_available_without_changing_exit_semantics(self) -> None:
         before = tree_snapshot(self.root)
         completed = subprocess.run(
