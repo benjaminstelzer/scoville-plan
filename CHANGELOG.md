@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.3 - 2026-09-19
+
+- Limit the pre-flight for the next `todo` Work Item to that item, the current
+  repository, evidence from completed dependencies, and only directly relevant
+  completed Work Items in the same active Plan. Do not scan completed or
+  historical Plans or reread the entire active Plan without a concrete
+  relevance reason.
+
 ## v1.4.2 - 2026-09-19
 
 - Check each next `todo` Work Item against the current repository and completed
@@ -45,12 +53,10 @@
   browser work together. Workflow availability alone does not activate it.
 - Store an optional routing class instead of a model or reasoning level. A Work
   Item without Steps remains one dispatch unit.
-- Companion app binaries remain at version 1.3.0 and are carried forward unchanged.
 
 ## v1.3.5 - 2026-09-12
 
 - Reuse available unchanged instructions, reload missing or changed references, and keep live record checks separate. Apply historical stops to their recorded subject and scope.
-- Companion app binaries remain at version 1.3.0 and are carried forward unchanged.
 
 ## v1.3.4 - 2026-09-11
 

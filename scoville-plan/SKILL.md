@@ -202,9 +202,12 @@ immediate redirect still governs live execution.
 
 ## Keep behavior-complete work
 
-- Before starting the next `todo` Work Item, run a pre-flight against the
-  current repository state and completed predecessor evidence. Check whether
-  earlier completed work changed its premises, signatures, data models,
+- Before starting the next `todo` Work Item in the active Plan, run a pre-flight
+  for that item against the current repository state and evidence from its
+  completed dependencies or other directly relevant completed Work Items in
+  that Plan. For this pre-flight, do not scan completed or historical Plans or
+  reread the entire active Plan without a concrete relevance reason. Check
+  whether that evidence changed the item's premises, signatures, data models,
   contracts, paths, or validation assumptions. If so, refine that still-`todo`
   item through its normal route before execution. Never run stale instructions
   or rewrite started history.

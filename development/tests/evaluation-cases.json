@@ -30,6 +30,15 @@
       ]
     },
     {
+      "id": "next-todo-preflight-stays-local",
+      "given": "An active Plan has a next todo Work Item, completed dependencies, unrelated completed items, and several completed or historical Plans.",
+      "expect": [
+        "Compare the next item with the current repository and evidence from its completed dependencies or other directly relevant completed Work Items in the same active Plan.",
+        "Do not scan completed or historical Plans or reread the entire active Plan without a concrete relevance reason.",
+        "Refine only the still-todo item when the scoped evidence shows a stale premise, signature, data model, contract, path, or validation assumption; never rewrite started history."
+      ]
+    },
+    {
       "id": "mid-task-explicit-redirect-stops-now",
       "given": "While W-001 is in progress, the user says, 'Do W-004 now, then return to W-001,' without reporting an error.",
       "expect": [
