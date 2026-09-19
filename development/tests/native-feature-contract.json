@@ -11,6 +11,7 @@
   ],
   "features": [
     {"id":"read-current","sources":["SKILL.md","references/read-only.md"]},
+    {"id":"deterministic-context-selector","sources":["SKILL.md","references/read-only.md","scripts/select_context.py"]},
     {"id":"list-plans-and-decisions","sources":["references/read-only.md"]},
     {"id":"surface-proposals","sources":["SKILL.md","references/read-only.md"]},
     {"id":"initialize-wholly-absent-profile","sources":["references/native-project-lifecycle.md","references/native-plan-format.md","references/native-editing.md"]},
@@ -33,6 +34,7 @@
     {"id":"narrow-format-repair","sources":["references/native-editing.md"]},
     {"id":"transaction-incomplete-stop","sources":["references/native-editing.md","references/native-project-lifecycle.md","references/native-decision-batches.md"]},
     {"id":"behavior-complete-planning-granularity","sources":["references/planning-granularity.md"]},
+    {"id":"guarded-workflow-step-bundles","sources":["SKILL.md","references/native-work-items.md"]},
     {"id":"compact-worker-ready-records","sources":["SKILL.md","references/native-plan-format.md","references/planning-granularity.md","references/native-work-items.md","references/native-decision-format.md"]},
     {"id":"read-only-profile-validator","sources":["SKILL.md","references/profile-validation.md","scripts/validate_profile.py"]}
   ]

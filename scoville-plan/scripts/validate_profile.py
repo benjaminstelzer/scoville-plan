@@ -380,27 +380,56 @@ class Validator:
                 incomplete=True,
             )
             return False
+        relative = path.relative_to(self.root)
+        current = self.root
+        for part in relative.parts:
+            current /= part
+            try:
+                info = os.lstat(current)
+            except FileNotFoundError:
+                return True
+            except OSError as error:
+                self.add(
+                    "FILE_UNREADABLE",
+                    self.logical(current),
+                    "A canonical path component could not be inspected.",
+                    "Resolve the filesystem access failure before validating; do not infer a structural verdict.",
+                    observed=str(error),
+                    incomplete=True,
+                )
+                return False
+            if self._is_redirect_stat(info):
+                redirected = self.logical(current)
+                self.add(
+                    "PATH_REDIRECTED",
+                    redirected,
+                    "A canonical profile path passes through a symlink, junction, or reparse point.",
+                    "Replace the redirected canonical path only with explicit authority; the validator will not follow it.",
+                    observed=redirected,
+                    incomplete=True,
+                )
+                return False
         try:
-            info = os.lstat(path)
+            resolved = path.resolve(strict=True)
         except FileNotFoundError:
             return True
         except OSError as error:
             self.add(
                 "FILE_UNREADABLE",
                 logical,
-                "A canonical path could not be inspected.",
+                "A canonical path could not be resolved.",
                 "Resolve the filesystem access failure before validating; do not infer a structural verdict.",
                 observed=str(error),
                 incomplete=True,
             )
             return False
-        if self._is_redirect_stat(info):
+        if not self._inside_root(resolved):
             self.add(
-                "PATH_REDIRECTED",
+                "PATH_ESCAPES_ROOT",
                 logical,
-                "A canonical profile path is a symlink, junction, or reparse point.",
-                "Replace the redirected canonical path only with explicit authority; the validator will not follow it.",
-                observed=logical,
+                "A canonical profile path resolves outside the immutable project root.",
+                "Stop and replace the redirected canonical ancestor before reading files.",
+                observed=os.fspath(resolved),
                 incomplete=True,
             )
             return False
@@ -922,6 +951,7 @@ class Validator:
             steps: list[str] = []
             in_steps = False
             expected_step = 1
+            saw_step_line = False
             for line_no in range(heading_line + 1, block_end + 1):
                 line = parsed.lines[line_no - 1]
                 if not line:
@@ -996,6 +1026,7 @@ class Validator:
                     expected_step = 1
                     continue
                 if in_steps:
+                    saw_step_line = True
                     step_match = re.fullmatch(r"([0-9]+)\. (.+)", line)
                     if not step_match or int(step_match.group(1)) != expected_step:
                         self.add(
@@ -1050,7 +1081,7 @@ class Validator:
                 )
 
             status_value = fields.get("Status", "")
-            if status_value and status_value not in WORK_STATUSES:
+            if "Status" in fields and status_value not in WORK_STATUSES:
                 self.add(
                     "STATUS_INVALID",
                     parsed.logical_path,
@@ -1061,6 +1092,18 @@ class Validator:
                     field_name="Status",
                     expected=", ".join(sorted(WORK_STATUSES)),
                     observed=status_value,
+                )
+            if "Steps" in fields and not steps and not saw_step_line:
+                self.add(
+                    "WORK_STEPS_INVALID",
+                    parsed.logical_path,
+                    "The Steps field contains no numbered Step.",
+                    "Add at least one known consecutive numbered Step or remove the optional Steps field.",
+                    line=field_lines.get("Steps"),
+                    record=record,
+                    field_name="Steps",
+                    expected="1. non-empty text",
+                    observed="empty",
                 )
 
             dependencies = self._parse_inline_list(
@@ -1278,7 +1321,7 @@ class Validator:
             )
 
         status_value = parsed.frontmatter.get("status", "")
-        if status_value and status_value not in PLAN_STATUSES:
+        if "status" in parsed.frontmatter and status_value not in PLAN_STATUSES:
             self.add(
                 "STATUS_INVALID",
                 logical,
@@ -1424,7 +1467,7 @@ class Validator:
             )
 
         status_value = parsed.frontmatter.get("status", "")
-        if status_value and status_value not in DECISION_STATUSES:
+        if "status" in parsed.frontmatter and status_value not in DECISION_STATUSES:
             self.add(
                 "STATUS_INVALID",
                 logical,
@@ -1485,7 +1528,7 @@ class Validator:
                 )
 
         scope = parsed.frontmatter.get("scope", "")
-        if scope and not SCOPE_RE.fullmatch(scope):
+        if "scope" in parsed.frontmatter and not SCOPE_RE.fullmatch(scope):
             self.add(
                 "DECISION_SCOPE_INVALID",
                 logical,
@@ -2058,6 +2101,15 @@ def build_parser() -> Parser:
     return parser
 
 
+def write_utf8(value: str) -> None:
+    encoded = (value + "\n").encode("utf-8")
+    stream = getattr(sys.stdout, "buffer", None)
+    if stream is None:
+        sys.stdout.write(encoded.decode("utf-8"))
+    else:
+        stream.write(encoded)
+
+
 def main(argv: list[str] | None = None) -> int:
     root = "."
     output_format = "json"
@@ -2067,7 +2119,7 @@ def main(argv: list[str] | None = None) -> int:
         output_format = arguments.format
     except UsageError as error:
         result = usage_result(str(error), root)
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        write_utf8(json.dumps(result, ensure_ascii=False, indent=2))
         return EXIT_INCOMPLETE
 
     try:
@@ -2076,9 +2128,9 @@ def main(argv: list[str] | None = None) -> int:
         result = internal_result(root, error)
         exit_code = EXIT_INTERNAL
     if output_format == "text":
-        print(render_text(result, exit_code))
+        write_utf8(render_text(result, exit_code))
     else:
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        write_utf8(json.dumps(result, ensure_ascii=False, indent=2))
     return exit_code
 
 

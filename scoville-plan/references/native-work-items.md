@@ -48,10 +48,14 @@ reference before changing the record.
 - Preserve subordinate implementation order in Steps. Steps never receive IDs,
   status, checkboxes, blockers, evidence, or completion semantics.
 - When preparing for later Scoville Workflow execution, keep each Step suitable
-  for one worker dispatch with one routing class. Separate materially different
-  risk or reasoning demand, but keep activities together when they share the
-  same outcome and Acceptance boundary. A `[route: CLASS]` prefix is optional
-  prose and may change only while the Work Item remains `todo`.
+  for one worker dispatch with one routing class. One Step remains one dispatch
+  by default. An explicitly invoked Workflow with its own accepted Decision may
+  bundle only adjacent Steps that share one outcome, owner, authorization,
+  route, workspace, and Acceptance boundary. A changed Decision, external
+  effect, materially higher risk, different route, or independently resumable
+  result forces a new dispatch. The runtime bundle adds no Plan field and
+  changes no authored order or Acceptance ownership. A `[route: CLASS]` prefix
+  is optional prose and may change only while the Work Item remains `todo`.
 - When work has several ordered actions, use consecutive numbered Steps in the
   exact execution order. Name every known repository-relative file in its
   action Step. If ownership is unknown, perform bounded read-only discovery

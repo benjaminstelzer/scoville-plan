@@ -3,6 +3,36 @@
 Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
 
+## Select current Work Item context
+
+When Python 3 and the bundled script are available, select the current or one
+explicitly named Work Item with:
+
+```text
+python <skill-directory>/scripts/select_context.py --root <project-root> [--work-item W-001] --format json
+```
+
+The success object contains exactly four top-level semantic areas:
+
+- `plan`: the exact Plan frontmatter plus Goal and Non-goals sections;
+- `work_item`: the complete selected Work Item block;
+- `direct_dependencies`: only each direct dependency ID and its `Status` line;
+- `decisions`: the complete Decision records referenced by the selected item.
+
+The selector reads canonical files internally, emits no unrelated Work Item or
+Decision body, never truncates, and never falls back to raw files. Its default
+UTF-8 output budget is 65,536 bytes; use `--max-output-bytes` only when the
+caller has an explicit bounded budget. A malformed profile, ambiguous record,
+redirected path, missing reference, or budget overflow returns one structured
+diagnostic and no partial context.
+
+This projection does not replace every read operation. Inventory Decision
+frontmatter and load every proposal separately. Read relevant dependency
+Evidence, bounded graph state, queued or paused return state, and complete
+relevant Work Items separately when the operation requires them. Keep those
+reads bounded and never widen the selector response. If the helper or Python 3
+is unavailable, apply the manual procedure below without installing a runtime.
+
 ## Read the smallest canonical state
 
 1. Read `PROJECT_INDEX.md` and require `format_version: 1`.
@@ -27,8 +57,8 @@ H3 headings and `Status`, `Depends on`, and `Decisions` lines expose identity,
 order, and references without loading Outcome, Steps, or Evidence history.
 This is a graph view, not complete structural validation. Resolve ambiguous
 boundaries or diagnostics from the original blocks; never treat missing output
-from a truncated read as a missing record. Shell searches and range reads suffice;
-no Python helper, generated index, or cached status file is required.
+from a truncated read as a missing record. Shell searches and range reads remain
+the manual fallback; no generated index or cached status file is required.
 
 Completed Work Items stay in their original format-version-1 Plan. Load their
 details when relevant; do not delete, summarize in place, or move them into an

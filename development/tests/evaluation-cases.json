@@ -438,6 +438,33 @@
       ]
     },
     {
+      "id": "workflow-step-dispatch-default",
+      "given": "A Work Item has three Steps and no accepted Decision authorizing an explicitly invoked Workflow bundle.",
+      "expect": [
+        "Keep one Step as one dispatch point by default.",
+        "Do not infer bundle authority from shared wording, proximity, or lower task cost.",
+        "Preserve Plan order, routing, and Acceptance ownership without adding bundle metadata."
+      ]
+    },
+    {
+      "id": "workflow-compatible-adjacent-bundle",
+      "given": "An explicitly invoked Workflow has an accepted bundle Decision and two adjacent Steps with the same outcome, owner, authorization, route, workspace, and Acceptance boundary.",
+      "expect": [
+        "Permit one runtime dispatch for the adjacent compatible Steps.",
+        "Keep the authored Step order and Work Item Acceptance unchanged.",
+        "Add no Plan field, bundle marker, hidden state, or model name."
+      ]
+    },
+    {
+      "id": "workflow-bundle-boundary",
+      "given": "Adjacent Steps differ by route, changed Decision, external effect, materially higher risk, or independent resumability.",
+      "expect": [
+        "Require a separate dispatch at every differing boundary.",
+        "Do not bundle merely because the Steps share one Work Item.",
+        "Keep Workflow runtime mechanics separate from Plan-authored semantics."
+      ]
+    },
+    {
       "id": "standalone-native-writing-owner",
       "given": "Create, rewrite, and audit native records with Plan alone, with Scribe installed, and with Scribe active for another segment.",
       "expect": [
