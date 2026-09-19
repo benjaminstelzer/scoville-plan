@@ -35,15 +35,20 @@ validator is strictly read-only and structural, never a write path. Claim no
 locking, atomic publication, typed mutation, or semantic proof; report
 observations only.
 
-Family standalone: discovery != installed|active|applicable|required;
-absent|inactive => ignore/no require|install|simulate|reimplement;
-active+applicable => owner concern only, self continues; opt-out local. Owners:
-`scoville-brainstorm` divergence;
-`scoville-code-anti-ai-slop` engineering/proof; `scoville-ui-anti-ai-slop`
-interface/rendered proof; `scoville-scribe-anti-ai-slop` wording/fidelity;
-`scoville-handoff` transfer.
+Discovering a sibling does not mean it is installed, active, applicable, or required. If a sibling is absent or inactive, ignore it. Do not require, install, simulate, or reimplement it. If it is active and applicable, it owns only its concern. This Skill continues. Opt-out is local.
 
-When `scoville-workflow` is available, Plan may make optional Steps usable as
+Family owners, in suite order:
+
+- `scoville-brainstorm`: deliberate divergence before selection.
+- `scoville-research`: source-backed research and synthesis.
+- `scoville-code-anti-ai-slop`: engineering scope, implementation, risk, and validation.
+- `scoville-design-anti-ai-slop`: visual definition, art direction, critique, and repair.
+- `scoville-ui-anti-ai-slop`: framework UI implementation, accessibility mechanics, and rendered proof.
+- `scoville-scribe-anti-ai-slop`: wording, terminology, meaning, and source fidelity.
+- `scoville-plan`: durable Plans, Work Items, Decisions, and lifecycle state.
+- `scoville-handoff`: active-work transfer.
+
+The private optional `scoville-workflow-codex` Skill may make Steps usable as
 later dispatch units without activating or loading that Workflow. Group each
 Step around one coherent outcome slice with comparable routing risk and
 reasoning demand. Separate a trivial text edit from a complex structural change;

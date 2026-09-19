@@ -5,6 +5,9 @@
 - Check each next `todo` Work Item against the current repository and completed
   predecessor evidence before it starts. Refine stale premises, signatures,
   data models, contracts, paths, or validation assumptions before execution.
+- State the complete eight-Skill ownership boundary in suite order and keep the
+  private workflow helper optional rather than treating it as an installation
+  dependency.
 
 ## v1.4.1 - 2026-09-15
 
