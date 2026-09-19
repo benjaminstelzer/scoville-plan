@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.2 - 2026-09-19
+
+- Check each next `todo` Work Item against the current repository and completed
+  predecessor evidence before it starts. Refine stale premises, signatures,
+  data models, contracts, paths, or validation assumptions before execution.
+
 ## v1.4.1 - 2026-09-15
 
 - Apply requests to add, remove, reorder, rewrite, or clean up Plan points

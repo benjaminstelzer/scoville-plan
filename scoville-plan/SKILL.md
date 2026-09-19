@@ -197,6 +197,12 @@ immediate redirect still governs live execution.
 
 ## Keep behavior-complete work
 
+- Before starting the next `todo` Work Item, run a pre-flight against the
+  current repository state and completed predecessor evidence. Check whether
+  earlier completed work changed its premises, signatures, data models,
+  contracts, paths, or validation assumptions. If so, refine that still-`todo`
+  item through its normal route before execution. Never run stale instructions
+  or rewrite started history.
 - Split independently resumable outcomes when Acceptance, dependencies,
   ownership, or rollout timing differs. Put subordinate order in optional
   Steps. Put testing, review, documentation, and release checks in Acceptance

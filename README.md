@@ -105,6 +105,10 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   without Scribe.
 - **Outcome-sized Work Items.** Separately resumable outcomes become items.
   Implementation steps and checks remain steps or acceptance evidence.
+- **Pre-flight before start.** Before a `todo` item begins, compare it with the
+  current repository and completed predecessor evidence. Refine assumptions,
+  signatures, data models, contracts, paths, or checks that earlier work made
+  stale.
 - **Workflow-ready Steps.** When Scoville Workflow is available, optional Steps
   can carry one routing class each. A simple text edit and complex redesign stay
   separate, while code, UI, and browser checks for one result stay together.
