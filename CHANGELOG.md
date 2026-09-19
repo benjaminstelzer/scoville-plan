@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.5.0 - 2026-09-19
+
+- Add an optional deterministic read-only selector that emits only the active
+  Plan direction, one current or named Work Item, direct dependency statuses,
+  and Decisions referenced by that item. Oversized or malformed selections fail
+  with a structured diagnostic instead of dumping or truncating source files.
+- Reject duplicate or unknown selector headings, redirected canonical-path
+  ancestors, empty required lifecycle values, and empty Steps. Validator
+  diagnostics now emit UTF-8 JSON independently of the host stdout encoding.
+- Keep one Step as the default Workflow dispatch unit, while allowing an
+  explicitly invoked Workflow with an accepted Decision to bundle adjacent
+  Steps only across one unchanged outcome, owner, authorization, route,
+  workspace, and Acceptance boundary.
+
 ## v1.4.4 - 2026-09-19
 
 - Show each Work Item's ordered Steps in the companion viewer, so the Plan's

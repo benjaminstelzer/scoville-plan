@@ -211,16 +211,42 @@ class ValidatorTest(unittest.TestCase):
         self.assertEqual({"USAGE_ERROR"}, self.codes(result))
         self.assertEqual(before, tree_snapshot(self.root))
 
+    def test_json_usage_error_is_utf8_under_non_utf8_stdout_encoding(self) -> None:
+        environment = os.environ.copy()
+        environment["PYTHONIOENCODING"] = "cp1252"
+        completed = subprocess.run(
+            [sys.executable, "-B", str(SCRIPT), "--root", str(self.root), "--✓"],
+            cwd=REPOSITORY,
+            check=False,
+            capture_output=True,
+            text=False,
+            env=environment,
+        )
+        result = json.loads(completed.stdout.decode("utf-8"))
+        self.assertEqual(2, completed.returncode, completed.stderr.decode(errors="replace"))
+        self.assertIsNone(result["valid"])
+        self.assertEqual({"USAGE_ERROR"}, self.codes(result))
+
     def test_local_shape_defects_have_stable_codes(self) -> None:
         plan = "docs/plans/0001-validate-profile.md"
         decision = "docs/decisions/0001-use-read-only-validation.md"
         cases = [
             (plan, "status: active\ncreated: 2026-08-08", "created: 2026-08-08\nstatus: active", "FRONTMATTER_KEY_ORDER"),
+            (plan, "status: active\ncreated: 2026-08-08", "status:\ncreated: 2026-08-08", "STATUS_INVALID"),
             (plan, "## Goal", "## Purpose", "SECTION_H2_ORDER"),
             (plan, "Status: in_progress\nDepends on: []", "Depends on: []\nStatus: in_progress", "WORK_FIELD_ORDER"),
+            (plan, "Status: todo\nDepends on: [W-001]", "Status:\nDepends on: [W-001]", "STATUS_INVALID"),
             (plan, "1. Read the canonical files.", "2. Read the canonical files.", "WORK_STEPS_INVALID"),
+            (
+                plan,
+                "Steps:\n1. Read the canonical files.\n2. Check the local record shapes.\nEvidence:",
+                "Steps:\nEvidence:",
+                "WORK_STEPS_INVALID",
+            ),
             (plan, "Next action: Run the structural validator.", "Next action:", "WORK_NEXT_ACTION_REQUIRED"),
+            (decision, "status: accepted\ncreated: 2026-08-08", "status:\ncreated: 2026-08-08", "STATUS_INVALID"),
             (decision, "scope: skill/profile-validation", "scope: Skill Profile", "DECISION_SCOPE_INVALID"),
+            (decision, "scope: skill/profile-validation", "scope:", "DECISION_SCOPE_INVALID"),
             (decision, "accepted: 2026-08-08\n", "", "DECISION_ACCEPTED_REQUIRED"),
         ]
         for relative, old, new, expected in cases:
@@ -329,6 +355,20 @@ class ValidatorTest(unittest.TestCase):
         shutil.rmtree(plans)
         try:
             os.symlink(target, plans, target_is_directory=True)
+        except OSError as error:
+            self.skipTest(f"directory symlink unavailable: {error}")
+        completed, result = self.run_json()
+        self.assertEqual(2, completed.returncode)
+        self.assertIsNone(result["valid"])
+        self.assertIn("PATH_REDIRECTED", self.codes(result))
+
+    def test_symlinked_docs_ancestor_is_not_followed(self) -> None:
+        docs = self.path("docs")
+        target = self.root.parent / "outside-docs"
+        shutil.copytree(docs, target)
+        shutil.rmtree(docs)
+        try:
+            os.symlink(target, docs, target_is_directory=True)
         except OSError as error:
             self.skipTest(f"directory symlink unavailable: {error}")
         completed, result = self.run_json()

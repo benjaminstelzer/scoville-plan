@@ -1,7 +1,7 @@
 ---
 name: scoville-plan
 description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned planning or decision records, must survive interruption or compaction, works in a format-version-1 project, receives a new instruction while an active Plan is running, or asks to add, remove, reorder, or clean up Plan points. Apply Plan-record maintenance directly and never create a Work Item whose only outcome is maintaining the Plan. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
-compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no CLI, MCP server, database or network. Optional structural validator needs Python 3. Developed for Codex and Claude Code; other hosts untested."
+compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no planning CLI, MCP server, database or network. Optional read-only selector and structural validator need Python 3. Developed for Codex and Claude Code; other hosts untested."
 ---
 
 # Scoville Plan
@@ -30,10 +30,12 @@ Precedence:
 Use the existing durable owner; never create a parallel Plan. Apply compatible
 guardrails only; runtime plans are disposable mirrors.
 
-Never invoke a planning CLI. The optional bundled
-validator is strictly read-only and structural, never a write path. Claim no
-locking, atomic publication, typed mutation, or semantic proof; report
-observations only.
+Never invoke a planning CLI. The optional bundled selector and validator are
+strictly read-only and never a write path. The selector owns only the exact
+current-or-named Work Item projection defined in the read-only route; proposal
+discovery, relevant Evidence, graph inspection, and successor recovery remain
+separate bounded reads. Claim no locking, atomic publication, typed mutation,
+or semantic proof; report observations only.
 
 Discovering a sibling does not mean it is installed, active, applicable, or required. If a sibling is absent or inactive, ignore it. Do not require, install, simulate, or reimplement it. If it is active and applicable, it owns only its concern. This Skill continues. Opt-out is local.
 
@@ -103,7 +105,9 @@ inside a Work Item uses the Work Item route even though its file is a Plan.
 
 For read-only, preload no format guides. If profile existence is unknown,
 list the root before canonical reads; never probe absent
-`PROJECT_INDEX.md`. For an explicitly requested new durable Plan, use the
+`PROJECT_INDEX.md`. When the bundled selector and Python 3 are available, use
+it for current-or-named Work Item selection through R; use R's bounded manual
+fallback when it is unavailable. For an explicitly requested new durable Plan, use the
 workspace as setup root, classify the whole profile, and initialize only if all
 three canonical paths are absent. Otherwise report absence. Preserve and stop
 on partial, foreign, unsupported, invalid, or intent-invalid state unless the
@@ -215,11 +219,16 @@ immediate redirect still governs live execution.
   ownership, or rollout timing differs. Put subordinate order in optional
   Steps. Put testing, review, documentation, and release checks in Acceptance
   or Evidence unless independently requested as resumable outcomes.
-- For later Scoville Workflow use, one Step is one subplan dispatch point. Give
-  each Step a single routing class when confidently known, using an optional
-  `[route: ultra_low|low|medium|high|ultra_high]` prefix. Never mix materially
-  different routing needs in one Step or hard-code a model. Without Steps, the
-  whole Work Item remains one dispatch unit.
+- For later Scoville Workflow use, one Step is one subplan dispatch point by
+  default. An explicitly invoked Workflow with its own accepted Decision may
+  bundle adjacent Steps only when they share one outcome, owner, authorization,
+  route, workspace, and Acceptance boundary. A changed Decision, external
+  effect, materially higher risk, different route, or independently resumable
+  result forces a new dispatch. A bundle adds no Plan field and changes no
+  authored order or Acceptance ownership. Give each Step a single routing class
+  when confidently known, using an optional
+  `[route: ultra_low|low|medium|high|ultra_high]` prefix. Never hard-code a
+  model. Without Steps, the whole Work Item remains one dispatch unit.
 - Keep at most one Work Item `in_progress`, equal to `current_item`. This limits
   concurrency, not total Plan items.
 - Change authored content or order only while `todo`. After start, preserve the

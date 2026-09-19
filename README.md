@@ -57,7 +57,7 @@ Skill invocation.
 
 ## Compatibility
 
-Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no CLI, MCP server, database or network. Optional structural validator needs Python 3. Developed for Codex and Claude Code; other hosts untested.
+Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no planning CLI, MCP server, database or network. Optional read-only selector and structural validator need Python 3. Developed for Codex and Claude Code; other hosts untested.
 
 ## Install
 
@@ -114,6 +114,10 @@ Preserve existing customizations and ask before overwriting conflicting files. R
 - **Workflow-ready Steps.** When Scoville Workflow is available, optional Steps
   can carry one routing class each. A simple text edit and complex redesign stay
   separate, while code, UI, and browser checks for one result stay together.
+  One Step remains one dispatch by default. An explicitly invoked Workflow can
+  bundle adjacent Steps only under an accepted Decision and only while outcome,
+  owner, authorization, route, workspace, and Acceptance boundary remain the
+  same.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
   Plan's `current_item`.
 - **Durable deferred work.** Mid-task additions leave current work running,
@@ -144,8 +148,10 @@ The Skill first resolves the existing planning owner and whether durable state
 is justified. It then loads only the format and lifecycle guidance required for
 the requested operation, edits the native `format_version: 1` Markdown/YAML
 records directly, and checks links and invariants. Optional standard-library
-Python helpers provide read-only validation. The profile remains usable without
-them or without the Skill installed.
+Python helpers provide structural validation and a deterministic read-only
+projection containing only the selected Plan direction, Work Item, direct
+dependency statuses, and referenced Decisions. The profile remains usable
+without them or without the Skill installed.
 
 Routine updates read the relevant complete blocks without printing unrelated
 history. Full-file change detection and complete structural checks remain in
