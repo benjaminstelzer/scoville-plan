@@ -1,10 +1,9 @@
 ---
 format_version: 1
 id: PLAN-0003
-status: active
+status: completed
 created: 2026-09-19
 updated: 2026-09-19
-current_item: W-004
 ---
 
 # Make Plan context and Workflow dispatch token-bounded
@@ -52,7 +51,7 @@ Evidence: [Accepted ADR-0003 is reflected in SKILL.md and native-work-items.md w
 
 ### W-004 Qualify and publish deterministic Plan selection
 
-Status: in_progress
+Status: done
 Depends on: [W-001, W-005]
 Blocked by: []
 Decisions: [ADR-0001, ADR-0002, ADR-0003]
@@ -62,5 +61,4 @@ Steps:
 1. [route: medium] Run the complete selector, Step compatibility, recovery, validator, and repository-structure suite on the final tree.
 2. [route: medium] Obtain an independent review of deterministic projection, dispatch compatibility, and recovery behavior.
 3. [route: low] Install the exact reviewed package locally, publish the approved repository update and release, and verify package, tag, release assets, and remote commit parity.
-Evidence: [Public 67-test suite passed after the real DIVI boundary fix, Fresh Terra Medium agents used select_context.py for DIVI PLAN-0012 W-003 and EMPCO PLAN-0001 W-290 without raw Plan fallback, Direct selector values and corrected semantic fingerprints matched both Terra reports, Astra High consultation 04 found no material issue in both Skills all Python helpers or the real-project boundary fix]
-Next action: Install the exact reviewed package then publish and verify the approved public repository update and release.
+Evidence: [Public 67-test suite passed after the real DIVI boundary fix, Fresh Terra Medium agents used select_context.py for DIVI PLAN-0012 W-003 and EMPCO PLAN-0001 W-290 without raw Plan fallback, Direct selector values and corrected semantic fingerprints matched both Terra reports, Astra High consultation 04 found no material issue in both Skills all Python helpers or the real-project boundary fix, Canonical scoville-plan package and installed package matched 15 files by relative path and SHA-256, Commit 2d0afe397d89929bf325a97f592ab8fc0eaec460 was pushed to public main and annotated tag v1.5.0 peeled to that commit, Published v1.5.0 contained 14 verified assets with matching names sizes and SHA-256 digests, Final publication audit passed with one release one release-version tag complete package structure family alignment and profile alignment]
