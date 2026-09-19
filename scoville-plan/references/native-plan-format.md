@@ -81,11 +81,14 @@ Non-goals
 Work items
 ```
 
-Goal and Non-goals must be explicit and non-empty.
-State the target result in Goal and only actual scope exclusions in Non-goals.
-Use one sentence for one concept and compact bullets for several equal-rank
-facts. Keep implementation order and rationale in their owning fields or
-Decisions.
+Goal and Non-goals must be explicit and non-empty. Goal is normalized current
+state, not chronology: state the current target, its boundary, and only
+genuinely plan-wide constraints. Put actual scope exclusions in Non-goals.
+Dates, versions, identifiers, priorities, and evidence are signals to check
+ownership, not universally forbidden text; retain them only when they are
+normative for the whole Plan. Use one sentence for one concept and compact
+bullets for several equal-rank facts. Keep implementation order and rationale
+in their owning fields or Decisions.
 
 ## Work Item block
 
@@ -140,10 +143,15 @@ required execution sequence.
 When a Plan is being shaped for later Scoville Workflow use, each Step may act
 as one subplan dispatch point. Keep materially different routing needs in
 separate Steps and optionally start the prose with one
-`[route: ultra_low|low|medium|high|ultra_high]` prefix. This annotation remains
-ordinary Step prose: it adds no field, lifecycle, or structural guarantee. Do
-not store a model or reasoning level; the live Workflow configuration owns that
-mapping. Without Steps, the Work Item is one dispatch unit.
+`[route: ultra_low|low|medium|high|ultra_high]` prefix. An explicitly selected
+executor property may follow it in one
+`[execute: model=MODEL_ID; reasoning=LEVEL]` annotation. Either property may be
+omitted; when both are present, `model` comes first. Model IDs contain only
+lowercase ASCII letters, digits, dots, and hyphens, start and end with a letter
+or digit, and `LEVEL` is `none`, `minimal`, `low`, `medium`, `high`, `xhigh`,
+`max`, or `ultra`. These annotations must precede the concrete Step verb. Route
+annotations never contain model names. Without Steps, the Work Item is one
+default-routed dispatch unit.
 
 Keep Outcome to the observable result, Acceptance to the checks and expected
 results that establish it, and Next action to the first unperformed action.

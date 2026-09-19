@@ -26,6 +26,10 @@ DECISION_FILE_RE = re.compile(r"([0-9]{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\Z")
 SCOPE_RE = re.compile(r"[a-z0-9][a-z0-9-]*(?:/[a-z0-9][a-z0-9-]*)*\Z")
 BLOCKER_RE = re.compile(r"[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}\Z")
 HASH_RE = re.compile(r"[0-9a-fA-F]{64}\Z")
+MODEL_ID_RE = re.compile(r"[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\Z")
+EXECUTION_REASONING = {"none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"}
+ROUTE_CLASSES = {"ultra_low", "low", "medium", "high", "ultra_high"}
+STEP_ANNOTATION_LIKE_RE = re.compile(r"\[(?:route|execute)(?:\s|:|\])")
 
 PLAN_STATUSES = {"draft", "active", "completed", "cancelled"}
 WORK_STATUSES = {"todo", "in_progress", "paused", "done", "cancelled"}
@@ -109,6 +113,7 @@ DIAGNOSTIC_CODES = {
     "WORK_NEXT_ACTION_FORBIDDEN",
     "WORK_NEXT_ACTION_REQUIRED",
     "WORK_STEPS_INVALID",
+    "WORK_STEP_EXECUTION_INVALID",
     "WORK_TERMINAL_BLOCKED",
     "WORK_TERMINAL_EVIDENCE_REQUIRED",
     "WORK_TEXT_EMPTY",
@@ -882,6 +887,105 @@ class Validator:
                     )
         return items
 
+    def _validate_execution_override(
+        self,
+        value: str,
+        *,
+        parsed: ParsedFile,
+        line: int | None,
+        record: str,
+        diagnostic_code: str,
+        field_name: str,
+    ) -> bool:
+        parts = value.split("; ") if value else []
+        valid = bool(parts) and len(parts) <= 2
+        keys: list[str] = []
+        for part in parts:
+            if "=" not in part:
+                valid = False
+                continue
+            key, item = part.split("=", 1)
+            keys.append(key)
+            if key == "model":
+                valid = valid and bool(MODEL_ID_RE.fullmatch(item))
+            elif key == "reasoning":
+                valid = valid and item in EXECUTION_REASONING
+            else:
+                valid = False
+        valid = valid and keys in (["model"], ["reasoning"], ["model", "reasoning"])
+        if not valid:
+            self.add(
+                diagnostic_code,
+                parsed.logical_path,
+                "The execution override does not use the strict native syntax.",
+                "Use `model=MODEL_ID`, `reasoning=LEVEL`, or `model=MODEL_ID; reasoning=LEVEL` with supported value shapes.",
+                line=line,
+                record=record,
+                field_name=field_name,
+                expected="model=MODEL_ID; reasoning=LEVEL (either property may be omitted)",
+                observed=value,
+            )
+        return valid
+
+    def _validate_step_execution(
+        self,
+        step: str,
+        *,
+        parsed: ParsedFile,
+        line: int,
+        record: str,
+    ) -> None:
+        remainder = step
+        if re.match(r"^\[route(?:\s|:|\])", remainder):
+            route = re.match(r"^\[route: ([a-z_]+)\] (\S(?:.*\S)?)\Z", remainder)
+            if not route or route.group(1) not in ROUTE_CLASSES:
+                self.add(
+                    "WORK_STEP_EXECUTION_INVALID",
+                    parsed.logical_path,
+                    "The Step route or execution annotation is malformed.",
+                    "Use an optional `[route: CLASS]` followed by an optional `[execute: ...]`, then concrete action prose.",
+                    line=line,
+                    record=record,
+                    field_name="Steps",
+                    observed=step,
+                )
+                return
+            remainder = route.group(2)
+        if re.match(r"^\[execute(?:\s|:|\])", remainder):
+            execution = re.match(r"^\[execute: ([^\]]+)\] (\S(?:.*\S)?)\Z", remainder)
+            if not execution:
+                self.add(
+                    "WORK_STEP_EXECUTION_INVALID",
+                    parsed.logical_path,
+                    "The Step execution annotation is malformed.",
+                    "Use `[execute: model=MODEL_ID; reasoning=LEVEL]` before the concrete action; either property may be omitted.",
+                    line=line,
+                    record=record,
+                    field_name="Steps",
+                    observed=step,
+                )
+                return
+            self._validate_execution_override(
+                execution.group(1),
+                parsed=parsed,
+                line=line,
+                record=record,
+                diagnostic_code="WORK_STEP_EXECUTION_INVALID",
+                field_name="Steps",
+            )
+            remainder = execution.group(2)
+        if not remainder.strip() or STEP_ANNOTATION_LIKE_RE.search(remainder):
+            self.add(
+                "WORK_STEP_EXECUTION_INVALID",
+                parsed.logical_path,
+                "A Step route or execution annotation is duplicated or not in canonical prefix position.",
+                "Keep at most one route annotation first and one execution annotation second, both before the action prose.",
+                line=line,
+                record=record,
+                field_name="Steps",
+                observed=step,
+            )
+
     def _parse_work_items(self, parsed: ParsedFile, plan_id: str, work_bounds: tuple[int, int] | None) -> list[WorkItem]:
         if work_bounds is None:
             return []
@@ -1041,7 +1145,14 @@ class Validator:
                             observed=line,
                         )
                     else:
-                        steps.append(step_match.group(2))
+                        step_text = step_match.group(2)
+                        self._validate_step_execution(
+                            step_text,
+                            parsed=parsed,
+                            line=line_no,
+                            record=record,
+                        )
+                        steps.append(step_text)
                         expected_step += 1
                     continue
                 self.add(

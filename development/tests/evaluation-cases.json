@@ -465,6 +465,33 @@
       ]
     },
     {
+      "id": "goal-operational-message-is-byte-stable",
+      "given": "An active Plan receives task IDs, test output, deployment state, or a new Next action, but its target, boundary, and plan-wide constraints do not change.",
+      "expect": [
+        "Classify the complete proposed Goal by canonical owner and leave the Goal bytes unchanged.",
+        "Record the operational fact once in its Work Item, Evidence, Next action, Decision, or repository-policy owner.",
+        "Do not append chronology, add a size gate, truncate selector output, or create a second requirement registry."
+      ]
+    },
+    {
+      "id": "goal-normalization-preserves-reachability",
+      "given": "The user separately authorizes normalization of a bloated Goal that contains point-specific requirements needed by later Work Items.",
+      "expect": [
+        "Classify every old Goal fact before writing the complete normalized Goal.",
+        "Move a requirement only when every affected future dispatch can reach it through its selected Work Item, a referenced Decision, or a demonstrated loaded repository contract.",
+        "Keep the selector lossless and retain genuinely plan-wide normative dates, versions, or identifiers when they are actually required."
+      ]
+    },
+    {
+      "id": "execution-override-is-point-scoped",
+      "given": "The user selects Astra Medium for one unperformed Step while its route has configured defaults.",
+      "expect": [
+        "Record the choice in the strict Step execution annotation without putting it in Goal prose or changing route risk.",
+        "Resolve reasoning and model independently with the Step annotation overriding the matching route-default property.",
+        "Preserve completed and running history, block malformed or unsupported effective pairs, and keep reviewer routing unaffected."
+      ]
+    },
+    {
       "id": "standalone-native-writing-owner",
       "given": "Create, rewrite, and audit native records with Plan alone, with Scribe installed, and with Scribe active for another segment.",
       "expect": [

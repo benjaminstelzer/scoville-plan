@@ -18,10 +18,16 @@ progress transitions.
   `active` Plan. Once an item leaves `todo`, retain its ID, title, dependencies,
   Decisions, Outcome, Acceptance, Steps, and document position.
 - Update started work only through status, `Blocked by`, Evidence, and
-  `Next action`. A `paused` item resumes to `in_progress`; it never returns to
+  `Next action`, except for the narrow unperformed-Step execution-annotation
+  change below. A `paused` item resumes to `in_progress`; it never returns to
   `todo` for editing.
 - Move one complete H3 block without renumbering any item. Dependencies must
   exist, precede their dependents in authored order, and remain acyclic.
+
+After start, an explicit user choice may change only the `[execute: ...]`
+annotation of one named unperformed Step. Preserve that Step's action and route
+text, all other authored content, and every completed or running dispatch. This
+exception never permits adding, removing, moving, or rewriting a Step.
 
 ## Apply direct Plan maintenance
 
@@ -56,6 +62,10 @@ reference before changing the record.
   result forces a new dispatch. The runtime bundle adds no Plan field and
   changes no authored order or Acceptance ownership. A `[route: CLASS]` prefix
   is optional prose and may change only while the Work Item remains `todo`.
+  Record an explicit point choice only with an `[execute: ...]` Step annotation
+  in the strict native format. For a still-`todo` item without Steps, add one
+  behavior-complete annotated Step when the choice must be retained. Apply the
+  narrow started-item exception only through `Preserve authored history` above.
 - When work has several ordered actions, use consecutive numbered Steps in the
   exact execution order. Name every known repository-relative file in its
   action Step. If ownership is unknown, perform bounded read-only discovery

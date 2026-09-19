@@ -35,6 +35,8 @@
     {"id":"transaction-incomplete-stop","sources":["references/native-editing.md","references/native-project-lifecycle.md","references/native-decision-batches.md"]},
     {"id":"behavior-complete-planning-granularity","sources":["references/planning-granularity.md"]},
     {"id":"guarded-workflow-step-bundles","sources":["SKILL.md","references/native-work-items.md"]},
+    {"id":"normalized-goal-ownership","sources":["SKILL.md","references/native-plan-format.md","references/native-project-lifecycle.md"]},
+    {"id":"step-execution-annotations","sources":["references/native-plan-format.md","references/native-work-items.md","scripts/validate_profile.py"]},
     {"id":"compact-worker-ready-records","sources":["SKILL.md","references/native-plan-format.md","references/planning-granularity.md","references/native-work-items.md","references/native-decision-format.md"]},
     {"id":"read-only-profile-validator","sources":["SKILL.md","references/profile-validation.md","scripts/validate_profile.py"]}
   ]

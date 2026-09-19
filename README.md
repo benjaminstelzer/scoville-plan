@@ -103,6 +103,11 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   facts in bullets, and write required execution order as numbered Steps. Each
   known file appears directly in the Step that changes it. Plan remains usable
   without Scribe.
+- **A Goal that stays current.** Goal owns the current target, its boundary,
+  and genuinely plan-wide constraints. Chronology, point-specific execution,
+  evidence, and the next move stay with their actual owners instead of growing
+  into an append-only preamble. Normalization moves a required fact only when
+  every affected worker can still reach it.
 - **Outcome-sized Work Items.** Separately resumable outcomes become items.
   Implementation steps and checks remain steps or acceptance evidence.
 - **Pre-flight before start.** Before a `todo` item begins, compare it with the
@@ -112,12 +117,13 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   concrete relevance reason. Refine assumptions, signatures, data models,
   contracts, paths, or checks that the relevant evidence made stale.
 - **Workflow-ready Steps.** When Scoville Workflow is available, optional Steps
-  can carry one routing class each. A simple text edit and complex redesign stay
-  separate, while code, UI, and browser checks for one result stay together.
-  One Step remains one dispatch by default. An explicitly invoked Workflow can
-  bundle adjacent Steps only under an accepted Decision and only while outcome,
-  owner, authorization, route, workspace, and Acceptance boundary remain the
-  same.
+  can carry one routing class each, plus a strict execution annotation when the
+  user explicitly selects an executor model or reasoning level for that Step.
+  A simple text edit and complex redesign stay separate, while code, UI, and
+  browser checks for one result stay together. One Step remains one dispatch by
+  default. An explicitly invoked Workflow can bundle adjacent Steps only under
+  an accepted Decision and only while outcome, owner, authorization, route,
+  effective executor pair, workspace, and Acceptance boundary remain the same.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
   Plan's `current_item`.
 - **Durable deferred work.** Mid-task additions leave current work running,
