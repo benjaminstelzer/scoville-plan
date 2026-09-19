@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.4 - 2026-09-19
+
+- Show each Work Item's ordered Steps in the companion viewer, so the Plan's
+  subordinate actions remain visible without opening the source Markdown.
+
 ## v1.4.3 - 2026-09-19
 
 - Limit the pre-flight for the next `todo` Work Item to that item, the current

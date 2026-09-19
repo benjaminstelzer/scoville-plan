@@ -1,6 +1,6 @@
 [package]
 name = "scoville-plan-viewer"
-version = "1.3.0"
+version = "1.3.1"
 description = "A local read-only viewer for Scoville Plan projects"
 authors = ["Benjamin Stelzer"]
 edition = "2021"

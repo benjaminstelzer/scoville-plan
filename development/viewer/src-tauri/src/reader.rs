@@ -644,6 +644,10 @@ mod tests {
         );
         assert_eq!(snapshot.plans[0].work_items[1].status, "in_progress");
         assert_eq!(snapshot.plans[0].work_items[1].decisions, ["ADR-0001"]);
+        assert_eq!(
+            snapshot.plans[0].work_items[1].steps,
+            ["Build the view.", "Inspect the view."]
+        );
         assert_eq!(snapshot.decisions[0].status, "accepted");
     }
 

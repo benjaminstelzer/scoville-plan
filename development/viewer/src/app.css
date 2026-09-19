@@ -288,6 +288,8 @@ dl { display: grid; gap: 12px; margin: 16px 0 0; }
 dl div { display: grid; grid-template-columns: 92px 1fr; gap: 12px; }
 dt { color: var(--muted-foreground); font-size: 12px; font-weight: 600; }
 dd { margin: 0; font-size: 12px; line-height: 1.5; }
+.work-steps { display: grid; gap: 6px; margin: 0; padding-inline-start: 20px; list-style: decimal; }
+.work-steps li { padding-inline-start: 2px; }
 .decision-status { width: 8px; height: 8px; border-radius: 999px; background: var(--status-upcoming); }
 .decision-item.accepted .decision-status { background: var(--status-active); }
 .decision-item.proposed .decision-status { background: var(--status-paused); }

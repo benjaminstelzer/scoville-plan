@@ -569,6 +569,18 @@
                   {#if item.next_action}<div class="detail-callout"><span>Next action</span><strong>{item.next_action}</strong></div>{/if}
                   <dl>
                     <div><dt>Acceptance</dt><dd>{item.acceptance}</dd></div>
+                    {#if item.steps.length}
+                      <div>
+                        <dt>Steps</dt>
+                        <dd>
+                          <ol class="work-steps">
+                            {#each item.steps as step}
+                              <li>{step}</li>
+                            {/each}
+                          </ol>
+                        </dd>
+                      </div>
+                    {/if}
                     {#if item.depends_on.length}<div><dt>Depends on</dt><dd>{item.depends_on.join(", ")}</dd></div>{/if}
                     {#if item.blocked_by.length}<div><dt>Blocked by</dt><dd>{item.blocked_by.join(", ")}</dd></div>{/if}
                     {#if item.decisions.length}<div><dt>Decisions</dt><dd>{item.decisions.join(", ")}</dd></div>{/if}
