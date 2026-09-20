@@ -13,6 +13,9 @@ from pathlib import Path, PurePosixPath
 
 PLAN_ID_RE = re.compile(r"PLAN-[0-9]{4}\Z")
 WORK_ID_RE = re.compile(r"W-[0-9]{3}\Z")
+UNIT_RE = re.compile(
+    r"(?P<work_item>W-[0-9]{3})(?:/step-(?P<step>[1-9][0-9]*)|/steps-(?P<first>[1-9][0-9]*)-(?P<last>[1-9][0-9]*))?\Z"
+)
 DECISION_ID_RE = re.compile(r"ADR-[0-9]{4}\Z")
 PLAN_FILE_RE = re.compile(r"([0-9]{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\Z")
 DECISION_FILE_RE = re.compile(r"([0-9]{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\Z")
@@ -69,9 +72,14 @@ def build_parser() -> argparse.ArgumentParser:
         description="Select deterministic read-only Scoville Plan context."
     )
     parser.add_argument("--root", required=True, help="Project root containing PROJECT_INDEX.md.")
-    parser.add_argument(
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument(
         "--work-item",
         help="Optional W-NNN item from the active Plan; defaults to current_item.",
+    )
+    selection.add_argument(
+        "--unit",
+        help="Exact dispatch unit: W-NNN, W-NNN/step-N, or W-NNN/steps-N-M.",
     )
     parser.add_argument(
         "--max-output-bytes",
@@ -355,6 +363,75 @@ def single_field(block: str, name: str, relative_path: str) -> str:
     return matches[0]
 
 
+def parse_steps(block: str, relative_path: str) -> list[str]:
+    match = re.search(r"^Steps:\n(?P<body>.*?)(?=^Evidence: )", block, re.MULTILINE | re.DOTALL)
+    if match is None:
+        if re.search(r"^Steps:", block, re.MULTILINE):
+            raise SelectorError("WORK_STEPS_INVALID", "selected Work Item Steps are malformed", path=relative_path)
+        return []
+    lines = match.group("body").splitlines()
+    if not lines:
+        raise SelectorError("WORK_STEPS_INVALID", "selected Work Item Steps must not be empty", path=relative_path)
+    for expected, line in enumerate(lines, 1):
+        if re.fullmatch(rf"{expected}\. .+", line) is None:
+            raise SelectorError(
+                "WORK_STEPS_INVALID",
+                "selected Work Item Steps must be consecutive non-empty single lines",
+                path=relative_path,
+            )
+    return lines
+
+
+def project_unit(
+    selected: WorkItem,
+    unit: str,
+    relative_path: str,
+) -> dict[str, object]:
+    unit_match = UNIT_RE.fullmatch(unit)
+    if unit_match is None:
+        raise SelectorError("UNIT_INVALID", "--unit has an invalid shape", exit_code=2)
+    steps = parse_steps(selected.block, relative_path)
+    requested_step = unit_match.group("step")
+    requested_first = unit_match.group("first")
+    requested_last = unit_match.group("last")
+    if steps and requested_step is None and requested_first is None:
+        raise SelectorError("UNIT_STEP_REQUIRED", "a Work Item with Steps requires an exact Step or adjacent Step range")
+    if not steps and (requested_step is not None or requested_first is not None):
+        raise SelectorError("UNIT_HAS_NO_STEPS", "a Work Item without Steps is one complete dispatch unit")
+    if requested_step is not None:
+        selected_numbers = [int(requested_step)]
+    elif requested_first is not None and requested_last is not None:
+        first = int(requested_first)
+        last = int(requested_last)
+        if first >= last:
+            raise SelectorError("UNIT_RANGE_INVALID", "a Step range must contain at least two adjacent Steps")
+        selected_numbers = list(range(first, last + 1))
+    else:
+        selected_numbers = []
+    if any(number > len(steps) for number in selected_numbers):
+        raise SelectorError(
+            "UNIT_STEP_MISSING",
+            "selected Step does not exist in the Work Item",
+            expected={"maximum_step": len(steps)},
+            observed={"selected_steps": selected_numbers},
+        )
+    lines = selected.block.splitlines()
+    projection: dict[str, object] = {
+        "unit": unit,
+        "header": lines[0],
+        "status": f"Status: {single_field(selected.block, 'Status', relative_path)}",
+        "depends_on": f"Depends on: {single_field(selected.block, 'Depends on', relative_path)}",
+        "blocked_by": f"Blocked by: {single_field(selected.block, 'Blocked by', relative_path)}",
+        "decisions": f"Decisions: {single_field(selected.block, 'Decisions', relative_path)}",
+        "outcome": f"Outcome: {single_field(selected.block, 'Outcome', relative_path)}",
+        "acceptance": f"Acceptance: {single_field(selected.block, 'Acceptance', relative_path)}",
+        "steps": [steps[number - 1] for number in selected_numbers],
+    }
+    if not steps:
+        projection["next_action"] = f"Next action: {single_field(selected.block, 'Next action', relative_path)}"
+    return projection
+
+
 def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict[str, WorkItem]]:
     match = re.fullmatch(
         r"\n*# [^\n]+\n\n## Goal\n(?P<goal>.+?)\n\n## Non-goals\n(?P<non_goals>.+?)\n\n## Work items\n(?P<work_items>.*)",
@@ -401,7 +478,11 @@ def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict
     return "## Goal\n" + goal_body, "## Non-goals\n" + non_goals_body, items
 
 
-def select_context(root: Path, requested_item: str | None) -> dict[str, object]:
+def select_context(
+    root: Path,
+    requested_item: str | None,
+    unit: str | None = None,
+) -> dict[str, object]:
     index_path = "PROJECT_INDEX.md"
     index = parse_record(safe_read_text(root, index_path), index_path)
     require_format_version(index, index_path)
@@ -414,7 +495,8 @@ def select_context(root: Path, requested_item: str | None) -> dict[str, object]:
     if plan.frontmatter.get("id") != active_plan or plan.frontmatter.get("status") != "active":
         raise SelectorError("ACTIVE_PLAN_INVALID", "index must reference one matching active Plan", path=plan_path)
     goal, non_goals, items = parse_plan(plan, plan_path)
-    selected_id = requested_item or plan.frontmatter.get("current_item")
+    unit_match = UNIT_RE.fullmatch(unit) if unit is not None else None
+    selected_id = unit_match.group("work_item") if unit_match is not None else requested_item or plan.frontmatter.get("current_item")
     if selected_id is None or WORK_ID_RE.fullmatch(selected_id) is None:
         raise SelectorError("CURRENT_ITEM_INVALID", "selected Work Item must match W-NNN", path=plan_path)
     selected = items.get(selected_id)
@@ -437,13 +519,16 @@ def select_context(root: Path, requested_item: str | None) -> dict[str, object]:
         if decision.frontmatter.get("id") != decision_id:
             raise SelectorError("DECISION_ID_MISMATCH", f"Decision file does not contain {decision_id}", path=decision_path)
         decisions.append(decision_text)
+    work_item: object = selected.block
+    if unit is not None:
+        work_item = project_unit(selected, unit, plan_path)
     return {
         "plan": {
             "frontmatter": plan.raw_frontmatter,
             "goal": goal,
             "non_goals": non_goals,
         },
-        "work_item": selected.block,
+        "work_item": work_item,
         "direct_dependencies": dependency_statuses,
         "decisions": decisions,
     }
@@ -471,8 +556,10 @@ def main(argv: list[str] | None = None) -> int:
             raise SelectorError("WORK_ITEM_ID_INVALID", "--work-item must match W-NNN", exit_code=2)
         if args.max_output_bytes < 512:
             raise SelectorError("OUTPUT_BUDGET_INVALID", "--max-output-bytes must be at least 512", exit_code=2)
+        if args.unit is not None and UNIT_RE.fullmatch(args.unit) is None:
+            raise SelectorError("UNIT_INVALID", "--unit has an invalid shape", exit_code=2)
         root = resolve_root(args.root)
-        payload = select_context(root, args.work_item)
+        payload = select_context(root, args.work_item, args.unit)
         encoded = encode_json(payload)
         if len(encoded) > args.max_output_bytes:
             raise SelectorError(

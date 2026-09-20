@@ -102,7 +102,11 @@ Blocked by: []
 Decisions: [ADR-0001]
 Outcome: Return ✓ without unrelated bodies.
 Acceptance: Exact projection.
-Evidence: []
+Steps:
+1. Inspect the producer.
+2. Change only the selected behavior.
+3. Verify the exact output.
+Evidence: [old executor attempt, old reviewer attempt]
 Next action: Run selector.
 
 ### W-004 Unrelated large item
@@ -190,6 +194,58 @@ class SelectContextTests(unittest.TestCase):
         self.assertIn("### W-001 First dependency", payload["work_item"])
         self.assertEqual([], payload["direct_dependencies"])
         self.assertEqual([], payload["decisions"])
+
+    def test_exact_step_unit_omits_other_steps_and_all_evidence(self) -> None:
+        completed = self.run_cli("--unit", "W-003/step-2")
+        self.assertEqual(0, completed.returncode, completed.stdout)
+        payload = json.loads(completed.stdout)
+        item = payload["work_item"]
+        self.assertEqual("W-003/step-2", item["unit"])
+        self.assertEqual(["2. Change only the selected behavior."], item["steps"])
+        self.assertNotIn("Evidence", item)
+        self.assertNotIn("Inspect the producer", completed.stdout)
+        self.assertNotIn("Verify the exact output", completed.stdout)
+        self.assertNotIn("old executor attempt", completed.stdout)
+        self.assertEqual([DECISION], payload["decisions"])
+        self.assertEqual("Outcome: Return ✓ without unrelated bodies.", item["outcome"])
+        self.assertEqual("Acceptance: Exact projection.", item["acceptance"])
+        self.assertNotIn("next_action", item)
+
+    def test_adjacent_step_bundle_contains_only_the_selected_range(self) -> None:
+        completed = self.run_cli("--unit", "W-003/steps-1-2")
+        self.assertEqual(0, completed.returncode, completed.stdout)
+        item = json.loads(completed.stdout)["work_item"]
+        self.assertEqual(
+            ["1. Inspect the producer.", "2. Change only the selected behavior."],
+            item["steps"],
+        )
+        self.assertNotIn("Verify the exact output", completed.stdout)
+        self.assertNotIn("old reviewer attempt", completed.stdout)
+
+    def test_work_item_without_steps_is_one_unit_without_evidence(self) -> None:
+        completed = self.run_cli("--unit", "W-002")
+        self.assertEqual(0, completed.returncode, completed.stdout)
+        item = json.loads(completed.stdout)["work_item"]
+        self.assertEqual("W-002", item["unit"])
+        self.assertEqual([], item["steps"])
+        self.assertEqual("Next action: Resume later.", item["next_action"])
+        self.assertNotIn("Evidence", item)
+        self.assertNotIn("Evidence", completed.stdout)
+
+    def test_invalid_unit_selection_fails_closed(self) -> None:
+        cases = (
+            (("--unit", "W-003"), "UNIT_STEP_REQUIRED"),
+            (("--unit", "W-001/step-1"), "UNIT_HAS_NO_STEPS"),
+            (("--unit", "W-003/step-4"), "UNIT_STEP_MISSING"),
+            (("--unit", "W-003/steps-2-2"), "UNIT_RANGE_INVALID"),
+            (("--unit", "W-003/steps-3-2"), "UNIT_RANGE_INVALID"),
+            (("--unit", "W-003/step-0"), "UNIT_INVALID"),
+        )
+        for arguments, code in cases:
+            with self.subTest(arguments=arguments):
+                completed = self.run_cli(*arguments)
+                self.assertNotEqual(0, completed.returncode)
+                self.assertEqual(code, json.loads(completed.stdout)["diagnostics"][0]["code"])
 
     def test_megabyte_plan_does_not_emit_unrelated_item(self) -> None:
         marker = "UNRELATED-MEGABYTE-MARKER"

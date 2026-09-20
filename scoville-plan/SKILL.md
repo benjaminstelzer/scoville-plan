@@ -32,7 +32,7 @@ guardrails only; runtime plans are disposable mirrors.
 
 Never invoke a planning CLI. The optional bundled selector and validator are
 strictly read-only and never a write path. The selector owns only the exact
-current-or-named Work Item projection defined in the read-only route; proposal
+current-or-named Work Item or dispatch-unit projection defined in the read-only route; proposal
 discovery, relevant Evidence, graph inspection, and successor recovery remain
 separate bounded reads. Claim no locking, atomic publication, typed mutation,
 or semantic proof; report observations only.

@@ -124,6 +124,9 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   default. An explicitly invoked Workflow can bundle adjacent Steps only under
   an accepted Decision and only while outcome, owner, authorization, route,
   effective executor pair, workspace, and Acceptance boundary remain the same.
+  The optional read-only selector can project that exact Step or range with all
+  referenced Decisions and without Evidence, other Steps, or the Work
+  Item-wide `Next action`; a Work Item without Steps remains one complete unit.
 - **One active item.** At most one Work Item is `in_progress` and it matches the
   Plan's `current_item`.
 - **Durable deferred work.** Mid-task additions leave current work running,
