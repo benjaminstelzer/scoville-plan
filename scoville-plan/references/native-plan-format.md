@@ -81,7 +81,11 @@ Non-goals
 Work items
 ```
 
-Goal and Non-goals must be explicit and non-empty. Goal is normalized current
+Goal and Non-goals must be explicit and non-empty. For their content, the Plan title, and authored Work Item prose, an explicit
+target language takes precedence. Otherwise preserve the existing Plan's
+language, including for added Work Items. A new Plan uses the user's request
+language. Keep the required English section labels, field names, status values,
+and technical identifiers unchanged. Goal is normalized current
 state, not chronology: state the current target, its boundary, and only
 genuinely plan-wide constraints. Put actual scope exclusions in Non-goals.
 Dates, versions, identifiers, priorities, and evidence are signals to check

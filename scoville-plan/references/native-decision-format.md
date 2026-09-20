@@ -23,7 +23,9 @@ ID. `ADR-9999` exhausts the space.
 ## Decision profile
 
 Use the required frontmatter keys in this order; add optional lifecycle keys
-only when their conditions apply:
+only when their conditions apply. The example shows key order, including
+optional keys from different lifecycle states. It is not a valid new proposal
+to copy unchanged:
 
 ```yaml
 ---
@@ -62,6 +64,11 @@ Confirmation
 Revisit when
 ```
 
+For the Decision title and section content, an explicit target language takes
+precedence. Otherwise preserve an existing Decision's language. A new Decision
+uses the associated Plan's language, or the user's request language if no Plan
+supplies one. Preserve the required section labels, frontmatter keys, status
+values, and technical identifiers.
 For a proposal, `Decision` states the recommended result before its rationale.
 For a choice already made explicitly by a human, it states that selected
 result. Separate observed or supplied constraints from the Skill's own
