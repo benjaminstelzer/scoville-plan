@@ -1,6 +1,6 @@
 ---
 name: scoville-plan
-description: Repository-native planning guardrail for creating, maintaining, resuming, auditing, and handing off durable project Plans, Work Items, and Decision records through direct Markdown and YAML edits only. Owns their concise writing and wording audits without requiring Scribe. Use when a task invokes Scoville Plan, requests repository-owned planning or decision records, must survive interruption or compaction, works in a format-version-1 project, receives a new instruction while an active Plan is running, or asks to add, remove, reorder, or clean up Plan points. Apply Plan-record maintenance directly and never create a Work Item whose only outcome is maintaining the Plan. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
+description: Create, maintain, resume, audit, and hand off project Plans, Work Items, and Decision records stored in the repository. Edit their Markdown and YAML directly. Owns their concise writing and wording audits under its own writing rules. Scribe writing rules do not apply to these records. Use when a task invokes Scoville Plan, requests repository-owned planning or decision records, must survive interruption or compaction, works in a format-version-1 project, receives a new instruction while an active Plan is running, or asks to add, remove, reorder, or clean up Plan points. Apply Plan-record maintenance directly and never create a Work Item whose only outcome is maintaining the Plan. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
 compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no planning CLI, MCP server, database or network. Optional read-only selector and structural validator need Python 3. Developed for Codex and Claude Code; other hosts untested."
 ---
 
@@ -24,7 +24,7 @@ Precedence:
 
 1. system, safety, and explicit current-request instructions;
 2. repository instructions and their canonical planning mechanism;
-3. an existing supported native profile;
+3. an existing supported native profile (the project index, Plans, and Decisions);
 4. these defaults for gaps.
 
 Use the existing durable owner; never create a parallel Plan. Apply compatible
@@ -37,7 +37,7 @@ discovery, relevant Evidence, graph inspection, and successor recovery remain
 separate bounded reads. Claim no locking, atomic publication, typed mutation,
 or semantic proof; report observations only.
 
-Discovering a sibling does not mean it is installed, active, applicable, or required. If a sibling is absent or inactive, ignore it. Do not require, install, simulate, or reimplement it. If it is active and applicable, it owns only its concern. This Skill continues. Opt-out is local.
+Finding another Skill in this family does not make it installed, active, applicable, or required. If that Skill is absent or inactive, ignore it. Do not require, install, simulate, or reimplement it. If it is active and applicable, let it handle only its stated concern while this Skill continues its own authorized work. An opt-out applies only to the Skill the user excluded, not to independently authorized work.
 
 Family owners, in suite order:
 
@@ -57,14 +57,20 @@ reasoning demand. Separate a trivial text edit from a complex structural change;
 do not split code, UI, browser work, or other activities that share the same
 outcome, risk, authorization, and Acceptance boundary. A user-selected executor
 model or reasoning effort may be recorded only through the strict Step
-annotation in the native format; otherwise the Workflow owns the live pair.
+annotation in the native format; otherwise the Workflow chooses the model and reasoning effort for execution.
 
-Plan owns wording and fidelity of its native records. If Scribe is installed,
-do not additionally activate, load, or apply it to their creation, rewriting,
-or wording audit. An explicit user request to use Scribe takes precedence for
-wording. Plan still owns permitted edits, format, and lifecycle unless opted out.
-If Scribe is active for another text segment, keep it scoped there. Plan works
-without Scribe and never requires its installation.
+Plan owns wording and fidelity of its native records. An explicit target
+language takes precedence. Otherwise preserve the language of an existing Plan,
+including new or edited Work Items in it. Use the user's request language for a
+new Plan. Preserve an existing Decision's language; write a new Decision in its
+Plan's language, or the user's request language when no Plan supplies one. Keep
+required field names, section labels, IDs, and other format literals unchanged.
+When Plan is available and applicable, load it if needed and use its own writing
+rules for these records. Do not activate, load, or apply Scribe to their creation,
+rewriting, or wording audit. A request to use Scribe does not override Plan's
+writing rules. Plan also owns permitted edits, format, and lifecycle unless
+opted out. If Scribe is active for another text segment, keep it scoped there.
+Plan works without Scribe and never requires its installation.
 
 ## Choose planning and route references
 
@@ -102,7 +108,7 @@ inside a Work Item uses the Work Item route even though its file is a Plan.
 | Rewrite Plan Goal or Non-goals | P, L, E |
 | Rewrite Work Item wording | P, W, E |
 | Rewrite Decision wording | D, P, E |
-| Validate after writes or diagnose a complete supported profile | Run V; then only the native reference for a reported diagnostic or correction |
+| Validate after writes or diagnose a complete supported profile | Use V for validation: run its optional validator when available, otherwise use the manual inspection described there. Then load only the native reference needed for a reported diagnostic or correction |
 
 For read-only, preload no format guides. If profile existence is unknown,
 list the root before canonical reads; never probe absent
@@ -110,7 +116,9 @@ list the root before canonical reads; never probe absent
 it for current-or-named Work Item selection through R; use R's bounded manual
 fallback when it is unavailable. For an explicitly requested new durable Plan, use the
 workspace as setup root, classify the whole profile, and initialize only if all
-three canonical paths are absent. Otherwise report absence. Preserve and stop
+three canonical paths are absent. Use an existing complete supported profile.
+If all three paths are absent and no durable Plan was requested, report that
+absence without initializing. Preserve and stop
 on partial, foreign, unsupported, invalid, or intent-invalid state unless the
 route permits intent-preserving repair.
 
@@ -119,7 +127,7 @@ route permits intent-preserving repair.
 | Input or state | Required treatment |
 | --- | --- |
 | Goal, Non-goals, blocker, dependency, acceptance result, evidence, or lifecycle choice | Never invent. Implementation, ordinary documentation, source, silence, and current behavior are evidence, not authorization. |
-| Activation, cancellation, changed scope, weaker Acceptance, ambiguous successor, or adoption of a possible material choice | Ask before changing durable state. |
+| Activation, cancellation, changed scope, weaker Acceptance, ambiguous successor, or adoption of a possible material choice | If the required explicit choice has not already been authorized, ask before changing durable state. |
 | User selects a direction, asks to preserve it in project rules, or applicable project instruction clearly records the human-selected direction | Create and accept its Decision without re-asking. |
 | Analysis reveals a possible material Decision about scope, architecture, public behavior, stored data, security, dependencies, reversibility, Acceptance, migration, or rollout | Create `proposed`; report recommendation, alternatives, tradeoffs, and effect; ask to accept, reject, or revise. Do not pre-accept. |
 
@@ -268,10 +276,10 @@ choices to Decisions, point-specific scope, order, checks, model, or reasoning
 to the affected Work Item or Step, observed results to Evidence, the next move
 to Next action, and repository policy to its canonical project instruction;
 omit irrelevant prose. Operational messages that change none of the Goal-owned
-semantics leave its bytes unchanged. A separately authorized normalization may
-relocate existing Goal facts only after checking that every affected future
-dispatch can still reach each needed requirement through its selected Work
-Item, a referenced Decision, or a demonstrated loaded repository contract. Do
+semantics leave its bytes unchanged. Moving existing Goal facts to other fields requires separate authorization.
+Before that normalization, check that every affected future dispatch can still
+reach each needed requirement through its selected Work Item, a referenced
+Decision, or a repository contract demonstrably loaded for that dispatch. Do
 not create a second requirement registry, truncate selector output, or use a
 size limit as a substitute for ownership.
 

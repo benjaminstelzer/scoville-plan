@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.2 - 2026-09-20
+
+- Give Plan sole ownership of native record wording and define language
+  selection for existing and new Plans, Work Items, and Decisions.
+- Clarify validation fallback, existing authorization, Goal normalization, and
+  the family rule for independently activated Skills.
+
 ## v1.7.1 - 2026-09-20
 
 - Show Plan point and Decision pagination above and below each long list. Both

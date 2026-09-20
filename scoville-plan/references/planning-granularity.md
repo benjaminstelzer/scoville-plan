@@ -27,7 +27,10 @@ and releasing one behavior normally belong to the same Work Item.
 
 Use numbered Steps when order affects correctness or when several file changes
 must be coordinated. Keep the concept in Goal and Outcome; Steps contain only
-the ordered work needed to realize it.
+the ordered work needed to realize it. For authored prose, follow an explicit target language first. Otherwise keep
+the existing Plan's language, including for added Steps or Work Items. For a new
+Plan, use the user's request language. Keep required labels and technical
+identifiers unchanged.
 
 1. Place prerequisites and canonical-owner changes before dependent consumers.
 2. Name each known repository-relative file in the Step that changes it.
@@ -82,8 +85,10 @@ boundary.
 
 When the routing class is confidently known, prefix the Step with exactly one
 of `[route: ultra_low]`, `[route: low]`, `[route: medium]`, `[route: high]`, or
-`[route: ultra_high]`. Record the class, not a model or reasoning level, because
-the Workflow configuration owns that live mapping. Omit the prefix rather than
+`[route: ultra_high]`. The route prefix records only the class, not a model or reasoning level.
+The Workflow configuration maps that class to execution settings. An explicit
+user choice of model or reasoning may be recorded separately in the existing
+`[execute: ...]` annotation defined by the native Plan format. Omit the prefix rather than
 inventing a class. The coordinator rechecks stale or newly changed risk at
 dispatch. Without Steps, the complete Work Item is one dispatch unit.
 
