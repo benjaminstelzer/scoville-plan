@@ -108,12 +108,16 @@ authority.
 After writing, reread changed frontmatter and the complete affected Work Item
 or Decision blocks, inspect the complete scoped diff, and compare full resulting
 bytes with the prepared result so unexpected edits outside those blocks are
-not hidden. Recheck the affected graph and lifecycle invariants. When the bundled
-read-only validator and Python are available, run it as described in
-[profile-validation.md](profile-validation.md). Otherwise preserve the manual
-inspection fallback; never make an executable a dependency of this Skill.
-Also review changed prose using the core compact-record rules. Structural
-validity alone does not establish precision, sufficiency, or lack of repetition.
+not hidden. When the bundled read-only validator and Python are available, run
+it on that final unchanged state as described in
+[profile-validation.md](profile-validation.md). A complete successful run owns
+its reported structural invariants for those exact bytes, so do not repeat the
+same full structure matrix manually. Otherwise use the full manual structural
+fallback; never make an executable a dependency of this Skill. In both cases,
+manually review authorization, meaning, Acceptance and Evidence sufficiency,
+preserved history and user changes, prepared versus written bytes, uncovered
+graph or lifecycle invariants, and changed prose under the compact-record rules.
+Structural validity alone does not establish precision or sufficiency.
 
 Report exact changed records, manual checks, validator output when actually
 observed, unresolved proposals, partial-state risk, and the next concrete

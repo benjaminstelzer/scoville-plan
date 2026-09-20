@@ -39,16 +39,12 @@ or semantic proof; report observations only.
 
 Finding another Skill in this family does not make it installed, active, applicable, or required. If that Skill is absent or inactive, ignore it. Do not require, install, simulate, or reimplement it. If it is active and applicable, let it handle only its stated concern while this Skill continues its own authorized work. An opt-out applies only to the Skill the user excluded, not to independently authorized work.
 
-Family owners, in suite order:
+Relevant neighboring owners:
 
-- `scoville-brainstorm`: deliberate divergence before selection.
-- `scoville-research`: source-backed research and synthesis.
-- `scoville-code-anti-ai-slop`: engineering scope, implementation, risk, and validation.
-- `scoville-design-anti-ai-slop`: visual definition, art direction, critique, and repair.
-- `scoville-ui-anti-ai-slop`: framework UI implementation, accessibility mechanics, and rendered proof.
-- `scoville-scribe-anti-ai-slop`: wording, terminology, meaning, and source fidelity.
-- `scoville-plan`: durable Plans, Work Items, Decisions, and lifecycle state.
-- `scoville-handoff`: active-work transfer.
+- `scoville-code-anti-ai-slop`: implementation scope, risk, and validation outside Plan records.
+- `scoville-scribe-anti-ai-slop`: non-Plan wording artifacts; it never owns native Plan records.
+- `scoville-handoff`: active-work transfer snapshots.
+- optional `scoville-workflow-codex`: dispatch of accepted Steps when explicitly active.
 
 The private optional `scoville-workflow-codex` Skill may make Steps usable as
 later dispatch units without activating or loading that Workflow. Group each
@@ -315,11 +311,15 @@ After writing:
 
 1. reread changed frontmatter and complete affected Work Item or Decision blocks;
 2. inspect the scoped diff and check changed prose against the compact-record rules;
-3. check index ownership, active-Plan count, current-item status, Work Item key
-   order, dependency order and cycles, Decision and Plan references, blockers,
-   lifecycle fields, Evidence, and `Next action`;
-4. when its script and Python are already available, run the optional validator
-   through V; otherwise perform and report the scoped manual inspection;
+3. when its script and Python are already available, run the optional validator
+   through V on the final unchanged multi-file state. Its successful result owns
+   only the structural invariants it reports for those exact bytes; any relevant
+   later change invalidates that evidence. Without a complete successful run,
+   perform and report the full manual structural inspection;
+4. manually check authorization, meaning, compact-record precision, Acceptance
+   and Evidence sufficiency, preserved history and user changes, prepared versus
+   written bytes, and every invariant the validator does not cover. Do not repeat
+   the validator's complete structure matrix when its evidence is still valid;
 5. record only acceptance evidence observed for the mutation.
 
 Use E's scoped-read rules: complete byte and structural checks need not print

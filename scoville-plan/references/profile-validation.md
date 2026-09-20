@@ -33,8 +33,9 @@ formatting, normalization, migration, allocation, or transition mode.
 
 The validator reads the complete profile internally. Return its result and
 diagnostics without appending the Plan bodies it inspected. Scoped model output
-does not narrow validation coverage; a selected Work Item alone cannot replace
-this check or the corresponding manual inspection.
+does not narrow validation coverage. A successful complete run replaces manual
+repetition only for the structural invariants it reports on the exact inspected
+bytes; it never replaces the semantic and authority checks below.
 
 ## Interpret the result
 
@@ -77,6 +78,11 @@ evidence truth, acceptance sufficiency, reported work occurrence, or the
 meaning of authored prose. It checks a Decision batch hash only for its
 64-hexadecimal shape and shared symmetric metadata; it cannot recompute a hash
 that depends on unavailable pre-mutation bytes.
+
+Bind validator evidence to the exact complete profile state it inspected.
+Changing a relevant file or dependency invalidates affected evidence. Before
+completion, validate the final state again or use the full manual structural
+fallback. Never reuse an old successful result for changed bytes.
 
 If Python or the script is unavailable, do not install a dependency merely to
 run the check. Follow [native-editing.md](native-editing.md), inspect the same
