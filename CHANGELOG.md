@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.7.0 - 2026-09-20
+
+- Add deterministic dispatch-unit selection for one exact Step, adjacent Step
+  range, or complete Work Item without Steps. Unit output retains all referenced
+  Decisions, excludes Evidence and unselected Steps, and omits the Work
+  Item-wide `Next action` from Step units so a later Step cannot leak into the
+  assigned task. Existing whole-Work-Item selector output and format-version-1
+  Plan files remain unchanged.
+
 ## v1.6.0 - 2026-09-19
 
 - Keep Goal as normalized current direction: target, boundary, and genuinely

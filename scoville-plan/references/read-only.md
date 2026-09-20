@@ -3,7 +3,7 @@
 Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
 
-## Select current Work Item context
+## Select Work Item or dispatch-unit context
 
 When Python 3 and the bundled script are available, select the current or one
 explicitly named Work Item with:
@@ -12,12 +12,28 @@ explicitly named Work Item with:
 python <skill-directory>/scripts/select_context.py --root <project-root> [--work-item W-001] --format json
 ```
 
+For a worker dispatch, select the exact unit instead:
+
+```text
+python <skill-directory>/scripts/select_context.py --root <project-root> --unit W-001 --format json
+python <skill-directory>/scripts/select_context.py --root <project-root> --unit W-003/step-2 --format json
+python <skill-directory>/scripts/select_context.py --root <project-root> --unit W-003/steps-2-3 --format json
+```
+
 The success object contains exactly four top-level semantic areas:
 
 - `plan`: the exact Plan frontmatter plus Goal and Non-goals sections;
-- `work_item`: the complete selected Work Item block;
+- `work_item`: the complete selected Work Item block in recovery mode, or exact
+  structured unit fields in dispatch mode;
 - `direct_dependencies`: only each direct dependency ID and its `Status` line;
 - `decisions`: the complete Decision records referenced by the selected item.
+
+Dispatch mode requires one exact Step or adjacent Step range when the Work Item
+has Steps. Without Steps, the Work Item itself is the unit. It includes every
+Decision referenced by the Work Item and excludes all Evidence plus every
+unselected Step. A Step unit also excludes the Work Item-wide `Next action`,
+which may already name a later Step; a whole-item unit retains it. The
+coordinator may not filter Decisions or add Evidence.
 
 The selector reads canonical files internally, emits no unrelated Work Item or
 Decision body, never truncates, and never falls back to raw files. Its default
