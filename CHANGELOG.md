@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.1 - 2026-09-20
+
+- Show Plan point and Decision pagination above and below each long list. Both
+  controls share the same page state, while only the lower status announces a
+  page change to assistive technology.
+
 ## v1.7.0 - 2026-09-20
 
 - Add deterministic dispatch-unit selection for one exact Step, adjacent Step

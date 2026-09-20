@@ -188,3 +188,45 @@ export const demoSnapshot: ProjectSnapshot = {
     },
   ],
 };
+
+export const paginationDemoSnapshot: ProjectSnapshot = {
+  ...demoSnapshot,
+  name: "Pagination demo",
+  plans: demoSnapshot.plans.map((plan) => plan.id !== "PLAN-0012" ? plan : {
+    ...plan,
+    work_items: [
+      ...plan.work_items,
+      ...Array.from({ length: 199 }, (_, index) => ({
+        id: `W-${String(index + 7).padStart(3, "0")}`,
+        title: `Pagination fixture ${index + 7}`,
+        status: "todo" as const,
+        depends_on: [],
+        blocked_by: [],
+        decisions: [],
+        outcome: "Keep enough representative Plan points available to verify pagination.",
+        acceptance: "The item appears on its expected page.",
+        steps: [],
+        evidence: [],
+        next_action: null,
+      })),
+    ],
+  }),
+  decisions: [
+    ...demoSnapshot.decisions,
+    ...Array.from({ length: 200 }, (_, index) => ({
+      id: `ADR-${String(index + 31).padStart(4, "0")}`,
+      title: `Pagination fixture ${index + 31}`,
+      status: "accepted" as const,
+      created: "2026-09-20",
+      accepted: "2026-09-20",
+      scope: "viewer/pagination",
+      supersedes: null,
+      superseded_by: null,
+      decision: "Keep this representative Decision available to verify pagination.",
+      problem: "Long Decision lists need reliable navigation.",
+      consequences: "The fixture spans several pages without changing production data.",
+      revisit_when: "The pagination test seam changes.",
+      source_path: `docs/decisions/${String(index + 31).padStart(4, "0")}-pagination-fixture.md`,
+    })),
+  ],
+};
