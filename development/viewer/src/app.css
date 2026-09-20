@@ -295,7 +295,9 @@ dd { margin: 0; font-size: 12px; line-height: 1.5; }
 .decision-item.proposed .decision-status { background: var(--status-paused); }
 .decision-item.superseded .decision-status, .decision-item.deprecated .decision-status, .decision-item.rejected .decision-status { background: var(--status-cancelled); }
 .inline-empty { margin: 24px; color: var(--muted-foreground); font-size: 14px; }
-.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 12px; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; color: var(--muted-foreground); font-size: 12px; }
+.pagination-top { margin-bottom: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.pagination-bottom { padding-top: 16px; border-top: 1px solid var(--border); }
 .pagination > span:first-child { margin-right: auto; }
 
 .status-pill { text-transform: none; }

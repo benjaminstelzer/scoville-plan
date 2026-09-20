@@ -15,9 +15,13 @@
   import XIcon from "@lucide/svelte/icons/x";
   import CircleIcon from "@lucide/svelte/icons/circle";
   import PlayIcon from "@lucide/svelte/icons/play";
-  import { demoSnapshot } from "./lib/demo";
+  import Pagination from "$lib/components/Pagination.svelte";
+  import { demoSnapshot, paginationDemoSnapshot } from "./lib/demo";
   import type { Decision, ProjectRegistry, ProjectSnapshot, SavedProject, WorkItem, WorkStatus } from "./lib/types";
-  const isDemo = import.meta.env.DEV && new URLSearchParams(window.location.search).has("demo");
+  const demoEnabled = import.meta.env.DEV || import.meta.env.VITE_DEMO === "true";
+  const demoMode = demoEnabled ? new URLSearchParams(window.location.search).get("demo") : null;
+  const isDemo = demoMode !== null;
+  const activeDemoSnapshot = demoMode === "pagination" ? paginationDemoSnapshot : demoSnapshot;
   const PAGE_SIZE = 100;
 
   let projects: SavedProject[] = [];
@@ -59,11 +63,11 @@
 
   onMount(() => {
     if (isDemo) {
-      projects = [{ id: "demo", name: demoSnapshot.name, path: demoSnapshot.root }];
+      projects = [{ id: "demo", name: activeDemoSnapshot.name, path: activeDemoSnapshot.root }];
       selectedId = "demo";
-      snapshot = demoSnapshot;
-      overviewEntries = [{ project: projects[0], snapshot: demoSnapshot, error: "" }];
-      selectedPlanId = demoSnapshot.active_plan ?? demoSnapshot.plans[0]?.id ?? "";
+      snapshot = activeDemoSnapshot;
+      overviewEntries = [{ project: projects[0], snapshot: activeDemoSnapshot, error: "" }];
+      selectedPlanId = activeDemoSnapshot.active_plan ?? activeDemoSnapshot.plans[0]?.id ?? "";
       return;
     }
 
@@ -166,8 +170,8 @@
     error = "";
     if (isDemo) {
       if (id === "demo") {
-        snapshot = demoSnapshot;
-        selectedPlanId = demoSnapshot.active_plan ?? demoSnapshot.plans[0]?.id ?? "";
+        snapshot = activeDemoSnapshot;
+        selectedPlanId = activeDemoSnapshot.active_plan ?? activeDemoSnapshot.plans[0]?.id ?? "";
       }
       return;
     }
@@ -542,6 +546,9 @@
           </div>
 
           <div class="work-list">
+            {#if visibleItems.length > PAGE_SIZE}
+              <Pagination itemLabel="Plan point" page={workPage} pageCount={workPageCount} pageSize={PAGE_SIZE} placement="top" total={visibleItems.length} onSelect={(page) => void selectPage("work", page)} />
+            {/if}
             {#each pagedItems as item, index (item.id)}
               <Collapsible.Root class="work-item {item.status}" open={openWorkItems.has(item.id)} onOpenChange={(open) => setWorkItemOpen(item.id, open)}>
                 <Collapsible.Trigger class="work-summary">
@@ -592,12 +599,7 @@
               <p class="inline-empty">No Plan points match this filter.</p>
             {/each}
             {#if visibleItems.length > PAGE_SIZE}
-              <nav class="pagination" aria-label="Plan point pages">
-                <span>{(workPage - 1) * PAGE_SIZE + 1}–{Math.min(workPage * PAGE_SIZE, visibleItems.length)} of {visibleItems.length}</span>
-                <Button size="sm" variant="outline" aria-label="Previous Plan point page" disabled={workPage === 1} onclick={() => void selectPage("work", workPage - 1)}>Previous</Button>
-                <span aria-live="polite" aria-atomic="true">Page {workPage} of {workPageCount}</span>
-                <Button size="sm" variant="outline" aria-label="Next Plan point page" disabled={workPage === workPageCount} onclick={() => void selectPage("work", workPage + 1)}>Next</Button>
-              </nav>
+              <Pagination itemLabel="Plan point" page={workPage} pageCount={workPageCount} pageSize={PAGE_SIZE} placement="bottom" total={visibleItems.length} onSelect={(page) => void selectPage("work", page)} />
             {/if}
           </div>
         </div>
@@ -613,6 +615,9 @@
           </div>
 
           <div class="decision-list">
+            {#if visibleDecisions.length > PAGE_SIZE}
+              <Pagination itemLabel="Decision" page={decisionPage} pageCount={decisionPageCount} pageSize={PAGE_SIZE} placement="top" total={visibleDecisions.length} onSelect={(page) => void selectPage("decision", page)} />
+            {/if}
             {#each pagedDecisions as decision (decision.id)}
               <Collapsible.Root class="decision-item {decision.status}" open={openDecisions.has(decision.id)} onOpenChange={(open) => setDecisionOpen(decision.id, open)}>
                 <Collapsible.Trigger class="decision-summary">
@@ -639,12 +644,7 @@
               <p class="inline-empty">No Decisions match this filter.</p>
             {/each}
             {#if visibleDecisions.length > PAGE_SIZE}
-              <nav class="pagination" aria-label="Decision pages">
-                <span>{(decisionPage - 1) * PAGE_SIZE + 1}–{Math.min(decisionPage * PAGE_SIZE, visibleDecisions.length)} of {visibleDecisions.length}</span>
-                <Button size="sm" variant="outline" aria-label="Previous Decision page" disabled={decisionPage === 1} onclick={() => void selectPage("decision", decisionPage - 1)}>Previous</Button>
-                <span aria-live="polite" aria-atomic="true">Page {decisionPage} of {decisionPageCount}</span>
-                <Button size="sm" variant="outline" aria-label="Next Decision page" disabled={decisionPage === decisionPageCount} onclick={() => void selectPage("decision", decisionPage + 1)}>Next</Button>
-              </nav>
+              <Pagination itemLabel="Decision" page={decisionPage} pageCount={decisionPageCount} pageSize={PAGE_SIZE} placement="bottom" total={visibleDecisions.length} onSelect={(page) => void selectPage("decision", page)} />
             {/if}
           </div>
         </div>
