@@ -48,12 +48,25 @@ Relevant neighboring owners:
 
 The private optional `scoville-workflow-codex` Skill may make Steps usable as
 later dispatch units without activating or loading that Workflow. Group each
-Step around one coherent outcome slice with comparable routing risk and
-reasoning demand. Separate a trivial text edit from a complex structural change;
+Step around one coherent outcome slice with comparable consequence and
+reasoning demand. Evaluate the complete expected execution and verification
+scope. Treat a bounded change needing no nontrivial local implementation or
+verification judgment as `ultra_low`; nontrivial local judgment with one known behavior owner,
+understood helpers, established checks, and no component or harness-boundary
+diagnosis as `low`; unresolved helper contracts, required local diagnostic
+discovery, interacting owners, harness-boundary helpers, integration diagnosis,
+or interpreted broader checks as at least `medium`; consequential
+changes to state, authorization, or integration contracts as `high`; and work
+beyond that consequence or complexity as `ultra_high`. Use these boundaries to
+separate Steps, but do not write the class. File count, generated metadata, and
+known test volume alone do not raise it. Separate a trivial text edit from a complex structural change;
 do not split code, UI, browser work, or other activities that share the same
 outcome, risk, authorization, and Acceptance boundary. A user-selected executor
 model or reasoning effort may be recorded only through the strict Step
-annotation in the native format; otherwise the Workflow chooses the model and reasoning effort for execution.
+annotation in the native format. Plan does not assign a route class. Preserve an
+existing route prefix and record one only when the user explicitly supplies it;
+the Workflow coordinator owns the current route, model, and reasoning choice at
+dispatch.
 
 Plan owns wording and fidelity of its native records. An explicit target
 language takes precedence. Otherwise preserve the language of an existing Plan,
@@ -230,9 +243,10 @@ immediate redirect still governs live execution.
   route, workspace, and Acceptance boundary. A changed Decision, external
   effect, materially higher risk, different route, or independently resumable
   result forces a new dispatch. A bundle adds no Plan field and changes no
-  authored order or Acceptance ownership. Give each Step a single routing class
-  when confidently known, using an optional
-  `[route: ultra_low|low|medium|high|ultra_high]` prefix. Record an explicit
+  authored order or Acceptance ownership. Do not assign a routing class while
+  planning. Preserve an existing `[route: ...]` prefix, or record one when the
+  user explicitly supplies it; the Workflow treats it as a minimum and owns the
+  final dispatch route. Record an explicit
   user-selected executor model or reasoning effort only through the optional
   Step execution annotation defined by P and W. When a still-`todo` Work Item
   has no Steps, add one behavior-complete annotated Step only if an explicit

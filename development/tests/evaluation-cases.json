@@ -492,6 +492,15 @@
       ]
     },
     {
+      "id": "workflow-coordinator-owns-route",
+      "given": "A new Workflow-ready Plan Step appears small, but its eventual execution may cross behavior-owner, harness, or integration boundaries that are not yet known.",
+      "expect": [
+        "Use the Workflow class boundaries to separate work that would need different routes, without assigning low, medium, high, or another class in Plan.",
+        "Preserve an existing or explicitly user-supplied route as a planned minimum rather than the final dispatch choice.",
+        "Leave current route, executor model, and reasoning selection to the Workflow coordinator at dispatch."
+      ]
+    },
+    {
       "id": "standalone-native-writing-owner",
       "given": "Create, rewrite, and audit native records with Plan alone, with Scribe installed, and with Scribe active for another segment.",
       "expect": [

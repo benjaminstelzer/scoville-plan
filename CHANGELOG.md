@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.7.4 - 2026-09-21
+
+- Give the Workflow coordinator sole ownership of route classification at
+  dispatch. Plan still separates materially different consequence and reasoning
+  boundaries with the Workflow's current class criteria, including unresolved
+  helper contracts and local diagnostic discovery, but no longer assigns route
+  classes while planning.
+- Preserve existing and explicitly user-supplied route prefixes as planned
+  minimums, while keeping route, executor model, and reasoning level separate.
+
+## v1.7.3 - 2026-09-20
+
+- Bind validator evidence to the exact complete profile bytes it inspected and
+  invalidate that evidence after relevant changes.
+- Let a complete successful validator run own its reported structural checks,
+  while retaining manual review for authorization, meaning, Acceptance,
+  Evidence, preserved history, and uncovered invariants.
+- Narrow neighboring-Skill guidance to the owners relevant to Plan records.
+
 ## v1.7.2 - 2026-09-20
 
 - Give Plan sole ownership of native record wording and define language
