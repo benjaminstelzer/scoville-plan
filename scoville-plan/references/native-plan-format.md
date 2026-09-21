@@ -145,9 +145,11 @@ Use unordered bullets only for equal-rank Goal or Non-goal facts, never for a
 required execution sequence.
 
 When a Plan is being shaped for later Scoville Workflow use, each Step may act
-as one subplan dispatch point. Keep materially different routing needs in
-separate Steps and optionally start the prose with one
-`[route: ultra_low|low|medium|high|ultra_high]` prefix. An explicitly selected
+as one subplan dispatch point. Keep materially different consequence or
+reasoning needs in separate Steps. Plan does not assign route classes, but it
+preserves an existing or explicitly user-supplied
+`[route: ultra_low|low|medium|high|ultra_high]` prefix. The prefix is a minimum
+for the Workflow coordinator's dispatch decision. An explicitly selected
 executor property may follow it in one
 `[execute: model=MODEL_ID; reasoning=LEVEL]` annotation. Either property may be
 omitted; when both are present, `model` comes first. Model IDs contain only

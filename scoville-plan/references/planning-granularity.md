@@ -77,20 +77,37 @@ not activate the Workflow, require it, or authorize execution.
 
 One Step is one subplan dispatch point. Keep its outcome slice, authorization,
 Acceptance cue, and expected reasoning demand coherent. Split Steps when their
-routing needs differ materially: for example, a simple text correction and a
+consequence or reasoning needs differ materially: for example, a simple text correction and a
 complex persistence redesign must not share one Step. Do not split merely
 because the same result needs code, UI, copy, installation, browser work, or
 live QA; those activities stay together when they share one risk and Acceptance
 boundary.
 
-When the routing class is confidently known, prefix the Step with exactly one
-of `[route: ultra_low]`, `[route: low]`, `[route: medium]`, `[route: high]`, or
-`[route: ultra_high]`. The route prefix records only the class, not a model or reasoning level.
-The Workflow configuration maps that class to execution settings. An explicit
-user choice of model or reasoning may be recorded separately in the existing
-`[execute: ...]` annotation defined by the native Plan format. Omit the prefix rather than
-inventing a class. The coordinator rechecks stale or newly changed risk at
-dispatch. Without Steps, the complete Work Item is one dispatch unit.
+Use the Workflow's route boundaries to decide whether expected work belongs in
+one Step. Evaluate the complete execution and verification scope. `Ultra_low`
+means a simple bounded change needing no nontrivial local implementation or
+verification judgment. `Low` requires nontrivial local judgment, one known
+behavior owner, understood helper contracts, established checks, and no
+diagnosis across component or test-harness boundaries. Interacting behavior
+owners, an unresolved helper contract, required local diagnostic discovery,
+helper or mock availability across a harness boundary, integration diagnosis,
+or broader checks whose results require interpretation need at least `medium`.
+Consequential changes to state, authorization, or integration
+contracts need `high`; mere involvement with those systems does not. Work whose
+consequence or complexity exceeds `high` needs `ultra_high`. Many files,
+generated metadata, or a known large test suite alone do not raise a class.
+Separate a Step when these factors would require a different class, but leave
+the class itself to the coordinator.
+
+Plan does not assign `ultra_low`, `low`, `medium`, `high`, or `ultra_high`.
+Preserve an existing route prefix. Record a new one only when the user
+explicitly supplies that class; it is a planned minimum, not the final dispatch
+choice. The Workflow coordinator classifies the complete current execution and
+verification scope, then chooses the route, model, and reasoning at dispatch.
+Those are three separate values. An explicit user choice of model or reasoning
+may be recorded separately in the existing `[execute: ...]` annotation defined
+by the native Plan format. Without Steps, the complete Work Item is one dispatch
+unit.
 
 Keep independently resumable outcomes as separate Work Items even when their
 routing class matches. Workflow-ready Steps remain subordinate sequence: they
@@ -111,11 +128,11 @@ For one UI behavior, a suitable Workflow-ready shape could be:
 
 ```text
 Steps:
-1. [route: ultra_low] Correct the approved button label and verify the exact copy.
-2. [route: medium] Implement and browser-check the responsive interaction across its affected component states.
+1. Correct the approved button label and verify the exact copy.
+2. Implement and browser-check the responsive interaction across its affected component states.
 ```
 
-The different routing demand justifies two Steps. The second Step keeps code,
+The different consequence and reasoning demand justifies two Steps. The second Step keeps code,
 UI, and browser validation together because they prove the same behavior.
 
 Dependencies express genuine boundary order. Keep subordinate sequence in

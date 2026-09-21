@@ -116,9 +116,13 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   completed or historical Plans or reread the entire active Plan without a
   concrete relevance reason. Refine assumptions, signatures, data models,
   contracts, paths, or checks that the relevant evidence made stale.
-- **Workflow-ready Steps.** When Scoville Workflow is available, optional Steps
-  can carry one routing class each, plus a strict execution annotation when the
-  user explicitly selects an executor model or reasoning level for that Step.
+- **Workflow-ready Steps.** When Scoville Workflow is available, Plan shapes
+  optional Steps but does not assign their route classes. It preserves an
+  existing or explicitly user-supplied route as a minimum. The coordinator owns
+  the final route, model, and reasoning choice at dispatch. A strict execution
+  annotation records a user-selected executor model or reasoning level. Plan
+  still uses the same consequence and reasoning boundaries to keep work that
+  would require different routes in separate Steps.
   A simple text edit and complex redesign stay separate, while code, UI, and
   browser checks for one result stay together. One Step remains one dispatch by
   default. An explicitly invoked Workflow can bundle adjacent Steps only under
