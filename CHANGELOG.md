@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.5 - 2026-09-21
+
+- Make Workflow-ready Steps expose discovery, interacting owners, cross-language
+  or component contracts, helpers, harnesses, generators, and interpreted checks
+  instead of describing only the small final edit.
+- Treat unknown low-eligibility facts as at least a `medium` Step boundary while
+  leaving final route ownership with the Workflow coordinator.
+
 ## v1.7.4 - 2026-09-21
 
 - Give the Workflow coordinator sole ownership of route classification at
