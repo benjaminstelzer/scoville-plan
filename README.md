@@ -122,7 +122,10 @@ Preserve existing customizations and ask before overwriting conflicting files. R
   the final route, model, and reasoning choice at dispatch. A strict execution
   annotation records a user-selected executor model or reasoning level. Plan
   still uses the same consequence and reasoning boundaries to keep work that
-  would require different routes in separate Steps.
+  would require different routes in separate Steps. It states discovery,
+  interacting owners, language or component boundaries, helpers, harnesses,
+  generators, and interpreted checks explicitly so a small final edit cannot
+  hide medium-complexity work from the coordinator.
   A simple text edit and complex redesign stay separate, while code, UI, and
   browser checks for one result stay together. One Step remains one dispatch by
   default. An explicitly invoked Workflow can bundle adjacent Steps only under

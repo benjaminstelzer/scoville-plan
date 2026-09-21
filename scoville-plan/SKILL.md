@@ -58,7 +58,10 @@ discovery, interacting owners, harness-boundary helpers, integration diagnosis,
 or interpreted broader checks as at least `medium`; consequential
 changes to state, authorization, or integration contracts as `high`; and work
 beyond that consequence or complexity as `ultra_high`. Use these boundaries to
-separate Steps, but do not write the class. File count, generated metadata, and
+separate Steps, but do not write the class. Treat every unknown low-eligibility
+fact as at least a `medium` boundary while shaping the Steps; never assume a
+single owner, known helper, mechanical check, or local scope when the Plan does
+not establish it. File count, generated metadata, and
 known test volume alone do not raise it. Separate a trivial text edit from a complex structural change;
 do not split code, UI, browser work, or other activities that share the same
 outcome, risk, authorization, and Acceptance boundary. A user-selected executor
@@ -301,6 +304,17 @@ When the owner is unknown, prefer bounded read-only discovery before starting
 the item, then refine its `todo` Steps with the observed path. If discovery must
 happen after start, keep its ownership criterion in the immutable Step and put
 the observed path in Evidence and the next concrete action. Never invent a path.
+
+Write each future Step from the mechanism the worker must perform, not only the
+small final edit it may produce. Name required search or inventory, every known
+language or component boundary, mirrored contract or interacting owner, helper,
+mock, harness, generator, and any validation whose result needs interpretation.
+If one of these facts is unknown, say what must be discovered instead of hiding
+it behind a simple verb. For example, write “inventory the PHP and JavaScript
+mirrors, identify each owner, update their reciprocal contract comments, and run
+the parity checks,” rather than only “add reciprocal comments.” Plan still does
+not assign the route; this wording gives the coordinator the facts needed to
+choose it safely.
 
 Write for a worker with lower reasoning and no hidden conversation context. The
 worker and reviewer must be able to identify the result, scope, applicable
