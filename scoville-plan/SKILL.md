@@ -44,9 +44,9 @@ Relevant neighboring owners:
 - `scoville-code-anti-ai-slop`: implementation scope, risk, and validation outside Plan records.
 - `scoville-scribe-anti-ai-slop`: non-Plan wording artifacts; it never owns native Plan records.
 - `scoville-handoff`: active-work transfer snapshots.
-- optional `scoville-workflow-codex`: dispatch of accepted Steps when explicitly active.
+- optional `scoville-workflow-for-codex`: dispatch of accepted Steps when explicitly active.
 
-The private optional `scoville-workflow-codex` Skill may make Steps usable as
+The optional `scoville-workflow-for-codex` Skill may make Steps usable as
 later dispatch units without activating or loading that Workflow. Group each
 Step around one coherent outcome slice with comparable consequence and
 reasoning demand. Evaluate the complete expected execution and verification

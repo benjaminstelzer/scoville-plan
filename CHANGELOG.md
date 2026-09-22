@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.6 - 2026-09-22
+
+- Use `scoville-workflow-for-codex` for optional Workflow dispatch integration.
+  Workflow is available as a Codex-only Beta inside Scoville Suite.
+- Keep the unchanged Plan Viewer v1.3.2 downloads available with this release.
+
 ## v1.7.5 - 2026-09-21
 
 - Make Workflow-ready Steps expose discovery, interacting owners, cross-language

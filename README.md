@@ -80,83 +80,27 @@ Install only the linked package for the focused option.
 
 ### Install the complete Scoville suite
 
-```text
-Install the complete Scoville Skill suite for all my projects. Fetch and install every exact package directory below:
-
-https://github.com/benjaminstelzer/scoville-brainstorm/tree/main/scoville-brainstorm
-https://github.com/benjaminstelzer/scoville-research/tree/main/scoville-research
-https://github.com/benjaminstelzer/scoville-code-anti-ai-slop/tree/main/scoville-code-anti-ai-slop
-https://github.com/benjaminstelzer/scoville-design-anti-ai-slop/tree/main/scoville-design-anti-ai-slop
-https://github.com/benjaminstelzer/scoville-ui-anti-ai-slop/tree/main/scoville-ui-anti-ai-slop
-https://github.com/benjaminstelzer/scoville-scribe-anti-ai-slop/tree/main/scoville-scribe-anti-ai-slop
-https://github.com/benjaminstelzer/scoville-plan/tree/main/scoville-plan
-https://github.com/benjaminstelzer/scoville-handoff/tree/main/scoville-handoff
-
-Preserve existing customizations and ask before overwriting conflicting files. Report every installed location and whether the host discovers each Skill.
-```
+Get the complete suite from the
+[Scoville Suite monorepo](https://github.com/benjaminstelzer/scoville-suite).
+Install its released Skill packages, not development templates.
 
 ## What it enforces
 
-- **One planning owner.** Existing repository instructions and records stay
-  authoritative.
-- **Compact worker-ready records.** State each necessary fact once, put equal-rank
-  facts in bullets, and write required execution order as numbered Steps. Each
-  known file appears directly in the Step that changes it. Plan remains usable
-  without Scribe.
-- **A Goal that stays current.** Goal owns the current target, its boundary,
-  and genuinely plan-wide constraints. Chronology, point-specific execution,
-  evidence, and the next move stay with their actual owners instead of growing
-  into an append-only preamble. Normalization moves a required fact only when
-  every affected worker can still reach it.
-- **Outcome-sized Work Items.** Separately resumable outcomes become items.
-  Implementation steps and checks remain steps or acceptance evidence.
-- **Pre-flight before start.** Before a `todo` item begins, compare it with the
-  current repository and evidence from completed dependencies or other directly
-  relevant completed items in the same active Plan. This check does not scan
-  completed or historical Plans or reread the entire active Plan without a
-  concrete relevance reason. Refine assumptions, signatures, data models,
-  contracts, paths, or checks that the relevant evidence made stale.
-- **Workflow-ready Steps.** When Scoville Workflow is available, Plan shapes
-  optional Steps but does not assign their route classes. It preserves an
-  existing or explicitly user-supplied route as a minimum. The coordinator owns
-  the final route, model, and reasoning choice at dispatch. A strict execution
-  annotation records a user-selected executor model or reasoning level. Plan
-  still uses the same consequence and reasoning boundaries to keep work that
-  would require different routes in separate Steps. It states discovery,
-  interacting owners, language or component boundaries, helpers, harnesses,
-  generators, and interpreted checks explicitly so a small final edit cannot
-  hide medium-complexity work from the coordinator.
-  A simple text edit and complex redesign stay separate, while code, UI, and
-  browser checks for one result stay together. One Step remains one dispatch by
-  default. An explicitly invoked Workflow can bundle adjacent Steps only under
-  an accepted Decision and only while outcome, owner, authorization, route,
-  effective executor pair, workspace, and Acceptance boundary remain the same.
-  The optional read-only selector can project that exact Step or range with all
-  referenced Decisions and without Evidence, other Steps, or the Work
-  Item-wide `Next action`; a Work Item without Steps remains one complete unit.
-- **One active item.** At most one Work Item is `in_progress` and it matches the
-  Plan's `current_item`.
-- **Durable deferred work.** Mid-task additions leave current work running,
-  batch compatible small changes into one queued item, and keep complex or
-  independently resumable changes separate. Visible Work Item title prefixes
-  preserve deferred anchors and explicit successor priority across sessions.
-  A paused item's live Next action preserves an explicitly requested return
-  after an immediate redirect. Explicit stops, redirects, and execution-changing
-  corrections still take effect immediately. Pure questions that require no
-  retained action create no Plan work.
-- **Non-recursive Plan maintenance.** Requests to add, remove, reorder, or clean
-  up Plan points change the records directly. Only a requested substantive
-  outcome becomes a Work Item; maintaining the Plan never becomes one itself.
-- **Evidence before completion.** Files and passing structure checks do not
-  substitute for the observed acceptance result.
-- **Explicit decisions.** Human choices are recorded without asking twice.
-  Inferred choices remain proposed rather than silently accepted.
-- **A real next action.** The Plan points to the first unperformed action and
-  becomes idle when final work is actually complete.
-- **No invented guarantees.** Direct Markdown/YAML edits are validated, but
-  never described as transactional or as behavioral proof.
+- **One planning owner.** Existing repository instructions and records stay authoritative.
+- **Records a worker can use.** Each fact has one owner. Goals describe the current target, Work Items describe resumable outcomes, and numbered Steps name the actual work.
+- **Check before starting.** Compare the next item with current sources and relevant completed work. Repair stale assumptions before executing them.
+- **One active item.** The Plan names the current work and its first unfinished action.
+- **Durable changes of direction.** Queue additions without losing current work. Preserve explicit stops, priorities and requested returns after a redirect.
+- **Evidence before completion.** A file and a green structure check do not prove that the requested result works.
+- **Explicit decisions.** Record human choices without asking twice. Keep inferred choices proposed until accepted.
+- **No planning for the sake of planning.** Editing the Plan changes its records directly. It does not create another Work Item to maintain them.
 
-The complete contract is in [SKILL.md](scoville-plan/SKILL.md).
+When Workflow is active, Steps expose the scope and boundaries needed for
+dispatch. The coordinator chooses the route. Plan can retain an explicit
+executor choice, but does not quietly turn a small-looking edit into low-risk work.
+
+The complete contract, including dispatch projections and direct-edit limits,
+is in [SKILL.md](scoville-plan/SKILL.md).
 
 ## How it works
 
@@ -193,23 +137,16 @@ instructions.
 Each Skill works independently. Combine only the concerns the task actually
 needs:
 
-- [Brainstorm](https://github.com/benjaminstelzer/scoville-brainstorm) explores
-  materially different mechanisms before selection.
-- [Research](https://github.com/benjaminstelzer/scoville-research) turns web,
-  GitHub, and scholarly evidence into a decision-ready, claim-traceable result.
-- [Code](https://github.com/benjaminstelzer/scoville-code-anti-ai-slop) owns
-  engineering scope, implementation, risk, and validation.
-- [Design](https://github.com/benjaminstelzer/scoville-design-anti-ai-slop) owns
-  visual definition, art direction, design systems, critique, and repair.
-- [UI](https://github.com/benjaminstelzer/scoville-ui-anti-ai-slop) owns
-  framework-aligned implementation, interface mechanics, accessibility, and
-  rendered evidence, with a standalone design fallback.
-- [Scribe](https://github.com/benjaminstelzer/scoville-scribe-anti-ai-slop) owns
-  wording, terminology, factual meaning, and source fidelity.
-- [Plan](https://github.com/benjaminstelzer/scoville-plan) owns durable Plans,
-  Work Items, Decisions, and lifecycle state.
-- [Handoff](https://github.com/benjaminstelzer/scoville-handoff) transfers active
-  work to another agent or session.
+- [Brainstorm](https://github.com/benjaminstelzer/scoville-brainstorm) explores materially different mechanisms before selection.
+- [Research](https://github.com/benjaminstelzer/scoville-research) turns web, GitHub, and scholarly evidence into a decision-ready, claim-traceable result.
+- [Code](https://github.com/benjaminstelzer/scoville-code-anti-ai-slop) owns engineering scope, implementation, risk, and validation.
+- [Design](https://github.com/benjaminstelzer/scoville-design-anti-ai-slop) owns visual definition, art direction, design systems, critique, and repair.
+- [UI](https://github.com/benjaminstelzer/scoville-ui-anti-ai-slop) owns framework-aligned implementation, interface mechanics, accessibility, and rendered evidence, with a standalone design fallback.
+- [WordPress UI Backend](https://github.com/benjaminstelzer/scoville-wordpress-ui-backend-anti-ai-slop) owns plugin-owned WordPress admin interfaces, platform components, spacing, accessibility and internationalization.
+- [Scribe](https://github.com/benjaminstelzer/scoville-scribe-anti-ai-slop) owns wording, terminology, factual meaning, and source fidelity.
+- [Plan](https://github.com/benjaminstelzer/scoville-plan) owns durable Plans, Work Items, Decisions, and lifecycle state.
+- [Handoff](https://github.com/benjaminstelzer/scoville-handoff) transfers active work to another agent or session.
+- [Workflow Codex](https://github.com/benjaminstelzer/scoville-suite) coordinates explicit Plan execution through native Codex project tasks.
 
 ## Sources
 
@@ -223,3 +160,4 @@ needs:
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
