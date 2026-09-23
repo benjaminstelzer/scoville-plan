@@ -28,14 +28,10 @@ ADR-0001:accept:<pre-mutation-sha256>
 ADR-0002:reject:<pre-mutation-sha256>
 ```
 
-Only when Python 3 or the bundled script is unavailable, use an already
-installed byte-exact SHA-256 primitive as the deterministic fallback. Validate
-the same date, unique IDs, authorized order, normalized root-contained relative
-paths, and regular non-symlink files; hash each file as raw bytes; construct the
-same UTF-8 payload with one LF after every line, including the last; then hash
-that payload. Record and compare the ordered IDs and per-file hashes before
-using the result. If no byte-exact primitive is available, stop instead of
-guessing a hash.
+If Python 3 is unavailable, load
+[decision-batch-without-python.md](decision-batch-without-python.md) for the
+byte-exact alternative. If Python is available but the helper fails, stop the
+batch and report its diagnostic.
 
 Member IDs are unique, each member lists itself, and every member carries the
 same identifier and exact member order. Preserve this metadata on later

@@ -46,7 +46,7 @@ Read both the process exit code and JSON `valid` field:
 | `0` | `true` | Complete inspection found no structural error. | Record only native structural validation; continue with independent behavioral acceptance evidence. |
 | `1` | `false` | Complete inspection found one or more contract errors. | Follow ordered diagnostics. Correct only unambiguous representation defects through the native editing route, then rerun. |
 | `2` | `null` | Root, path safety, access, I/O, or concurrent change prevented a complete inspection. | Resolve the stated inspection condition or report it. Do not claim the profile is structurally valid or edit around it. |
-| `3` | `null` | The validator itself failed unexpectedly. | Report the diagnostic and use manual inspection without claiming validator evidence. Debug the script only when that is the task. |
+| `3` | `null` | The validator itself failed unexpectedly. | Report the diagnostic and stop the structural-completion claim. Debug the script only when that is the task. |
 
 Each diagnostic names a stable `code`, severity, repository-relative file,
 best available line, record and field, expected and observed shape, safe
@@ -81,11 +81,10 @@ that depends on unavailable pre-mutation bytes.
 
 Bind validator evidence to the exact complete profile state it inspected.
 Changing a relevant file or dependency invalidates affected evidence. Before
-completion, validate the final state again or use the full manual structural
-fallback. Never reuse an old successful result for changed bytes.
+completion, validate the final state again. Never reuse an old successful
+result for changed bytes.
 
-If Python or the script is unavailable, do not install a dependency merely to
-run the check. Follow [native-editing.md](native-editing.md), inspect the same
-scoped format and graph invariants manually, and report `native structural
-inspection passed` only when actually observed. Never describe manual
-inspection as validator output.
+If Python is unavailable, load
+[profile-without-python.md](profile-without-python.md). Do not install a runtime
+merely to run the optional check. If Python is available but the bundled script
+is missing or fails, report the limitation without claiming structural success.

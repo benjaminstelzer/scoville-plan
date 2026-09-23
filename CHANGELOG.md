@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.7 - 2026-09-23
+
+- Document the no-Python dispatch-unit selection procedure for exact Step
+  ranges, dependency statuses, and complete referenced Decisions.
+- Name the optional Decision-batch helper and its byte-exact SHA-256 alternative
+  in compatibility requirements.
+
 ## v1.7.6 - 2026-09-22
 
 - Use `scoville-workflow-for-codex` for optional Workflow dispatch integration.

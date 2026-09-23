@@ -45,13 +45,11 @@ Preserve the full captured bytes for unchanged-content comparisons. Verify
 proposed and written structure completely when required; do not replace this
 with a grep result, a zero-length diff, or an old validator result.
 
-Without the optional validator, use shell searches, range reads, and byte/hash
-comparisons plus manual inspection of the required invariants. Expand to full
-records wherever those checks cannot establish structure or relation validity.
-Use full reads for full-content audits and relevant malformed-state diagnosis.
-If extraction boundaries or output completeness are uncertain, widen the read;
-never interpret truncated output as absence. This changes output scope, not
-format, history retention, concurrency checks, or the manual proof boundary.
+For a manual structural check when Python is unavailable, load
+[profile-without-python.md](profile-without-python.md). Use full reads for
+full-content audits and relevant malformed-state diagnosis. If extraction
+boundaries or output completeness are uncertain, widen the read; never
+interpret truncated output as absence.
 
 Reuse relevant Skill instructions while their contents remain available and
 their source identity is current. Reload missing contents even when a retained
@@ -108,12 +106,13 @@ authority.
 After writing, reread changed frontmatter and the complete affected Work Item
 or Decision blocks, inspect the complete scoped diff, and compare full resulting
 bytes with the prepared result so unexpected edits outside those blocks are
-not hidden. When the bundled read-only validator and Python are available, run
-it on that final unchanged state as described in
+not hidden. When Python is available, run the bundled read-only validator
+on that final unchanged state as described in
 [profile-validation.md](profile-validation.md). A complete successful run owns
 its reported structural invariants for those exact bytes, so do not repeat the
-same full structure matrix manually. Otherwise use the full manual structural
-fallback; never make an executable a dependency of this Skill. In both cases,
+same full structure matrix manually. Without Python, load
+[profile-without-python.md](profile-without-python.md); never make an
+executable a dependency of this Skill. In both cases,
 manually review authorization, meaning, Acceptance and Evidence sufficiency,
 preserved history and user changes, prepared versus written bytes, uncovered
 graph or lifecycle invariants, and changed prose under the compact-record rules.
