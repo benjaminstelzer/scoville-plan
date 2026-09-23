@@ -1,7 +1,7 @@
 ---
 name: scoville-plan
 description: Create, maintain, resume, audit, and hand off project Plans, Work Items, and Decision records stored in the repository. Edit their Markdown and YAML directly. Owns their concise writing and wording audits under its own writing rules. Scribe writing rules do not apply to these records. Use when a task invokes Scoville Plan, requests repository-owned planning or decision records, must survive interruption or compaction, works in a format-version-1 project, receives a new instruction while an active Plan is running, or asks to add, remove, reorder, or clean up Plan points. Apply Plan-record maintenance directly and never create a Work Item whose only outcome is maintaining the Plan. Do not use for a pure informational question that requires no retained action, a small contained task that needs no durable plan, or an explicit opt-out.
-compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no planning CLI, MCP server, database or network. Optional read-only selector and structural validator need Python 3. Developed for Codex and Claude Code; other hosts untested."
+compatibility: "Any Agent Skills host with read and write access to the repository's PROJECT_INDEX.md, docs/plans and docs/decisions. Direct Markdown and YAML edits only; requires no planning CLI, MCP server, database or network. Optional selector, structural validator and Decision-batch helper need Python 3; the batch has a byte-exact SHA-256 alternative. Developed for Codex and Claude Code; other hosts untested."
 ---
 
 # Scoville Plan
@@ -120,13 +120,13 @@ inside a Work Item uses the Work Item route even though its file is a Plan.
 | Rewrite Plan Goal or Non-goals | P, L, E |
 | Rewrite Work Item wording | P, W, E |
 | Rewrite Decision wording | D, P, E |
-| Validate after writes or diagnose a complete supported profile | Use V for validation: run its optional validator when available, otherwise use the manual inspection described there. Then load only the native reference needed for a reported diagnostic or correction |
+| Validate after writes or diagnose a complete supported profile | Use V for validation: run its optional validator when Python is available; load the manual inspection route only without Python. Then load only the native reference needed for a reported diagnostic or correction |
 
 For read-only, preload no format guides. If profile existence is unknown,
 list the root before canonical reads; never probe absent
-`PROJECT_INDEX.md`. When the bundled selector and Python 3 are available, use
-it for current-or-named Work Item selection through R; use R's bounded manual
-fallback when it is unavailable. For an explicitly requested new durable Plan, use the
+`PROJECT_INDEX.md`. When Python 3 is available, use the bundled selector for
+current-or-named Work Item selection through R; load R's bounded manual route
+only when Python is unavailable. For an explicitly requested new durable Plan, use the
 workspace as setup root, classify the whole profile, and initialize only if all
 three canonical paths are absent. Use an existing complete supported profile.
 If all three paths are absent and no durable Plan was requested, report that
@@ -339,11 +339,12 @@ After writing:
 
 1. reread changed frontmatter and complete affected Work Item or Decision blocks;
 2. inspect the scoped diff and check changed prose against the compact-record rules;
-3. when its script and Python are already available, run the optional validator
-   through V on the final unchanged multi-file state. Its successful result owns
-   only the structural invariants it reports for those exact bytes; any relevant
-   later change invalidates that evidence. Without a complete successful run,
-   perform and report the full manual structural inspection;
+3. when Python is available, run the optional validator through V on the final
+   unchanged multi-file state. Its successful result owns only the structural
+   invariants it reports for those exact bytes; any relevant later change
+   invalidates that evidence. If Python is unavailable, load V's manual
+   structural procedure and report its actual checks. A validator failure with
+   Python available remains a diagnostic, not a manual pass;
 4. manually check authorization, meaning, compact-record precision, Acceptance
    and Evidence sufficiency, preserved history and user changes, prepared versus
    written bytes, and every invariant the validator does not cover. Do not repeat
