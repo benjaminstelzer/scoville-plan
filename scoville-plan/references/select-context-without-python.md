@@ -26,7 +26,9 @@ exact Plan frontmatter, Goal and Non-goals; the requested unit ID and selected
 Work Item's heading, Status, Depends on, Blocked by, Decisions, Outcome and
 Acceptance lines, plus only the selected Step lines; direct dependency IDs
 with their Status lines; and every complete Decision referenced by the Work
-Item. For an item without Steps, also include Next action. Exclude Evidence,
-unselected Steps and Work Item-wide Next action from a Step unit. Resolve each
+Item. Include source_text as the exact selected Step lines or complete item
+block without Steps, normalized to LF with one final newline and no trailing
+separator blank lines. For an item without Steps, retain Evidence and Next
+action. Exclude unselected Steps and Work Item-wide Next action from Step units. Resolve each
 reference from canonical records. If a record, boundary or reference is missing
 or ambiguous, stop without supplying a partial dispatch context.
