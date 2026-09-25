@@ -56,6 +56,7 @@ class ParsedRecord:
     frontmatter: dict[str, str]
     raw_frontmatter: str
     body: str
+    newline: str = "\n"
 
 
 @dataclass(frozen=True)
@@ -94,15 +95,6 @@ def build_parser() -> argparse.ArgumentParser:
 def is_redirect(info: os.stat_result) -> bool:
     attributes = getattr(info, "st_file_attributes", 0)
     return stat.S_ISLNK(info.st_mode) or bool(attributes & REPARSE_POINT)
-
-
-def snapshot(info: os.stat_result) -> tuple[int, int, int, int, int]:
-    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
-
-
-def same_opened_file(path_info: os.stat_result, opened_info: os.stat_result) -> bool:
-    fields = 4 if sys.platform == "win32" else 5
-    return snapshot(path_info)[:fields] == snapshot(opened_info)[:fields]
 
 
 def resolve_root(value: str) -> Path:
@@ -195,7 +187,6 @@ def safe_directory_entries(root: Path, relative_value: str) -> list[str]:
         )
     try:
         names = sorted(entry.name for entry in os.scandir(directory))
-        after = os.lstat(directory)
     except OSError as error:
         raise SelectorError(
             "PATH_UNREADABLE",
@@ -203,13 +194,6 @@ def safe_directory_entries(root: Path, relative_value: str) -> list[str]:
             path=relative_value,
             exit_code=2,
         ) from error
-    if is_redirect(after) or snapshot(after) != snapshot(before):
-        raise SelectorError(
-            "FILE_CHANGED_DURING_READ",
-            "canonical directory changed during inspection",
-            path=relative_value,
-            exit_code=2,
-        )
     return names
 
 
@@ -220,7 +204,6 @@ def safe_read_text(root: Path, relative_value: str) -> str:
         raise SelectorError(
             "PATH_NOT_FILE", "canonical path must be a regular file", path=relative_value, exit_code=2
         )
-    before = snapshot(path_info)
     flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
     try:
         descriptor = os.open(candidate, flags)
@@ -233,7 +216,7 @@ def safe_read_text(root: Path, relative_value: str) -> str:
         ) from error
     try:
         opened = os.fstat(descriptor)
-        if is_redirect(opened) or not stat.S_ISREG(opened.st_mode) or not same_opened_file(path_info, opened):
+        if is_redirect(opened) or not stat.S_ISREG(opened.st_mode):
             raise SelectorError(
                 "FILE_CHANGED_DURING_READ",
                 "canonical file changed during inspection",
@@ -243,20 +226,6 @@ def safe_read_text(root: Path, relative_value: str) -> str:
         chunks: list[bytes] = []
         while chunk := os.read(descriptor, 1024 * 1024):
             chunks.append(chunk)
-        after_open = os.fstat(descriptor)
-        after_path = os.lstat(candidate)
-        if (
-            is_redirect(after_open)
-            or snapshot(after_open) != snapshot(opened)
-            or is_redirect(after_path)
-            or snapshot(after_path) != before
-        ):
-            raise SelectorError(
-                "FILE_CHANGED_DURING_READ",
-                "canonical file changed during inspection",
-                path=relative_value,
-                exit_code=2,
-            )
     except SelectorError:
         raise
     except OSError as error:
@@ -278,12 +247,14 @@ def safe_read_text(root: Path, relative_value: str) -> str:
         text = raw.decode("utf-8", errors="strict")
     except UnicodeDecodeError as error:
         raise SelectorError("FILE_UTF8_INVALID", "canonical file is not valid UTF-8", path=relative_value) from error
-    if "\r" in text:
-        raise SelectorError("FILE_LINE_ENDING_INVALID", "canonical files must use LF line endings", path=relative_value)
+    if "\r" in text.replace("\r\n", "") or ("\r\n" in text and "\n" in text.replace("\r\n", "")):
+        raise SelectorError("FILE_LINE_ENDING_INVALID", "canonical files must use consistent LF or CRLF line endings", path=relative_value)
     return text
 
 
 def parse_record(text: str, relative_path: str) -> ParsedRecord:
+    newline = "\r\n" if "\r\n" in text else "\n"
+    text = text.replace("\r\n", "\n")
     if not text.startswith("---\n"):
         raise SelectorError("FRONTMATTER_OPEN_MISSING", "record must start with frontmatter", path=relative_path)
     close = text.find("\n---\n", 4)
@@ -299,7 +270,7 @@ def parse_record(text: str, relative_path: str) -> ParsedRecord:
         if key in entries:
             raise SelectorError("FRONTMATTER_KEY_DUPLICATE", f"frontmatter key is repeated: {key}", path=relative_path)
         entries[key] = value
-    return ParsedRecord(entries, raw_frontmatter, text[close + 5 :])
+    return ParsedRecord(entries, raw_frontmatter.replace("\n", newline), text[close + 5 :], newline)
 
 
 def require_format_version(record: ParsedRecord, relative_path: str) -> None:
@@ -360,10 +331,11 @@ def single_field(block: str, name: str, relative_path: str) -> str:
             expected=1,
             observed=len(matches),
         )
-    return matches[0]
+    return matches[0].rstrip("\r")
 
 
 def parse_steps(block: str, relative_path: str) -> list[str]:
+    block = block.replace("\r\n", "\n")
     match = re.search(r"^Steps:\n(?P<body>.*?)(?=^Evidence: )", block, re.MULTILINE | re.DOTALL)
     if match is None:
         if re.search(r"^Steps:", block, re.MULTILINE):
@@ -426,6 +398,8 @@ def project_unit(
         "outcome": f"Outcome: {single_field(selected.block, 'Outcome', relative_path)}",
         "acceptance": f"Acceptance: {single_field(selected.block, 'Acceptance', relative_path)}",
         "steps": [steps[number - 1] for number in selected_numbers],
+        "source_text": ("\n".join(steps[number - 1] for number in selected_numbers) + "\n"
+                        if steps else selected.block.replace("\r\n", "\n").rstrip("\n") + "\n"),
     }
     if not steps:
         projection["next_action"] = f"Next action: {single_field(selected.block, 'Next action', relative_path)}"
@@ -474,8 +448,8 @@ def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict
         status = single_field(block, "Status", relative_path)
         dependencies = parse_inline_ids(single_field(block, "Depends on", relative_path), WORK_ID_RE, "Depends on", relative_path)
         decisions = parse_inline_ids(single_field(block, "Decisions", relative_path), DECISION_ID_RE, "Decisions", relative_path)
-        items[item_id] = WorkItem(item_id, block, status, dependencies, decisions)
-    return "## Goal\n" + goal_body, "## Non-goals\n" + non_goals_body, items
+        items[item_id] = WorkItem(item_id, block.replace("\n", record.newline), status, dependencies, decisions)
+    return ("## Goal\n" + goal_body).replace("\n", record.newline), ("## Non-goals\n" + non_goals_body).replace("\n", record.newline), items
 
 
 def select_context(

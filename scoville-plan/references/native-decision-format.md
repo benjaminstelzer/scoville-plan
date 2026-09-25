@@ -1,149 +1,92 @@
-# Native Decision format
+# Decisions
 
-Load this reference only when creating, changing, transitioning, or auditing a
-Decision in a Scoville Plan native profile with `format_version: 1`.
-
-## Contents
-
-- Files, IDs, and allocation
-- Decision profile
-- Links and lifecycle
-
-## Files, IDs, and allocation
-
-Store one UTF-8-without-BOM, LF-ended Decision in `docs/decisions/`. IDs match
-`ADR-[0-9]{4}`. Filenames use the numeric ID followed by a lowercase ASCII
-kebab-case subject, for example `0042-use-repository-native-files.md`.
-
-Allocate the highest valid Decision number plus one. Recheck the internal ID
-and filename immediately before creation, never overwrite a collision, and do
-not reuse an interior gap. A deleted highest proposal releases that provisional
-ID. `ADR-9999` exhausts the space.
-
-## Decision profile
-
-Use the required frontmatter keys in this order; add optional lifecycle keys
-only when their conditions apply. The example shows key order, including
-optional keys from different lifecycle states. It is not a valid new proposal
-to copy unchanged:
-
-```yaml
----
-format_version: 1
-id: ADR-0001
-status: proposed
-created: 2026-08-08
-accepted: 2026-08-08
-scope: project/storage
-supersedes: ADR-0000
-superseded_by: ADR-0002
-transition_batch: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-transition_batch_members: [ADR-0001, ADR-0002]
----
-```
-
-`format_version`, `id`, `status`, `created`, and `scope` are required. Scope is
-a non-empty slash-separated domain label whose segments match
-`[a-z0-9][a-z0-9-]*`; it is not a path. Status is `proposed`, `accepted`,
-`rejected`, `deprecated`, or `superseded`.
-
-Omit `accepted`, supersession keys, and transition-batch keys on a new
-proposal. Require `accepted` for `accepted`, `deprecated`, and `superseded`,
-and omit it for `proposed` and `rejected`. Dates use ISO `YYYY-MM-DD`; an
-acceptance date must not precede creation.
-
-After one H1 title, write these non-empty H2 sections in order:
+Use edit.md for safe edits and validation. Allocate the highest ADR number plus
+one, without interior reuse or collisions. Store `ADR-0074` in
+`docs/decisions/0074-subject.md`. A new proposal follows this template:
 
 ```text
-Decision
-Problem
-Drivers
-Considered alternatives
-Consequences
-Confirmation
-Revisit when
+---
+format_version: 1
+id: ADR-0074
+status: proposed
+created: 2026-09-25
+scope: project/concern
+---
+
+# Concrete choice
+
+## Decision
+
+Recommended result, or the explicit human choice.
+
+## Problem
+
+The unresolved need.
+
+## Drivers
+
+- Supplied or observed constraint.
+
+## Considered alternatives
+
+- Option: material tradeoff.
+
+## Consequences
+
+Benefits, costs and limits introduced by this choice.
+
+## Confirmation
+
+Checks that would verify the choice, not an assertion they already passed.
+
+## Revisit when
+
+Concrete reconsideration trigger.
 ```
 
-For the Decision title and section content, an explicit target language takes
-precedence. Otherwise preserve an existing Decision's language. A new Decision
-uses the associated Plan's language, or the user's request language if no Plan
-supplies one. Preserve the required section labels, frontmatter keys, status
-values, and technical identifiers.
-For a proposal, `Decision` states the recommended result before its rationale.
-For a choice already made explicitly by a human, it states that selected
-result. Separate observed or supplied constraints from the Skill's own
-recommendation. Name actual alternatives and their material tradeoffs; do not
-manufacture facts, approval, confirmation evidence, or certainty.
-`Confirmation` states how the choice can be verified, not that verification
-already happened.
+Keep each section's distinct information without invented alternatives or
+repeated rationale. New Decisions use the owning Plan's language or request
+language. Preserve an existing record's language unless explicitly changed.
 
-Give each section distinct compact content:
+## Links and transitions
 
-- `Decision`: state the selected or recommended choice once.
-- `Problem`: state the unresolved need in one sentence.
-- `Drivers`: use one bullet per supplied or observed constraint.
-- `Considered alternatives`: use one bullet per real option in the form
-  `Option: material tradeoff.`
-- `Consequences`: use separate bullets for new benefits, costs, and limits.
-- `Confirmation`: use numbered `1.`, `2.`, `3.` steps when verification order
-  matters; otherwise use compact bullets. Name known commands and files directly.
-- `Revisit when`: use one sentence or one bullet per concrete trigger.
+Work Item Decisions lists own incoming links. Link every affected todo item and
+no unrelated item, including for unresolved proposals. Started lists are immutable;
+report that limitation rather than changing history. Proposal status does not
+remove its links. Creating starts proposed; an already explicit human direction
+authorizes immediate acceptance without another question.
 
-Do not introduce a section with prose, restate the choice as rationale, repeat
-a driver as a consequence, or pad the record with invented alternatives or
-generic claims. Preserve causal links and material tradeoffs, but remove a
-sentence when its deletion changes no choice, review judgment, verification, or
-reconsideration trigger. A lower-reasoning reviewer must be able to compare the
-choice and alternatives without reconstructing omitted facts.
+Apply only explicitly authorized transitions:
 
-## Links and lifecycle
+| From | To |
+| --- | --- |
+| proposed | accepted or rejected |
+| accepted | deprecated or superseded |
+| deprecated | superseded |
 
-Work Item `Decisions` lists are the sole canonical Plan-to-Decision links.
-Decision frontmatter never stores incoming Plan links. Add a new proposal to
-every affected `todo` item and no unrelated item. Preserve the immutable list
-on items that have left `todo` and report that format-version-1 limitation.
-Proposal status never removes a link: a proposed or otherwise unresolved
-Decision links every mutable Work Item whose implementation, sequencing,
-Acceptance, or Evidence could change under a viable alternative. Do not link a
-Work Item when no such effect is established.
+Acceptance adds `accepted: YYYY-MM-DD` between created and scope. Deprecation
+retains it. Proposed/rejected omit it. Rejected and superseded are terminal.
+Use actual dates no earlier than creation. Generic content edits affect only
+proposals and preserve identity and lifecycle. Delete a proposal only after
+checking that no Work Item or Decision links to it.
 
-Creating a Decision always produces `proposed`. When the current user has
-already selected the direction or an applicable project instruction clearly
-records the human-selected direction, apply the accepted transition without
-asking for the same choice again. Edit or physically delete only a proposal;
-deletion requires no incoming Work Item reference. Never infer a lifecycle
-transition from implementation, ordinary documentation, source code,
-repository state, or silence. Apply these transitions only after the required
-explicit human choice:
+Supersession preserves both records: create the accepted replacement with
+`supersedes: ADR-0001` after scope, and set old status superseded with reciprocal
+`superseded_by: ADR-0002` after any supersedes. An authorized change to accepted
+or deprecated content uses this route, never an in-place rewrite. Replace links
+in affected todo items. If still-relevant started work would need a new link,
+stop that dependent change and report the immutable-record limit. Terminal
+historical links alone do not block replacement. Rejection in favor of another
+proposal is not supersession.
 
-- `proposed` to `accepted` or `rejected`;
-- `accepted` to `deprecated` or `superseded`; and
-- `deprecated` to `superseded`.
+## Existing batch metadata
 
-`rejected` and `superseded` are terminal. Acceptance records the authorized
-date; deprecation retains it. Supersession creates an accepted replacement,
-sets `supersedes` on the replacement and `superseded_by` on the old record, and
-preserves both files. Rejecting one proposal in favor of a separately authored
-choice creates no supersession link.
-
-A generic Decision update applies only to `proposed` and preserves ID, status,
-creation date, acceptance date, and supersession fields. Physically delete only
-an unreferenced proposal after checking every Work Item `Decisions` list and
-every Decision `supersedes` and `superseded_by` field. Once a Decision leaves
-`proposed`, preserve its ID, filename, authored rationale, and lifecycle
-metadata.
-
-Implement an explicitly authorized edit of an accepted or deprecated Decision
-as one supersession result, not an in-place rewrite. Every affected mutable Work
-Item must replace the old Decision ID explicitly. Block only an affected
-started or otherwise immutable Work Item whose still-relevant implementation,
-sequencing, Acceptance, or Evidence would have to adopt the replacement
-Decision. A terminal historical Work Item is not a blocked item merely because
-its unchanged Decision link remains as history. If a required replacement would
-edit an immutable Work Item, stop and report the format limitation rather than
-publishing an inconsistent replacement.
-
-For an explicitly authorized accept-or-reject batch, additionally load
-[native-decision-batches.md](native-decision-batches.md). Do not load that
-reference for creation, a single transition, or an audit unrelated to batch
-integrity.
+Write new accept/reject transitions individually and validate after each
+completed operation. Never create transition_batch or transition_batch_members.
+Preserve those fields when already present, including later lifecycle changes.
+Existing batch IDs are `batch-YYYYMMDD-N` (positive N) or 64 hexadecimal digits.
+Both fields occur together; members are existing unique ADR IDs, each lists
+itself, and every member has the same batch ID and complete ordered membership.
+Do not recompute historical hashes. The Viewer ignores these fields; validator
+and selector retain historical integrity checks. Without Python, General uses
+its manual profile reference for complete inspection.
