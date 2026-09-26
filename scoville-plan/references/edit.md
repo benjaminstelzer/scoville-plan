@@ -84,11 +84,12 @@ Step. See granularity only when boundaries need judgment.
 ## Evidence and Next action
 
 Evidence contains actual observations with precise artifact references, not
-expected results or a diary. Write compatible lists: `Evidence: [Tests passed]`.
-Entries have 1 to 200 Unicode characters without commas, brackets, control
-characters or leading/trailing whitespace. Use `[]` when nothing was observed.
-Updated readers also accept one-line plain text and consistent CRLF; preserve
-existing records without migration. New writes retain LF and list compatibility.
+expected results or a diary. Prefer one-line plain text, for example:
+`Evidence: tests/results.txt records passing Unicode cases, including brackets [x].`
+Keep it within the supported 200 characters; link a
+report for more detail. Commas and brackets within the text are allowed; do not
+start plain text with `[`. Use `[]` when nothing was observed. Preserve existing
+supported lists without migration. New writes retain LF.
 
 Next action names the first unfinished action. Once implementation exists, name
 the first unobserved test, build, browser check, review or evaluator check.

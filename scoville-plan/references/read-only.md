@@ -30,14 +30,17 @@ The success object contains exactly four top-level semantic areas:
 - `direct_dependencies`: only each direct dependency ID and its `Status` line;
 - `decisions`: the complete Decision records referenced by the selected item.
 
-Dispatch mode requires one exact Step or adjacent Step range when the Work Item
-has Steps. Without Steps, the Work Item itself is the unit. `source_text` is
+Dispatch mode accepts a complete Work Item, an exact Step or adjacent Step
+range. Scoville Workflow can group consecutive Steps in one worker while
+preserving their authored order. `source_text` is
 the unchanged selected single-line Step text, adjacent lines, or complete Work
 Item block, including its Evidence for a whole-item unit. Text uses UTF-8/LF
 and one final newline; trailing block-separator blank lines are excluded.
-Other structured fields supply parent context. All referenced Decisions remain
-present. Unselected Steps and Work Item-wide Next action are excluded for Step
-units. Never rewrite source_text. Do not insert dependency Evidence into it.
+context_text contains the complete parent Work Item once, for consumers that
+need its overall context while assigning only the selected unit. Other
+structured fields supply parent context. All referenced Decisions remain
+present. Unselected Steps and Work Item-wide Next action are excluded from source_text
+for Step units; they remain in context_text as background. Never rewrite source_text. Do not insert dependency Evidence into it.
 
 The selector reads canonical files internally, emits no unrelated Work Item or
 Decision body, never truncates, and never falls back to raw files. Its default

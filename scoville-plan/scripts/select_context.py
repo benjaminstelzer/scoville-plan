@@ -88,7 +88,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_MAX_OUTPUT_BYTES,
         help=f"Maximum UTF-8 success payload size; default {DEFAULT_MAX_OUTPUT_BYTES}.",
     )
-    parser.add_argument("--format", choices=("json",), required=True)
+    parser.add_argument("--format", choices=("json",), default="json")
     return parser
 
 
@@ -366,8 +366,6 @@ def project_unit(
     requested_step = unit_match.group("step")
     requested_first = unit_match.group("first")
     requested_last = unit_match.group("last")
-    if steps and requested_step is None and requested_first is None:
-        raise SelectorError("UNIT_STEP_REQUIRED", "a Work Item with Steps requires an exact Step or adjacent Step range")
     if not steps and (requested_step is not None or requested_first is not None):
         raise SelectorError("UNIT_HAS_NO_STEPS", "a Work Item without Steps is one complete dispatch unit")
     if requested_step is not None:
@@ -379,7 +377,7 @@ def project_unit(
             raise SelectorError("UNIT_RANGE_INVALID", "a Step range must contain at least two adjacent Steps")
         selected_numbers = list(range(first, last + 1))
     else:
-        selected_numbers = []
+        selected_numbers = list(range(1, len(steps) + 1))
     if any(number > len(steps) for number in selected_numbers):
         raise SelectorError(
             "UNIT_STEP_MISSING",
@@ -390,6 +388,7 @@ def project_unit(
     lines = selected.block.splitlines()
     projection: dict[str, object] = {
         "unit": unit,
+        "context_text": selected.block.replace("\r\n", "\n").rstrip("\n") + "\n",
         "header": lines[0],
         "status": f"Status: {single_field(selected.block, 'Status', relative_path)}",
         "depends_on": f"Depends on: {single_field(selected.block, 'Depends on', relative_path)}",
@@ -399,7 +398,7 @@ def project_unit(
         "acceptance": f"Acceptance: {single_field(selected.block, 'Acceptance', relative_path)}",
         "steps": [steps[number - 1] for number in selected_numbers],
         "source_text": ("\n".join(steps[number - 1] for number in selected_numbers) + "\n"
-                        if steps else selected.block.replace("\r\n", "\n").rstrip("\n") + "\n"),
+                        if requested_step is not None or requested_first is not None else selected.block.replace("\r\n", "\n").rstrip("\n") + "\n"),
     }
     if not steps:
         projection["next_action"] = f"Next action: {single_field(selected.block, 'Next action', relative_path)}"
