@@ -69,9 +69,11 @@ Preserve every other item. Validate the complete resulting profile.
 ## Complete or cancel a Plan
 
 When final current todo/in_progress work meets Acceptance and every other item
-is terminal, finish that item and the Plan together. Set status completed,
-remove current_item and set the index idle. Paused work must first resume.
-Do not create placeholder work to avoid idle.
+is terminal, prepare together: item `Status: done`, retained observed Evidence,
+empty Blocked by and no Next action; Plan `status: completed` without
+current_item; index `active_plan: null`. Validate the complete resulting profile
+through edit.md. Paused work must first resume. Do not create placeholder work
+to avoid idle.
 
 Cancel a draft only on explicit direction. An active Plan cannot be cancelled
 or completed with a standalone status edit: reconcile current work and index
