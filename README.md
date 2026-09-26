@@ -15,7 +15,7 @@ projects, not to turn a small reversible edit into paperwork.
 - Read the relevant Plan, Work Item and Decisions, then edit Markdown and YAML directly.
 - Check the next item against current sources before starting it. Keep one current item and an explicit next action.
 - Record evidence before completion and preserve accepted decisions and completed history.
-- Use optional read-only helpers for structural validation and selected-work projections. Records remain usable without them.
+- Validate the planning records and select the context needed for the current task.
 
 ## What it enforces
 
@@ -52,7 +52,7 @@ not lock files. Concurrent changes require reconciliation.
 Requires a frontier LLM from the Fable, Astra, SOL or Opus families, version 5.0
 or newer. This requirement is separate from the models actually tested.
 
-Any Agent Skills host with repository read/write access. Direct Markdown/YAML planning needs no service or network. Selector and validator need Python 3.10+. Manual alternatives load only without Python. Helper errors remain errors. Developed for Codex and Claude Code. Other hosts are untested.
+Any Agent Skills host with repository read/write access. Direct Markdown/YAML planning needs no service or network. Optional validation and selection helpers require Python 3.10+. Developed for Codex and Claude Code. Other hosts are untested.
 
 This Skill works on its own. Other Scoville Skills are optional and handle
 only their own concerns when available and applicable.
