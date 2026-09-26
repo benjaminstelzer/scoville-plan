@@ -1,36 +1,36 @@
 # Scoville Plan
 
-The name comes from the Scoville scale, which originally measured chili heat through dilution.
-Here, the heat is the direction another agent can recover: the goal, decisions, current state and next action.
-
 Work spread across conversations needs a durable record of the goal, decisions
 and next action. Scoville Plan keeps those facts in the repository, with Work
 Items that describe resumable outcomes and evidence required for completion.
 
 Use it for dependent work and long-running projects. It follows the project's
-existing planning owner and keeps small tasks proportionate.
+existing planning system and keeps small tasks proportionate.
+
+The name comes from the Scoville scale, which originally measured chili heat through dilution.
+Here, the heat is the direction another agent can recover: the goal, decisions, current state and next action.
 
 ## How it works
 
-- Use the repository's planning owner and relevant Plan, Work Items and Decisions.
+- Use the repository's existing planning system and relevant Plan, Work Items and Decisions.
 - Check current sources before starting the next item.
 - Edit Markdown and YAML records with an explicit next action.
 - Record evidence before completion, preserve accepted history and validate the records.
 
 ## What it enforces
 
-- **One planning owner.** Repository instructions and canonical records remain authoritative.
+- **Existing project records.** Follow the repository's planning rules and update its established records.
 - **Clear work units.** Goals name the target, Work Items define resumable outcomes, and ordered Steps describe the work.
 - **Current assumptions.** Check the next item against sources and completed work before execution.
 - **One active item.** Record current work and its first unfinished action.
-- **Durable direction.** Preserve additions, stops, priorities and requested returns after a redirect.
+- **Changes of direction.** Record new priorities, pauses and work the user wants to return to.
 - **Evidence before completion.** Record observed results that establish acceptance.
-- **Explicit decisions.** Save human choices; keep inferred choices proposed until accepted.
+- **Explicit decisions.** Record the user's decisions. Keep unconfirmed choices marked as proposals.
 - **Direct maintenance.** Update Plan records without creating extra work items for routine edits.
 
-Edit the records from one session at a time; concurrent changes require reconciliation.
+Edit the records from one session at a time. Concurrent changes must be reconciled.
 
-See [SKILL.md](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md) for the complete contract and editing limits.
+See [SKILL.md](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md) for the full instructions and editing limits.
 
 ## What it costs
 
@@ -39,12 +39,12 @@ See [SKILL.md](https://github.com/benjaminstelzer/scoville-plan/blob/main/scovil
 ## How it was developed
 
 - Real project records exposed the information needed to resume: active work, applicable decisions and remaining actions.
-- Project histories and targeted simulations informed the record format and checks, with retained evidence for instruction changes.
+- Project histories and targeted simulations informed the record format and validation checks.
 
 ## Compatibility
 
-Requires a frontier LLM from the Fable, Astra, SOL or Opus families, version 5.0
-or newer. This requirement is separate from the models actually tested.
+A current Fable, Astra, SOL or Opus model is recommended. Luna was also used
+in testing.
 
 Any Agent Skills host with repository read/write access. Direct Markdown/YAML planning needs no service or network. Optional validation and selection helpers require Python 3.10+. Developed for Codex and Claude Code. Other hosts are untested.
 
@@ -123,8 +123,7 @@ read-only desktop overview. Point it at a project containing
 `PROJECT_INDEX.md`, `docs/plans`, and `docs/decisions` to see the active Plan
 point, completed and upcoming work, paused, blocked, or cancelled steps, and
 the current and historical Decisions. It rereads visible projects every four
-seconds while the window is active, so edits made by an agent or editor appear
-without a second tracking system.
+seconds while the window is active, so changes made by an agent or editor appear automatically.
 
 [Download the current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
 for Windows x64, macOS Apple Silicon or Intel, and Linux x64. Windows offers a
@@ -140,8 +139,8 @@ Viewer never changes its repository.
 
 Plan uses `format_version: 1`. Evidence accepts plain text such as
 `Evidence: Tests A, B passed.` and bracketed lists. Files support LF or
-consistent CRLF line endings. Use matching current Skill and Viewer versions;
-older readers require bracketed Evidence lists and LF.
+consistent CRLF line endings. Use matching current Skill and Viewer versions.
+Older readers require bracketed Evidence lists and LF.
 
 ## Sources
 
