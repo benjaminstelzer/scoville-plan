@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.1 - 2026-09-26
+
+- Name an unresolved blocking decision before the concrete next action it prevents.
+- Complete a final Work Item, Plan and active index together with retained evidence and full profile validation.
+
 ## v1.9.0 - 2026-09-25
 
 - Select consecutive Step groups with the complete Work Item as context and an explicit assigned range.

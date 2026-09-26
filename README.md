@@ -32,10 +32,8 @@ projects, not to turn a small reversible edit into paperwork.
 
 - The complete contract, including dispatch projections and direct-edit limits, is in [SKILL.md](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md).
 
-Run one task to completion before editing its files or changing model settings
-elsewhere. Plan assumes this single-run workflow. It does not lock files or
-promise conflict-free recovery after concurrent changes. Routine edits need
-no model-profile selection or hash receipts.
+Let the current run finish before editing the same records elsewhere. Plan does
+not lock files. Concurrent changes require reconciliation.
 
 ## What it costs
 
@@ -54,7 +52,7 @@ no model-profile selection or hash receipts.
 Requires a frontier LLM from the Fable, Astra, SOL or Opus families, version 5.0
 or newer. This requirement is separate from the models actually tested.
 
-Any Agent Skills host with repository read/write access. Direct Markdown/YAML planning; no service or network required. Selector and validator need Python 3.10+. Manual alternatives load only without Python; helper errors remain errors. Developed for Codex and Claude Code; other hosts untested.
+Any Agent Skills host with repository read/write access. Direct Markdown/YAML planning needs no service or network. Selector and validator need Python 3.10+. Manual alternatives load only without Python. Helper errors remain errors. Developed for Codex and Claude Code. Other hosts are untested.
 
 This Skill works on its own. Other Scoville Skills are optional and handle
 only their own concerns when available and applicable.
@@ -94,13 +92,14 @@ Create a detailed repository-owned implementation plan for the billing migration
 ```
 
 State the outcome, acceptance criteria and next action directly in the Plan.
-No model-specific writing profile or profile resolver is needed.
 
 ### Set reasoning for a Step
 
-Plan does not choose a model or reasoning level on its own. Without an explicit
-instruction, Workflow assesses the Step and uses the configured model pair for
-its route, falling back to the Skill defaults.
+Plan does not choose a model or reasoning level on its own. When using Scoville
+Workflow for Codex from the Codex suite, you can retain an explicit model or
+reasoning choice on a Step. Plan itself does not dispatch work. Without an
+explicit choice, Workflow assesses the Step and uses the configured pair for
+its route. Scoville Setup displays or saves those project settings.
 
 You can request a reasoning level for one Step:
 
@@ -136,7 +135,7 @@ without a second tracking system.
 
 [Download the current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
 for Windows x64, macOS Apple Silicon or Intel, and Linux x64. Windows offers a
-portable EXE and installers; macOS offers DMGs and zipped apps; Linux offers a
+portable EXE and installers. macOS offers DMGs and zipped apps. Linux offers a
 portable binary, AppImage, DEB, and RPM packages.
 
 The saved project list is one `scoville-plan-viewer.xml` file beside a portable
@@ -149,7 +148,7 @@ Viewer never changes its repository.
 Existing format-version-1 Plans need no migration. Updated readers also accept
 consistent CRLF and plain text such as `Evidence: Tests A, B passed.` No quoting
 or escaping is needed. Existing bracketed lists keep their meaning. Update the
-Skill and Viewer before using the new forms; older readers may reject them.
+Skill and Viewer before using the new forms. Older readers may reject them.
 Keep legacy Evidence lists and LF when working with older readers.
 
 ## Sources

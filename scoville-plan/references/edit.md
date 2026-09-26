@@ -91,8 +91,10 @@ report for more detail. Commas and brackets within the text are allowed; do not
 start plain text with `[`. Use `[]` when nothing was observed. Preserve existing
 supported lists without migration. New writes retain LF.
 
-Next action names the first unfinished action. Once implementation exists, name
-the first unobserved test, build, browser check, review or evaluator check.
+Next action names the first unfinished action. If a material decision blocks it,
+name that decision first and retain the concrete action to resume afterward.
+Otherwise, once implementation exists, name the first unobserved test, build,
+browser check, review or evaluator check.
 Changing it alone changes no other field. Resolve only a named blocker, with
 observed evidence and a new next action; adding a blocker also updates that action.
 
