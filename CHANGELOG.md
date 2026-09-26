@@ -2,6 +2,7 @@
 
 ## v1.9.0 - 2026-09-25
 
+- Select consecutive Step groups with the complete Work Item as context and an explicit assigned range.
 - Write plans directly without model-specific writing profiles or hash-based edit guards.
 - Ship Plan Viewer v1.3.3 with plain-text Evidence and CRLF support. Keep writing legacy Evidence lists and LF for installed older Viewers.
 - Use a Work Item template and one editing reference for ordinary Plan maintenance. Validate each completed write and preserve manual checks when Python is unavailable in General.
