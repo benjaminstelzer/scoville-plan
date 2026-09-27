@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.3 - 2026-09-27
+
+- Report exact Evidence limits and invalid characters with concrete correction steps. Explain valid Decision scope spelling.
+- Keep Plans and Decisions focused on execution-relevant facts, constraints and reasons.
+
 ## v1.9.2 - 2026-09-27
 
 - Add accepted Decisions and make verified formal corrections to started Work Items without replacing them.
