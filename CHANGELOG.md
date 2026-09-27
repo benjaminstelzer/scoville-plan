@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.2 - 2026-09-27
+
+- Add accepted Decisions and make verified formal corrections to started Work Items without replacing them.
+- Keep related test repairs in the existing scope and link concise evidence to retained reports.
+
 ## v1.9.1 - 2026-09-26
 
 - Name an unresolved blocking decision before the concrete next action it prevents.
