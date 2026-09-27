@@ -46,11 +46,19 @@ unchanged instructions; no routine saved copies or byte receipts are required.
 | Work Item status | Permitted changes |
 | --- | --- |
 | todo in draft/active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
-| in_progress or paused | Status, Blocked by, Evidence and Next action only |
+| in_progress or paused | Status, Blocked by, Evidence and Next action; bounded amendments below |
 | done or cancelled | Retained history; no routine edits or state transitions |
 
-IDs never change. Started title, dependencies, Decisions, Outcome, Acceptance,
-Steps and position stay immutable. Paused work resumes to in_progress, never
+IDs never change. Preserve started scope, dependencies, order and execution
+history. A started item may add a relevant accepted Decision, retaining older
+links as history. It may correct a stale path, version reference or other purely
+formal wording only when evidence shows unchanged behavior, compatibility,
+data, authority and verification scope. Retain the old wording and reason in
+one referenced note or existing Git history. A changed expected result or weaker
+Acceptance is material, not a formal correction; obtain the user's decision
+before dependent work and record it in the existing Decision system. Do not
+create a replacement Work Item merely to add a Decision or fix formal wording.
+Other started fields remain fixed. Paused work resumes to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
 An explicit user choice may replace only the execution annotation of a named
 unperformed Step after start, preserving its action, route and execution history.
@@ -80,16 +88,24 @@ and checks that need interpretation. Keep all context needed without chat histor
 Preserve explicit route/execute annotations; Plan never infers them. For a todo
 item without Steps, an explicit executor choice may add one coherent annotated
 Step. See granularity only when boundaries need judgment.
+Describe behavioral contracts in Acceptance. Pin a version or count only when
+that exact value is itself required; record the tested candidate in Evidence.
+Fix test or fixture drift within the existing outcome when it preserves scope
+and Acceptance. A separate owner or independently acceptable result warrants a
+new item; each failed check does not.
 
 ## Evidence and Next action
 
-Evidence contains actual observations with precise artifact references, not
-expected results or a diary. Prefer one-line plain text, for example:
+Evidence contains the observed result, decisive report reference and any open
+limit or relevant commit, not expected results or a diary. Task IDs and attempts
+belong in local run records. Prefer one-line plain text, for example:
 `Evidence: tests/results.txt records passing Unicode cases, including brackets [x].`
 Keep it within the supported 200 characters; link a
 report for more detail. Commas and brackets within the text are allowed; do not
 start plain text with `[`. Use `[]` when nothing was observed. Preserve existing
-supported lists without migration. New writes retain LF.
+supported lists without routine migration. When cleanup is requested, preserve
+the full original Evidence in an accessible report before replacing it with a
+short result and link; preserve statuses and acceptance history. New writes retain LF.
 
 Next action names the first unfinished action. If a material decision blocks it,
 name that decision first and retain the concrete action to resume afterward.

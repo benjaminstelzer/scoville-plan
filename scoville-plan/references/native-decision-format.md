@@ -51,8 +51,10 @@ language. Preserve an existing record's language unless explicitly changed.
 ## Links and transitions
 
 Work Item Decisions lists own incoming links. Link every affected todo item and
-no unrelated item, including for unresolved proposals. Started lists are immutable;
-report that limitation rather than changing history. Proposal status does not
+no unrelated item, including for unresolved proposals. Started items may append
+a relevant accepted Decision under edit.md while retaining earlier links. An
+unresolved proposal affecting started work belongs in its Next action until
+resolved; it blocks only dependent work. Proposal status does not
 remove its links. Creating starts proposed; an already explicit human direction
 authorizes immediate acceptance without another question.
 
@@ -74,8 +76,8 @@ Supersession preserves both records: create the accepted replacement with
 `supersedes: ADR-0001` after scope, and set old status superseded with reciprocal
 `superseded_by: ADR-0002` after any supersedes. An authorized change to accepted
 or deprecated content uses this route, never an in-place rewrite. Replace links
-in affected todo items. If still-relevant started work would need a new link,
-stop that dependent change and report the immutable-record limit. Terminal
+in affected todo items. Append the accepted replacement to affected started
+items, preserving the older link as history and explaining the change. Terminal
 historical links alone do not block replacement. Rejection in favor of another
 proposal is not supersession.
 

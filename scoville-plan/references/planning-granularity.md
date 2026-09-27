@@ -6,6 +6,9 @@
 - Keep implementation, tests, review and documentation together when they prove
   the same behavior. Make them separate items only for independently requested
   outcomes; file count and activity names do not define boundaries.
+- Keep prerequisite test and fixture corrections with that outcome when they
+  preserve its scope and Acceptance. Group repairs with a common cause; do not
+  create a Work Item for every failure or formal metadata change.
 - Use numbered Steps for ordered behavior-complete units within an item. Keep
   necessary intermediate actions inside their unit, not as extra dispatches.
   Put prerequisites and canonical-owner changes before dependent consumers.
