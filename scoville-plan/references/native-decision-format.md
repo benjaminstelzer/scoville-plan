@@ -2,7 +2,8 @@
 
 Use edit.md for safe edits and validation. Allocate the highest ADR number plus
 one, without interior reuse or collisions. Store `ADR-0074` in
-`docs/decisions/0074-subject.md`. A new proposal follows this template:
+`docs/decisions/0074-subject.md`. Use a lowercase slash-separated domain label
+for `scope`, such as `product/import-pricing`. A new proposal follows this template:
 
 ```text
 ---
@@ -45,7 +46,9 @@ Concrete reconsideration trigger.
 ```
 
 Keep each section's distinct information without invented alternatives or
-repeated rationale. New Decisions use the owning Plan's language or request
+repeated rationale. Keep reasons and tradeoffs only where they explain the
+choice, constrain implementation or determine when to revisit it; omit the
+discussion history. New Decisions use the owning Plan's language or request
 language. Preserve an existing record's language unless explicitly changed.
 
 ## Links and transitions

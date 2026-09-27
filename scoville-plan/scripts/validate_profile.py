@@ -1207,21 +1207,31 @@ class Validator:
                         observed=blocker,
                     )
             for entry in evidence:
-                invalid = (
-                    len(entry) > 200
-                    or entry != entry.strip()
-                    or any(character in entry for character in ("\r\n" if not fields.get("Evidence", "").startswith("[") else ",[]\r\n"))
-                    or any(ord(character) < 32 or ord(character) == 127 for character in entry)
-                )
-                if invalid:
+                problems: list[str] = []
+                fixes: list[str] = []
+                if len(entry) > 200:
+                    problems.append(f"Evidence entry has {len(entry)} characters; maximum is 200")
+                    fixes.append("Shorten this entry to at most 200 characters; preserve the observed result and decisive report reference, moving needed detail into that report")
+                if entry != entry.strip():
+                    problems.append("Evidence entry has leading or trailing whitespace")
+                    fixes.append("Remove only leading and trailing whitespace")
+                forbidden = {c for c in entry if ord(c) < 32 or ord(c) == 127}
+                if fields.get("Evidence", "").startswith("["):
+                    forbidden.update(c for c in entry if c in ",[]")
+                if forbidden:
+                    names = ", ".join(f"U+{ord(c):04X}" for c in sorted(forbidden))
+                    problems.append(f"Evidence entry contains forbidden characters: {names}")
+                    fixes.append("Replace control characters with readable single-line text; for literal commas or brackets use plain-text Evidence without enclosing list brackets")
+                if problems:
                     self.add(
                         "WORK_EVIDENCE_INVALID",
                         parsed.logical_path,
-                        "An Evidence entry violates the native scalar-value shape.",
-                        "Correct only the representation of observed evidence; never invent or strengthen evidence.",
+                        "; ".join(problems) + ".",
+                        ". ".join(fixes) + ". Do not invent evidence or remove an unresolved limitation.",
                         line=field_lines.get("Evidence"),
                         record=record,
                         field_name="Evidence",
+                        expected="at most 200 characters; single-line text without outer whitespace or control characters; list entries also exclude commas and brackets",
                         observed=entry,
                     )
             for text_field in ("Outcome", "Acceptance"):
@@ -1590,7 +1600,7 @@ class Validator:
                 "DECISION_SCOPE_INVALID",
                 logical,
                 "The Decision scope is not a canonical slash-separated domain label.",
-                "Correct only the representation of the known scope; do not broaden it.",
+                "Use lowercase letters a-z, digits and hyphens in each nonempty segment, separated by single slashes; each segment starts with a letter or digit (example: product/import-pricing). Correct spelling/case only; preserve the intended scope.",
                 line=parsed.key_lines.get("scope"),
                 record=record,
                 field_name="scope",

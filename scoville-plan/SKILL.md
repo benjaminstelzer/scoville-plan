@@ -25,6 +25,13 @@ Plan owns its records' wording and lifecycle. It does not start Workflow or
 choose dispatch routes. Run one editor at a time; do not change affected files
 or model settings concurrently. Reads and Skill upgrades require no migration.
 
+Keep Plans, Work Items and Decisions as short as possible and only as long as
+necessary. Necessary information enables correct execution, verification or
+continuation without hidden context: the outcome, binding constraints,
+dependencies, acceptance, relevant decision reasons and current evidence limits.
+Omit repetition and process history that no longer affects the work. Preserve
+required historical records under their lifecycle rules, not as repeated context.
+
 ## Authority and evidence
 
 1. Follow system/safety and explicit user instructions, repository rules, then
