@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.4 - 2026-09-28
+
+- Split unfinished work in a started Step into ordered Steps while preserving scope, acceptance criteria and completed evidence.
+- Keep unresolved Decisions in a started item's next action until accepted, without changing its Decision links prematurely.
+
 ## v1.9.3 - 2026-09-27
 
 - Report exact Evidence limits and invalid characters with concrete correction steps. Explain valid Decision scope spelling.

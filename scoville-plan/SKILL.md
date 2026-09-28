@@ -44,7 +44,9 @@ required historical records under their lifecycle rules, not as repeated context
    Already authorized directions need no repeated approval.
 4. Record explicit human choices as accepted Decisions. Unresolved material
    choices become proposals; report alternatives, tradeoffs and effect, and
-   ask only before dependent work. Link affected mutable Work Items.
+   ask only before dependent work. Link proposals to affected todo items; for
+   started items name the proposal in Next action until accepted. Accepted
+   Decisions may be linked to affected started items.
 5. At work start inventory Decision frontmatter and read relevant proposals
    (all proposals for a full audit). Preserve unresolved choices at handoff.
 6. Mark done only after observing every Acceptance criterion and retaining its
