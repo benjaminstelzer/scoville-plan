@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.5 - 2026-09-28
+
+- Clarify the README presentation and keep the name explanation once per package.
+
 ## v1.9.4 - 2026-09-28
 
 - Split unfinished work in a started Step into ordered Steps while preserving scope, acceptance criteria and completed evidence.
