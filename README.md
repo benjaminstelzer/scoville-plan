@@ -7,7 +7,6 @@ Items that describe resumable outcomes and evidence required for completion.
 Use it for dependent work and long-running projects. It follows the project's
 existing planning system and keeps small tasks proportionate.
 
-The name comes from the Scoville scale, which originally measured chili heat through dilution.
 Here, the heat is the direction another agent can recover: the goal, decisions, current state and next action.
 
 ## How it works
@@ -141,6 +140,8 @@ Plan uses `format_version: 1`. Evidence accepts plain text such as
 `Evidence: Tests A, B passed.` and bracketed lists. Files support LF or
 consistent CRLF line endings. Use matching current Skill and Viewer versions.
 Older readers require bracketed Evidence lists and LF.
+
+The name comes from the Scoville scale, which originally measured chili heat through dilution.
 
 ## Sources
 
