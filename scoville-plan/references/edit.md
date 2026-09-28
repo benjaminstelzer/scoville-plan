@@ -58,6 +58,10 @@ one referenced note or existing Git history. A changed expected result or weaker
 Acceptance is material, not a formal correction; obtain the user's decision
 before dependent work and record it in the existing Decision system. Do not
 create a replacement Work Item merely to add a Decision or fix formal wording.
+Remaining work in a started Step or group may be split into consecutive Steps
+in the same Work Item without changing its Outcome, Acceptance, constraints or
+authored order. Preserve completed parts and their Evidence, and update affected
+Step references so pending assignments still identify the remaining work.
 Other started fields remain fixed. Paused work resumes to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
 An explicit user choice may replace only the execution annotation of a named
