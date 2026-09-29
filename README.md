@@ -80,10 +80,6 @@ Planning in plain Markdown and YAML needs no service and no network. The
 optional validation and selection helpers need Python 3.10+. Developed for
 Codex and Claude Code. Other hosts haven't been tested.
 
-
-
-It works on its own. The other Scoville Skills are optional.
-
 This Skill works independently. Other Scoville Skills are optional.
 
 ## Install
