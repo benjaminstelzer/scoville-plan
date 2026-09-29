@@ -1,8 +1,9 @@
 # Changelog
 
-## v1.9.5 - 2026-09-28
+## v1.10.0 - 2026-09-29
 
-- Clarify the README presentation and keep the name explanation once per package.
+- Continue explicitly requested Plan execution through eligible work while preserving recorded stops, priority conflicts and unresolved Decisions.
+- Load the named manual procedures only when Python is unavailable in the general edition. Codex uses the packaged helpers without manual fallbacks.
 
 ## v1.9.4 - 2026-09-28
 

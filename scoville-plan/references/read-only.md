@@ -53,10 +53,7 @@ This projection does not replace every read operation. Inventory Decision
 frontmatter and load relevant proposals separately, or all for a full audit. Read relevant dependency
 Evidence, bounded graph state, queued or paused return state, and complete
 relevant Work Items separately when the operation requires them. Keep those
-reads bounded and never widen the selector response. If Python 3 is unavailable,
-load [select-context-without-python.md](select-context-without-python.md) only
-for current-or-named recovery or manual unit selection; do not install a runtime. If Python is available but
-the helper fails, report its diagnostic and do not invent partial context.
+reads bounded and never widen the selector response. Use the profile-specific Runtime helpers rule in SKILL.md when Python is unavailable. A helper failure stops selection; do not invent partial context.
 
 ## Read state outside the selector
 

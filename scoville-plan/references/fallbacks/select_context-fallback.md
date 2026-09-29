@@ -1,3 +1,4 @@
+<!-- helper-fallback: scripts/select_context.py -->
 # Select Work Item context without Python
 
 Use this route only when Python 3 is unavailable. First read `PROJECT_INDEX.md`
@@ -21,7 +22,7 @@ matching active Plan and one matching Work Item. If the item has Steps, require
 `W-NNN/step-N` or `W-NNN/steps-N-M` with an existing Step or an ascending
 adjacent range of at least two Steps. Without Steps, require `W-NNN` alone.
 
-Return the same four semantic areas described in [read-only.md](read-only.md):
+Return the same four semantic areas described in [read-only.md](../read-only.md):
 exact Plan frontmatter, Goal and Non-goals; the requested unit ID and selected
 Work Item's heading, Status, Depends on, Blocked by, Decisions, Outcome and
 Acceptance lines, plus only the selected Step lines; direct dependency IDs

@@ -1,11 +1,28 @@
 # Scoville Plan
 
-Work spread across conversations needs a durable record of the goal, decisions
-and next action. Scoville Plan keeps those facts in the repository, with Work
-Items that describe resumable outcomes and evidence required for completion.
+Before an agent starts implementing, it should be clear what it is supposed to
+achieve and how the result will be checked. A Plan makes the goal, dependencies
+and acceptance criteria explicit. That matters in AI-assisted software
+engineering, especially when the work spans several conversations.
 
-Use it for dependent work and long-running projects. It follows the project's
-existing planning system and keeps small tasks proportionate.
+Scoville Plan keeps those facts in the repository: Work Items, relevant
+Decisions, accepted results and the next action. The next agent can pick up the
+work from there. You can see what is finished, why a choice was made and what
+still needs checking, without piecing it together from an entire chat.
+
+For substantial work, the Plan deserves substantial attention before execution.
+Clarify requirements, check dependencies and get independent feedback, for
+example through Scoville Ask. Revise the Plan until the material questions are
+settled. Complex work may need several rounds of review and changes before
+Scoville Workflow starts implementing it. Its coordination overhead makes sense
+when the size and dependencies justify it. Good planning is a substantial part
+of software engineering. AI helps with the work, while goals, architecture and
+tradeoffs still need informed judgment.
+
+When implementation shows that an assumption was wrong, update the Plan. Its
+job is to preserve direction while the work develops. Use it for dependent work
+and long-term maintenance, within the project's existing planning system. Keep
+small tasks small. A large Plan for a contained fix only adds work.
 
 Here, the heat is the direction another agent can recover: the goal, decisions, current state and next action.
 
@@ -42,8 +59,8 @@ See [SKILL.md](https://github.com/benjaminstelzer/scoville-plan/blob/main/scovil
 
 ## Compatibility
 
-A current Fable, Astra, SOL or Opus model is recommended. Luna was also used
-in testing.
+Requires a frontier model from the Fable, Astra, SOL or Opus families, version
+5.0 or newer. Luna was also used in testing.
 
 Any Agent Skills host with repository read/write access. Direct Markdown/YAML planning needs no service or network. Optional validation and selection helpers require Python 3.10+. Developed for Codex and Claude Code. Other hosts are untested.
 
