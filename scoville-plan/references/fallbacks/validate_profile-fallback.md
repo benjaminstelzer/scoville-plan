@@ -1,3 +1,4 @@
+<!-- helper-fallback: scripts/validate_profile.py -->
 # Inspect a profile without Python
 
 General only: load this only when Python is unavailable. Never use it to

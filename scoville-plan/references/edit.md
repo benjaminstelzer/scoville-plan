@@ -120,6 +120,12 @@ observed evidence and a new next action; adding a blocker also updates that acti
 
 ## Select and finish
 
+An explicit request to execute the whole Plan authorizes ordinary continuation
+within that scope; do not ask again after each item. Read older stops in their
+recorded scope. A newer explicit direction replaces an older instruction only
+where they conflict; it does not satisfy dependencies, Acceptance or substantive
+cost, safety or external prerequisites. Ask only if a material conflict remains.
+
 Only the active Plan selects current_item. Select todo or paused work only with
 done dependencies and no other in_progress item. Selection may retain blockers;
 starting current todo or resuming current paused work requires no blockers or
@@ -131,6 +137,12 @@ work before completion. Keep Evidence, empty Blocked by and remove Next action.
 Select the authorized successor in the same prepared change. Start it only after
 its pre-flight; selection alone does not start it. Validate each completed write
 operation. No named compound operation or additional progress record is needed.
+An eligible ordinary successor may be blocked: select it without starting it.
+This does not apply to an explicit return governed by the lifecycle rules.
+If no successor can be selected, retain observed Acceptance in Evidence and
+name the unresolved succession in Next action; do not repeat accepted work.
+For a bounded execution request, selecting the successor grants no permission
+to start work outside that request.
 
 Honor recorded returns and explicit historical priority before default document
 order; if those obligations conflict, ask for a choice. Inspect the records
