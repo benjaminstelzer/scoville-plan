@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.11.0 - 2026-10-01
+
+- Give each new Plan point at least one Step with explicit progress. Preserve older and mixed records, with unknown progress kept unknown.
+- Replace Next action in new records with Steps and optional Instructions. Return active Step groups, paused context and linked open Decisions through the context helper.
+- Repair proven Plan and Step progress from Evidence, original reports and actual results, without inventing completion or changing a read-only review.
+- Ship Plan Viewer 1.4.0 with Step icons, written active groups, safe Next step selection, Instructions and linked open Decisions.
+
 ## v1.10.0 - 2026-09-29
 
 - Continue explicitly requested Plan execution through eligible work while preserving recorded stops, priority conflicts and unresolved Decisions.

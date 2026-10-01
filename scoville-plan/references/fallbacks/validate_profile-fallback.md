@@ -39,11 +39,15 @@ for a wholly unstarted Plan are in native-project-lifecycle.md.
 
 Each H3 is `### W-001 Nonempty title` and starts one contiguous block. Exactly
 these fields occur in order: Status, Depends on, Blocked by, Decisions, Outcome,
-Acceptance, optional Steps, Evidence, Next action when nonterminal. Unknown,
+Acceptance, optional Instructions, optional Steps, Evidence, optional legacy Next action. Unknown,
 repeated or missing fields are invalid. Each value occupies one physical line.
 Status is todo/in_progress/paused/done/cancelled. Outcome and Acceptance are
 nonempty. Steps are consecutive nonempty `1.`, `2.` lines without blank lines.
-Steps have no IDs, statuses, dependencies, blockers, evidence or checkboxes.
+Steps have no separate IDs, dependencies, blockers, evidence or checkboxes.
+Optional first `[status: todo|in_progress|done|cancelled]` precedes route/execute
+and nonempty action text. Unmarked Steps and mixed lists remain valid; status
+annotations are not duplicated or moved behind route/execute. Missing status
+is unknown, not todo/done. Status-like prose within an action stays prose.
 
 Depends on and Decisions use `[]` or `[ID, ID]`, with unique correctly typed IDs.
 Dependencies resolve to earlier items in the same Plan and form no cycles.
@@ -53,7 +57,14 @@ unique labels matching `[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}`;
 ADR, PLAN and W are reserved prefixes.
 
 Done/cancelled work has nonempty Evidence, no blockers and no Next action.
-Todo/in_progress/paused has nonempty Next action; Evidence may be empty.
+Todo/in_progress/paused needs a nonempty legacy Next action or at least one
+written Step status. New authors write every Step with status and no Next action.
+Evidence may be empty. Instructions is optional one-line text or exactly [];
+empty is invalid. Missing means unrecorded, not expressly none. New items write
+it explicitly. Keep extra binding conditions there and results in Evidence;
+ordinary progression is Steps. Proposed and accepted ADR links are allowed for
+started items; ADR status owns which linked proposals are open. Terminal history
+does not become a live return.
 Evidence is `[]`, a compatible list of unique entries or (for updated readers)
 one-line plain text unless its value begins `[`. Each entry is 1–200 Unicode
 scalar values without edge whitespace or ASCII controls. List entries contain

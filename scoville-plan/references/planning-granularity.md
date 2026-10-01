@@ -15,15 +15,16 @@
 - Name known repository-relative paths, interacting owners, necessary discovery
   and verification that needs interpretation. Resolve unknown owners before
   start when practical; otherwise retain the criterion and record the discovered
-  path in Evidence and Next action without rewriting started Steps.
+  path in Evidence without rewriting started Steps.
 - Include enough context to execute without chat history. Acceptance owns proof
-  criteria, Evidence owns observations, and Next action owns the next unfinished
-  action. Do not create duplicate testing or bookkeeping Steps.
+  criteria, Evidence owns observations, and Step status owns progression.
+  Every new Work Item has at least one marked Step; preserve legacy forms.
+  Do not create duplicate testing or bookkeeping Steps.
 
 Separate Steps with materially different consequence or reasoning demand.
 Preserve existing `[route: ...]` and `[execute: ...]` annotations; Plan defines
 no route classes or inferred execution settings. Writing Steps does not activate
-Workflow. An item without Steps is one default execution unit.
+Workflow. A legacy item without Steps is one default execution unit.
 
 Group Steps to avoid repeated setup and handoffs while keeping a clear,
 checkable result. A useful group produces one coherent result that a worker can

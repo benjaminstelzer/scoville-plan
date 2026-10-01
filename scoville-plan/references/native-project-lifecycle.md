@@ -111,19 +111,23 @@ A missing/later anchor, duplicate priorities for one anchor or a conflict with
 an explicit return requires a choice; never silently normalize history.
 
 Only when the user explicitly requests return after redirect, pause the outgoing
-started item and keep its first unfinished action in Next action:
-`After W-004 completes, resume W-001 and perform ACTION.` Keep title and position.
-An ordinary pause keeps the ordinary next action. Permit only one unambiguous
+started item and retain the binding return in Instructions:
+`After W-004 completes, resume W-001 at Step N.` Keep title, Steps and position.
+Read existing Next-action returns as equally binding; never silently discard them.
+An ordinary pause preserves observed Step position and remaining constraints. Permit only one unambiguous
 paused return target per redirected item.
 
 Before completing current work, compare every paused return naming that item
-with every `Prioritized after <current-item>:` successor. If they name different
+with every `Prioritized after <current-item>:` successor. Use the position
+helper's paused_context and historical_priorities; read Legacy-Next-action/Evidence
+when Instructions was not captured. The helper does not interpret these texts. If they name different
 targets, keep the current item nonterminal, preserve both instructions and ask
 which target should follow; observed Acceptance alone does not resolve this
 conflict. Record that observation without selecting or resuming either target.
 
 Only after successor selection is unambiguous and Acceptance is observed,
 complete current work while selecting the paused return target, resume it and
-restore its saved concrete action. Validate the completed write operation.
+restore its recorded Step position or legacy concrete action. Remove the
+consumed return from live Instructions and record its fulfilment in Evidence. Validate the completed write operation.
 A blocked, missing or dependency-invalid return stays recorded and needs a
 choice; do not skip to another item.

@@ -13,9 +13,12 @@ check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
 Do not scan historical Plans without a concrete relevance reason.
 
-For current or named recovery, run the selector rather than reconstructing its
-projection. Read paused return instructions and historical priority segments
-separately because the selector does not include unrelated Work Items.
+On recovery, use select_context.py --root "<project-root>" --position --format json
+to locate the recorded Work Item and Steps, then select its full context as below.
+Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
+Steps require only the evidence/result check needed for the authorized work.
+Use paused_context and historical_priorities to check relevant return directions;
+the full-context mode contains only the selected Work Item.
 
 ```text
 python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
@@ -33,8 +36,10 @@ PowerShell pipes, set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)
 and invoke Python with `-X utf8` so source text and stdin agree. After writing,
 decode the saved bytes as UTF-8 and compare changed non-ASCII text with the
 intended text; a structural pass alone cannot detect already-corrupted words. For multi-file changes prepare the consistent result together and write
-the index last. Stop on concurrent changes or a partial write. An interrupted
-lifecycle transition needs user direction before completing or undoing it.
+the index last. Stop dependent execution on concurrent changes or a partial write.
+An interrupted lifecycle transition needs user direction before completing or
+undoing it. Existing explicit direction suffices only for the same prepared,
+unambiguous result with unchanged affected sources; otherwise ask.
 
 Reread affected complete blocks and inspect the scoped diff. Check meaning,
 authority, preserved history and acceptance evidence, then validate below.
@@ -46,11 +51,11 @@ unchanged instructions; no routine saved copies or byte receipts are required.
 | Work Item status | Permitted changes |
 | --- | --- |
 | todo in draft/active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
-| in_progress or paused | Status, Blocked by, Evidence and Next action; bounded amendments below |
+| in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
 | done or cancelled | Retained history; no routine edits or state transitions |
 
 IDs never change. Preserve started scope, dependencies, order and execution
-history. A started item may add a relevant accepted Decision, retaining older
+history. A started item may add a relevant proposed or accepted Decision, retaining older
 links as history. It may correct a stale path, version reference or other purely
 formal wording only when evidence shows unchanged behavior, compatibility,
 data, authority and verification scope. Retain the old wording and reason in
@@ -98,7 +103,29 @@ Fix test or fixture drift within the existing outcome when it preserves scope
 and Acceptance. A separate owner or independently acceptable result warrants a
 new item; each failed check does not.
 
-## Evidence and Next action
+## Step progress
+
+Every new Work Item has Steps, including a single action. Write every new Step
+with a first annotation: `1. [status: todo] Action.` Do not write Next action
+for new work; Step status is the progression source.
+Allowed values: `todo`, `in_progress`, `done`, `cancelled`; put status before
+existing route/execute annotations. Old unmarked Steps and mixed lists remain
+valid. Missing status is unknown; never infer todo/done from absence.
+
+During ordinary work, add or update status only from observed progress. Begin
+in_progress when work starts, not on selection alone. Jointly started Steps
+may share in_progress; no separate group record is needed. Mark done when the
+Step's action and required checks are complete. Preserve due Work Item reviews
+and acceptance. Cancelled needs explicit direction and is never done.
+In a nonterminal item, a confirmed correction may return a done Step to
+in_progress; retain its completed effects and reason in Evidence. Status changes
+do not rewrite the action, order, route or execution choice. Pause and blockers
+remain on the Work Item. Update observed Step status at start, completion,
+interruption and correction, and before handoff/compaction. Instructions preserves
+concrete outstanding Work Item checks/reviews and binding return directions.
+All Steps done does not itself complete the Work Item or authorize repeating them.
+
+## Evidence and legacy continuation
 
 Evidence contains the observed result, decisive report reference and any open
 limit or relevant commit, not expected results or a diary. Task IDs and attempts
@@ -111,12 +138,18 @@ supported lists without routine migration. When cleanup is requested, preserve
 the full original Evidence in an accessible report before replacing it with a
 short result and link; preserve statuses and acceptance history. New writes retain LF.
 
-Next action names the first unfinished action. If a material decision blocks it,
-name that decision first and retain the concrete action to resume afterward.
-Otherwise, once implementation exists, name the first unobserved test, build,
-browser check, review or evaluator check.
-Changing it alone changes no other field. Resolve only a named blocker, with
-observed evidence and a new next action; adding a blocker also updates that action.
+Instructions holds additional binding conditions, such as explicit return or
+due overall review, never the next ordinary Step or a copied progress list.
+Use one line or exactly []; absence is legacy unknown, not []. New items write
+it explicitly. Update/remove fulfilled conditions and retain their result in
+Evidence. Before new terminal closure no unmet binding condition remains.
+Do not reinterpret terminal history as live instructions. Link relevant proposed
+ADRs in Decisions; their status is read from the ADR, not copied here. Read
+legacy Next action for these facts too; do not discard existing return authority.
+Legacy nonterminal work without written Step status still needs its nonempty
+Next action. When retained during legacy work, keep it consistent with observed
+progress. New work uses Steps instead. Resolve only a named blocker with proof;
+retain any unresolved prerequisite and its effect in Evidence.
 
 ## Select and finish
 
@@ -140,7 +173,7 @@ operation. No named compound operation or additional progress record is needed.
 An eligible ordinary successor may be blocked: select it without starting it.
 This does not apply to an explicit return governed by the lifecycle rules.
 If no successor can be selected, retain observed Acceptance in Evidence and
-name the unresolved succession in Next action; do not repeat accepted work.
+name the unresolved succession in Instructions; do not repeat accepted work.
 For a bounded execution request, selecting the successor grants no permission
 to start work outside that request.
 

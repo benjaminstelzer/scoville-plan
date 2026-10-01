@@ -55,9 +55,9 @@ language. Preserve an existing record's language unless explicitly changed.
 
 Work Item Decisions lists own incoming links. Link every affected todo item and
 no unrelated item, including for unresolved proposals. Started items may append
-a relevant accepted Decision under edit.md while retaining earlier links. An
-unresolved proposal affecting started work belongs in its Next action until
-resolved; it blocks only dependent work. Proposal status does not
+a relevant proposed or accepted Decision under edit.md while retaining earlier links. An
+unresolved proposal affecting started work remains linked in Decisions until
+resolved; its concrete effect may be recorded in Instructions; it blocks only dependent work. Proposal status does not
 remove its links. Creating starts proposed; an already explicit human direction
 authorizes immediate acceptance without another question.
 
