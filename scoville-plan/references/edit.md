@@ -164,6 +164,11 @@ done dependencies and no other in_progress item. Selection may retain blockers;
 starting current todo or resuming current paused work requires no blockers or
 unresolved dependent Decision. Pause current in_progress work on authorization.
 
+At execution start, write `Status: in_progress` on the current Work Item and
+record the actually started Steps under Step progress. Selecting current_item
+or assigning a range alone starts no Step. Save and validate this state before
+delegated execution begins. Read-only review does not restart completed Steps.
+
 Complete current todo or in_progress work only with observed Acceptance, done
 dependencies, cleared blockers and an eligible exact successor. Resume paused
 work before completion. Keep Evidence, empty Blocked by and remove Next action.

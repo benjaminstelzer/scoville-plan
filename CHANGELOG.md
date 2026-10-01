@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.11.1 - 2026-10-01
+
+- Record the active Work Item and actually started Steps before delegated execution. Read-only review preserves completed Step progress.
+- Add Paused and Cancelled filters in Plan Viewer 1.4.1, covering every Plan point status.
+
 ## v1.11.0 - 2026-10-01
 
 - Give each new Plan point at least one Step with explicit progress. Preserve older and mixed records, with unknown progress kept unknown.
