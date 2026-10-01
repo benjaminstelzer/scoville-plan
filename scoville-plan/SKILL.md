@@ -25,6 +25,8 @@ Plan owns its records' wording and lifecycle. It does not start Workflow or
 choose dispatch routes. Run one editor at a time; do not change affected files
 or model settings concurrently. Reads and Skill upgrades require no migration.
 
+
+
 Keep Plans, Work Items and Decisions as short as possible and only as long as
 necessary. Necessary information enables correct execution, verification or
 continuation without hidden context: the outcome, binding constraints,
@@ -45,7 +47,7 @@ required historical records under their lifecycle rules, not as repeated context
 4. Record explicit human choices as accepted Decisions. Unresolved material
    choices become proposals; report alternatives, tradeoffs and effect, and
    ask only before dependent work. Link proposals to affected todo items; for
-   started items name the proposal in Next action until accepted. Accepted
+   started items also link relevant proposals in Decisions. ADR status owns their state. Accepted
    Decisions may be linked to affected started items.
 5. At work start inventory Decision frontmatter and read relevant proposals
    (all proposals for a full audit). Preserve unresolved choices at handoff.
@@ -70,13 +72,17 @@ Blocked by: []
 Decisions: []
 Outcome: One independently resumable result.
 Acceptance: Observable checks and their required results.
+Instructions: []
 Steps:
-1. Perform one coherent unit at the known repository-relative paths and verify its result.
+1. [status: todo] Perform one coherent unit at the known repository-relative paths and verify its result.
 Evidence: []
-Next action: The first unfinished action or unobserved check.
 ```
 
-Omit Steps when no ordered units are needed. Steps add no separate lifecycle.
+New Work Items write Instructions as one-line text or [] for no extra conditions.
+Every new Work Item has at least one Step, even for one action. Every new Step
+has written status; do not write Next action for new work. Legacy items without
+Steps/status and with Next action remain supported. Steps add no independent
+acceptance or dependency lifecycle.
 Use [granularity](references/planning-granularity.md) only when outcome or Step
 boundaries need judgment, not for a routine insertion with known boundaries.
 
@@ -88,6 +94,7 @@ boundaries need judgment, not for a routine insertion with known boundaries.
 | Read direction, list records, select dispatch units | [read-only.md](references/read-only.md) |
 | Create/restructure, activate, finish, cancel or delete Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and edit.md |
 | Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and edit.md |
+| Explicit request to inspect/repair/migrate recorded Plan/Step progress; never ordinary work or recovery | [repair.md](references/repair.md) |
 | Audit wording | edit.md; Decision reference for Decision sections |
 | Validate or diagnose structure | edit.md; operation reference only if a diagnostic needs it |
 

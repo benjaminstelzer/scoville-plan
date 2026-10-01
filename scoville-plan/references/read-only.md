@@ -3,6 +3,35 @@
 Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
 
+## Locate the current Work Item and Steps
+
+Use the selector's position mode for a compact deterministic lookup:
+
+```text
+python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
+```
+
+Omit --plan to use the index's active Plan. `work_item` is its stored current_item;
+`current_steps` and `current_units` contain only explicitly in_progress Steps,
+grouping only adjacent numbers. `next_step` is the first written todo when no
+Step is active and no earlier unfinished Step is unmarked. Unmarked Steps appear
+in `untracked_steps`; an unknown first unfinished Step gives no guessed position.
+`reason`, Work Item status and blockers explain whether execution can resume.
+`instructions` retains additional binding conditions; null means missing and
+"[]" expressly none. `paused_context` provides all paused items' IDs, headings,
+status, dependency status, blockers and Instructions, with Legacy-Next-action/
+Evidence when unrecorded. `historical_priorities` retains nonterminal priority
+headings. `open_decisions` derives proposed ADRs from the current item's links.
+The helper does not infer return targets, instruction fulfilment or acceptance.
+`acceptance` and `evidence` retain requirements and observations;
+`legacy_next_action` is included only when the old field exists. Unknown progress
+never loads repair.md automatically. The helper selects no work and repairs nothing.
+All explicit active Steps are returned even around unknown gaps, with a warning
+in guidance. If all Steps are terminal, inspect outstanding Work Item Acceptance
+and Evidence; do not invent a next Step or repeat completed effects.
+No Steps means a whole-item unit; a Plan without current_item returns null.
+Position selects no work, changes no status and grants no start permission.
+
 ## Select Work Item or dispatch-unit context
 
 When Python 3 is present, select the current or explicitly named Work Item
@@ -11,7 +40,7 @@ never enables manual selection. The commands below specify the complete
 invocation; do not load the Python source just to call them. Run:
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" [--work-item W-001] --format json
+python "<skill-directory>/scripts/select_context.py" --root "<project-root>" [--plan PLAN-0001] [--work-item W-001] --format json
 ```
 
 For a worker dispatch, select the exact unit instead:
@@ -31,7 +60,10 @@ The success object contains exactly four top-level semantic areas:
 - `decisions`: the complete Decision records referenced by the selected item.
 
 Dispatch mode accepts a complete Work Item, an exact Step or adjacent Step
-range. Scoville Workflow can group consecutive Steps in one worker while
+range. When selected Steps contain written status, `work_item.step_statuses`
+adds their original numbers and status (null for unmarked selected Steps).
+Without written status this field is absent. Source text and selected scope
+remain exact, including done/cancelled Steps needed for review or correction. Scoville Workflow can group consecutive Steps in one worker while
 preserving their authored order. `source_text` is
 the unchanged selected single-line Step text, adjacent lines, or complete Work
 Item block, including its Evidence for a whole-item unit. Text uses UTF-8/LF

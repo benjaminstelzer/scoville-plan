@@ -114,6 +114,7 @@ DIAGNOSTIC_CODES = {
     "WORK_NEXT_ACTION_REQUIRED",
     "WORK_STEPS_INVALID",
     "WORK_STEP_EXECUTION_INVALID",
+    "WORK_STEP_STATUS_INVALID",
     "WORK_TERMINAL_BLOCKED",
     "WORK_TERMINAL_EVIDENCE_REQUIRED",
     "WORK_TEXT_EMPTY",
@@ -882,6 +883,17 @@ class Validator:
         record: str,
     ) -> None:
         remainder = step
+        status_prefix = re.match(r"^\[status: (todo|in_progress|done|cancelled)\] (\S(?:.*\S)?)\Z", remainder)
+        if status_prefix:
+            remainder = status_prefix.group(2)
+        if re.match(r"^\[status(?:\s|:|\])", remainder):
+            self.add(
+                "WORK_STEP_STATUS_INVALID", parsed.logical_path,
+                "The Step status annotation is invalid, repeated or misplaced.",
+                "Use one optional `[status: todo|in_progress|done|cancelled]` first, before route/execute and non-empty action text; for example `1. [status: done] Verify the result.`",
+                line=line, record=record, field_name="Steps", observed=step,
+            )
+            return
         if re.match(r"^\[route(?:\s|:|\])", remainder):
             route = re.match(r"^\[route: ([a-z_]+)\] (\S(?:.*\S)?)\Z", remainder)
             if not route or route.group(1) not in ROUTE_CLASSES:
@@ -920,6 +932,12 @@ class Validator:
                 field_name="Steps",
             )
             remainder = execution.group(2)
+        if re.match(r"^\[status(?:\s|:|\])", remainder):
+            self.add("WORK_STEP_STATUS_INVALID", parsed.logical_path,
+                     "The Step status must precede route/execute annotations.",
+                     "Move the single [status: todo|in_progress|done|cancelled] annotation first, e.g. `1. [status: done] [route: low] Verify the result.`",
+                     line=line, record=record, field_name="Steps", observed=step)
+            return
         if not remainder.strip() or STEP_ANNOTATION_LIKE_RE.search(remainder):
             self.add(
                 "WORK_STEP_EXECUTION_INVALID",
@@ -962,11 +980,12 @@ class Validator:
             "Decisions",
             "Outcome",
             "Acceptance",
+            "Instructions",
             "Steps",
             "Evidence",
             "Next action",
         ]
-        required_fields = [field for field in expected_fields if field not in {"Steps", "Next action"}]
+        required_fields = [field for field in expected_fields if field not in {"Instructions", "Steps", "Next action"}]
 
         for index, (heading_line, match) in enumerate(starts):
             item_id, title = match.group(1), match.group(2).strip()
@@ -1247,6 +1266,13 @@ class Validator:
                         observed="empty",
                     )
 
+            instructions = fields.get("Instructions")
+            if instructions is not None and not instructions.strip():
+                self.add("WORK_TEXT_EMPTY", parsed.logical_path,
+                         "Instructions is empty.",
+                         "Write one-line instructions or exactly `Instructions: []` for no additional instructions; leave legacy absence unchanged when unknown.",
+                         line=field_lines.get("Instructions"), record=record,
+                         field_name="Instructions", observed=instructions)
             next_action = fields.get("Next action")
             if status_value in TERMINAL_WORK_STATUSES:
                 if not evidence:
@@ -1283,12 +1309,14 @@ class Validator:
                         observed=next_action,
                     )
             elif status_value in WORK_STATUSES:
-                if next_action is None or not next_action.strip():
+                if (next_action is None or not next_action.strip()) and not any(
+                    re.match(r"^\[status: (todo|in_progress|done|cancelled)\] ", step) for step in steps
+                ):
                     self.add(
                         "WORK_NEXT_ACTION_REQUIRED",
                         parsed.logical_path,
-                        "A non-terminal Work Item has no non-empty Next action.",
-                        "Set the first concrete action not yet performed using current project state.",
+                        "A non-terminal Work Item has neither written Step status nor a non-empty legacy Next action.",
+                        "For new work write at least one Step with status, e.g. `1. [status: todo] Verify the result.` Preserve a valid legacy Next action for old unmarked work.",
                         line=field_lines.get("Next action") or heading_line,
                         record=record,
                         field_name="Next action",

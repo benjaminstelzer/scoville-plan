@@ -25,14 +25,16 @@ work and long-term maintenance, inside whatever planning system the project
 already has. And keep small tasks small: a large Plan for a contained fix
 just adds work.
 
-The heat, in this case, is the direction another agent can pick up again: the
-goal, the decisions, the current state and the next action.
+The name comes from the Scoville scale, which originally measured chili heat
+through dilution. The heat, in this case, is the direction another agent can
+pick up again: the goal, the decisions, the current state and the next
+action.
 
 ## How it works
 
 - Use the repository's existing planning system and relevant Plan, Work Items and Decisions.
 - Check current sources before starting the next item.
-- Edit Markdown and YAML records with an explicit next action.
+- Edit Markdown and YAML records with observed Step progress and any additional Instructions.
 - Record evidence before completion, preserve accepted history and validate the records.
 
 ## What it enforces
@@ -86,7 +88,7 @@ This Skill works independently. Other Scoville Skills are optional.
 
 ### Install this Skill
 
-This package works on its own. Ask your agent host:
+Ask your agent host:
 
 ```text
 Install this Skill for all my projects from this exact package directory:
@@ -116,7 +118,86 @@ Use Scoville Plan to create an implementation plan for migrating the billing sch
 Create a detailed repository-owned implementation plan for the billing migration so workers can execute each point without this conversation.
 ```
 
-State the outcome, acceptance criteria and next action directly in the Plan.
+State the outcome, acceptance criteria and ordered Steps directly in the Plan.
+
+### Step progress and repair
+
+Every new Plan point has at least one Step, even for one action. Record progress
+with a first annotation:
+
+```text
+1. [status: done] Write the draft.
+2. [status: in_progress] Review the draft against the brief.
+3. [status: todo] Deliver the reviewed text.
+```
+
+The values are `todo`, `in_progress`, `done` and `cancelled`. Put
+status before any `route` or `execute` annotation. Old and mixed lists remain
+valid: an unmarked Step has unknown progress. Completing Steps doesn't replace
+the Plan point's acceptance checks. Pause and blockers belong to the Plan point.
+New entries omit Next action. Legacy Steps/status and Next action remain supported.
+Keep additional conditions in the new one-line Instructions field, or write
+`Instructions: []` when there are none. Evidence holds observed results.
+
+The context helper can return a named Plan's recorded position:
+
+```text
+python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
+```
+
+It returns the current Plan point and explicitly started Steps, grouping only
+adjacent active numbers. With none active, it identifies the first written todo
+only when no earlier unknown Step prevents selection. It also supplies Instructions,
+paused-item context and linked open Decisions. The agent judges free instructions;
+the helper doesn't infer a return or acceptance from them. Unknown progress carries
+an instruction to inspect
+Evidence and actual results or changes against the requirements. The helper
+doesn't guess or change records.
+When Python is unavailable, load the helper's separate manual route.
+
+```text
+Review and correct PLAN-0001.
+```
+
+This request loads the separate repair instructions. The agent checks Evidence,
+original reports and, where needed, the actual result, including code, tests or
+written text. It corrects proven Work Item and Step progress, preserves unknown
+states and validates the records. An inspection without a correction request
+remains read-only. An explicit migration can transfer proven legacy instructions
+and progress without losing history. Ordinary Plan maintenance doesn't load this route.
+
+### Companion app
+
+The optional Scoville Plan Viewer shows the repository records as a compact,
+read-only desktop overview. Point it at a project with `PROJECT_INDEX.md`,
+`docs/plans` and `docs/decisions`, and you'll see the active Plan point,
+finished and upcoming work, paused, blocked or cancelled Plan points, and current
+and past Decisions. While the window is active, it rereads visible projects
+every four seconds, so changes from an agent or an editor show up on their
+own. Marked Steps have an icon and a status label. Unmarked Steps keep an empty
+icon slot and the same text alignment. Their progress remains unknown. Written
+active Steps also appear in the overview. Next step replaces Next action and shows
+only recorded active or safely selected todo Steps. Without Step status this field
+stays hidden. Instructions and linked open Decisions appear separately. Completed Steps
+show a check, and cancelled Steps show an X and crossed-out text.
+
+[Download the current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
+for Windows x64, macOS Apple Silicon or Intel, and Linux x64. For Windows
+there's a portable EXE and installers, for macOS DMGs and zipped apps, and for
+Linux a portable binary, an AppImage and DEB and RPM packages.
+
+The portable version saves its project list in a `scoville-plan-viewer.xml`
+next to the application. Installed copies in read-only system folders keep
+the same XML file in the platform's user configuration directory. Removing a
+project from the Viewer never touches its repository.
+
+### Record compatibility
+
+Plan uses `format_version: 1`. Evidence can be plain text such as
+`Evidence: Tests A, B passed.` or a bracketed list. Files can use LF or
+consistent CRLF line endings. Keep the Skill and the Viewer on matching
+updated versions: older readers may require bracketed Evidence lists, LF and
+Next action, and don't understand the new Step status and Instructions fields.
 
 ### Set reasoning for a Step
 
@@ -149,35 +230,6 @@ another level.
 Route classes such as `ultra_low` describe how complex a task is. They're
 separate from reasoning levels: an `ultra_low` task can use reasoning `low`.
 
-### Companion app
-
-The optional Scoville Plan Viewer shows the repository records as a compact,
-read-only desktop overview. Point it at a project with `PROJECT_INDEX.md`,
-`docs/plans` and `docs/decisions`, and you'll see the active Plan point,
-finished and upcoming work, paused, blocked or cancelled steps, and current
-and past Decisions. While the window is active, it rereads visible projects
-every four seconds, so changes from an agent or an editor show up on their
-own.
-
-[Download the current release](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
-for Windows x64, macOS Apple Silicon or Intel, and Linux x64. For Windows
-there's a portable EXE and installers, for macOS DMGs and zipped apps, and for
-Linux a portable binary, an AppImage and DEB and RPM packages.
-
-The portable version saves its project list in a `scoville-plan-viewer.xml`
-next to the application. Installed copies in read-only system folders keep
-the same XML file in the platform's user configuration directory. Removing a
-project from the Viewer never touches its repository.
-
-### Record compatibility
-
-Plan uses `format_version: 1`. Evidence can be plain text such as
-`Evidence: Tests A, B passed.` or a bracketed list. Files can use LF or
-consistent CRLF line endings. Keep the Skill and the Viewer on matching
-current versions, because older readers need bracketed Evidence lists and LF.
-
-The name comes from the Scoville scale, which originally measured chili heat through dilution.
-
 ## Sources
 
 - [Agent Skills specification](https://agentskills.io/specification) for the
@@ -193,6 +245,7 @@ The name comes from the Scoville scale, which originally measured chili heat thr
 - [Plan](https://github.com/benjaminstelzer/scoville-plan) keeps Plans, Work Items, Decisions and their status in the repository.
 - [UI](https://github.com/benjaminstelzer/scoville-ui) covers UI implementation, information structure, accessibility and rendered checks, with an optional WordPress adapter.
 - [Handoff](https://github.com/benjaminstelzer/scoville-handoff) passes active work to another agent or session.
+- [Project Context Cleanup](https://github.com/benjaminstelzer/scoville-suite) keeps requested project rules and index text concise without losing required context.
 
 ## License
 
