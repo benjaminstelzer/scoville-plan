@@ -78,11 +78,11 @@ Steps:
 Evidence: []
 ```
 
-New Work Items write Instructions as one-line text or [] for no extra conditions.
-Every new Work Item has at least one Step, even for one action. Every new Step
-has written status; do not write Next action for new work. Legacy items without
-Steps/status and with Next action remain supported. Steps add no independent
-acceptance or dependency lifecycle.
+New Work Items use one-line Instructions or [], at least one status-marked Step,
+and no Next action. Work Item Status covers the whole outcome; Step status records
+observed progress; Instructions retains extra binding conditions. Legacy items
+without Steps or Step status may retain Next action. Steps have no independent
+acceptance or dependencies.
 Use [granularity](references/planning-granularity.md) only when outcome or Step
 boundaries need judgment, not for a routine insertion with known boundaries.
 

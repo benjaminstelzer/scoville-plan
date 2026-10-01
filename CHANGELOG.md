@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.11.2 - 2026-10-01
+
+- Show Plan progress beneath the title in Plan Viewer 1.4.2. Collapse the Plan and current point independently, and keep long Step details out of the current-point header.
+- Keep project, Plan and current-point labels compact with consistent type and spacing. The current point's description aligns with its heading.
+- Distinguish a display-only scope mismatch from a real instruction conflict without changing the authorized work.
+
 ## v1.11.1 - 2026-10-01
 
 - Record the active Work Item and actually started Steps before delegated execution. Read-only review preserves completed Step progress.
