@@ -28,7 +28,8 @@ A non-null reference resolves to exactly one active Plan. Null requires none.
 
 Plan frontmatter order is format_version, id, status, created, updated, then
 current_item only when active. Required values are format_version: 1 and status
-one of draft, active, completed, cancelled. Exactly one H1 precedes the H2s Goal,
+one of draft, active, completed, cancelled. Ignore fenced code contents when identifying headings and section boundaries.
+Exactly one H1 precedes the H2s Goal,
 Non-goals, Work items in that order; all are explicit and nonempty. A Plan has
 at least one Work Item. Active current_item resolves to todo/in_progress/paused.
 At most one item is in_progress and it equals current_item; nonactive Plans have
@@ -88,6 +89,7 @@ by a valid parser result. Authored-history permissions are in edit.md.
 Frontmatter keys in order: format_version, id, status, created, optional accepted,
 scope, optional supersedes, superseded_by, transition_batch,
 transition_batch_members. Unknown or repeated keys are invalid. Version is 1.
+Headings inside backtick or tilde code fences are literal content.
 Scope consists of nonempty slash-separated `[a-z0-9][a-z0-9-]*` segments.
 Status is proposed/accepted/rejected/deprecated/superseded. Accepted, deprecated
 and superseded require accepted; proposed and rejected forbid it. New proposals

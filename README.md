@@ -1,37 +1,18 @@
 # Scoville Plan
 
-Before an agent starts implementing, it should be clear what it is supposed to
-achieve and how the result will be checked. A Plan makes the goal, dependencies
-and acceptance criteria explicit. That matters in AI-assisted software
-engineering, especially when the work spans several conversations.
+Scoville Plan keeps goals, decisions and progress in the repository so longer
+work survives the next conversation. You can see what is done, what remains
+and why a choice was made without reconstructing it from chat history.
 
-Scoville Plan keeps those facts in the repository: Work Items, relevant
-Decisions, accepted results and the next action. The next agent can pick up the
-work from there. You can see what is finished, why a choice was made and what
-still needs checking, without piecing it together from an entire chat.
+Use it for work with dependencies or several sessions. Settle the requirements
+and acceptance criteria before implementation, get independent advice where
+useful, and revise the Plan when the facts change. A contained fix can stay small.
 
-Substantial work deserves a Plan that got real attention before anything is
-executed. Clarify requirements, check dependencies and get independent
-feedback, for example through Scoville Ask, then revise the Plan until the
-important questions are settled. Complex work can take several rounds of
-review and changes before Scoville Workflow starts implementing it. That
-coordination overhead is worth it when the size and dependencies justify it.
-Good planning is a large part of software engineering. AI helps with it, but
-goals, architecture and tradeoffs still need informed judgment.
+Scoville measures chili heat. Plan keeps the direction from being diluted by
+one more perfectly reasonable detour.
 
-If implementation shows that an assumption was wrong, update the Plan. Its
-job is to keep the direction while the work changes. Use it for dependent
-work and long-term maintenance, inside whatever planning system the project
-already has. And keep small tasks small: a large Plan for a contained fix
-just adds work.
-
-[Download Scoville Plan Viewer](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
-for Windows, macOS and Linux.
-
-The name comes from the Scoville scale, which originally measured chili heat
-through dilution. The heat, in this case, is the direction another agent can
-pick up again: the goal, the decisions, the current state and the next
-action.
+[Plan Viewer](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
+shows these records on Windows, macOS and Linux.
 
 ## How it works
 
@@ -42,38 +23,25 @@ action.
 
 ## What it enforces
 
-- **Existing project records.** Plan follows the repository's planning rules
-  and updates its established records.
-- **Clear work units.** Goals name the target, Work Items describe outcomes
-  that can be resumed, and ordered Steps describe the work.
-- **Current assumptions.** Before the next item is executed, it's checked
-  against the sources and the work already done.
-- **One active item.** Only one item is active at a time, with its first
-  unfinished action recorded.
-- **Changes of direction.** New priorities, pauses and work you want to come
-  back to get recorded.
-- **Evidence before completion.** Nothing is marked complete without the
-  observed results that show it meets acceptance.
-- **Explicit decisions.** Your decisions get recorded. Choices you haven't
-  confirmed stay marked as proposals.
-- **Direct maintenance.** Routine edits update the Plan directly instead of
-  creating extra Work Items.
+- **Resumable work.** Goals, ordered Steps, dependencies and the current position
+  stay explicit in the project's records.
+- **Decisions with an owner.** Confirmed choices are recorded. Open questions
+  remain proposals and block only the work that depends on them.
+- **Evidence before completion.** Finished means acceptance was checked.
+  Changes of direction preserve completed work and relevant history.
 
-Edit the records from one session at a time. If two sessions change them in
-parallel, the changes have to be reconciled.
-
-See [SKILL.md](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md) for the full instructions and editing limits.
+Edit records from one session at a time. Concurrent edits need reconciliation.
+See the [full instructions](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md).
 
 ## What it costs
 
-- Reading, updating and checking Plan records add token usage and maintenance time.
+- Maintaining records takes tokens and time. It pays for continuity on dependent work. A small fix rarely needs a large Plan.
 
 ## How it was developed
 
-- Real project records showed what you need to resume work: the active item,
-  the decisions that apply and what's left to do.
-- Project histories and targeted simulations shaped the record format and the
-  validation checks.
+Real project records shaped the resumable work units and progress checks.
+The useful lesson was to keep decisions and accepted results close to the
+work they explain, without turning routine updates into more work items.
 
 ## Compatibility
 
@@ -121,116 +89,53 @@ Use Scoville Plan to create an implementation plan for migrating the billing sch
 Create a detailed repository-owned implementation plan for the billing migration so workers can execute each point without this conversation.
 ```
 
-State the outcome, acceptance criteria and ordered Steps directly in the Plan.
+State the result you want and the constraints that matter. Plan records the
+work, dependencies and acceptance criteria. It does not dispatch agents.
 
-### Step progress and repair
+### Progress and decisions
 
-Every new Plan point has at least one Step, even for one action. Record progress
-with a first annotation:
+New Plan points use ordered Steps with explicit progress:
 
 ```text
 1. [status: done] Write the draft.
-2. [status: in_progress] Review the draft against the brief.
+2. [status: in_progress] Review it against the brief.
 3. [status: todo] Deliver the reviewed text.
 ```
 
-The values are `todo`, `in_progress`, `done` and `cancelled`. Put
-status before any `route` or `execute` annotation. Old and mixed lists remain
-valid: an unmarked Step has unknown progress. Completing Steps doesn't replace
-the Plan point's acceptance checks. Pause and blockers belong to the Plan point.
-New entries omit Next action. Legacy Steps/status and Next action remain supported.
-Keep additional conditions in the new one-line Instructions field, or write
-`Instructions: []` when there are none. Evidence holds observed results.
+The agent records observed progress, keeps open decisions visible and asks
+before dependent work. Older unmarked Steps remain valid, with unknown progress.
+Completed Steps still need the Plan point's acceptance checks.
 
-The context helper can return a named Plan's recorded position:
-
-```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
-```
-
-It returns the current Plan point and explicitly started Steps, grouping only
-adjacent active numbers. With none active, it identifies the first written todo
-only when no earlier unknown Step prevents selection. It also supplies Instructions,
-paused-item context and linked open Decisions. The agent judges free instructions;
-the helper doesn't infer a return or acceptance from them. Unknown progress carries
-an instruction to inspect
-Evidence and actual results or changes against the requirements. The helper
-doesn't guess or change records.
-When Python is unavailable, load the helper's separate manual route.
-
-```text
-Review and correct PLAN-0001.
-```
-
-This request loads the separate repair instructions. The agent checks Evidence,
-original reports and, where needed, the actual result, including code, tests or
-written text. It corrects proven Work Item and Step progress, preserves unknown
-states and validates the records. An inspection without a correction request
-remains read-only. An explicit migration can transfer proven legacy instructions
-and progress without losing history. Ordinary Plan maintenance doesn't load this route.
+To correct an existing record, ask: "Review and correct PLAN-0001." The agent
+checks the evidence and actual result before changing progress. Inspection
+without a correction request stays read-only.
 
 ### Companion app
 
-The optional Scoville Plan Viewer shows the repository records as a compact,
-read-only desktop overview. Point it at a project with `PROJECT_INDEX.md`,
-`docs/plans` and `docs/decisions`, and you'll see the active Plan point,
-finished and upcoming work, paused, blocked or cancelled Plan points, and current
-and past Decisions. While the window is active, it rereads visible projects
-every four seconds, so changes from an agent or an editor show up on their
-own. Marked Steps have an icon and a status label. Unmarked Steps keep an empty
-icon slot and the same text alignment. Their progress remains unknown. Written
-active Steps also appear in the overview. Next step replaces Next action and shows
-only recorded active or safely selected todo Steps. Without Step status this field
-stays hidden. Instructions and linked open Decisions appear separately. Completed Steps
-show a check, and cancelled Steps show an X and crossed-out text.
+[Plan Viewer downloads](https://github.com/benjaminstelzer/scoville-plan/releases/latest)
+include a portable EXE and installers for Windows x64, DMGs and zipped apps for
+macOS Apple Silicon and Intel, and a portable binary, AppImage, DEB and RPM for
+Linux x64.
 
-Downloads include a portable EXE and installers for Windows x64, DMGs and
-zipped apps for macOS Apple Silicon or Intel, and a portable binary, an
-AppImage and DEB and RPM packages for Linux x64.
+Open a project containing `PROJECT_INDEX.md`, `docs/plans` and `docs/decisions`.
+The read-only Viewer shows current work, Step progress and decisions, refreshing
+automatically while active. Removing a project from its list leaves the
+repository untouched.
 
-The portable version saves its project list in a `scoville-plan-viewer.xml`
-next to the application. Installed copies in read-only system folders keep
-the same XML file in the platform's user configuration directory. Removing a
-project from the Viewer never touches its repository.
+Portable copies keep the project list in `scoville-plan-viewer.xml` beside the
+application. An installed copy in a read-only folder uses the platform's user
+configuration directory. Keep the Skill and Viewer updated together: older
+readers do not understand all current progress fields.
 
-### Record compatibility
+### Model choices for Workflow
 
-Plan uses `format_version: 1`. Evidence can be plain text such as
-`Evidence: Tests A, B passed.` or a bracketed list. Files can use LF or
-consistent CRLF line endings. Keep the Skill and the Viewer on matching
-updated versions: older readers may require bracketed Evidence lists, LF and
-Next action, and don't understand the new Step status and Instructions fields.
+When using Scoville Workflow for Codex, you can request a model and reasoning
+level for a Step. Otherwise Workflow uses its configured routing. Scoville
+Setup shows or saves those settings. Unsupported model/effort combinations
+stop the affected operation instead of silently changing your choice.
 
-### Set reasoning for a Step
-
-Plan doesn't pick a model or reasoning level by itself, and it doesn't
-dispatch work either. If you use Scoville Workflow for Codex from the Codex
-suite, you can attach an explicit model or reasoning choice to a Step.
-Without one, Workflow assesses the Step and uses the pair configured for its
-route. Scoville Setup shows or saves those project settings.
-
-You can request a reasoning level for one Step:
-
-```text
-1. [execute: reasoning=high] Check the migration and its rollback behavior.
-```
-
-To specify the model as well, put it first:
-
-```text
-1. [execute: model=gpt-6-astra; reasoning=high] Check the migration and its rollback behavior.
-```
-
-The regular levels are `low`, `medium`, `high` and `xhigh`, and those are the
-four Setup offers and saves. The format also accepts `none`, `minimal`, `max`
-and `ultra`, either as explicit annotations or as manual entries in
-`.scoville/config.json`. Setup leaves such manual entries alone when you
-change other settings. Whatever pair you choose, the model has to support it.
-If it doesn't, the run stops and explains why instead of quietly picking
-another level.
-
-Route classes such as `ultra_low` describe how complex a task is. They're
-separate from reasoning levels: an `ultra_low` task can use reasoning `low`.
+The [record guide](scoville-plan/references/edit.md) covers Step annotations,
+field formats and helper commands. Plan uses `format_version: 1`.
 
 ## Sources
 

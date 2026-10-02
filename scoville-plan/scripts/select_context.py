@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -9,6 +10,16 @@ import stat
 import sys
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
+
+_MARKDOWN_PATH = Path(__file__).resolve().with_name("markdown_structure.py")
+_MARKDOWN_IMPORT_ERROR: Exception | None = None
+try:
+    _markdown_spec = importlib.util.spec_from_file_location("markdown_structure", _MARKDOWN_PATH)
+    _markdown_module = importlib.util.module_from_spec(_markdown_spec)
+    _markdown_spec.loader.exec_module(_markdown_module)
+    mask_fenced_code = _markdown_module.mask_fenced_code
+except Exception as error:  # Report startup failures through the helper's diagnostic contract.
+    _MARKDOWN_IMPORT_ERROR = error
 
 
 PLAN_ID_RE = re.compile(r"PLAN-[0-9]{4}\Z")
@@ -90,6 +101,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--plan", help="Named PLAN-NNNN instead of the active Plan.")
     parser.add_argument("--position", action="store_true", help="Return current Work Item, written active Steps and next known Step without guessing unmarked progress.")
+    parser.add_argument("--proposals", action="store_true", help="List all proposed Decisions with ID, title, scope and path; independent of the active Plan.")
     parser.add_argument("--format", choices=("json",), default="json")
     return parser
 
@@ -443,9 +455,10 @@ def project_unit(
 
 
 def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict[str, WorkItem]]:
+    structural_body = mask_fenced_code(record.body)
     match = re.fullmatch(
         r"\n*# [^\n]+\n\n## Goal\n(?P<goal>.+?)\n\n## Non-goals\n(?P<non_goals>.+?)\n\n## Work items\n(?P<work_items>.*)",
-        record.body,
+        structural_body,
         re.DOTALL,
     )
     if match is None:
@@ -454,19 +467,19 @@ def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict
             "Plan must contain one H1 followed by Goal, Non-goals, and Work items in exact order",
             path=relative_path,
         )
-    goal_body = match.group("goal")
-    non_goals_body = match.group("non_goals")
-    work_text = match.group("work_items")
+    goal_body = record.body[slice(*match.span("goal"))]
+    non_goals_body = record.body[slice(*match.span("non_goals"))]
+    work_text = record.body[slice(*match.span("work_items"))]
     if not goal_body.strip() or not non_goals_body.strip():
         raise SelectorError("PLAN_SECTION_EMPTY", "Goal and Non-goals must be non-empty", path=relative_path)
-    if MARKDOWN_HEADING_RE.search(goal_body) or MARKDOWN_HEADING_RE.search(non_goals_body):
+    if MARKDOWN_HEADING_RE.search(match.group("goal")) or MARKDOWN_HEADING_RE.search(match.group("non_goals")):
         raise SelectorError(
             "PLAN_SECTION_BOUNDARY_INVALID",
             "Goal and Non-goals must not contain nested or duplicate Markdown headings",
             path=relative_path,
         )
-    headings = list(WORK_HEADING_RE.finditer(work_text))
-    all_work_headings = list(MARKDOWN_HEADING_RE.finditer(work_text))
+    headings = list(WORK_HEADING_RE.finditer(match.group("work_items")))
+    all_work_headings = list(MARKDOWN_HEADING_RE.finditer(match.group("work_items")))
     if (
         not headings
         or work_text[: headings[0].start()].strip()
@@ -567,6 +580,53 @@ def continuation_context(item: WorkItem, items: dict[str, WorkItem], path: str) 
     return output
 
 
+def proposal_inventory(root: Path) -> dict[str, object]:
+    index_path = "PROJECT_INDEX.md"
+    require_format_version(parse_record(safe_read_text(root, index_path), index_path), index_path)
+    proposals = []
+    seen = set()
+    statuses = {"proposed", "accepted", "rejected", "deprecated", "superseded"}
+    for name in safe_directory_entries(root, "docs/decisions"):
+        if not name.endswith(".md"):
+            continue
+        path = f"docs/decisions/{name}"
+        filename = DECISION_FILE_RE.fullmatch(name)
+        if filename is None:
+            raise SelectorError(
+                "DECISION_FILENAME_INVALID", "Rename the Decision file to four digits and a lowercase kebab-case subject, e.g. 0001-choice.md; preserve its ID.",
+                path=path, expected="NNNN-lowercase-subject.md", observed=name)
+        decision = parse_record(safe_read_text(root, path), path)
+        require_format_version(decision, path)
+        decision_id = f"ADR-{filename.group(1)}"
+        if decision.frontmatter.get("id") != decision_id:
+            raise SelectorError(
+                "DECISION_ID_MISMATCH", f"Make the filename and id agree on the existing Decision identity; this filename requires id: {decision_id}.",
+                path=path, expected=decision_id, observed=decision.frontmatter.get("id"))
+        if decision_id in seen:
+            raise SelectorError(
+                "DECISION_ID_DUPLICATE", f"Resolve the duplicate file for {decision_id}; retain one canonical record without discarding decision history.",
+                path=path, expected="one file per ADR ID", observed=decision_id)
+        seen.add(decision_id)
+        status = decision.frontmatter.get("status")
+        if status not in statuses:
+            raise SelectorError(
+                "DECISION_STATUS_INVALID", "Correct status to the recorded lifecycle state; do not infer acceptance from an invalid spelling.",
+                path=path, expected=", ".join(sorted(statuses)), observed=status)
+        scope = decision.frontmatter.get("scope", "")
+        if re.fullmatch(r"[a-z0-9][a-z0-9-]*(?:/[a-z0-9][a-z0-9-]*)*", scope) is None:
+            raise SelectorError(
+                "DECISION_SCOPE_INVALID", "Correct scope to lowercase domain segments separated by single slashes, e.g. project/testing; preserve the domain.",
+                path=path, expected="lowercase slash-separated domain label", observed=scope)
+        titles = re.findall(r"^# (.+)$", mask_fenced_code(decision.body), re.MULTILINE)
+        if len(titles) != 1 or not titles[0].strip():
+            raise SelectorError(
+                "DECISION_TITLE_INVALID", "Restore one nonempty H1 title, e.g. # Concrete choice, preserving the Decision's subject.",
+                path=path, expected="one nonempty H1 title", observed=titles)
+        if status == "proposed":
+            proposals.append({"id": decision_id, "title": titles[0], "scope": scope, "path": path})
+    return {"proposals": proposals}
+
+
 def linked_open_decisions(root: Path, item: WorkItem) -> list[dict[str, str]]:
     output = []
     for decision_id in item.decisions:
@@ -576,7 +636,7 @@ def linked_open_decisions(root: Path, item: WorkItem) -> list[dict[str, str]]:
         if decision.frontmatter.get("id") != decision_id:
             raise SelectorError("DECISION_ID_MISMATCH", f"Decision file must contain {decision_id}", path=path)
         if decision.frontmatter.get("status") == "proposed":
-            title = next((line[2:] for line in decision.body.splitlines() if line.startswith("# ")), decision_id)
+            title = next((line[2:] for line in mask_fenced_code(decision.body).splitlines() if line.startswith("# ")), decision_id)
             output.append({"id": decision_id, "status": "proposed", "title": title, "path": path})
     return output
 
@@ -676,13 +736,30 @@ def main(argv: list[str] | None = None) -> int:
             raise SelectorError("PLAN_ID_INVALID", "--plan must match PLAN-NNNN, e.g. --plan PLAN-0001", exit_code=2)
         if args.position and (args.work_item is not None or args.unit is not None):
             raise SelectorError("USAGE_ERROR", "--position uses the Plan's current_item; omit --work-item/--unit, e.g. --plan PLAN-0001 --position", exit_code=2)
+        if args.proposals and (args.plan is not None or args.position or args.work_item is not None or args.unit is not None):
+            raise SelectorError(
+                "USAGE_ERROR", "--proposals inventories the whole project; omit --plan, --position, --work-item and --unit. Use select_context.py --root <project-root> --proposals --format json.",
+                expected="--root <project-root> --proposals --format json", exit_code=2)
+        if _MARKDOWN_IMPORT_ERROR is not None:
+            raise SelectorError(
+                "SELECTOR_INTERNAL_ERROR",
+                "Cannot load bundled markdown_structure.py; restore scripts/markdown_structure.py "
+                "from the same package version and rerun the command.",
+                path=str(_MARKDOWN_PATH),
+                expected="readable, importable bundled module exporting mask_fenced_code",
+                observed=f"{type(_MARKDOWN_IMPORT_ERROR).__name__}: {_MARKDOWN_IMPORT_ERROR}",
+                exit_code=3,
+            )
         root = resolve_root(args.root)
-        payload = plan_position(root, args.plan) if args.position else select_context(root, args.work_item, args.unit, args.plan)
+        if args.proposals:
+            payload = proposal_inventory(root)
+        else:
+            payload = plan_position(root, args.plan) if args.position else select_context(root, args.work_item, args.unit, args.plan)
         encoded = encode_json(payload)
         if len(encoded) > args.max_output_bytes:
             raise SelectorError(
                 "OUTPUT_BUDGET_EXCEEDED",
-                "selected semantic context exceeds the configured output budget",
+                "selected semantic context exceeds --max-output-bytes; supply an explicit budget of at least required_bytes to receive the complete result, e.g. --max-output-bytes 65536 when sufficient; no partial result is returned",
                 expected={"maximum_bytes": args.max_output_bytes},
                 observed={"required_bytes": len(encoded)},
             )

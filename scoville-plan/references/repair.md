@@ -47,7 +47,7 @@ not proof of unrun tests, missing reviews or external effects.
 Only an authorized correction/migration writes. Reconcile existing Next action,
 Evidence and relevant original instructions before setting Instructions; missing
 facts stay unrecorded, not []. Transfer additional binding conditions, not the
-next ordinary Step. Link relevant proposed ADRs in Decisions; their ADR owns status.
+next ordinary Step. Apply the entrypoint's proposal-link policy.
 If a legacy item has no Steps, add a coherent Step only when its original task
 and observed state are established. Preserve the whole original scope and effects,
 not just remaining work. Unknown history stays unchanged and is reported.

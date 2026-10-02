@@ -8,6 +8,16 @@ resolve that exact Plan instead of active_plan, retaining its real lifecycle.
 A null `active_plan` is idle;
 do not infer a current Work Item.
 
+For the project-wide proposal inventory, inspect every Decision file's
+frontmatter and H1 title. Require unique matching ADR/file IDs, format_version 1,
+a supported status, lowercase slash-separated scope and one nonempty H1 outside
+backtick or tilde code fences. Ignore fenced contents when locating Plan sections
+and titles too; preserve their original text in returned context.
+Return each proposed Decision's ID, title, scope and repository-relative path,
+including unlinked proposals. Read relevant bodies afterward (all for a full
+audit). This works with an idle index and selects no Plan or Work Item. Stop on
+malformed or ambiguous metadata; never report a partial list as complete.
+
 For position lookup, return the stored current_item and its status, blockers
 and Acceptance/Evidence; retain legacy Next action when present. Only first-prefix `[status: in_progress]` Steps are current;
 group adjacent numbers only. With no active Step, choose the first unfinished

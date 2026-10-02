@@ -18,7 +18,6 @@
   path in Evidence without rewriting started Steps.
 - Include enough context to execute without chat history. Acceptance owns proof
   criteria, Evidence owns observations, and Step status owns progression.
-  Every new Work Item has at least one marked Step; preserve legacy forms.
   Do not create duplicate testing or bookkeeping Steps.
 
 Separate Steps with materially different consequence or reasoning demand.
@@ -34,8 +33,7 @@ Before choosing a group, identify the repeated setup it saves and the concrete
 result its final checks can prove. If either is unclear, revise the grouping.
 Group small, related consecutive Steps when they can be implemented and checked
 together. Keep independently substantial sections separate. Preserve Step order
-within and across groups. Workflow follows supplied grouping, or chooses it at
-dispatch when none is supplied. Grouping changes no authored Steps or acceptance
+within and across groups. Grouping changes no authored Steps or acceptance
 ownership and adds no separate lifecycle. Context rollover continues the same
 assigned group with its remaining work.
 

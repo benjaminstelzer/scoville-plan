@@ -4,7 +4,7 @@
 
 Only when Python is available, use the session interpreter verified with
 `--version` wherever examples say `python` (Windows: `py -3`, then `python`;
-macOS/Linux: `python3`), following the [runtime rule](../SKILL.md#load-only-the-current-route).
+macOS/Linux: `python3`), following the [runtime rule](../SKILL.md#runtime-helpers).
 Without Python, use the manual routes named there; do not invoke these commands.
 
 Read PROJECT_INDEX.md, the active Plan header and the complete affected blocks.
@@ -13,14 +13,15 @@ check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
 Do not scan historical Plans without a concrete relevance reason.
 
-On recovery, use select_context.py --root "<project-root>" --position --format json
-to locate the recorded Work Item and Steps, then select its full context as below.
+On recovery, use position mode to locate the recorded Work Item and Steps,
+then select its full context with the commands below.
 Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
 Steps require only the evidence/result check needed for the authorized work.
 Use paused_context and historical_priorities to check relevant return directions;
 the full-context mode contains only the selected Work Item.
 
 ```text
+python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
 python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
 python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
 ```
@@ -105,12 +106,20 @@ new item; each failed check does not.
 
 ## Step progress
 
-Every new Work Item has Steps, including a single action. Write every new Step
-with a first annotation: `1. [status: todo] Action.` Do not write Next action
-for new work; Step status is the progression source.
+Write status first: `1. [status: todo] Action.`
 Allowed values: `todo`, `in_progress`, `done`, `cancelled`; put status before
 existing route/execute annotations. Old unmarked Steps and mixed lists remain
 valid. Missing status is unknown; never infer todo/done from absence.
+
+An explicitly supplied route follows status: `[route: CLASS]`, with CLASS
+`ultra_low`, `low`, `medium`, `high` or `ultra_high`. Execution follows route:
+`[execute: model=MODEL_ID; reasoning=LEVEL]`. Either execution property may be
+omitted; when both exist, model comes first, separated by exactly `; `.
+MODEL_ID uses lowercase ASCII letters, digits, dots and hyphens, beginning and
+ending alphanumeric. LEVEL is `none`, `minimal`, `low`, `medium`, `high`,
+`xhigh`, `max` or `ultra`. Example shape: `1. [status: todo] [execute: reasoning=high] Verify the result.`
+These are record formats, not model availability or support checks. Preserve the
+authorized choice; do not infer a route or executor from these examples.
 
 During ordinary work, add or update status only from observed progress. Begin
 in_progress when work starts, not on selection alone. Jointly started Steps
@@ -121,11 +130,10 @@ In a nonterminal item, a confirmed correction may return a done Step to
 in_progress; retain its completed effects and reason in Evidence. Status changes
 do not rewrite the action, order, route or execution choice. Pause and blockers
 remain on the Work Item. Update observed Step status at start, completion,
-interruption and correction, and before handoff/compaction. Instructions preserves
-concrete outstanding Work Item checks/reviews and binding return directions.
+interruption and correction, and before handoff/compaction.
 All Steps done does not itself complete the Work Item or authorize repeating them.
 
-## Evidence and legacy continuation
+## Evidence
 
 Evidence contains the observed result, decisive report reference and any open
 limit or relevant commit, not expected results or a diary. Task IDs and attempts
@@ -138,18 +146,29 @@ supported lists without routine migration. When cleanup is requested, preserve
 the full original Evidence in an accessible report before replacing it with a
 short result and link; preserve statuses and acceptance history. New writes retain LF.
 
+## Instructions
+
 Instructions holds additional binding conditions, such as explicit return or
 due overall review, never the next ordinary Step or a copied progress list.
 Use one line or exactly []; absence is legacy unknown, not []. New items write
 it explicitly. Update/remove fulfilled conditions and retain their result in
 Evidence. Before new terminal closure no unmet binding condition remains.
-Do not reinterpret terminal history as live instructions. Link relevant proposed
-ADRs in Decisions; their status is read from the ADR, not copied here. Read
-legacy Next action for these facts too; do not discard existing return authority.
-Legacy nonterminal work without written Step status still needs its nonempty
+Do not reinterpret terminal history as live instructions.
+
+## Legacy continuation
+
+Read legacy Next action for binding conditions too; preserve existing return
+authority. Legacy nonterminal work without written Step status still needs its nonempty
 Next action. When retained during legacy work, keep it consistent with observed
-progress. New work uses Steps instead. Resolve only a named blocker with proof;
-retain any unresolved prerequisite and its effect in Evidence.
+progress. New work uses Steps instead.
+
+## Blockers
+
+Blocked by is `[]` or a comma-space-separated list such as `[EXT-API-KEY]`.
+Labels match `[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}`; prefixes
+`ADR`, `PLAN` and `W` are reserved. Use unique labels for actual external
+prerequisites, never invent one to satisfy validation. Resolve only a named
+blocker with proof; retain unresolved prerequisites and their effect in Evidence.
 
 ## Select and finish
 
@@ -162,7 +181,8 @@ cost, safety or external prerequisites. Ask only if a material conflict remains.
 Only the active Plan selects current_item. Select todo or paused work only with
 done dependencies and no other in_progress item. Selection may retain blockers;
 starting current todo or resuming current paused work requires no blockers or
-unresolved dependent Decision. Pause current in_progress work on authorization.
+unresolved dependent Decision. Pause current in_progress work under explicit
+user direction or an already authorized pause/return instruction.
 
 At execution start, write `Status: in_progress` on the current Work Item and
 record the actually started Steps under Step progress. Selecting current_item
@@ -211,6 +231,6 @@ a write path. Read both exit code and JSON valid:
 | 2 / null | Inspection incomplete (path, access, I/O or concurrent change); resolve the condition, claim no pass |
 | 3 / null | Helper failure; report it and leave structural acceptance open |
 
-Runtime requirements and the sole no-Python fallback are in SKILL.md. Never
+Follow the [Runtime helpers rule](../SKILL.md#runtime-helpers). Never
 turn a helper error into a manual pass. Report a remaining lifecycle or scope
 choice instead of inventing state to satisfy a diagnostic.
