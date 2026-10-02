@@ -63,9 +63,9 @@ Dispatch mode accepts a complete Work Item, an exact Step or adjacent Step
 range. When selected Steps contain written status, `work_item.step_statuses`
 adds their original numbers and status (null for unmarked selected Steps).
 Without written status this field is absent. Source text and selected scope
-remain exact, including done/cancelled Steps needed for review or correction. Scoville Workflow can group consecutive Steps in one worker while
-preserving their authored order. `source_text` is
-the unchanged selected single-line Step text, adjacent lines, or complete Work
+remain exact, including done/cancelled Steps needed for review or correction.
+
+`source_text` is the unchanged selected single-line Step text, adjacent lines, or complete Work
 Item block, including its Evidence for a whole-item unit. Text uses UTF-8/LF
 and one final newline; trailing block-separator blank lines are excluded.
 context_text contains the complete parent Work Item once, for consumers that
@@ -81,15 +81,15 @@ caller has an explicit bounded budget. A malformed profile, ambiguous record,
 redirected path, missing reference, or budget overflow returns one structured
 diagnostic and no partial context.
 
-This projection does not replace every read operation. Inventory Decision
-frontmatter and load relevant proposals separately, or all for a full audit. Read relevant dependency
-Evidence, bounded graph state, queued or paused return state, and complete
+This projection does not replace every read operation. Use the proposal
+inventory below and load relevant proposals separately, or all for a full audit.
+Read relevant dependency Evidence, bounded graph state, queued or paused return state, and complete
 relevant Work Items separately when the operation requires them. Keep those
 reads bounded and never widen the selector response. Use the profile-specific Runtime helpers rule in SKILL.md when Python is unavailable. A helper failure stops selection; do not invent partial context.
 
 ## Read state outside the selector
 
-Use direct reads for Plan or Decision listings, proposal inventory, relevant
+Use direct reads for Plan or Decision listings, relevant
 dependency Evidence, and graph inspection. These operations complement the
 selector; they never replace current-or-named Work Item or dispatch-unit
 selection when Python is available.
@@ -98,8 +98,8 @@ For a Plan or Decision listing, read only frontmatter and the H1 title unless
 the request asks for record content. Read other Work Items only for the
 requested state, dependencies, blockers, or authored content. Read a
 prerequisite's status for readiness and its full block when its result or
-Evidence matters. Inventory Decision frontmatter and surface proposals through
-the next section without loading unrelated accepted Decisions.
+Evidence matters. Surface proposals through the next section without loading
+unrelated accepted Decisions.
 
 Extract sections by their boundaries rather than dumping a large file or
 truncating it at an arbitrary line count. For a graph or item inventory, ordered
@@ -122,9 +122,19 @@ referenced record cannot be resolved unambiguously.
 
 ## Surface proposals
 
-Apply the entrypoint's proposal policy: inventory IDs and status, read and
-report relevant proposals (all for a full audit), and request a choice only
-for dependent work or explicit Decision handling. Keep unrelated work moving.
+Use the `--proposals` invocation in [SKILL.md](../SKILL.md#proposal-inventory).
+
+The `proposals` list contains ID, title, scope and repository-relative path for
+every proposed Decision, including unlinked proposals and proposals outside the
+active Plan. An idle project is supported. The helper reads Decision metadata
+and titles, emits no bodies, and does not judge relevance. Do not combine this
+mode with --plan, --position, --work-item or --unit. The normal output budget
+and diagnostic handling apply. This is an inventory, not full profile validation.
+
+Use each returned path to read and report relevant proposals (all for a full
+audit), then apply the entrypoint's choice policy. Keep unrelated work moving.
+Without Python, follow the selector's manual route named in
+SKILL.md.
 
 ## Report the boundary
 

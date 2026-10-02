@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -11,6 +12,16 @@ from dataclasses import asdict, dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any, Iterable
+
+_MARKDOWN_PATH = Path(__file__).resolve().with_name("markdown_structure.py")
+_MARKDOWN_IMPORT_ERROR: Exception | None = None
+try:
+    _markdown_spec = importlib.util.spec_from_file_location("markdown_structure", _MARKDOWN_PATH)
+    _markdown_module = importlib.util.module_from_spec(_markdown_spec)
+    _markdown_spec.loader.exec_module(_markdown_module)
+    mask_fenced_code = _markdown_module.mask_fenced_code
+except Exception as error:  # Report startup failures through the helper's diagnostic contract.
+    _MARKDOWN_IMPORT_ERROR = error
 
 
 EXIT_VALID = 0
@@ -29,6 +40,13 @@ BATCH_ID_RE = re.compile(r"(?:[0-9a-fA-F]{64}|batch-[0-9]{8}-[1-9][0-9]*)\Z")
 MODEL_ID_RE = re.compile(r"[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\Z")
 EXECUTION_REASONING = {"none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"}
 ROUTE_CLASSES = {"ultra_low", "low", "medium", "high", "ultra_high"}
+EXECUTION_FORMAT = (
+    "model=MODEL_ID; reasoning=LEVEL (either property may be omitted; model first, separator '; '). "
+    "MODEL_ID: lowercase ASCII letters, digits, dots and hyphens, beginning/ending alphanumeric. "
+    "LEVEL: none, minimal, low, medium, high, xhigh, max, ultra"
+)
+ROUTE_FORMAT = "[route: CLASS], CLASS: ultra_low, low, medium, high, ultra_high; after status and before execute/action"
+BLOCKER_FORMAT = "[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}; prefixes ADR, PLAN and W are reserved"
 STEP_ANNOTATION_LIKE_RE = re.compile(r"\[(?:route|execute)(?:\s|:|\])")
 
 PLAN_STATUSES = {"draft", "active", "completed", "cancelled"}
@@ -726,9 +744,10 @@ class Validator:
         expected_h2: list[str],
         record: str | None,
     ) -> dict[str, tuple[int, int]]:
+        structural_lines = mask_fenced_code("\n".join(parsed.lines)).split("\n")
         body = parsed.lines[parsed.body_start :]
         nonempty = [(index + parsed.body_start + 1, line) for index, line in enumerate(body) if line]
-        h1 = [(line_no, line[2:]) for line_no, line in nonempty if line.startswith("# ")]
+        h1 = [(i + 1, line[2:]) for i, line in enumerate(structural_lines) if i >= parsed.body_start and line.startswith("# ")]
         first = nonempty[0] if nonempty else (parsed.body_start + 1, "")
         if len(h1) != 1 or not first[1].startswith("# ") or not first[1][2:].strip():
             self.add(
@@ -742,7 +761,7 @@ class Validator:
                 observed=str([title for _, title in h1]),
             )
 
-        h2 = [(index + 1, line[3:]) for index, line in enumerate(parsed.lines) if line.startswith("## ")]
+        h2 = [(index + 1, line[3:]) for index, line in enumerate(structural_lines) if index >= parsed.body_start and line.startswith("## ")]
         observed_h2 = [title for _, title in h2]
         if observed_h2 != expected_h2:
             self.add(
@@ -865,11 +884,11 @@ class Validator:
                 diagnostic_code,
                 parsed.logical_path,
                 "The execution override does not use the strict native syntax.",
-                "Use `model=MODEL_ID`, `reasoning=LEVEL`, or `model=MODEL_ID; reasoning=LEVEL` with supported value shapes.",
+                "Correct only the malformed spelling while preserving the authorized executor choice; for example `[execute: reasoning=high]`. If the intended choice is unknown, ask before dependent work.",
                 line=line,
                 record=record,
                 field_name=field_name,
-                expected="model=MODEL_ID; reasoning=LEVEL (either property may be omitted)",
+                expected=EXECUTION_FORMAT,
                 observed=value,
             )
         return valid
@@ -901,7 +920,8 @@ class Validator:
                     "WORK_STEP_EXECUTION_INVALID",
                     parsed.logical_path,
                     "The Step route or execution annotation is malformed.",
-                    "Use an optional `[route: CLASS]` followed by an optional `[execute: ...]`, then concrete action prose.",
+                    "Correct the supplied route to its intended allowed value, e.g. `[route: high]`, before execute and action text; do not infer a different route.",
+                    expected=ROUTE_FORMAT,
                     line=line,
                     record=record,
                     field_name="Steps",
@@ -916,7 +936,8 @@ class Validator:
                     "WORK_STEP_EXECUTION_INVALID",
                     parsed.logical_path,
                     "The Step execution annotation is malformed.",
-                    "Use `[execute: model=MODEL_ID; reasoning=LEVEL]` before the concrete action; either property may be omitted.",
+                    "Use `[execute: model=MODEL_ID; reasoning=LEVEL]` before the concrete action; either property may be omitted. Preserve the authorized choice, e.g. `[execute: reasoning=high]`.",
+                    expected=EXECUTION_FORMAT,
                     line=line,
                     record=record,
                     field_name="Steps",
@@ -943,7 +964,8 @@ class Validator:
                 "WORK_STEP_EXECUTION_INVALID",
                 parsed.logical_path,
                 "A Step route or execution annotation is duplicated or not in canonical prefix position.",
-                "Keep at most one route annotation first and one execution annotation second, both before the action prose.",
+                "Keep at most one status, route and execution annotation in that order before the action; e.g. `1. [status: todo] [route: high] [execute: reasoning=high] Verify the result.` Preserve the authorized choices.",
+                expected=ROUTE_FORMAT + "; " + EXECUTION_FORMAT,
                 line=line,
                 record=record,
                 field_name="Steps",
@@ -955,8 +977,9 @@ class Validator:
             return []
         start, end = work_bounds
         starts: list[tuple[int, re.Match[str]]] = []
+        structural_lines = mask_fenced_code("\n".join(parsed.lines)).split("\n")
         for line_no in range(start + 1, end + 1):
-            match = re.fullmatch(r"### (W-[0-9]{3}) (.+)", parsed.lines[line_no - 1])
+            match = re.fullmatch(r"### (W-[0-9]{3}) (.+)", structural_lines[line_no - 1])
             if match:
                 starts.append((line_no, match))
         if not starts:
@@ -1219,7 +1242,8 @@ class Validator:
                         "WORK_BLOCKER_INVALID",
                         parsed.logical_path,
                         "A blocker label is invalid or uses a reserved prefix.",
-                        "Replace it only with the actual external blocker label; do not invent a blocker.",
+                        "Format the actual external prerequisite as a unique label in `Blocked by: [EXT-API-KEY]` (example only); preserve its meaning and do not invent a blocker.",
+                        expected=BLOCKER_FORMAT,
                         line=field_lines.get("Blocked by"),
                         record=record,
                         field_name="Blocked by",
@@ -2218,7 +2242,17 @@ def main(argv: list[str] | None = None) -> int:
         return EXIT_INCOMPLETE
 
     try:
-        result, exit_code = Validator(root).run()
+        if _MARKDOWN_IMPORT_ERROR is not None:
+            result = internal_result(root, _MARKDOWN_IMPORT_ERROR)
+            result["diagnostics"][0].update(
+                file=str(_MARKDOWN_PATH),
+                message="Cannot load bundled markdown_structure.py; no profile validation was performed.",
+                expected="readable, importable bundled module exporting mask_fenced_code",
+                suggestion="Restore scripts/markdown_structure.py from the same package version and rerun the command.",
+            )
+            exit_code = EXIT_INTERNAL
+        else:
+            result, exit_code = Validator(root).run()
     except Exception as error:  # pragma: no cover - defensive process boundary
         result = internal_result(root, error)
         exit_code = EXIT_INTERNAL

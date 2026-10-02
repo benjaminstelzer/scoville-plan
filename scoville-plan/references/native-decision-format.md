@@ -45,6 +45,9 @@ Checks that would verify the choice, not an assertion they already passed.
 Concrete reconsideration trigger.
 ```
 
+Fenced code examples are literal content, including lines starting with `#`.
+Only headings outside backtick or tilde fences define the title and sections.
+
 Keep each section's distinct information without invented alternatives or
 repeated rationale. Keep reasons and tradeoffs only where they explain the
 choice, constrain implementation or determine when to revisit it; omit the
@@ -53,12 +56,10 @@ language. Preserve an existing record's language unless explicitly changed.
 
 ## Links and transitions
 
-Work Item Decisions lists own incoming links. Link every affected todo item and
-no unrelated item, including for unresolved proposals. Started items may append
-a relevant proposed or accepted Decision under edit.md while retaining earlier links. An
-unresolved proposal affecting started work remains linked in Decisions until
-resolved; its concrete effect may be recorded in Instructions; it blocks only dependent work. Proposal status does not
-remove its links. Creating starts proposed; an already explicit human direction
+Work Item Decisions lists own incoming links under the entrypoint policy and
+edit.md permissions. A proposal blocks only dependent work; its concrete effect
+may be recorded in Instructions. Changing proposal status does not remove links.
+Creating starts proposed; an already explicit human direction
 authorizes immediate acceptance without another question.
 
 Apply only explicitly authorized transitions:
@@ -93,5 +94,6 @@ Existing batch IDs are `batch-YYYYMMDD-N` (positive N) or 64 hexadecimal digits.
 Both fields occur together; members are existing unique ADR IDs, each lists
 itself, and every member has the same batch ID and complete ordered membership.
 Do not recompute historical hashes. The Viewer ignores these fields; validator
-and selector retain historical integrity checks. Without Python, General uses
-its manual profile reference for complete inspection.
+and selector retain historical integrity checks.
+Without Python, use the validator manual route named under
+[Runtime helpers](../SKILL.md#runtime-helpers) for complete inspection.
