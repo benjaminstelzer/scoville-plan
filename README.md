@@ -73,6 +73,15 @@ The complete suite is in the
 [Scoville Suite monorepo](https://github.com/benjaminstelzer/scoville-suite).
 Install its released Skill packages, not development templates.
 
+## Configuration
+
+### Model choices for Workflow
+
+When using Scoville Workflow for Codex, you can request a model and reasoning
+level for a Step. Otherwise Workflow uses its configured routing. Scoville
+Setup shows or saves those settings. Unsupported model/effort combinations
+stop the affected operation instead of silently changing your choice.
+
 ## How to use
 
 ```text
@@ -120,13 +129,6 @@ Portable copies keep the project list in `scoville-plan-viewer.xml` beside the
 application. An installed copy in a read-only folder uses the platform's user
 configuration directory. Keep the Skill and Viewer updated together: older
 readers do not understand all current progress fields.
-
-### Model choices for Workflow
-
-When using Scoville Workflow for Codex, you can request a model and reasoning
-level for a Step. Otherwise Workflow uses its configured routing. Scoville
-Setup shows or saves those settings. Unsupported model/effort combinations
-stop the affected operation instead of silently changing your choice.
 
 The [record guide](scoville-plan/references/edit.md) covers Step annotations,
 field formats and helper commands. Plan uses `format_version: 1`.
