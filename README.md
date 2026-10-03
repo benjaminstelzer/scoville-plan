@@ -45,7 +45,7 @@ work they explain, without turning routine updates into more work items.
 
 ## Compatibility
 
-Developed for Codex and Claude Code with repository read/write access and a Fable, Astra, SOL or Opus model (5.0+). The optional helpers need Python 3.10+.
+Developed for Codex and Claude Code with repository read/write access, with Python 3.10+ needed only for optional helpers. Fable, Astra, SOL or Opus (5.0+) are recommended, while Luna 6 with Medium reasoning is the lowest tested baseline.
 
 ## Install
 
