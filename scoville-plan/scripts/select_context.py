@@ -759,7 +759,7 @@ def main(argv: list[str] | None = None) -> int:
         if len(encoded) > args.max_output_bytes:
             raise SelectorError(
                 "OUTPUT_BUDGET_EXCEEDED",
-                "selected semantic context exceeds --max-output-bytes; supply an explicit budget of at least required_bytes to receive the complete result, e.g. --max-output-bytes 65536 when sufficient; no partial result is returned",
+                f"selected semantic context exceeds --max-output-bytes; retry with an explicit budget of at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}; no partial result is returned",
                 expected={"maximum_bytes": args.max_output_bytes},
                 observed={"required_bytes": len(encoded)},
             )

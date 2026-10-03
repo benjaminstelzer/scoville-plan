@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.11.4 - 2026-10-03
+
+- Report the required context size in budget errors and provide an invocation that returns the complete result.
+
 ## v1.11.3 - 2026-10-02
 
 - Find all open Decision proposals, including unlinked choices and projects without an active Plan.
