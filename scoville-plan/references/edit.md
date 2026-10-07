@@ -16,7 +16,7 @@ Do not scan historical Plans without a concrete relevance reason.
 On recovery, use position mode to locate the recorded Work Item and Steps,
 then select its full context with the commands below.
 Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
-Steps require only the evidence/result check needed for the authorized work.
+Steps require only the evidence or result check needed for the authorized work.
 Use paused_context and historical_priorities to check relevant return directions;
 the full-context mode contains only the selected Work Item.
 
@@ -29,34 +29,45 @@ python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --w
 A selector diagnostic stops selection; do not truncate or invent partial
 context. Read read-only.md only for dispatch-unit selection or wider read tasks.
 
-Edit only the owning records. Use context-bound edits, UTF-8 without BOM and
-LF; reject redirected targets or paths outside this project. Preserve unrelated
-changes. Specify `encoding="utf-8"` for every text read and write; for Python
-writes also use `newline="\n"`. Never rely on the platform encoding. For
+Edit only the records that own the state. Use context-bound edits: anchor each
+replacement to unique surrounding text so it changes only the intended location.
+Use UTF-8 without BOM and LF endings. Reject redirected targets or paths
+outside this project, and preserve unrelated changes.
+
+Specify `encoding="utf-8"` for every text read and write. Never rely on the
+platform encoding. For Python replacement writes, prepare the complete
+LF-normalized UTF-8 bytes before opening the target and write those prepared
+bytes. If using a text-mode writer, `newline` must contain the actual LF
+character, never the two literal characters backslash and n. For
 PowerShell pipes, set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)`
 and invoke Python with `-X utf8` so source text and stdin agree. After writing,
 decode the saved bytes as UTF-8 and compare changed non-ASCII text with the
-intended text; a structural pass alone cannot detect already-corrupted words. For multi-file changes prepare the consistent result together and write
-the index last. Stop dependent execution on concurrent changes or a partial write.
+intended text. A structural pass alone cannot detect already-corrupted words.
+
+For changes across files, prepare the consistent result together and write the
+index last. Stop dependent execution on concurrent changes or a partial write.
 An interrupted lifecycle transition needs user direction before completing or
 undoing it. Existing explicit direction suffices only for the same prepared,
 unambiguous result with unchanged affected sources; otherwise ask.
 
 Reread affected complete blocks and inspect the scoped diff. Check meaning,
 authority, preserved history and acceptance evidence, then validate below.
-A successful result applies only to the inspected bytes. Reuse available,
-unchanged instructions; no routine saved copies or byte receipts are required.
+The checked edit and its validation cover only the file contents actually inspected.
+Reuse available instructions while they remain unchanged; do not routinely
+save extra instruction copies or receipts of their exact bytes.
 
 ## Editable fields
 
 | Work Item status | Permitted changes |
 | --- | --- |
-| todo in draft/active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
+| todo in draft or active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
 | in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
 | done or cancelled | Retained history; no routine edits or state transitions |
 
 IDs never change. Preserve started scope, dependencies, order and execution
-history. A started item may add a relevant proposed or accepted Decision, retaining older
+history.
+
+A started item may add a relevant proposed or accepted Decision, retaining older
 links as history. It may correct a stale path, version reference or other purely
 formal wording only when evidence shows unchanged behavior, compatibility,
 data, authority and verification scope. Retain the old wording and reason in
@@ -64,11 +75,12 @@ one referenced note or existing Git history. A changed expected result or weaker
 Acceptance is material, not a formal correction; obtain the user's decision
 before dependent work and record it in the existing Decision system. Do not
 create a replacement Work Item merely to add a Decision or fix formal wording.
+
 Remaining work in a started Step or group may be split into consecutive Steps
 in the same Work Item without changing its Outcome, Acceptance, constraints or
 authored order. Preserve completed parts and their Evidence, and update affected
 Step references so pending assignments still identify the remaining work.
-Other started fields remain fixed. Paused work resumes to in_progress, never
+Other started fields remain fixed. Resume paused work to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
 An explicit user choice may replace only the execution annotation of a named
 unperformed Step after start, preserving its action, route and execution history.
@@ -76,10 +88,12 @@ unperformed Step after start, preserving its action, route and execution history
 ## Insert, refine and order
 
 Allocate the highest Work Item ID plus one; recheck collisions and never reuse
-an interior gap. Append new outcomes in arrival order. Only an explicit priority
+an interior gap. Read it with `select_context.py --root "<project-root>"
+--next-id work-item --plan PLAN-NNNN --format json`. This only suggests an ID;
+recheck immediately before manual creation. Append new outcomes in arrival order. Only an explicit priority
 permits another position; dependencies still precede dependents. Keep the current
 item unchanged when queueing. Do not invent dependencies to force an order.
-Do not write new Deferred/Prioritized title prefixes. Preserve existing prefixes
+Do not write new Deferred or Prioritized title prefixes. Preserve existing prefixes
 and their historical priority; read special cases in the lifecycle reference
 when they affect selection. Persist and validate before acknowledging a queue.
 
@@ -95,7 +109,7 @@ a dependency-ready todo or paused replacement in the same change.
 Write Outcome as the result, Acceptance as decisive checks, and Steps as the
 ordered mechanism. Include known paths, interacting owners, required discovery
 and checks that need interpretation. Keep all context needed without chat history.
-Preserve explicit route/execute annotations; Plan never infers them. For a todo
+Preserve explicit route and execute annotations; Plan never infers them. For a todo
 item without Steps, an explicit executor choice may add one coherent annotated
 Step. See granularity only when boundaries need judgment.
 Describe behavioral contracts in Acceptance. Pin a version or count only when
@@ -106,20 +120,23 @@ new item; each failed check does not.
 
 ## Step progress
 
-Write status first: `1. [status: todo] Action.`
-Allowed values: `todo`, `in_progress`, `done`, `cancelled`; put status before
-existing route/execute annotations. Old unmarked Steps and mixed lists remain
-valid. Missing status is unknown; never infer todo/done from absence.
+Minimum Step syntax (see the [Plan template](native-project-lifecycle.md#create-and-refine)):
 
-An explicitly supplied route follows status: `[route: CLASS]`, with CLASS
-`ultra_low`, `low`, `medium`, `high` or `ultra_high`. Execution follows route:
-`[execute: model=MODEL_ID; reasoning=LEVEL]`. Either execution property may be
-omitted; when both exist, model comes first, separated by exactly `; `.
-MODEL_ID uses lowercase ASCII letters, digits, dots and hyphens, beginning and
-ending alphanumeric. LEVEL is `none`, `minimal`, `low`, `medium`, `high`,
-`xhigh`, `max` or `ultra`. Example shape: `1. [status: todo] [execute: reasoning=high] Verify the result.`
-These are record formats, not model availability or support checks. Preserve the
-authorized choice; do not infer a route or executor from these examples.
+```text
+1. [status: todo] Verify the result.
+```
+
+Status comes first: todo, in_progress, done or cancelled. A Step without status
+is legacy unknown; never treat it as todo or done. Route and execution annotations
+are optional;
+preserve explicit choices, never infer them. Order: status, route, execute,
+action. CLASS: ultra_low, low, medium, high, ultra_high. Execute may omit either
+property; if both exist, model comes first with exactly `; ` between them.
+MODEL_ID uses lowercase ASCII letters, digits, dots and hyphens and starts
+and ends with a letter or digit. LEVEL: none, minimal, low, medium, high, xhigh,
+max, ultra.
+These formats do not prove model availability or support. The validator below
+names malformed annotations and their correction; it never writes the record.
 
 During ordinary work, add or update status only from observed progress. Begin
 in_progress when work starts, not on selection alone. Jointly started Steps
@@ -130,10 +147,16 @@ In a nonterminal item, a confirmed correction may return a done Step to
 in_progress; retain its completed effects and reason in Evidence. Status changes
 do not rewrite the action, order, route or execution choice. Pause and blockers
 remain on the Work Item. Update observed Step status at start, completion,
-interruption and correction, and before handoff/compaction.
+interruption and correction, and before handoff or compaction.
 All Steps done does not itself complete the Work Item or authorize repeating them.
 
 ## Evidence
+
+When a Work Item needs a separate report, update one owning report in place.
+Link retained raw results and independent reviews from it; do not create
+another summary for each check or correction. Update the report for a
+meaningful change in outcome, evidence, blocker or next action, not merely
+because a tool finished. Preserve required historical evidence and verdicts.
 
 Evidence contains the observed result, decisive report reference and any open
 limit or relevant commit, not expected results or a diary. Task IDs and attempts
@@ -148,10 +171,11 @@ short result and link; preserve statuses and acceptance history. New writes reta
 
 ## Instructions
 
-Instructions holds additional binding conditions, such as explicit return or
-due overall review, never the next ordinary Step or a copied progress list.
+Use Instructions for additional binding conditions, such as an explicit return
+or a required overall review. Do not put the next ordinary Step or a copied
+progress list there.
 Use one line or exactly []; absence is legacy unknown, not []. New items write
-it explicitly. Update/remove fulfilled conditions and retain their result in
+it explicitly. Update or remove fulfilled conditions and retain their result in
 Evidence. Before new terminal closure no unmet binding condition remains.
 Do not reinterpret terminal history as live instructions.
 
@@ -182,7 +206,16 @@ Only the active Plan selects current_item. Select todo or paused work only with
 done dependencies and no other in_progress item. Selection may retain blockers;
 starting current todo or resuming current paused work requires no blockers or
 unresolved dependent Decision. Pause current in_progress work under explicit
-user direction or an already authorized pause/return instruction.
+user direction or an already authorized pause or return instruction.
+
+Read structural facts with `select_context.py --root "<project-root>"
+--check-start W-NNN --format json`; add --plan PLAN-NNNN to inspect a named
+Plan, including a draft or inactive one. The output distinguishes todo, paused
+resume, already started and terminal work, checks current_item and lists
+dependencies, blockers, other started items and linked open proposals. A
+successful read and an empty violated_conditions list grant no permission or
+acceptance. Determine proposal relevance and actual authority yourself;
+the helper neither chooses a successor nor writes a start.
 
 At execution start, write `Status: in_progress` on the current Work Item and
 record the actually started Steps under Step progress. Selecting current_item
@@ -194,7 +227,8 @@ dependencies, cleared blockers and an eligible exact successor. Resume paused
 work before completion. Keep Evidence, empty Blocked by and remove Next action.
 Select the authorized successor in the same prepared change. Start it only after
 its pre-flight; selection alone does not start it. Validate each completed write
-operation. No named compound operation or additional progress record is needed.
+operation. These related field edits need no separate named operation or
+additional progress record beyond the native Plan fields.
 An eligible ordinary successor may be blocked: select it without starting it.
 This does not apply to an explicit return governed by the lifecycle rules.
 If no successor can be selected, retain observed Acceptance in Evidence and
@@ -210,7 +244,8 @@ rather than skip it. For historical prefixes or an immediate redirect read the
 special cases in the Plan lifecycle reference.
 
 Cancellation needs explicit direction, evidence and cleared blockers; cancelled
-work satisfies no dependency. Terminal fields match completion. When all other
+work satisfies no dependency. On cancellation, retain Evidence, empty Blocked by
+and remove Next action, as on completion. When all other
 items are terminal, finish the final item and Plan through the lifecycle route
 and set the index idle; invent no successor.
 
@@ -220,6 +255,12 @@ and set the index idle; invent no successor.
 python "<skill-directory>/scripts/validate_profile.py" --root "<project-root>" --format json
 ```
 
+Read warning diagnostics too: FILE_MOJIBAKE_SUSPECTED gives file, line and
+column for common misdecoding sequences in prose. Warnings alone retain
+valid=true and exit 0. Fenced/inline code is excluded; an unquoted literal
+encoding example may warn. This heuristic misses other damage. Compare changed
+non-ASCII text manually with intended wording and never repair it automatically.
+
 Invoke helpers without loading their Python source. They inspect structure and
 references, not authorization, meaning or acceptance truth. No planning CLI is
 a write path. Read both exit code and JSON valid:
@@ -227,7 +268,7 @@ a write path. Read both exit code and JSON valid:
 | Exit / valid | Action |
 | --- | --- |
 | 0 / true | Structural check passed for these bytes; assess semantics separately |
-| 1 / false | Follow ordered file/field diagnostics; repair only unambiguous representation defects and rerun |
+| 1 / false | Follow ordered file and field diagnostics; repair only unambiguous representation defects and rerun |
 | 2 / null | Inspection incomplete (path, access, I/O or concurrent change); resolve the condition, claim no pass |
 | 3 / null | Helper failure; report it and leave structural acceptance open |
 

@@ -13,6 +13,10 @@ output or semantic acceptance. Leave acceptance open if a relation is unresolved
 Write UTF-8 without BOM and LF. Readers also accept consistent CRLF, but not
 mixed endings, bare CR, NUL or invalid UTF-8. Reject redirected paths and
 cross-project escapes. Use one record per Markdown file and forward-slash paths.
+Manually compare changed non-ASCII text with the intended wording. Common
+misdecoding sequences such as `Ã¤` or `â€` may be valid UTF-8 but wrong prose.
+Treat suspicion as a warning with file/line/column, not a syntax failure;
+literal encoding examples and code may be intentional. Never repair automatically.
 IDs are case-sensitive: PLAN-0001, W-001 and ADR-0001 use exactly four, three and
 four digits respectively. File subjects are lowercase ASCII kebab-case after
 the four-digit Plan/Decision number. IDs must be unique in their namespace;

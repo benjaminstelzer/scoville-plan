@@ -1,4 +1,4 @@
 interface:
   display_name: "Scoville Plan"
-  short_description: "Keeps project direction durable without process sprawl"
-  default_prompt: "Use $scoville-plan to maintain the full native Plan, Work Item, and Decision lifecycle without a planning CLI."
+  short_description: "Maintain repository Plans, Work Items and Decisions"
+  default_prompt: "Use $scoville-plan to maintain the repository's Plans, Work Items and Decisions while preserving their scope, history and evidence."

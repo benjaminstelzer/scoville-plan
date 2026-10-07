@@ -11,21 +11,30 @@ Use the selector's position mode for a compact deterministic lookup:
 python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
 ```
 
-Omit --plan to use the index's active Plan. `work_item` is its stored current_item;
-`current_steps` and `current_units` contain only explicitly in_progress Steps,
-grouping only adjacent numbers. `next_step` is the first written todo when no
-Step is active and no earlier unfinished Step is unmarked. Unmarked Steps appear
-in `untracked_steps`; an unknown first unfinished Step gives no guessed position.
-`reason`, Work Item status and blockers explain whether execution can resume.
-`instructions` retains additional binding conditions; null means missing and
-"[]" expressly none. `paused_context` provides all paused items' IDs, headings,
-status, dependency status, blockers and Instructions, with Legacy-Next-action/
-Evidence when unrecorded. `historical_priorities` retains nonterminal priority
-headings. `open_decisions` derives proposed ADRs from the current item's links.
+Omit --plan to use the index's active Plan. The position response contains:
+
+- `work_item`: the Plan's stored current_item.
+- `current_steps`: only Steps explicitly marked in_progress.
+- `current_units`: those active Steps, grouped only when their numbers are adjacent.
+- `next_step`: the first written todo Step, only when no Step is active and no
+  earlier unfinished Step has an unknown status.
+- `untracked_steps`: Steps without a written status. The helper does not guess
+  a position when the first unfinished Step's status is unknown.
+- `reason`: why work can or cannot resume, alongside the Work Item status and blockers.
+- `instructions`: additional binding conditions. null means the field is missing;
+  "[]" explicitly means there are none.
+- `paused_context`: all paused items' IDs, headings, status, dependency status,
+  blockers and Instructions. When Instructions is unrecorded, this also includes
+  the legacy Next action and Evidence fields.
+- `historical_priorities`: nonterminal items' historical priority headings.
+- `open_decisions`: proposed ADRs linked from the current item.
+- `acceptance`: the Work Item's requirements.
+- `evidence`: its recorded observations.
+- `legacy_next_action`: the old field, included only when it exists.
+
 The helper does not infer return targets, instruction fulfilment or acceptance.
-`acceptance` and `evidence` retain requirements and observations;
-`legacy_next_action` is included only when the old field exists. Unknown progress
-never loads repair.md automatically. The helper selects no work and repairs nothing.
+Unknown progress never loads repair.md automatically. The helper selects no
+work and repairs nothing.
 All explicit active Steps are returned even around unknown gaps, with a warning
 in guidance. If all Steps are terminal, inspect outstanding Work Item Acceptance
 and Evidence; do not invent a next Step or repeat completed effects.
@@ -63,7 +72,7 @@ Dispatch mode accepts a complete Work Item, an exact Step or adjacent Step
 range. When selected Steps contain written status, `work_item.step_statuses`
 adds their original numbers and status (null for unmarked selected Steps).
 Without written status this field is absent. Source text and selected scope
-remain exact, including done/cancelled Steps needed for review or correction.
+remain exact, including done or cancelled Steps needed for review or correction.
 
 `source_text` is the unchanged selected single-line Step text, adjacent lines, or complete Work
 Item block, including its Evidence for a whole-item unit. Text uses UTF-8/LF
