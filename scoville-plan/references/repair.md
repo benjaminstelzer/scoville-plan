@@ -69,7 +69,7 @@ as a new direction to return to and execute that work.
 Only an explicit cleanup request authorizes these edits, including in old,
 completed or cancelled Plans. Read the affected complete blocks and only the
 sources needed to distinguish live conditions from redundant text. Apply edit.md's
-Instructions and Evidence rules to those records:
+field rules to those records:
 Before a potentially large read, apply the [shared writing rules](writing.md)
 for preventive size checks and complete ordered reads; do not compact the input
 or first let a full read truncate.
@@ -84,6 +84,16 @@ or first let a full read truncate.
   review occurred. Retain confirmed open defects and limits needed for further
   development. Remove stored review text, run chronologies, duplicate summaries,
   old counts and versions, and artifact inventories without a continuing purpose.
+- Explicit cleanup also authorizes editorial shortening of Outcome, Acceptance
+  and Step text, including started and terminal items. Remove filler and redundant
+  wording; merge equivalent conditions. Every required result, case, value,
+  limit, quantifier, negation, exception, action and verification obligation must
+  retain its meaning. The same results must pass or fail before and after the edit.
+  Keep required methods and checks even when new writing would place them in Steps.
+  Do not replace historical conditions with a mutable reference. If equivalence
+  is uncertain or a requirement would change, keep that text and resolve only
+  the material choice before the affected edit. Equivalent shortening needs no
+  separate approval, old-text copy, note or report.
 - Apply the same future-use criterion to reports within the requested cleanup
   scope. Keep a report reference only when its detail remains useful or required.
   Reviews are temporary development input, not retained reports; remove their
@@ -92,7 +102,8 @@ or first let a full read truncate.
   findings remain current work until resolved.
   Do not create an archive, before-copy, hash chain, new report or Work Item for
   cleanup. No complete project history needs to be reconstructed or retained.
-- Preserve IDs, statuses, Step actions and their order, Acceptance, dependencies,
+- Preserve IDs, statuses, execution annotations, Step order, the meaning of
+  Step actions and Acceptance, dependencies,
   material Decisions, completed effects and live user permissions, limits and
   stops. Cleanup changes neither acceptance nor authorization. Do not delete
   files or alter Decisions outside the requested scope.

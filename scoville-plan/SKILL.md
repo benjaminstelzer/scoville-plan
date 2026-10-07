@@ -42,7 +42,7 @@ requirements remain governed by this Skill.
    prove that an action was authorized or that work was performed.
    Apply historical stops only to their recorded scope.
 3. Ask only for a missing material choice: activation, cancellation, deletion,
-   changed scope, weaker Acceptance, ambiguous succession or Decision transition.
+   changed scope, changed Acceptance requirements, ambiguous succession or Decision transition.
    Check applicable accepted Decisions and the current item's Instructions
    before asking; reuse authority that covers the action and ask only about
    the uncovered material choice. After compaction, recover the recorded
@@ -89,7 +89,7 @@ Depends on: []
 Blocked by: []
 Decisions: []
 Outcome: One independently resumable result.
-Acceptance: Observable checks and their required results.
+Acceptance: Distinct necessary observable conditions and required results; follow edit.md.
 Instructions: []
 Steps:
 1. [status: todo] Perform one coherent unit at the known repository-relative paths and verify its result.

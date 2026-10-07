@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.12.2 - 2026-10-07
+
+- Define Acceptance through distinct necessary results and binding checks. Keep methods, test catalogs and history out of the field unless a method or check is itself required for acceptance.
+- Allow explicitly requested Maintenance to shorten Outcome, Acceptance and Step wording, including started and completed items, without changing requirements or keeping another copy of the old text.
+
 ## v1.12.1 - 2026-10-07
 
 - Keep Instructions limited to current conditions beyond the Steps. Retain concise results and required review occurrence in Evidence.
