@@ -1,12 +1,36 @@
 <!-- helper-fallback: scripts/select_context.py -->
 # Select Work Item context without Python
 
-Use this route only when Python 3 is unavailable. First read `PROJECT_INDEX.md`
-and require `format_version: 1`. Resolve its `active_plan` and require exactly
+Use this route only when Python 3 is unavailable. Read PROJECT_INDEX.md and
+require `format_version: 1`. Select only the requested operation below.
+
+For next-ID lookup, an active Plan is not required. Work Item IDs
+require an explicit Plan and its matching ID/file; inspect its canonical H3
+Work Item IDs. For Plan or Decision IDs inspect every canonical file in the
+corresponding docs directory, require format_version 1 and valid metadata IDs,
+and take the maximum of both filename and metadata numbers. Report mismatches.
+Return maximum plus one, never an interior gap, and the required filename
+pattern for Plans/Decisions. Empty directories begin at 0001. Stop at W-999 or
+PLAN-/ADR-9999; obtain a format decision. Do not write or reserve anything;
+recheck collisions immediately before manual creation. Do not combine this
+lookup with position, proposal or context selection.
+
+For a structural start check, inspect the explicitly named W-NNN in the active
+or explicitly named Plan. Return Plan lifecycle and index selection, current_item
+match, item status, direct dependency statuses, external blockers, other
+in_progress item IDs and linked proposed Decision facts. List violations:
+Plan not active or selected, item not current, terminal or already started item,
+dependency not done, external blockers and other in_progress items. Distinguish
+todo from paused resume; already started work is not a new start. Missing items,
+dependencies or malformed records stop the check. Do not inspect proposal
+contents to infer relevance, choose successors or interpret Returns/priorities.
+Facts never authorize or accept work; make no writes or selections.
+
+For position or Work Item context, resolve `active_plan` and require exactly
 one matching active Plan with `format_version: 1`. For an explicit PLAN-NNNN,
-resolve that exact Plan instead of active_plan, retaining its real lifecycle.
-A null `active_plan` is idle;
-do not infer a current Work Item.
+resolve that exact Plan instead, retaining its real lifecycle. With a null
+`active_plan` and no explicit Plan, report idle and no current Work Item.
+Next-ID lookup and the project-wide proposal inventory also work when idle.
 
 For the project-wide proposal inventory, inspect every Decision file's
 frontmatter and H1 title. Require unique matching ADR/file IDs, format_version 1,

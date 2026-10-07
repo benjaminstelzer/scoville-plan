@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.12.0 - 2026-10-07
+
+- Query the next unused Work Item, Plan or Decision ID and a named item's structural start conditions without writing records or granting execution authority.
+- Warn about likely text-decoding damage without treating intentional examples as invalid UTF-8 or repairing them automatically.
+- Keep Plan updates focused on decisions and progress, preserve completed drafting notes as evidence, and reuse decisive checks for unchanged work.
+- Preserve complete oversized context through compaction or a hashed temporary file, with clear diagnostics for invalid paths and arguments.
+- Keep long Project and Plan history menus scrollable and their first and last entries selectable in Plan Viewer 1.4.3.
+
 ## v1.11.4 - 2026-10-03
 
 - Report the required context size in budget errors and provide an invocation that returns the complete result.

@@ -1,6 +1,6 @@
 # Plan lifecycle and special cases
 
-Use edit.md for writing and validation. The index is the sole active-Plan owner.
+Use edit.md for writing and validation. Only PROJECT_INDEX.md selects the active Plan.
 
 ## Create and refine
 
@@ -12,6 +12,10 @@ it. Write the index last. An existing partial or unsupported profile is not setu
 
 Allocate the highest PLAN number plus one, never an interior gap; check ID and
 filename collisions. Use `docs/plans/0014-subject.md` for PLAN-0014. A later Plan
+may obtain its ID and filename pattern from `select_context.py --root
+"<project-root>" --next-id plan --format json`. The read-only result includes
+both filename and metadata numbers, exposes mismatches, and reserves nothing;
+recheck collisions immediately before manual creation. A later Plan
 starts draft with at least one todo item. Use this template with actual values:
 
 ```text
@@ -49,26 +53,38 @@ active_plan: PLAN-0014
 
 Its optional body must not duplicate live state. Use `active_plan: null` when
 idle. A generic Plan edit changes only title, Goal and Non-goals, plus updated
-on real changes. Preserve identity, lifecycle and Work Items. Classify the whole
-proposed Goal before writing: target and plan-wide constraints stay there;
+on real changes. Preserve identity, lifecycle and Work Items.
+
+Classify the whole proposed Goal before writing: target and plan-wide
+constraints stay there;
 exclusions belong to Non-goals, choices to Decisions, item-specific actions and
 checks to their Work Item, observations to Evidence, and policy to repository
-instructions. Operational messages leave Goal bytes unchanged. Moving existing
-facts requires authorization and continued access by every affected dispatch
-through its item, Decisions or a demonstrably loaded repository contract.
+instructions. Messages about ongoing work do not authorize a Goal edit; leave
+the Goal text unchanged when processing them.
+
+Move existing facts only with authorization. Every affected dispatch must
+still be able to read those facts through its Work Item, its Decisions or a
+repository contract that the dispatched agent has demonstrably loaded.
 
 ## Activate
 
-Activation requires a target draft Plan, explicit direction and a selected
-dependency-ready todo or paused current item. It does not start execution. From idle, prepare the target
-and index together. From an active Plan, also prepare the outgoing Plan with
-the user's chosen draft/completed/cancelled status and exact current-item action:
-preserve todo/paused, pause in_progress, or complete/cancel under edit.md.
+To activate a Plan, require an explicit direction, a target draft Plan and a
+selected todo or paused item whose dependencies are done. Activation does not
+start execution. From idle, prepare the target Plan and index together.
+
+When switching from an active Plan, prepare the outgoing Plan in the same
+change. Use the user's chosen draft, completed or cancelled Plan status.
+Apply only the user's chosen action for its current item:
+
+- Keep a todo or paused item, or
+- pause an in_progress item, or
+- complete or cancel the item under edit.md.
+
 Preserve every other item. Validate the complete resulting profile.
 
 ## Complete or cancel a Plan
 
-When final current todo/in_progress work meets Acceptance and every other item
+When final current todo or in_progress work meets Acceptance and every other item
 is terminal, prepare together: item `Status: done`, retained observed Evidence,
 empty Blocked by and no Next action; Plan `status: completed` without
 current_item; index `active_plan: null`. Validate the complete resulting profile
@@ -77,7 +93,9 @@ to avoid idle.
 
 Cancel a draft only on explicit direction. An active Plan cannot be cancelled
 or completed with a standalone status edit: reconcile current work and index
-in the same prepared change. Cancelled and completed Plans are terminal: do not reactivate them. The
+in the same prepared change.
+
+Cancelled and completed Plans are terminal; do not reactivate them. The
 wholly-unstarted exception below permits only its stated rewrite or deletion,
 never a lifecycle transition.
 
@@ -107,21 +125,22 @@ through the ordinary route instead of deleting it.
 Do not create new title prefixes. Read existing `Deferred after W-001:` as an
 anchored deferred segment in its stored arrival order, and `Prioritized after
 W-001:` as an explicitly chosen successor. Preserve that priority on recovery.
-A missing/later anchor, duplicate priorities for one anchor or a conflict with
+A missing or later anchor, duplicate priorities for one anchor or a conflict with
 an explicit return requires a choice; never silently normalize history.
 
 Only when the user explicitly requests return after redirect, pause the outgoing
 started item and retain the binding return in Instructions:
 `After W-004 completes, resume W-001 at Step N.` Keep title, Steps and position.
 Read existing Next-action returns as equally binding; never silently discard them.
-An ordinary pause preserves observed Step position and remaining constraints. Permit only one unambiguous
-paused return target per redirected item.
+An ordinary pause preserves the observed Step position and remaining constraints.
+Permit only one unambiguous paused return target per redirected item.
 
 Before completing current work, compare every paused return naming that item
 with every `Prioritized after <current-item>:` successor. Use the position
-helper's paused_context and historical_priorities; read Legacy-Next-action/Evidence
-when Instructions was not captured. The helper does not interpret these texts. If they name different
-targets, keep the current item nonterminal, preserve both instructions and ask
+helper's paused_context and historical_priorities; read legacy Next action and Evidence
+when Instructions was not captured. The helper does not interpret these texts.
+
+If they name different targets, keep the current item nonterminal, preserve both instructions and ask
 which target should follow; observed Acceptance alone does not resolve this
 conflict. Record that observation without selecting or resuming either target.
 

@@ -1,7 +1,11 @@
 # Decisions
 
 Use edit.md for safe edits and validation. Allocate the highest ADR number plus
-one, without interior reuse or collisions. Store `ADR-0074` in
+one, without interior reuse or collisions. Read the next ID and filename pattern
+with `select_context.py --root "<project-root>" --next-id decision --format json`.
+The result considers filename and metadata numbers, reports mismatches and
+reserves nothing; recheck before creation.
+For example, store `ADR-0074` in
 `docs/decisions/0074-subject.md`. Use a lowercase slash-separated domain label
 for `scope`, such as `product/import-pricing`. A new proposal follows this template:
 
@@ -56,11 +60,12 @@ language. Preserve an existing record's language unless explicitly changed.
 
 ## Links and transitions
 
-Work Item Decisions lists own incoming links under the entrypoint policy and
-edit.md permissions. A proposal blocks only dependent work; its concrete effect
+Record links to Decisions in each affected Work Item's Decisions field,
+following the entrypoint's linking policy and edit.md's edit permissions.
+A proposal blocks only dependent work; its concrete effect
 may be recorded in Instructions. Changing proposal status does not remove links.
-Creating starts proposed; an already explicit human direction
-authorizes immediate acceptance without another question.
+Create a new Decision as proposed unless explicit human direction already
+authorizes its immediate acceptance. That direction needs no repeated question.
 
 Apply only explicitly authorized transitions:
 
@@ -71,7 +76,8 @@ Apply only explicitly authorized transitions:
 | deprecated | superseded |
 
 Acceptance adds `accepted: YYYY-MM-DD` between created and scope. Deprecation
-retains it. Proposed/rejected omit it. Rejected and superseded are terminal.
+retains it. Proposed and rejected Decisions omit the accepted date. Rejected
+and superseded Decisions are terminal.
 Use actual dates no earlier than creation. Generic content edits affect only
 proposals and preserve identity and lifecycle. Delete a proposal only after
 checking that no Work Item or Decision links to it.
@@ -87,7 +93,7 @@ proposal is not supersession.
 
 ## Existing batch metadata
 
-Write new accept/reject transitions individually and validate after each
+Write new accept or reject transitions individually and validate after each
 completed operation. Never create transition_batch or transition_batch_members.
 Preserve those fields when already present, including later lifecycle changes.
 Existing batch IDs are `batch-YYYYMMDD-N` (positive N) or 64 hexadecimal digits.

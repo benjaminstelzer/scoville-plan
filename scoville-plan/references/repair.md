@@ -16,9 +16,10 @@ request authorizes bounded record corrections, not changes to work products.
    completion. Preserve the result; product fixes are remaining work, not Plan
    repair. Historical acceptance is judged against its original requirements
    and evidence, not today's unrelated product state.
-3. Classify each Step from observed facts: unstarted is todo; actual work with
-   unfinished action/checks is in_progress; completed action and required checks
-   is done; cancelled requires an explicit cancellation. An interruption or
+3. Classify each Step from observed facts. Use todo for unstarted work and
+   in_progress for work that began but still has an unfinished action or checks.
+   Use done only after the action and required checks are complete. Use cancelled
+   only after explicit cancellation. An interruption or
    failed check is not cancellation. If facts are insufficient, retain unknown
    or the recorded status and report the specific uncertainty; never guess.
 4. For an authorized repair, load edit.md and correct only established progress,
@@ -30,7 +31,7 @@ request authorizes bounded record corrections, not changes to work products.
    stops and due reviews. Record unresolved evidence limits once. A Work Item
    is done only after every Acceptance criterion and required review is observed;
    completed Steps or partial successful checks alone do not close it.
-5. Follow edit.md and the lifecycle route for Work Item/Plan/index transitions;
+5. Follow edit.md and the lifecycle route for Work Item, Plan and index transitions;
    prepare related changes together and validate the entire resulting profile.
    Reopening terminal work, removing blockers without proof, cancellation or
    changed scope still needs its applicable explicit decision. If an incorrect
@@ -38,23 +39,25 @@ request authorizes bounded record corrections, not changes to work products.
    direction; do not silently rewrite historical acceptance. On concurrent
    changes stop the affected write and retain the findings.
 
-Report corrected items/Steps, actual checks, unresolved facts and the concrete
+Report corrected items and Steps, actual checks, unresolved facts and the concrete
 continuation. A code or text inspection is evidence only for what it established,
 not proof of unrun tests, missing reviews or external effects.
 
 ## Migrate old records
 
-Only an authorized correction/migration writes. Reconcile existing Next action,
-Evidence and relevant original instructions before setting Instructions; missing
-facts stay unrecorded, not []. Transfer additional binding conditions, not the
-next ordinary Step. Apply the entrypoint's proposal-link policy.
+Only an authorized correction or migration writes. Reconcile existing Next action,
+Evidence and relevant original instructions before setting Instructions. Leave
+unknown facts unrecorded; do not use [] to claim that no conditions exist.
+Transfer additional binding conditions, not the next ordinary Step. Link
+proposed Decisions to affected Work Items under SKILL.md's linking policy.
 If a legacy item has no Steps, add a coherent Step only when its original task
 and observed state are established. Preserve the whole original scope and effects,
 not just remaining work. Unknown history stays unchanged and is reported.
 
 Remove Next action only after all binding contents are preserved in Instructions,
 Steps or retained historical evidence. Keep accessible original reports when
-cleaning up Evidence. Conflicting legacy/new instructions require clarification;
+cleaning up Evidence. Conflicting legacy and new instructions require clarification;
 neither source wins automatically. Historical Step annotations may be filled from
 proof without reopening terminal work. Historical terminal instructions remain
-history; report contradictions without treating them as a new executable return.
+history. Report contradictions, but do not use historical terminal instructions
+as a new direction to return to and execute that work.

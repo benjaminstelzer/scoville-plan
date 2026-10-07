@@ -48,6 +48,7 @@ EXECUTION_FORMAT = (
 ROUTE_FORMAT = "[route: CLASS], CLASS: ultra_low, low, medium, high, ultra_high; after status and before execute/action"
 BLOCKER_FORMAT = "[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}; prefixes ADR, PLAN and W are reserved"
 STEP_ANNOTATION_LIKE_RE = re.compile(r"\[(?:route|execute)(?:\s|:|\])")
+MOJIBAKE_RE = re.compile(r'(?:Ã[\u0080-\u00bfŸ]|Â[\u0080-\u00bf]|â[\u0080-\u00bf€]|ðŸ)')
 
 PLAN_STATUSES = {"draft", "active", "completed", "cancelled"}
 WORK_STATUSES = {"todo", "in_progress", "paused", "done", "cancelled"}
@@ -74,6 +75,7 @@ DIAGNOSTIC_CODES = {
     "FILE_BOM_FORBIDDEN",
     "FILE_CHANGED_DURING_READ",
     "FILE_LINE_ENDING_INVALID",
+    "FILE_MOJIBAKE_SUSPECTED",
     "FILE_UNREADABLE",
     "FILE_UTF8_INVALID",
     "FORMAT_VERSION_UNSUPPORTED",
@@ -138,6 +140,43 @@ DIAGNOSTIC_CODES = {
     "WORK_TEXT_EMPTY",
     "WORK_UNEXPECTED_LINE",
 }
+
+
+def mask_inline_code(text: str) -> str:
+    """Mask matched backtick runs within paragraphs; opening escapes matter."""
+    output = []
+    # ATX headings are separate blocks even without surrounding blank lines.
+    boundaries = r'(\n[ \t]*\n|^ {0,3}#{1,6}(?:[ \t]+[^\n]*|$)\n?)'
+    for paragraph in re.split(boundaries, text, flags=re.MULTILINE):
+        runs = list(re.finditer(r'`+', paragraph))
+        next_same = {}
+        after_escaped_tick = {}
+        following = {}
+        for index in range(len(runs) - 1, -1, -1):
+            length = len(runs[index][0])
+            next_same[index] = following.get(length)
+            after_escaped_tick[index] = following.get(length - 1)
+            following[length] = index
+        chars = list(paragraph)
+        index = 0
+        while index < len(runs):
+            opening = runs[index]
+            before = opening.start() - 1
+            while before >= 0 and paragraph[before] == '\\':
+                before -= 1
+            escaped = (opening.start() - 1 - before) % 2 == 1
+            start = opening.start() + int(escaped)
+            closing = after_escaped_tick[index] if escaped else next_same[index]
+            if start == opening.end() or closing is None:
+                index += 1
+                continue
+            for offset in range(start, runs[closing].end()):
+                if chars[offset] != '\n':
+                    chars[offset] = ' '
+            # Backslashes inside a code span are literal, including before its close.
+            index = closing + 1
+        output.append(''.join(chars))
+    return ''.join(output)
 
 
 @dataclass(frozen=True)
@@ -453,6 +492,17 @@ class Validator:
             )
             return None
 
+        if not stat.S_ISREG(before.st_mode):
+            self.add(
+                "PROFILE_PATH_NOT_DIRECTORY",
+                logical,
+                "A canonical Markdown file path is not a regular file.",
+                "Restore the required regular file from known project facts without opening the unexpected path; do not invent its authored content.",
+                expected="regular Markdown file",
+                observed="not a regular file",
+            )
+            return None
+
         flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
         descriptor: int | None = None
         try:
@@ -514,7 +564,21 @@ class Validator:
                 observed=f"decode error at byte {error.start}",
             )
             return None
-        return text.replace("\r\n", "\n").replace("\r", "\n")
+        text = text.replace("\r\n", "\n").replace("\r", "\n")
+        self._warn_mojibake(text, logical)
+        return text
+
+    def _warn_mojibake(self, text: str, logical: str) -> None:
+        """Flag common misdecoding sequences; quoted code stays literal."""
+        prose = mask_fenced_code(text)
+        prose = mask_inline_code(prose)
+        for line_number, line in enumerate(prose.split('\n'), 1):
+            for match in MOJIBAKE_RE.finditer(line):
+                column = match.start() + 1
+                self.add('FILE_MOJIBAKE_SUSPECTED', logical,
+                         f'Possible mojibake at column {column}; valid UTF-8 can contain already misdecoded prose.',
+                         'Compare with the intended authored text. Preserve intentional examples; do not repair automatically. Manually check other changed non-ASCII text too.',
+                         line=line_number, observed=f'column {column}: {match[0]}', severity='warning')
 
     def _scan_markdown(self, directory: Path) -> list[Path]:
         logical = self.logical(directory)
