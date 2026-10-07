@@ -66,9 +66,12 @@ save extra instruction copies or receipts of their exact bytes.
 | --- | --- |
 | todo in draft or active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
 | in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
-| done or cancelled | No routine edits or state transitions; explicit record cleanup under repair.md may shorten Instructions and Evidence |
+| done or cancelled | No routine edits or state transitions; explicit record cleanup under repair.md may shorten Instructions and Evidence and apply the editorial exception below |
 
 IDs never change. Preserve started scope, dependencies, order and completed effects.
+For any status, explicit cleanup under repair.md may shorten Outcome, Acceptance
+and Step wording without changing requirements, actions or historical meaning.
+This editorial exception needs no old-text note, copy or separate approval.
 
 A started item may add a relevant proposed or accepted Decision, retaining older
 links as history. It may correct a stale path, version reference or other purely
@@ -83,7 +86,7 @@ Remaining work in a started Step or group may be split into consecutive Steps
 in the same Work Item without changing its Outcome, Acceptance, constraints or
 authored order. Preserve completed parts and their Evidence, and update affected
 Step references so pending assignments still identify the remaining work.
-Other started fields remain fixed. Resume paused work to in_progress, never
+Other started fields remain fixed except for that editorial cleanup. Resume paused work to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
 An explicit user choice may replace only the execution annotation of a named
 unperformed Step after start, preserving its action, route and execution history.
@@ -109,13 +112,29 @@ Move whole todo blocks without renumbering. Delete only when another item
 remains and no incoming dependency targets it. Deleting the current item needs
 a dependency-ready todo or paused replacement in the same change.
 
-Write Outcome as the result, Acceptance as decisive checks, and Steps as the
-ordered mechanism. Include known paths, interacting owners, required discovery
-and checks that need interpretation. Keep all context needed without chat history.
+Write Outcome as one result sentence and Steps as the ordered mechanism.
+Put known paths, interacting owners, discovery, methods and check execution in
+Steps. Keep the context needed to execute without chat history.
+
+Derive Acceptance from the requested observable outcome. Keep each distinct,
+necessary condition once: the relevant case, required result and binding limits.
+A condition belongs here when its failure alone prevents acceptance, or when
+it is an explicitly binding verification requirement. Merge equivalent conditions.
+Do not add implementation recipes, full test matrices, reasons, history or copies
+of Outcome, Steps, Instructions or generic project rules. Methods belong here
+only when that method is itself required. Preserve required values, variants,
+exceptions, compatibility, must-not conditions and verification obligations.
+Cite an existing authoritative specification by exact path and section instead
+of copying it; the assigned agent must read that section. Create no document
+merely to move criteria out of the Plan. No character or criterion quota applies.
+A finding against an existing condition is a defect, not another criterion.
+When authorized changes add a condition, rewrite Acceptance coherently rather
+than appending history. Brevity never permits weaker acceptance.
+
 Preserve explicit route and execute annotations; Plan never infers them. For a todo
 item without Steps, an explicit executor choice may add one coherent annotated
 Step. See granularity only when boundaries need judgment.
-Describe behavioral contracts in Acceptance. Pin a version or count only when
+Pin a version or count in Acceptance only when
 that exact value is itself required; record the tested candidate in Evidence.
 Fix test or fixture drift within the existing outcome when it preserves scope
 and Acceptance. A separate owner or independently acceptable result warrants a

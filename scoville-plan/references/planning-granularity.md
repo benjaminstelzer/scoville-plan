@@ -16,8 +16,8 @@
   and verification that needs interpretation. Resolve unknown owners before
   start when practical; otherwise retain the criterion and record the discovered
   path in Evidence without rewriting started Steps.
-- Include enough context to execute without chat history. Acceptance owns proof
-  criteria, Evidence owns observations, and Step status owns progression.
+- Include enough context to execute without chat history. Follow edit.md's field
+  rules for Acceptance; Steps own execution, Evidence observations and Step status progression.
   Do not create duplicate testing or bookkeeping Steps.
 
 Separate Steps with materially different consequence or reasoning demand.
