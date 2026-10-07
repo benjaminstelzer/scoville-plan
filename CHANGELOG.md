@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.12.1 - 2026-10-07
+
+- Keep Instructions limited to current conditions beyond the Steps. Retain concise results and required review occurrence in Evidence.
+- Clean old and completed Plans through Maintenance without reconstructing history, archiving reviews or repeating completed checks.
+- Show the real position fields when resuming work and provide directly usable selection commands. Check large inputs before reading them.
+
 ## v1.12.0 - 2026-10-07
 
 - Query the next unused Work Item, Plan or Decision ID and a named item's structural start conditions without writing records or granting execution authority.

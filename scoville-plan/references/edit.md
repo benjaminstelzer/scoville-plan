@@ -15,6 +15,9 @@ Do not scan historical Plans without a concrete relevance reason.
 
 On recovery, use position mode to locate the recorded Work Item and Steps,
 then select its full context with the commands below.
+Its key fields are `plan`, `plan_status`, `work_item`, `work_status`,
+`current_steps`, `current_units`, `next_step`, `instructions`, `paused_context`
+and `historical_priorities`; [read-only.md](read-only.md) explains further fields.
 Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
 Steps require only the evidence or result check needed for the authorized work.
 Use paused_context and historical_priorities to check relevant return directions;
@@ -27,7 +30,8 @@ python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --w
 ```
 
 A selector diagnostic stops selection; do not truncate or invent partial
-context. Read read-only.md only for dispatch-unit selection or wider read tasks.
+context. Read read-only.md only for further output-field details, dispatch-unit
+selection or wider read tasks.
 
 Edit only the records that own the state. Use context-bound edits: anchor each
 replacement to unique surrounding text so it changes only the intended location.
@@ -51,7 +55,7 @@ undoing it. Existing explicit direction suffices only for the same prepared,
 unambiguous result with unchanged affected sources; otherwise ask.
 
 Reread affected complete blocks and inspect the scoped diff. Check meaning,
-authority, preserved history and acceptance evidence, then validate below.
+authority, current constraints and acceptance evidence, then validate below.
 The checked edit and its validation cover only the file contents actually inspected.
 Reuse available instructions while they remain unchanged; do not routinely
 save extra instruction copies or receipts of their exact bytes.
@@ -62,10 +66,9 @@ save extra instruction copies or receipts of their exact bytes.
 | --- | --- |
 | todo in draft or active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
 | in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
-| done or cancelled | Retained history; no routine edits or state transitions |
+| done or cancelled | No routine edits or state transitions; explicit record cleanup under repair.md may shorten Instructions and Evidence |
 
-IDs never change. Preserve started scope, dependencies, order and execution
-history.
+IDs never change. Preserve started scope, dependencies, order and completed effects.
 
 A started item may add a relevant proposed or accepted Decision, retaining older
 links as history. It may correct a stale path, version reference or other purely
@@ -152,32 +155,40 @@ All Steps done does not itself complete the Work Item or authorize repeating the
 
 ## Evidence
 
-When a Work Item needs a separate report, update one owning report in place.
-Link retained raw results and independent reviews from it; do not create
-another summary for each check or correction. Update the report for a
-meaningful change in outcome, evidence, blocker or next action, not merely
-because a tool finished. Preserve required historical evidence and verdicts.
+Record the observed result briefly. For a required review, record that it took
+place. Keep confirmed open defects as current work, not as a review transcript.
+Do not copy or archive reviews or a run chronology. Review texts serve only the
+development process; full worker results serve the running assessment and
+correction. Keep only facts needed for further development or an independently
+binding retention requirement.
 
-Evidence contains the observed result, decisive report reference and any open
-limit or relevant commit, not expected results or a diary. Task IDs and attempts
-belong in local run records. Prefer one-line plain text, for example:
-`Evidence: tests/results.txt records passing Unicode cases, including brackets [x].`
-Keep it within the supported 200 characters; link a
-report for more detail. Commas and brackets within the text are allowed; do not
-start plain text with `[`. Use `[]` when nothing was observed. Preserve existing
-supported lists without routine migration. When cleanup is requested, preserve
-the full original Evidence in an accessible report before replacing it with a
-short result and link; preserve statuses and acceptance history. New writes retain LF.
+The field is normally sufficient. Link an existing report only for needed detail;
+create or update a separate report only when the task requires that detail.
+Do not create archives, copies, hashes or inventories merely to document checks,
+reviews or cleanup. Progress and next actions belong in their Plan fields.
+
+Prefer one-line plain text, for example:
+`Evidence: Unicode cases passed; Sol high review performed; open: installer ordering, Step 3.`
+Keep it within the supported 200 characters. Commas and brackets within the text
+are allowed; do not start plain text with `[`. Use `[]` when nothing was observed.
+Preserve existing supported lists without routine migration. Explicit cleanup
+uses repair.md; it needs no copy of the old Evidence or new report. New writes retain LF.
 
 ## Instructions
 
-Use Instructions for additional binding conditions, such as an explicit return
-or a required overall review. Do not put the next ordinary Step or a copied
-progress list there.
-Use one line or exactly []; absence is legacy unknown, not []. New items write
-it explicitly. Update or remove fulfilled conditions and retain their result in
-Evidence. Before new terminal closure no unmet binding condition remains.
-Do not reinterpret terminal history as live instructions.
+Use Instructions only for current binding conditions applying to the Work Item
+that are not already stated in its Steps, such as a user stop or limit, an
+explicit return or a required overall review. Do not repeat or paraphrase Steps,
+Outcome or Acceptance, or put status summaries, results, review text, versions,
+counts or history here. Ordinary actions remain in Steps; results belong in Evidence.
+
+Use one short line or exactly []; absence is legacy unknown, not []. New items
+write it explicitly. When conditions change, replace the whole field with the
+remaining conditions in current words. Drop fulfilled or superseded conditions;
+do not prepend new text to old instructions. Keep an unclear live condition
+briefly and ask only if the next action depends on its meaning. Before new
+terminal closure no unmet binding condition remains. Do not reinterpret terminal
+history as live instructions. Explicit cleanup of old fields uses repair.md.
 
 ## Legacy continuation
 

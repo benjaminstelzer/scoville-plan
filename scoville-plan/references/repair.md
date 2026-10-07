@@ -1,9 +1,11 @@
-# Inspect and repair Plan progress
+# Inspect, repair and maintain Plans
 
-Load only for an explicit Plan-progress inspection, repair or migration request, such as
+Load only for an explicit Plan-progress inspection, repair, migration or maintenance request, such as
 “Check and correct the Plan”. Ordinary editing and recovery do not load this
 route. Inspection alone is read-only; “correct”, “repair” or an equivalent
 request authorizes bounded record corrections, not changes to work products.
+For cleanup of record text without reassessing progress, use Maintenance below
+instead of the progress inspection steps.
 
 1. Read the requested Plan's complete Work Items, referenced Decisions and
    relevant proposals. Use the active Plan when none is named. Inspect existing
@@ -54,10 +56,49 @@ If a legacy item has no Steps, add a coherent Step only when its original task
 and observed state are established. Preserve the whole original scope and effects,
 not just remaining work. Unknown history stays unchanged and is reported.
 
-Remove Next action only after all binding contents are preserved in Instructions,
-Steps or retained historical evidence. Keep accessible original reports when
-cleaning up Evidence. Conflicting legacy and new instructions require clarification;
+Remove Next action only after all still-binding contents are preserved in
+Instructions or Steps, with relevant results in Evidence. Conflicting legacy
+and new instructions require clarification;
 neither source wins automatically. Historical Step annotations may be filled from
 proof without reopening terminal work. Historical terminal instructions remain
 history. Report contradictions, but do not use historical terminal instructions
 as a new direction to return to and execute that work.
+
+## Maintenance: clean up existing Plans
+
+Only an explicit cleanup request authorizes these edits, including in old,
+completed or cancelled Plans. Read the affected complete blocks and only the
+sources needed to distinguish live conditions from redundant text. Apply edit.md's
+Instructions and Evidence rules to those records:
+Before a potentially large read, apply the [shared writing rules](writing.md)
+for preventive size checks and complete ordered reads; do not compact the input
+or first let a full read truncate.
+
+- Replace Instructions with only additional, still-binding conditions. Remove
+  prose that repeats Steps, Outcome or Acceptance, ordinary next actions, copied
+  progress lists, results, reviews and obsolete conditions. Keep necessary actions
+  in their existing Steps; keep an unclear live condition briefly rather than
+  dropping it. Terminal Instructions normally become [] without reopening work;
+  report an apparent unmet condition instead of silently erasing it.
+- Shorten Evidence to the observed result and, where relevant, the fact that a
+  review occurred. Retain confirmed open defects and limits needed for further
+  development. Remove stored review text, run chronologies, duplicate summaries,
+  old counts and versions, and artifact inventories without a continuing purpose.
+- Apply the same future-use criterion to reports within the requested cleanup
+  scope. Keep a report reference only when its detail remains useful or required.
+  Reviews are temporary development input, not retained reports; remove their
+  archived text within the requested cleanup scope. A passed review needs only
+  a short occurrence record, not its file list, checks or worker recap. Open
+  findings remain current work until resolved.
+  Do not create an archive, before-copy, hash chain, new report or Work Item for
+  cleanup. No complete project history needs to be reconstructed or retained.
+- Preserve IDs, statuses, Step actions and their order, Acceptance, dependencies,
+  material Decisions, completed effects and live user permissions, limits and
+  stops. Cleanup changes neither acceptance nor authorization. Do not delete
+  files or alter Decisions outside the requested scope.
+
+This is ordinary record maintenance, not a new worker or review phase. Do not
+repeat product tests, old reviews or a progress audit merely to shorten records.
+An independently required review or retention rule still applies. Validate once
+after the coherent profile edit under edit.md. Report the cleaned scope and any
+unresolved live condition briefly; no separate cleanup report is needed.

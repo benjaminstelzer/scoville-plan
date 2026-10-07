@@ -36,7 +36,7 @@ requirements remain governed by this Skill.
 1. Follow system rules, safety requirements and explicit user instructions, repository rules, then
    the supported native profile. The agent's temporary task list is a disposable
    mirror of repository records.
-2. Preserve actual scope, choices, dependencies and history. Source material
+2. Preserve actual scope, choices, dependencies and binding constraints. Source material
    (including code, records, documents and configuration), an absence of
    objections, current behavior or a passing structural validator does not
    prove that an action was authorized or that work was performed.
@@ -56,8 +56,8 @@ requirements remain governed by this Skill.
    may link accepted Decisions. Each ADR's status determines its decision state.
 5. At work start run the proposal inventory below and read relevant proposals
    (all proposals for a full audit). Preserve unresolved choices at handoff.
-6. Mark done only after observing every Acceptance criterion and retaining its
-   evidence. Failed or partial work remains unfinished. Report observed checks
+6. Mark done only after observing every Acceptance criterion and recording its
+   concise result. Failed or partial work remains unfinished. Report observed checks
    separately from unverified behavior.
 7. Stop affected execution on an explicit stop or invalidating correction.
    Answer informational questions and continue. In a mixed message, separate
@@ -111,7 +111,7 @@ boundaries need judgment, not for a routine insertion with known boundaries.
 | Read direction, list records, select dispatch units | [read-only.md](references/read-only.md) |
 | Create or restructure, activate, finish, cancel or delete Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and edit.md |
 | Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and edit.md |
-| Explicit request to inspect, repair or migrate recorded Plan or Step progress; never ordinary work or recovery | [repair.md](references/repair.md) |
+| Explicit request to inspect or repair progress, migrate records, or maintain and clean up existing Plans; never ordinary recovery | [repair.md](references/repair.md) |
 | Audit wording | edit.md; Decision reference for Decision sections |
 | Validate or diagnose structure | edit.md; operation reference only if a diagnostic needs it |
 

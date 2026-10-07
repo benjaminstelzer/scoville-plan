@@ -49,8 +49,11 @@ never enables manual selection. The commands below specify the complete
 invocation; do not load the Python source just to call them. Run:
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" [--plan PLAN-0001] [--work-item W-001] --format json
+python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
 ```
+
+Add `--work-item W-001` to select that item. Add `--plan PLAN-0001` to select
+from that named Plan instead of the index's active Plan; the two options may be combined.
 
 For a worker dispatch, select the exact unit instead:
 
