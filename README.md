@@ -19,7 +19,7 @@ shows these records on Windows, macOS and Linux.
 - Use the repository's existing planning system and relevant Plan, Work Items and Decisions.
 - Check current sources before starting the next item.
 - Edit Markdown and YAML records with observed Step progress and any additional Instructions.
-- Record evidence before completion, preserve accepted history and validate the records.
+- Record concise acceptance results before completion and validate the records.
 
 ## What it enforces
 
@@ -28,7 +28,7 @@ shows these records on Windows, macOS and Linux.
 - **Decisions with an owner.** Confirmed choices are recorded. Open questions
   remain proposals and block only the work that depends on them.
 - **Evidence before completion.** Finished means acceptance was checked.
-  Changes of direction preserve completed work and relevant history.
+  Changes of direction preserve completed work, binding constraints and material decisions.
 
 Edit records from one session at a time. Concurrent edits need reconciliation.
 See the [full instructions](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md).
