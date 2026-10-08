@@ -84,12 +84,17 @@ Preserve every other item. Validate the complete resulting profile.
 
 ## Complete or cancel a Plan
 
-When final current todo or in_progress work meets Acceptance and every other item
-is terminal, prepare together: item `Status: done`, retained observed Evidence,
-empty Blocked by and no Next action; Plan `status: completed` without
-current_item; index `active_plan: null`. Validate the complete resulting profile
-through edit.md. Paused work must first resume. Do not create placeholder work
-to avoid idle.
+When final current todo or in_progress work meets Acceptance and every other
+item is terminal, prepare one coherent update:
+
+| Owner | Terminal fields |
+| --- | --- |
+| Work Item | `Status: done`; retain observed Evidence; empty Blocked by; no Next action. |
+| Plan | `status: completed`; no current_item. |
+| Index | `active_plan: null`. |
+
+Write the index last and validate the complete profile through edit.md.
+Paused work must first resume. Create no placeholder work to avoid idle.
 
 Cancel a draft only on explicit direction. An active Plan cannot be cancelled
 or completed with a standalone status edit: reconcile current work and index
@@ -140,13 +145,16 @@ with every `Prioritized after <current-item>:` successor. Use the position
 helper's paused_context and historical_priorities; read legacy Next action and Evidence
 when Instructions was not captured. The helper does not interpret these texts.
 
-If they name different targets, keep the current item nonterminal, preserve both instructions and ask
-which target should follow; observed Acceptance alone does not resolve this
-conflict. Record that observation without selecting or resuming either target.
+| Return or priority result | Action |
+| --- | --- |
+| Different targets | Keep current item nonterminal and both instructions. Ask which target follows; record observed Acceptance without selecting or resuming either target. |
+| Blocked, missing or dependency-invalid return | Retain return and obtain a choice; never skip to another item. |
+| Unambiguous paused return satisfying edit.md's resume prerequisites, and observed Acceptance | Complete current work and select/resume that return through the sequence below. |
 
-Only after successor selection is unambiguous and Acceptance is observed,
-complete current work while selecting the paused return target, resume it and
-restore its recorded Step position or legacy concrete action. Remove the
-consumed return from live Instructions and record its fulfilment in Evidence. Validate the completed write operation.
-A blocked, missing or dependency-invalid return stays recorded and needs a
-choice; do not skip to another item.
+Historical priority without a paused return follows normal selection under
+[edit.md](edit.md). For the eligible unambiguous paused return only:
+
+1. Complete current work while selecting the return target.
+2. Resume it and restore its recorded Step position or legacy concrete action.
+3. Remove the consumed return from live Instructions; record fulfilment in Evidence.
+4. Validate the complete write operation.

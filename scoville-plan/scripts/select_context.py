@@ -719,14 +719,14 @@ def plan_position(root: Path, requested_plan: str | None) -> dict[str, object]:
                   untracked_steps=[i for i, status in enumerate(statuses, 1) if status is None],
                   blocked_by=f"Blocked by: {single_field(item.block, 'Blocked by', path)}")
     if output["untracked_steps"]:
-        output["guidance"] = "Determine unmarked Step progress from Evidence, relevant original reports and actual task results or changes against the requirements. Missing status is unknown, never todo/done. Do not repeat established completed effects. Record progress only within authorized Plan editing; load the repair route only for an explicit inspection/repair request."
+        output["guidance"] = "1. Determine unmarked Step progress from Evidence, relevant original reports and actual task results or changes against requirements.\n2. Keep missing status unknown, never todo/done; do not repeat established completed effects.\n3. Record progress only within authorized Plan editing; load repair only for an explicit inspection/repair request."
     if active:
         output["reason"] = "written_in_progress_with_untracked" if output["untracked_steps"] else "written_in_progress"
     elif not steps:
         output["reason"] = "whole_work_item"
     elif remaining is None:
         output["reason"] = "steps_terminal_work_item_acceptance_pending"
-        output["guidance"] = "All Steps are terminal. Inspect outstanding Work Item Acceptance, Instructions, Evidence, paused_context, historical_priorities and legacy Next action if present. The helper does not interpret Instructions or choose a return. Do not repeat completed Steps; Work Item acceptance/succession is still pending."
+        output["guidance"] = "All Steps are terminal; Work Item acceptance/succession is pending.\n1. Inspect outstanding Acceptance, Instructions, Evidence, paused_context, historical_priorities and legacy Next action if present.\n2. Resolve acceptance and succession under Plan rules; the helper neither interprets Instructions nor chooses a return.\n3. Do not repeat completed Steps."
     elif remaining[1] is None:
         output["reason"] = "untracked_progress_requires_inspection"
     else:
@@ -905,7 +905,7 @@ def main(argv: list[str] | None = None) -> int:
         if len(encoded) > args.max_output_bytes:
             raise SelectorError(
                 "OUTPUT_BUDGET_EXCEEDED",
-                f"selected semantic context exceeds --max-output-bytes; if this is an agent-selected budget, retry with at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}; do not raise a binding cap; no partial result is returned. This bounds successful selection only: capture the complete output under the outer tool limit before display",
+                f"selected semantic context exceeds --max-output-bytes; no partial result is returned.\n1. Agent-selected internal budget: explicitly retry with at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}.\n2. Binding cap: do not raise it.\n3. Outer tool limit: capture complete output before display; the selection budget bounds successful context only",
                 expected={"maximum_bytes": args.max_output_bytes},
                 observed={"required_bytes": len(encoded)},
             )
