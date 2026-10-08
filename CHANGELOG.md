@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.6 - 2026-10-08
+
+- Follow ordered preparation, writing and verification steps when editing Plan records.
+
 ## v1.12.5 - 2026-10-08
 
 - Diagnose shortened output from the observed failing layer; a later shortened query does not prove that the original capture lost information.
