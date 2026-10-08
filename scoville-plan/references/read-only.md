@@ -2,11 +2,9 @@
 
 Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
-For every invocation below, start Python with `-X utf8` and use the shared writing
-rules' complete in-memory capture before display. The selector's byte budget
-bounds successful context only, not diagnostics or combined output. A reviewer
-does not write captures; if required input cannot be read completely through a
-permitted bounded read, report that missing input.
+Run the commands below under SKILL.md's Proposal inventory capture rule.
+A reviewer does not write source captures; report any required input that
+cannot be read completely through a permitted bounded read.
 
 ## Locate the current Work Item and Steps
 
@@ -48,7 +46,7 @@ Position selects no work, changes no status and grants no start permission.
 
 ## Select Work Item or dispatch-unit context
 
-When Python 3 is present, select the current or explicitly named Work Item
+With a verified Python 3.11+, select the current or explicitly named Work Item
 with the bundled script. A missing script or script error is a blocker; it
 never enables manual selection. The commands below specify the complete
 invocation; do not load the Python source just to call them. Run:
@@ -102,14 +100,14 @@ This projection does not replace every read operation. Use the proposal
 inventory below and load relevant proposals separately, or all for a full audit.
 Read relevant dependency Evidence, bounded graph state, queued or paused return state, and complete
 relevant Work Items separately when the operation requires them. Keep those
-reads bounded and never widen the selector response. Use the profile-specific Runtime helpers rule in SKILL.md when Python is unavailable. A helper failure stops selection; do not invent partial context.
+reads bounded and never widen the selector response. Use the profile-specific Runtime helpers rule in SKILL.md when no suitable Python 3.11+ is available. A helper failure stops selection; do not invent partial context.
 
 ## Read state outside the selector
 
 Use direct reads for Plan or Decision listings, relevant
 dependency Evidence, and graph inspection. These operations complement the
 selector; they never replace current-or-named Work Item or dispatch-unit
-selection when Python is available.
+selection when suitable Python 3.11+ is available.
 
 For a Plan or Decision listing, read only frontmatter and the H1 title unless
 the request asks for record content. Read other Work Items only for the
@@ -150,7 +148,7 @@ and diagnostic handling apply. This is an inventory, not full profile validation
 
 Use each returned path to read and report relevant proposals (all for a full
 audit), then apply the entrypoint's choice policy. Keep unrelated work moving.
-Without Python, follow the selector's manual route named in
+Without suitable Python 3.11+, follow the selector's manual route named in
 SKILL.md.
 
 ## Report the boundary

@@ -87,7 +87,7 @@ def build_parser() -> argparse.ArgumentParser:
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument(
         "--work-item",
-        help="Optional W-NNN item from the active Plan; defaults to current_item.",
+        help="Optional W-NNN item from the active or named Plan; defaults to current_item.",
     )
     selection.add_argument(
         "--unit",
@@ -423,7 +423,7 @@ def project_unit(
 ) -> dict[str, object]:
     unit_match = UNIT_RE.fullmatch(unit)
     if unit_match is None:
-        raise SelectorError("UNIT_INVALID", "--unit has an invalid shape", exit_code=2)
+        raise SelectorError("UNIT_INVALID", "--unit has an invalid shape; use W-NNN, W-NNN/step-N or W-NNN/steps-N-M, e.g. W-001/steps-1-3", exit_code=2)
     steps = parse_steps(selected.block, relative_path)
     requested_step = unit_match.group("step")
     requested_first = unit_match.group("first")
@@ -867,7 +867,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.max_output_bytes < 512:
             raise SelectorError("OUTPUT_BUDGET_INVALID", "--max-output-bytes must be at least 512", exit_code=2)
         if args.unit is not None and UNIT_RE.fullmatch(args.unit) is None:
-            raise SelectorError("UNIT_INVALID", "--unit has an invalid shape", exit_code=2)
+            raise SelectorError("UNIT_INVALID", "--unit has an invalid shape; use W-NNN, W-NNN/step-N or W-NNN/steps-N-M, e.g. W-001/steps-1-3", exit_code=2)
         if args.plan is not None and PLAN_ID_RE.fullmatch(args.plan) is None:
             raise SelectorError("PLAN_ID_INVALID", "--plan must match PLAN-NNNN, e.g. --plan PLAN-0001", exit_code=2)
         if args.check_start is not None and WORK_ID_RE.fullmatch(args.check_start) is None:
@@ -905,7 +905,7 @@ def main(argv: list[str] | None = None) -> int:
         if len(encoded) > args.max_output_bytes:
             raise SelectorError(
                 "OUTPUT_BUDGET_EXCEEDED",
-                f"selected semantic context exceeds --max-output-bytes; retry with an explicit budget of at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}; no partial result is returned",
+                f"selected semantic context exceeds --max-output-bytes; if this is an agent-selected budget, retry with at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}; do not raise a binding cap; no partial result is returned. This bounds successful selection only: capture the complete output under the outer tool limit before display",
                 expected={"maximum_bytes": args.max_output_bytes},
                 observed={"required_bytes": len(encoded)},
             )

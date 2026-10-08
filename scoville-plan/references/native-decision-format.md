@@ -101,5 +101,5 @@ Both fields occur together; members are existing unique ADR IDs, each lists
 itself, and every member has the same batch ID and complete ordered membership.
 Do not recompute historical hashes. The Viewer ignores these fields; validator
 and selector retain historical integrity checks.
-Without Python, use the validator manual route named under
+Without suitable Python 3.11+, use the validator manual route named under
 [Runtime helpers](../SKILL.md#runtime-helpers) for complete inspection.

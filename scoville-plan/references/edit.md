@@ -2,14 +2,11 @@
 
 ## Read and write
 
-Only when Python is available, use the session interpreter verified with
-`--version` wherever examples say `python` (Windows: `py -3`, then `python`;
-macOS/Linux: `python3`), following the [runtime rule](../SKILL.md#runtime-helpers).
-Without Python, use the manual routes named there; do not invoke these commands.
+Use the interpreter and [runtime rule](../SKILL.md#runtime-helpers) from the entrypoint.
+Without suitable Python, use the manual routes named there;
+do not invoke these commands.
 
 Read PROJECT_INDEX.md, the active Plan header and the complete affected blocks.
-Read `.md` files as UTF-8 documentation, never as Python programs. Execute only
-the named `.py` helper with its documented arguments.
 Read referenced Decisions and relevant proposals. Before starting a todo item,
 check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
@@ -23,11 +20,8 @@ and `historical_priorities`; [read-only.md](read-only.md) explains further field
 Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
 Steps require only the evidence or result check needed for the authorized work.
 Use paused_context and historical_priorities to check relevant return directions;
-the full-context mode contains only the selected Work Item. The invocations below
-are command arguments for the shared writing rules' complete capture before
-display, not permission to print unchecked output. Start Python with `-X utf8`.
-`--max-output-bytes` bounds the successful selection, not its diagnostics or
-combined tool output. Check the actual complete output before displaying it.
+the full-context mode contains only the selected Work Item. Run the commands
+below under SKILL.md's Proposal inventory capture rule.
 
 ```text
 python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
@@ -136,6 +130,15 @@ merely to move criteria out of the Plan. No character or criterion quota applies
 A finding against an existing condition is a defect, not another criterion.
 When authorized changes add a condition, rewrite Acceptance coherently rather
 than appending history. Brevity never permits weaker acceptance.
+
+When authorized remaining work moves to another Work Item or Plan, write the
+receiving item from the remaining outcome. Acceptance states each condition
+still binding that outcome once, including fulfilled guarantees the remaining
+work must preserve, or cites the source Acceptance by exact path and section.
+Steps hold takeover and remaining actions; Evidence records accepted source
+contributions and their limits. Do not copy completed actions or results into
+Acceptance. A manager or worker handoff of the same item changes no fields or
+criteria.
 
 Preserve explicit route and execute annotations; Plan never infers them. For a todo
 item without Steps, an explicit executor choice may add one coherent annotated

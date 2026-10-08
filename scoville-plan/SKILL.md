@@ -1,7 +1,7 @@
 ---
 name: scoville-plan
 description: Maintain, resume and audit repository Plans, Work Items and Decisions. Use for Scoville Plan requests, planning records in projects with PROJECT_INDEX.md and docs/plans, durable work across interruptions or context compaction, and follow-up instructions that add or change work during an active Plan. Use to add, remove, reorder or clarify Plan points. Exclude pure informational questions with no retained action, small tasks needing no durable Plan, and explicit opt-out. A requested transfer prompt belongs to Handoff.
-compatibility: "Any Agent Skills host with repository read and write access. Direct Markdown and YAML planning needs no service or network. Selector and validator need Python 3.10+. Manual alternatives load only without Python. Helper errors remain errors. Developed for Codex and Claude Code. Other hosts are untested."
+compatibility: "Any Agent Skills host with repository read and write access. Direct Markdown and YAML planning needs no service or network. Python helpers require Python 3.11+. Manual alternatives load only without suitable Python 3.11+. Helper errors remain errors. Developed for Codex and Claude Code. Other hosts are untested."
 ---
 
 # Scoville Plan
@@ -54,7 +54,8 @@ requirements remain governed by this Skill.
    ask only before dependent work. Link Decisions to affected todo items, never
    unrelated items. Started items also link relevant proposals in Decisions and
    may link accepted Decisions. Each ADR's status determines its decision state.
-5. At work start run the proposal inventory below and read relevant proposals
+5. At work start, except for an assigned read-only field review, run the proposal
+   inventory below and read relevant proposals
    (all proposals for a full audit). Preserve unresolved choices at handoff.
 6. Mark done only after observing every Acceptance criterion and recording its
    concise result. Failed or partial work remains unfinished. Report observed checks
@@ -68,6 +69,14 @@ requirements remain governed by this Skill.
    owning Plan's language. Keep format labels and identifiers unchanged.
 
 ## Proposal inventory
+
+Reuse an already verified interpreter meeting this Skill's Python 3.11+
+requirement. Otherwise check `py -3`
+on Windows or `python3` elsewhere; try `python` if needed. Choose it locally,
+without asking the user. Verify its version before the first helper operation.
+Use that executable wherever examples say `python` or `<verified-python>`,
+including Python commands after `--run --`.
+Report a missing runtime only when no suitable installed interpreter is found.
 
 Follow Runtime helpers below for availability and failures. Start Python with
 `-X utf8` and capture this invocation's complete output before display under the
@@ -115,6 +124,7 @@ boundaries need judgment, not for a routine insertion with known boundaries.
 | Create or restructure, activate, finish, cancel or delete Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and edit.md |
 | Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and edit.md |
 | Explicit request to inspect or repair progress, migrate records, or maintain and clean up existing Plans; never ordinary recovery | [repair.md](references/repair.md) |
+| Review assigned native fields without maintenance | read-only.md and applicable field rules in edit.md; Decision reference for Decision sections. Respect the assigned source boundary; no proposal inventory, maintenance, selectors, validators or tests. Permitted bounded reads remain available. |
 | Audit wording | edit.md; Decision reference for Decision sections |
 | Validate or diagnose structure | edit.md; operation reference only if a diagnostic needs it |
 
@@ -142,20 +152,29 @@ if another editor changes the files or a write leaves only part of the result.
 Use the bundled helpers for their operations. Read their invocation instructions,
 not their source, unless diagnosing a failure.
 
-Before reading Skill references or other large inputs, apply any declared or
-explicitly selected output limit. With Python, use
-`<verified-python> -X utf8 "<skill-directory>/scripts/check_text_size.py" --file "<file>" --max-output-tokens <limit> --part 1`.
-Follow each `next=M` label with `--part M`; read every unchanged UTF-8 part
-through `last`, where end equals total. Measure the complete rendered output, including labels;
-combine files or parts only when that combined output fits. Otherwise use
-separate, individually checked outer tool calls; a script joining reads
-returns one combined output. With no applicable limit, read
-complete UTF-8 directly; do not invent a budget.
-Without Python, first read only the check_text_size reference below. Use
+Before a potentially large read, use the verified Python interpreter and the
+bundled reader:
+`<verified-python> -X utf8 "<skill-directory>/scripts/check_text_size.py" --file "<document>" --max-output-tokens <limit> --part 1`.
+The program is `scripts/check_text_size.py`; the document is only the `--file`
+value. Start only named `.py` files as Python program files. SKILL.md, references
+and assignments are documents, never programs.
+
+Use the smallest declared or explicitly selected command and outer output limit.
+The reader validates the complete UTF-8 file and budgets its labels too.
+Follow `part=N bytes=start:end/total next=M` with `--part M` through `last`,
+where end equals total. Read every unchanged part in order before dependent
+work. Keep the same budget throughout; if it changes, restart at part 1.
+Use separate outer calls unless their complete combined output, including
+labels and metadata, has been measured and fits. Multiple reads or `text()`
+calls in one outer call share its budget. A reader error leaves the read
+incomplete, even if the budget cannot fit its diagnostic. Do not alter or copy
+the input, truncate it or recover omitted text after an oversized read.
+Without an applicable limit, read complete UTF-8 directly; invent no budget.
+Without suitable Python 3.11+, first read only the check_text_size reference below. Use
 a native UTF-8 reader and ordered unchanged parts, measuring each complete
 output including labels before display against `floor(limit * 4 / 5)` bytes.
 With no limit, read it completely. Without a safe reader, stop dependent work.
-Only when Python is unavailable, load the matching optional reference below.
+Only when suitable Python 3.11+ is unavailable, load the matching optional reference below.
 Missing scripts, missing dependencies or helper errors stop the operation;
 they never enable the manual route. Do not load these references otherwise.
 
