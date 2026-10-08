@@ -56,8 +56,13 @@ malformed or ambiguous metadata; never report a partial list as complete.
 
 ## Position
 
-Return the stored current_item and its status, blockers
-and Acceptance/Evidence; retain legacy Next action when present. Current Steps
+1. Return stored current_item, status, blockers and Acceptance/Evidence;
+   retain legacy Next action when present.
+2. Determine current and next Steps under the rules below.
+3. Return unchanged Instructions, paused_context, historical priorities and
+   linked proposed Decisions as described below; infer no return or acceptance.
+
+Current Steps
 are only lines whose first annotation is `[status: in_progress]`. A `todo`,
 `done` or `cancelled` Step is never current, even when a dispatch selects it.
 Group adjacent current Step numbers only. With no active Step, choose the first unfinished
@@ -81,31 +86,41 @@ before Steps is optional in legacy records; new authors write it explicitly.
 
 ## Work Item recovery
 
-Choose the explicit `W-NNN` ID when
-supplied; otherwise use the active Plan's `current_item`. Require exactly one
-matching H3 Work Item block. Return the exact Plan frontmatter, Goal and
-Non-goals; the complete selected Work Item block, including Steps, Evidence
-and any Instructions/legacy Next action; each direct dependency ID and Status line; and every complete
-Decision referenced by the Work Item. Preserve record boundaries and source
-order. Do not trim the Work Item into a dispatch unit or replace a missing
-field with an inference.
+1. Choose explicit `W-NNN` when supplied, otherwise active current_item.
+2. Require exactly one matching H3 Work Item block.
+3. Return every context area below, preserving boundaries and source order:
+
+| Area | Required content |
+| --- | --- |
+| Plan | Exact frontmatter, Goal and Non-goals. |
+| Work Item | Complete block, including Steps, Evidence, Instructions and legacy Next action when present. |
+| Direct dependencies | Each ID and Status line. |
+| Decisions | Every complete Decision referenced by the item. |
+
+Never trim recovery to a dispatch unit or infer a missing field.
 
 ## Dispatch context
 
-Select the exact requested unit.
+1. Select the exact requested unit using its `W-NNN`, not current_item.
+2. Resolve canonical records and required context areas below.
+3. Return complete context only; missing or ambiguous records, boundaries or
+   references stop selection.
 
-Use the `W-NNN` ID in the requested unit, not `current_item`. Require one
-matching active Plan and one matching Work Item. `W-NNN` selects its whole
+Require one matching active Plan and one matching Work Item. `W-NNN` selects its whole
 scope, including all existing Steps. With Steps, `W-NNN/step-N` or
 `W-NNN/steps-N-M` selects an existing Step or an ascending adjacent range of
 at least two Steps. Without Steps, require `W-NNN` alone.
 
-Return the same four semantic areas described in [read-only.md](../read-only.md):
-exact Plan frontmatter, Goal and Non-goals; the requested unit ID and selected
-Work Item's heading, Status, Depends on, Blocked by, Decisions, Outcome and
-Acceptance lines, Instructions when present, plus only the selected Step lines; direct dependency IDs
-with their Status lines; and every complete Decision referenced by the Work
-Item. Include source_text as the exact selected Step lines or complete item
+Return the four semantic areas described in [read-only.md](../read-only.md):
+
+| Area | Required content |
+| --- | --- |
+| Plan | Exact frontmatter, Goal and Non-goals. |
+| Unit | Requested unit ID; selected Work Item's heading, Status, Depends on, Blocked by, Decisions, Outcome, Acceptance and Instructions when present; only selected Step lines. |
+| Direct dependencies | Each ID and Status line. |
+| Decisions | Every complete Decision referenced by the Work Item. |
+
+Include source_text as the exact selected Step lines or complete item
 block without Steps, normalized to LF with one final newline and no trailing
 separator blank lines. For an item without Steps, retain Evidence and Next
 action. Exclude unselected Steps and Work Item-wide Next action from Step units. Resolve each

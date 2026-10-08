@@ -260,11 +260,14 @@ delegated execution begins. Read-only review does not restart completed Steps.
 
 Complete current todo or in_progress work only with observed Acceptance, done
 dependencies, cleared blockers and an eligible exact successor. Resume paused
-work before completion. Keep Evidence, empty Blocked by and remove Next action.
-Select the authorized successor in the same prepared change. Start it only after
-its pre-flight; selection alone does not start it. Validate each completed write
-operation. These related field edits need no separate named operation or
-additional progress record beyond the native Plan fields.
+work before completion.
+
+1. Prepare item completion: retain Evidence, empty Blocked by and remove Next action.
+2. Select the authorized exact successor in the same change. Start it only after
+   its pre-flight; selection alone does not start work.
+3. Validate the complete write operation.
+
+These field edits need no separately named operation or extra progress record.
 An eligible ordinary successor may be blocked: select it without starting it.
 This does not apply to an explicit return governed by the lifecycle rules.
 If no successor can be selected, retain observed Acceptance in Evidence and

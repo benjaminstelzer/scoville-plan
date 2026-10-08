@@ -29,13 +29,22 @@ Dates are valid ISO YYYY-MM-DD and updated/accepted cannot precede created.
 
 ## Index and Plan shape
 
-PROJECT_INDEX.md frontmatter has only these ordered keys: format_version: 1,
-active_plan: PLAN-NNNN or null. Optional body duplicates no mutable routing facts.
-A non-null reference resolves to exactly one active Plan. Null requires none.
+| Index field, in order | Required form |
+| --- | --- |
+| format_version | `1`. |
+| active_plan | `PLAN-NNNN` resolving to exactly one active Plan, or `null` with none. |
 
-Plan frontmatter order is format_version, id, status, created, updated, then
-current_item only when active. Required values are format_version: 1 and status
-one of draft, active, completed, cancelled. Ignore fenced code contents when identifying headings and section boundaries.
+No other frontmatter keys. Optional body duplicates no mutable routing facts.
+
+| Plan field, in order | Required form |
+| --- | --- |
+| format_version | `1`. |
+| id | Unique matching Plan ID. |
+| status | draft, active, completed or cancelled. |
+| created, updated | Valid dates under Files and identity. |
+| current_item | Only when active; resolves to todo/in_progress/paused. |
+
+Ignore fenced code contents when identifying headings and section boundaries.
 Exactly one H1 precedes the H2s Goal,
 Non-goals, Work items in that order; all are explicit and nonempty. A Plan has
 at least one Work Item. Active current_item resolves to todo/in_progress/paused.
@@ -45,9 +54,16 @@ for a wholly unstarted Plan are in native-project-lifecycle.md.
 
 ## Work Item shape
 
-Each H3 is `### W-001 Nonempty title` and starts one contiguous block. Exactly
-these fields occur in order: Status, Depends on, Blocked by, Decisions, Outcome,
-Acceptance, optional Instructions, optional Steps, Evidence, optional legacy Next action. Unknown,
+Each H3 is `### W-001 Nonempty title` and starts one contiguous block.
+
+| Fields, in order | Presence |
+| --- | --- |
+| Status, Depends on, Blocked by, Decisions, Outcome, Acceptance | Required. |
+| Instructions, Steps | Optional in legacy records. |
+| Evidence | Required. |
+| Next action | Optional legacy field. |
+
+Unknown,
 repeated or missing fields are invalid. Each value occupies one physical line.
 Status is todo/in_progress/paused/done/cancelled. Outcome and Acceptance are
 nonempty. Steps are consecutive nonempty `1.`, `2.` lines without blank lines.
@@ -93,9 +109,14 @@ by a valid parser result. Authored-history permissions are in edit.md.
 
 ## Decision shape and graph
 
-Frontmatter keys in order: format_version, id, status, created, optional accepted,
-scope, optional supersedes, superseded_by, transition_batch,
-transition_batch_members. Unknown or repeated keys are invalid. Version is 1.
+| Decision keys, in order | Presence |
+| --- | --- |
+| format_version, id, status, created | Required; version is 1. |
+| accepted | Required for accepted/deprecated/superseded; forbidden for proposed/rejected. |
+| scope | Required. |
+| supersedes, superseded_by, transition_batch, transition_batch_members | Optional under the graph rules below. |
+
+Unknown or repeated keys are invalid.
 Headings inside backtick or tilde code fences are literal content.
 Scope consists of nonempty slash-separated `[a-z0-9][a-z0-9-]*` segments.
 Status is proposed/accepted/rejected/deprecated/superseded. Accepted, deprecated

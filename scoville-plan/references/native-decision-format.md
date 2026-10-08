@@ -82,14 +82,17 @@ Use actual dates no earlier than creation. Generic content edits affect only
 proposals and preserve identity and lifecycle. Delete a proposal only after
 checking that no Work Item or Decision links to it.
 
-Supersession preserves both records: create the accepted replacement with
-`supersedes: ADR-0001` after scope, and set old status superseded with reciprocal
-`superseded_by: ADR-0002` after any supersedes. An authorized change to accepted
-or deprecated content uses this route, never an in-place rewrite. Replace links
-in affected todo items. Append the accepted replacement to affected started
-items, preserving the older link as history and explaining the change. Terminal
-historical links alone do not block replacement. Rejection in favor of another
-proposal is not supersession.
+Supersession preserves both records. An authorized change to accepted or
+deprecated content uses this route, never an in-place rewrite:
+
+1. Create the accepted replacement with `supersedes: ADR-0001` after scope.
+2. Set old status superseded and reciprocal `superseded_by: ADR-0002` after any supersedes.
+3. Replace links in affected todo items. For started items, append the accepted
+   replacement, retain the older link as history and explain the change.
+4. Validate the coherent transition through edit.md.
+
+Terminal historical links alone do not block replacement. Rejection in favor
+of another proposal is not supersession.
 
 ## Existing batch metadata
 
