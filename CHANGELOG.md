@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.5 - 2026-10-08
+
+- Diagnose shortened output from the observed failing layer; a later shortened query does not prove that the original capture lost information.
+
 ## v1.12.4 - 2026-10-08
 
 - Require Python 3.11+ consistently and distinguish the reader program from its document input.
