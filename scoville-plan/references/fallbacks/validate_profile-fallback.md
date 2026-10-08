@@ -1,8 +1,8 @@
 <!-- helper-fallback: scripts/validate_profile.py -->
 # Inspect a profile without Python
 
-General only: load this only when Python is unavailable. Never use it to
-bypass a missing or failing helper when Python is present. Require the complete
+General only: load this only when no suitable Python 3.11+ is available. Never use it to
+bypass a missing or failing helper with a suitable interpreter. Require the complete
 supported profile and inspect all canonical records and relations after edits.
 Use full records when bounded reads cannot establish an invariant. Truncated
 output proves no absence. This is manual structural inspection, not validator
@@ -13,6 +13,9 @@ output or semantic acceptance. Leave acceptance open if a relation is unresolved
 Write UTF-8 without BOM and LF. Readers also accept consistent CRLF, but not
 mixed endings, bare CR, NUL or invalid UTF-8. Reject redirected paths and
 cross-project escapes. Use one record per Markdown file and forward-slash paths.
+Strictly decode bytes before displaying text; replacement decoding is no
+encoding check. Base each diagnosis on that profile's own files, including
+semantic observations; never copy facts from another inspected profile.
 Manually compare changed non-ASCII text with the intended wording. Common
 misdecoding sequences such as `Ã¤` or `â€` may be valid UTF-8 but wrong prose.
 Treat suspicion as a warning with file/line/column, not a syntax failure;

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.12.4 - 2026-10-08
+
+- Require Python 3.11+ consistently and distinguish the reader program from its document input.
+- Preserve every binding Acceptance condition when remaining work changes owner. Keep field reviews read-only.
+- Make manual selection and profile inspection use exact records, the current profile and strict UTF-8 decoding before display.
+
 ## v1.12.3 - 2026-10-08
 
 - Read Markdown as documentation and use complete UTF-8 helper invocations. Capture selector diagnostics as well as successful context before display.

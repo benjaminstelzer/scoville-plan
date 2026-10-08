@@ -1,8 +1,14 @@
 <!-- helper-fallback: scripts/select_context.py -->
 # Select Work Item context without Python
 
-Use this route only when Python 3 is unavailable. Read PROJECT_INDEX.md and
-require `format_version: 1`. Select only the requested operation below.
+Use this route only when no suitable Python 3.11+ is available. Read PROJECT_INDEX.md and
+require `format_version: 1`. Choose the requested operation below. If several
+are requested, keep their results separate; position and dispatch select
+different Steps. Supply original records, not summaries. For saved JSON, use
+a native UTF-8 writer and serializer; read the complete saved result before
+dependent work. Do not implement a character-to-byte encoder yourself.
+
+## Next ID
 
 For next-ID lookup, an active Plan is not required. Work Item IDs
 require an explicit Plan and its matching ID/file; inspect its canonical H3
@@ -15,7 +21,9 @@ PLAN-/ADR-9999; obtain a format decision. Do not write or reserve anything;
 recheck collisions immediately before manual creation. Do not combine this
 lookup with position, proposal or context selection.
 
-For a structural start check, inspect the explicitly named W-NNN in the active
+## Structural start check
+
+Inspect the explicitly named W-NNN in the active
 or explicitly named Plan. Return Plan lifecycle and index selection, current_item
 match, item status, direct dependency statuses, external blockers, other
 in_progress item IDs and linked proposed Decision facts. List violations:
@@ -26,13 +34,17 @@ dependencies or malformed records stop the check. Do not inspect proposal
 contents to infer relevance, choose successors or interpret Returns/priorities.
 Facts never authorize or accept work; make no writes or selections.
 
-For position or Work Item context, resolve `active_plan` and require exactly
+## Resolve the Plan for position or context
+
+Resolve `active_plan` and require exactly
 one matching active Plan with `format_version: 1`. For an explicit PLAN-NNNN,
 resolve that exact Plan instead, retaining its real lifecycle. With a null
 `active_plan` and no explicit Plan, report idle and no current Work Item.
 Next-ID lookup and the project-wide proposal inventory also work when idle.
 
-For the project-wide proposal inventory, inspect every Decision file's
+## Proposal inventory
+
+Inspect every Decision file's
 frontmatter and H1 title. Require unique matching ADR/file IDs, format_version 1,
 a supported status, lowercase slash-separated scope and one nonempty H1 outside
 backtick or tilde code fences. Ignore fenced contents when locating Plan sections
@@ -42,9 +54,13 @@ including unlinked proposals. Read relevant bodies afterward (all for a full
 audit). This works with an idle index and selects no Plan or Work Item. Stop on
 malformed or ambiguous metadata; never report a partial list as complete.
 
-For position lookup, return the stored current_item and its status, blockers
-and Acceptance/Evidence; retain legacy Next action when present. Only first-prefix `[status: in_progress]` Steps are current;
-group adjacent numbers only. With no active Step, choose the first unfinished
+## Position
+
+Return the stored current_item and its status, blockers
+and Acceptance/Evidence; retain legacy Next action when present. Current Steps
+are only lines whose first annotation is `[status: in_progress]`. A `todo`,
+`done` or `cancelled` Step is never current, even when a dispatch selects it.
+Group adjacent current Step numbers only. With no active Step, choose the first unfinished
 written todo only if no earlier unfinished Step is unmarked. List unmarked
 Steps as unknown. Tell the agent to determine their progress from Evidence,
 relevant original reports and actual task results or changes against requirements;
@@ -63,7 +79,9 @@ Derive open_decisions from linked ADRs whose status is proposed, never copied
 state. Do not infer return targets or acceptance from free text. Instructions
 before Steps is optional in legacy records; new authors write it explicitly.
 
-For current-or-named Work Item recovery, choose the explicit `W-NNN` ID when
+## Work Item recovery
+
+Choose the explicit `W-NNN` ID when
 supplied; otherwise use the active Plan's `current_item`. Require exactly one
 matching H3 Work Item block. Return the exact Plan frontmatter, Goal and
 Non-goals; the complete selected Work Item block, including Steps, Evidence
@@ -72,7 +90,9 @@ Decision referenced by the Work Item. Preserve record boundaries and source
 order. Do not trim the Work Item into a dispatch unit or replace a missing
 field with an inference.
 
-For a worker dispatch, select the exact unit instead:
+## Dispatch context
+
+Select the exact requested unit.
 
 Use the `W-NNN` ID in the requested unit, not `current_item`. Require one
 matching active Plan and one matching Work Item. `W-NNN` selects its whole
