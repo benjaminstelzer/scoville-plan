@@ -8,6 +8,8 @@ macOS/Linux: `python3`), following the [runtime rule](../SKILL.md#runtime-helper
 Without Python, use the manual routes named there; do not invoke these commands.
 
 Read PROJECT_INDEX.md, the active Plan header and the complete affected blocks.
+Read `.md` files as UTF-8 documentation, never as Python programs. Execute only
+the named `.py` helper with its documented arguments.
 Read referenced Decisions and relevant proposals. Before starting a todo item,
 check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
@@ -21,12 +23,16 @@ and `historical_priorities`; [read-only.md](read-only.md) explains further field
 Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
 Steps require only the evidence or result check needed for the authorized work.
 Use paused_context and historical_priorities to check relevant return directions;
-the full-context mode contains only the selected Work Item.
+the full-context mode contains only the selected Work Item. The invocations below
+are command arguments for the shared writing rules' complete capture before
+display, not permission to print unchecked output. Start Python with `-X utf8`.
+`--max-output-bytes` bounds the successful selection, not its diagnostics or
+combined tool output. Check the actual complete output before displaying it.
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
 ```
 
 A selector diagnostic stops selection; do not truncate or invent partial
@@ -282,7 +288,7 @@ and set the index idle; invent no successor.
 ## Structural check
 
 ```text
-python "<skill-directory>/scripts/validate_profile.py" --root "<project-root>" --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/validate_profile.py" --root "<project-root>" --format json
 ```
 
 Read warning diagnostics too: FILE_MOJIBAKE_SUSPECTED gives file, line and
