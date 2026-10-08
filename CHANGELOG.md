@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.7 - 2026-10-08
+
+- Make Plan selection, editing and paused continuation conditions explicit, so blockers are resolved before a dependent action.
+
 ## v1.12.6 - 2026-10-08
 
 - Follow ordered preparation, writing and verification steps when editing Plan records.
