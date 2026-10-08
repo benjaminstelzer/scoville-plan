@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.12.3 - 2026-10-08
+
+- Read Markdown as documentation and use complete UTF-8 helper invocations. Capture selector diagnostics as well as successful context before display.
+- Keep complete input available through bounded reads and preserve the manual route when Python is unavailable.
+
 ## v1.12.2 - 2026-10-07
 
 - Define Acceptance through distinct necessary results and binding checks. Keep methods, test catalogs and history out of the field unless a method or check is itself required for acceptance.

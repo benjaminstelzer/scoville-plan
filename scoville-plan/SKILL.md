@@ -69,10 +69,13 @@ requirements remain governed by this Skill.
 
 ## Proposal inventory
 
-Follow Runtime helpers below for availability and failures. Run:
+Follow Runtime helpers below for availability and failures. Start Python with
+`-X utf8` and capture this invocation's complete output before display under the
+shared writing rules, including diagnostics. The selector's byte budget bounds
+successful context only. Run:
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
 ```
 
 Read relevant Decisions from the returned paths. The inventory includes unlinked
@@ -138,6 +141,20 @@ if another editor changes the files or a write leaves only part of the result.
 
 Use the bundled helpers for their operations. Read their invocation instructions,
 not their source, unless diagnosing a failure.
+
+Before reading Skill references or other large inputs, apply any declared or
+explicitly selected output limit. With Python, use
+`<verified-python> -X utf8 "<skill-directory>/scripts/check_text_size.py" --file "<file>" --max-output-tokens <limit> --part 1`.
+Follow each `next=M` label with `--part M`; read every unchanged UTF-8 part
+through `last`, where end equals total. Measure the complete rendered output, including labels;
+combine files or parts only when that combined output fits. Otherwise use
+separate, individually checked outer tool calls; a script joining reads
+returns one combined output. With no applicable limit, read
+complete UTF-8 directly; do not invent a budget.
+Without Python, first read only the check_text_size reference below. Use
+a native UTF-8 reader and ordered unchanged parts, measuring each complete
+output including labels before display against `floor(limit * 4 / 5)` bytes.
+With no limit, read it completely. Without a safe reader, stop dependent work.
 Only when Python is unavailable, load the matching optional reference below.
 Missing scripts, missing dependencies or helper errors stop the operation;
 they never enable the manual route. Do not load these references otherwise.

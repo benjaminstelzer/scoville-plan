@@ -2,13 +2,18 @@
 
 Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
+For every invocation below, start Python with `-X utf8` and use the shared writing
+rules' complete in-memory capture before display. The selector's byte budget
+bounds successful context only, not diagnostics or combined output. A reviewer
+does not write captures; if required input cannot be read completely through a
+permitted bounded read, report that missing input.
 
 ## Locate the current Work Item and Steps
 
 Use the selector's position mode for a compact deterministic lookup:
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
 ```
 
 Omit --plan to use the index's active Plan. The position response contains:
@@ -49,7 +54,7 @@ never enables manual selection. The commands below specify the complete
 invocation; do not load the Python source just to call them. Run:
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
 ```
 
 Add `--work-item W-001` to select that item. Add `--plan PLAN-0001` to select
@@ -58,9 +63,9 @@ from that named Plan instead of the index's active Plan; the two options may be 
 For a worker dispatch, select the exact unit instead:
 
 ```text
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-001 --format json
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/step-2 --format json
-python "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/steps-2-3 --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-001 --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/step-2 --format json
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/steps-2-3 --format json
 ```
 
 The success object contains exactly four top-level semantic areas:
