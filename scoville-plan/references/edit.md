@@ -33,32 +33,29 @@ A selector diagnostic stops selection; do not truncate or invent partial
 context. Read read-only.md only for further output-field details, dispatch-unit
 selection or wider read tasks.
 
-Edit only the records that own the state. Use context-bound edits: anchor each
-replacement to unique surrounding text so it changes only the intended location.
-Use UTF-8 without BOM and LF endings. Reject redirected targets or paths
-outside this project, and preserve unrelated changes.
+Edit only owning records with replacements anchored to unique surrounding text.
+Reject redirected targets and paths outside the project; preserve unrelated
+changes. Use UTF-8 without BOM, LF endings and explicit `encoding="utf-8"` for
+every text read and write, never platform encoding.
 
-Specify `encoding="utf-8"` for every text read and write. Never rely on the
-platform encoding. For Python replacement writes, prepare the complete
-LF-normalized UTF-8 bytes before opening the target and write those prepared
-bytes. If using a text-mode writer, `newline` must contain the actual LF
-character, never the two literal characters backslash and n. For
-PowerShell pipes, set `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)`
-and invoke Python with `-X utf8` so source text and stdin agree. After writing,
-decode the saved bytes as UTF-8 and compare changed non-ASCII text with the
-intended text. A structural pass alone cannot detect already-corrupted words.
+1. Prepare the complete consistent result before opening targets. For Python
+   replacement writes, prepare LF-normalized UTF-8 bytes and write those bytes.
+   A text-mode writer's `newline` must be an actual LF, never literal backslash
+   and n. For PowerShell pipes, set
+   `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` and invoke Python
+   with `-X utf8` so source text and stdin agree.
+2. Write the prepared files, index last for changes across files. Decode saved
+   bytes as UTF-8 and compare changed non-ASCII text with the intended text;
+   a structural pass alone cannot detect corrupted words.
+3. Reread affected complete blocks and inspect the scoped diff. Check meaning,
+   authority, current constraints and acceptance evidence, then validate below.
+   This covers only inspected contents. Reuse unchanged instructions; do not
+   routinely save extra copies or receipts of their exact bytes.
 
-For changes across files, prepare the consistent result together and write the
-index last. Stop dependent execution on concurrent changes or a partial write.
-An interrupted lifecycle transition needs user direction before completing or
-undoing it. Existing explicit direction suffices only for the same prepared,
+Stop dependent execution on concurrent changes or a partial write. An
+interrupted lifecycle transition needs user direction before completion or
+undoing. Existing explicit direction suffices only for the same prepared,
 unambiguous result with unchanged affected sources; otherwise ask.
-
-Reread affected complete blocks and inspect the scoped diff. Check meaning,
-authority, current constraints and acceptance evidence, then validate below.
-The checked edit and its validation cover only the file contents actually inspected.
-Reuse available instructions while they remain unchanged; do not routinely
-save extra instruction copies or receipts of their exact bytes.
 
 ## Editable fields
 
