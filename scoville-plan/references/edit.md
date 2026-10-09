@@ -49,6 +49,9 @@ every text read and write, never platform encoding.
    a structural pass alone cannot detect corrupted words.
 3. Reread affected complete blocks and inspect the scoped diff. Check meaning,
    authority, current constraints and acceptance evidence, then validate below.
+   Keep actions in Steps, observed results in Evidence and extra current conditions
+   in Instructions. Remove completed actions and result history from Instructions;
+   preserve binding safeguards and due reviews.
    This covers only inspected contents. Reuse unchanged instructions; do not
    routinely save extra copies or receipts of their exact bytes.
 
@@ -90,10 +93,10 @@ unperformed Step after start, preserving its action, route and execution history
 
 ## Insert, refine and order
 
-Allocate the highest Work Item ID plus one; recheck collisions and never reuse
-an interior gap. Read it with `select_context.py --root "<project-root>"
---next-id work-item --plan PLAN-NNNN --format json`. This only suggests an ID;
-recheck immediately before manual creation. Append new outcomes in arrival order. Only an explicit priority
+Use the highest Work Item ID plus one, never an interior gap. The selector
+`select_context.py --root "<project-root>" --next-id work-item --plan PLAN-NNNN
+--format json` only suggests it; recheck collisions immediately before creation.
+Append new outcomes in arrival order. Only an explicit priority
 permits another position; dependencies still precede dependents. Keep the current
 item unchanged when queueing. Do not invent dependencies to force an order.
 Do not write new Deferred or Prioritized title prefixes. Preserve existing prefixes

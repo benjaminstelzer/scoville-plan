@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.8 - 2026-10-09
+
+- Recheck new IDs immediately before creation and reserve complete Work Item Acceptance for Work Item completion. Preserve full input and failure status when reading or transferring Plan context.
+
 ## v1.12.7 - 2026-10-08
 
 - Make Plan selection, editing and paused continuation conditions explicit, so blockers are resolved before a dependent action.
