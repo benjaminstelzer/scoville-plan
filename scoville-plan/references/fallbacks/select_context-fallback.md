@@ -15,7 +15,7 @@ require an explicit Plan and its matching ID/file; inspect its canonical H3
 Work Item IDs. For Plan or Decision IDs inspect every canonical file in the
 corresponding docs directory, require format_version 1 and valid metadata IDs,
 and take the maximum of both filename and metadata numbers. Report mismatches.
-Return maximum plus one, never an interior gap, and the required filename
+Return `next ID = maximum + 1`, never an interior gap, and the required filename
 pattern for Plans/Decisions. Empty directories begin at 0001. Stop at W-999 or
 PLAN-/ADR-9999; obtain a format decision. Do not write or reserve anything;
 recheck collisions immediately before manual creation. Do not combine this
