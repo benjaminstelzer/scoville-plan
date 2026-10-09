@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.10 - 2026-10-09
+
+- Keep the verified reader and launcher unchanged when continuing a document or opening one from another Skill. Change only the document or part arguments.
+
 ## v1.12.9 - 2026-10-09
 
 - Use a complete reader command when continuing document reads, and an existing directory with a file filter when searching. Prefer direct shell commands for simple file inventories.
