@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.9 - 2026-10-09
+
+- Use a complete reader command when continuing document reads, and an existing directory with a file filter when searching. Prefer direct shell commands for simple file inventories.
+
 ## v1.12.8 - 2026-10-09
 
 - Recheck new IDs immediately before creation and reserve complete Work Item Acceptance for Work Item completion. Preserve full input and failure status when reading or transferring Plan context.
