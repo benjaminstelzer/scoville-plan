@@ -2,6 +2,10 @@
 
 ## Unreleased - 2026-10-10
 
+- Load command capture and large-result delivery only when needed; preserve complete outputs and role permissions.
+- Clarify task and owning-Plan language; unrelated questions do not translate records.
+
+- Continue the same assigned group after host compaction; remove the obsolete automatic-rollover claim.
 - Keep agent messages and internal commentary compact. Reference readable source text instead of copying it; preserve required facts and exact controls.
 - Keep the full reading procedure in one reference and load host command details when needed. Preserve complete reads and existing permissions.
 

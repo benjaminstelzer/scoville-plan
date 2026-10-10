@@ -55,8 +55,9 @@ Only headings outside backtick or tilde fences define the title and sections.
 Keep each section's distinct information without invented alternatives or
 repeated rationale. Keep reasons and tradeoffs only where they explain the
 choice, constrain implementation or determine when to revisit it; omit the
-discussion history. New Decisions use the owning Plan's language or request
-language. Preserve an existing record's language unless explicitly changed.
+discussion history. New Decisions use the owning Plan's language; without an
+owning Plan, use the task request's language. Preserve an existing record's
+language unless explicitly changed.
 
 ## Links and transitions
 

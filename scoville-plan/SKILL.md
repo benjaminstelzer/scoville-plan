@@ -64,9 +64,11 @@ requirements remain governed by this Skill.
    Answer informational questions and continue. In a mixed message, separate
    the question from instructions that add or change work. Append additive work
    through edit.md. Direct Plan maintenance never creates a Work Item about maintenance.
-8. Keep required facts once in their owning field, in the existing record's
-   language unless the user chooses another. New records use the request or
-   owning Plan's language. Keep format labels and identifiers unchanged.
+8. Keep required facts once in their owning field. Preserve existing record
+   language unless the user requests a change. New Plans use the task request's
+   language; related Work Items and Decisions use the owning Plan's language.
+   Unrelated later questions change no record language. Keep native labels, IDs,
+   statuses and technical literals unchanged.
 
 ## Proposal inventory
 
