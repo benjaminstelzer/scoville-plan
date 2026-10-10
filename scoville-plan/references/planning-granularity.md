@@ -34,7 +34,7 @@ result its final checks can prove. If either is unclear, revise the grouping.
 Group small, related consecutive Steps when they can be implemented and checked
 together. Keep independently substantial sections separate. Preserve Step order
 within and across groups. Grouping changes no authored Steps or acceptance
-ownership and adds no separate lifecycle. Context rollover continues the same
+ownership and adds no separate lifecycle. Host compaction continues the same
 assigned group with its remaining work.
 
 When proposing groups, name the Plan, Step ranges and why they belong together

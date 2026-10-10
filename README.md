@@ -93,7 +93,9 @@ Create a detailed repository-owned implementation plan for the billing migration
 ```
 
 State the result you want and the constraints that matter. Plan records the
-work, dependencies and acceptance criteria. It does not dispatch agents.
+work, dependencies and acceptance criteria. It does not dispatch agents. New Plans use
+your task language; related records follow the Plan. An unrelated question does
+not change an existing record's language.
 
 ### Progress and decisions
 
