@@ -2,6 +2,10 @@
 
 ## Unreleased - 2026-10-12
 
+- Return complete command output directly when it fits; save only oversized
+  captures. Verify supplied artifacts once and compare saved native Finals
+  directly, avoiding repeated hash checks for unchanged text.
+
 - Follow required Workflow Step reviews when adding a missing implementation Step after closure findings.
 - Write each Step's own completion condition and required checks. Preserve or
   make them explicit during authorized repair and cleanup without inventing requirements.
