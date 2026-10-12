@@ -66,12 +66,15 @@ unambiguous result with unchanged affected sources; otherwise ask.
 | --- | --- |
 | todo in draft or active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
 | in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
-| done or cancelled | No routine edits or state transitions; explicit record cleanup under repair.md may shorten Instructions and Evidence and apply the editorial exception below |
+| done or cancelled | No routine edits or state transitions; explicit cleanup under repair.md may shorten Instructions and Evidence; the exceptions below apply |
 
 IDs never change. Preserve started scope, dependencies, order and completed effects.
 For any status, explicit cleanup under repair.md may shorten Outcome, Acceptance
 and Step wording without changing requirements, actions or historical meaning.
-This editorial exception needs no old-text note, copy or separate approval.
+Explicit repair or cleanup may also clarify a Step's established completion
+condition and required checks under repair.md. This Step clarification permits
+no Outcome or Acceptance edits. Both exceptions need no old-text note, copy
+or separate approval.
 
 A started item may add a relevant proposed or accepted Decision, retaining older
 links as history. It may correct a stale path, version reference or other purely
@@ -86,7 +89,7 @@ Remaining work in a started Step may be split into consecutive Steps
 in the same Work Item without changing its Outcome, Acceptance, constraints or
 authored order. Preserve completed parts and their Evidence, and update affected
 Step references so pending assignments still identify the remaining work.
-Other started fields remain fixed except for that editorial cleanup. Resume paused work to in_progress, never
+Other started fields remain fixed except for these explicit repair.md exceptions. Resume paused work to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
 When an authorized Workflow closure review finds an omitted implementation
 with no existing matching Step, the manager may append one Step that fulfils
@@ -118,9 +121,11 @@ Move whole todo blocks without renumbering. Delete only when another item
 remains and no incoming dependency targets it. Deleting the current item needs
 a dependency-ready todo or paused replacement in the same change.
 
-Write Outcome as one result sentence and Steps as the ordered mechanism.
-Put known paths, interacting owners, discovery, methods and check execution in
-Steps. Keep the context needed to execute without chat history.
+Write Outcome as one result sentence and Steps as the ordered mechanism. For
+every Step, write one bounded action, its own observable completion condition
+and required checks in its text. Distinguish investigation from implementation
+explicitly. Put known paths, interacting owners, discovery and methods in Steps.
+Keep the context needed to execute without chat history.
 
 Derive Acceptance from the requested observable outcome. Keep each distinct,
 necessary condition once: the relevant case, required result and binding limits.

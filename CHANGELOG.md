@@ -2,6 +2,9 @@
 
 ## Unreleased - 2026-10-12
 
+- Write each Step's own completion condition and required checks. Preserve or
+  make them explicit during authorized repair and cleanup without inventing requirements.
+
 - Classify planning profiles before proposal inventory; preserve explicit
   initialization and bounded field reviews without bypassing helper errors.
 - Remove obsolete preventive and ordered reading instructions from maintenance.
