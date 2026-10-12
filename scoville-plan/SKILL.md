@@ -54,9 +54,11 @@ requirements remain governed by this Skill.
    ask only before dependent work. Link Decisions to affected todo items, never
    unrelated items. Started items also link relevant proposals in Decisions and
    may link accepted Decisions. Each ADR's status determines its decision state.
-5. At work start, except for an assigned read-only field review, run the proposal
-   inventory below and read relevant proposals
-   (all proposals for a full audit). Preserve unresolved choices at handoff.
+5. At work start, except for an assigned read-only field review, classify the
+   planning profile with the table below. For a complete supported profile, run
+   the proposal inventory below and read relevant proposals (all proposals for
+   a full audit); an inventory error does not change that classification.
+   Follow the table for other profiles. Preserve unresolved choices at handoff.
 6. Mark a Work Item done only after observing every Acceptance criterion and recording its
    concise result. Failed or partial work remains unfinished. Report observed checks
    separately from unverified behavior.
@@ -80,7 +82,7 @@ Use that executable wherever examples say `python` or `<verified-python>`,
 including Python commands after `--run --`.
 Report a missing runtime only when no suitable installed interpreter is found.
 
-Before shell calls, follow [shell command rules](references/shell-commands.md).
+Before helper calls, follow [shell command rules](references/shell-commands.md).
 
 Follow Runtime helpers below for availability and failures. Start Python with
 `-X utf8` and capture this invocation's complete output before display under the
@@ -128,16 +130,19 @@ boundaries need judgment, not for a routine insertion with known boundaries.
 | Create or restructure, activate, finish, cancel or delete Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and edit.md |
 | Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and edit.md |
 | Explicit request to inspect or repair progress, migrate records, or maintain and clean up existing Plans; never ordinary recovery | [repair.md](references/repair.md) |
-| Review assigned native fields without maintenance | read-only.md and applicable field rules in edit.md; Decision reference for Decision sections. Respect the assigned source boundary; no proposal inventory, maintenance, selectors, validators or tests. Permitted bounded reads remain available. |
+| Review assigned native fields without maintenance | read-only.md and applicable field rules in edit.md; Decision reference for Decision sections. Respect the assigned source boundary; no proposal inventory, maintenance, selectors, validators or tests. Permitted file reads remain available. |
 | Audit wording | edit.md; Decision reference for Decision sections |
 | Validate or diagnose structure | edit.md; operation reference only if a diagnostic needs it |
 
-If the project's planning profile is unknown, first list the project root to
-find its planning files. PROJECT_INDEX.md, docs/plans and docs/decisions must
-form a complete supported profile. Initialize
-only when all three are absent and a durable Plan was requested. Preserve
-partial, foreign, unsupported or ambiguous state; repair only a representation
-defect that changes no intent.
+If the planning profile is unknown, first list the project root to locate
+PROJECT_INDEX.md, docs/plans and docs/decisions:
+
+| Observed profile | Action |
+| --- | --- |
+| All three form a complete supported profile | Use the existing owner and selected operation route. |
+| All three absent; durable Plan requested | Initialize through the lifecycle route. |
+| All three absent; no durable Plan requested | Do not initialize. |
+| Partial, foreign, unsupported or ambiguous | Preserve; repair only an unambiguous representation defect that changes no intent. |
 
 Validate the complete profile once after a coherent profile update and before
 reporting that update or starting dependent work. Related Plan, Decision and
@@ -155,13 +160,6 @@ if another editor changes the files or a write leaves only part of the result.
 
 Use the bundled helpers for their operations. Read their invocation instructions,
 not their source, unless diagnosing a failure.
-
-When a host output limit applies and a file may exceed it, read it with the bundled reader.
-Follow the [large-read rules](references/writing.md#large-reads) before the first such read.
-Without suitable Python 3.11+, first read only the check_text_size reference below. Use
-a native UTF-8 reader and ordered unchanged parts, measuring each complete
-output including labels before display against `floor(limit * 4 / 5)` bytes.
-With no limit, read it completely. Without a safe reader, stop dependent work.
 
 | Condition | Required route |
 | --- | --- |

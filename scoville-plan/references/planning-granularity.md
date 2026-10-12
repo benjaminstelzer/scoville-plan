@@ -23,19 +23,10 @@
 Separate Steps with materially different consequence or reasoning demand.
 Preserve existing `[route: ...]` and `[execute: ...]` annotations; Plan defines
 no route classes or inferred execution settings. Writing Steps does not activate
-Workflow. A legacy item without Steps is one default execution unit.
+Workflow.
 
-Group Steps to avoid repeated setup and handoffs while keeping a clear,
-checkable result. A useful group produces one coherent result that a worker can
-implement and verify with the supplied context. Keep its implementation and
-necessary checks together; do not group merely to reduce the number of workers.
-Before choosing a group, identify the repeated setup it saves and the concrete
-result its final checks can prove. If either is unclear, revise the grouping.
-Group small, related consecutive Steps when they can be implemented and checked
-together. Keep independently substantial sections separate. Preserve Step order
-within and across groups. Grouping changes no authored Steps or acceptance
-ownership and adds no separate lifecycle. Host compaction continues the same
-assigned group with its remaining work.
-
-When proposing groups, name the Plan, Step ranges and why they belong together
-in one or two sentences. This is a brief explanation, not Workflow activation.
+Make each Step one bounded result an executor can implement and check with its
+supplied context. Keep necessary intermediate actions and checks inside that
+Step. Host compaction continues the same assignment with its remaining work.
+A legacy item without Steps may be one default
+execution unit.

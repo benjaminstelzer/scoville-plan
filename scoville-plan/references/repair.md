@@ -70,10 +70,6 @@ Only an explicit cleanup request authorizes these edits, including in old,
 completed or cancelled Plans. Read the affected complete blocks and only the
 sources needed to distinguish live conditions from redundant text. Apply edit.md's
 field rules to those records:
-Before a potentially large read, apply the [shared writing rules](writing.md)
-for preventive size checks and complete ordered reads; do not compact the input
-or first let a full read truncate.
-
 - Replace Instructions with only additional, still-binding conditions. Remove
   prose that repeats Steps, Outcome or Acceptance, ordinary next actions, copied
   progress lists, results, reviews and obsolete conditions. Keep necessary actions

@@ -4,7 +4,7 @@ Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
 Run the commands below under SKILL.md's Proposal inventory capture rule.
 A reviewer does not write source captures; report any required input that
-cannot be read completely through a permitted bounded read.
+cannot be read completely through a permitted read.
 
 ## Locate the current Work Item and Steps
 
@@ -18,7 +18,8 @@ Omit --plan to use the index's active Plan. The position response contains:
 
 - `work_item`: the Plan's stored current_item.
 - `current_steps`: only Steps explicitly marked in_progress.
-- `current_units`: those active Steps, grouped only when their numbers are adjacent.
+- `current_units`: adjacent active Step numbers compressed into ranges for position
+  reporting. This representation does not authorize grouped execution.
 - `next_step`: the first written todo Step, only when no Step is active and no
   earlier unfinished Step has an unknown status.
 - `untracked_steps`: Steps without a written status. The helper does not guess
@@ -58,7 +59,7 @@ python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-token
 Add `--work-item W-001` to select that item. Add `--plan PLAN-0001` to select
 from that named Plan instead of the index's active Plan; the two options may be combined.
 
-For a worker dispatch, select the exact unit instead:
+For exact unit inspection, select the unit instead:
 
 ```text
 python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-001 --format json
@@ -79,7 +80,6 @@ range. When selected Steps contain written status, `work_item.step_statuses`
 adds their original numbers and status (null for unmarked selected Steps).
 Without written status this field is absent. Source text and selected scope
 remain exact, including done or cancelled Steps needed for review or correction.
-
 `source_text` is the unchanged selected single-line Step text, adjacent lines, or complete Work
 Item block, including its Evidence for a whole-item unit. Text uses UTF-8/LF
 and one final newline; trailing block-separator blank lines are excluded.

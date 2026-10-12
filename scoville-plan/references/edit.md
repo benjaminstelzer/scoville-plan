@@ -82,12 +82,18 @@ Acceptance is material, not a formal correction; obtain the user's decision
 before dependent work and record it in the existing Decision system. Do not
 create a replacement Work Item merely to add a Decision or fix formal wording.
 
-Remaining work in a started Step or group may be split into consecutive Steps
+Remaining work in a started Step may be split into consecutive Steps
 in the same Work Item without changing its Outcome, Acceptance, constraints or
 authored order. Preserve completed parts and their Evidence, and update affected
 Step references so pending assignments still identify the remaining work.
 Other started fields remain fixed except for that editorial cleanup. Resume paused work to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
+When an authorized Workflow closure review finds an omitted implementation
+with no existing matching Step, the manager may append one Step that fulfils
+a named, already binding unchanged Acceptance criterion or Work Item requirement.
+Preserve existing Step text, scope, order, completed effects and Acceptance.
+Run the new Step through execution, Step review and closure review. Changed
+scope, contradictory requirements or materially unclear meaning need the user.
 An explicit user choice may replace only the execution annotation of a named
 unperformed Step after start, preserving its action, route and execution history.
 
@@ -170,8 +176,8 @@ These formats do not prove model availability or support. The validator below
 names malformed annotations and their correction; it never writes the record.
 
 During ordinary work, add or update status only from observed progress. Begin
-in_progress when work starts, not on selection alone. Jointly started Steps
-may share in_progress; no separate group record is needed. Mark done when the
+in_progress when work starts, not on selection alone. Scoville Workflow starts
+exactly one Step at a time. Mark done when the
 Step's action and required checks are complete. Preserve due Work Item reviews
 and acceptance. Cancelled needs explicit direction and is never done.
 In a nonterminal item, a confirmed correction may return a done Step to
@@ -241,11 +247,16 @@ recorded scope. A newer explicit direction replaces an older instruction only
 where they conflict; it does not satisfy dependencies, Acceptance or substantive
 cost, safety or external prerequisites. Ask only if a material conflict remains.
 
-Only the active Plan selects current_item. Select todo or paused work only with
-done dependencies and no other in_progress item. Selection may retain blockers;
-starting current todo or resuming current paused work requires no blockers or
-unresolved dependent Decision. Pause current in_progress work under explicit
-user direction or an already authorized pause or return instruction.
+| Change | Requires |
+| --- | --- |
+| Select current_item in the active Plan | Todo or paused item, done dependencies, no other in_progress item. Blockers may remain. |
+| Start current todo or resume current paused work | No blockers or unresolved dependent Decision. |
+| Pause current in_progress work | Explicit user direction or an already authorized pause or return instruction. |
+| Complete current todo or in_progress work | Observed Acceptance, done dependencies, cleared blockers and an eligible exact successor. Resume paused work first. |
+| Cancel | Explicit direction, evidence and cleared blockers. Cancelled work satisfies no dependency. |
+
+The final item finishes with the Plan and index through the lifecycle route;
+invent no successor. The completion steps below govern ordinary succession.
 
 Read structural facts with `select_context.py --root "<project-root>"
 --check-start W-NNN --format json`; add --plan PLAN-NNNN to inspect a named
@@ -260,10 +271,6 @@ At execution start, write `Status: in_progress` on the current Work Item and
 record the actually started Steps under Step progress. Selecting current_item
 or assigning a range alone starts no Step. Save and validate this state before
 delegated execution begins. Read-only review does not restart completed Steps.
-
-Complete current todo or in_progress work only with observed Acceptance, done
-dependencies, cleared blockers and an eligible exact successor. Resume paused
-work before completion.
 
 1. Prepare item completion: retain Evidence, empty Blocked by and remove Next action.
 2. Select the authorized exact successor in the same change. Start it only after
@@ -285,8 +292,7 @@ ambiguous, missing, blocked or dependency-invalid return, retain it and ask
 rather than skip it. For historical prefixes or an immediate redirect read the
 special cases in the Plan lifecycle reference.
 
-Cancellation needs explicit direction, evidence and cleared blockers; cancelled
-work satisfies no dependency. On cancellation, retain Evidence, empty Blocked by
+On cancellation, retain Evidence, empty Blocked by
 and remove Next action, as on completion. When all other
 items are terminal, finish the final item and Plan through the lifecycle route
 and set the index idle; invent no successor.
