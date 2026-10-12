@@ -2,6 +2,7 @@
 
 ## Unreleased - 2026-10-12
 
+- Follow required Workflow Step reviews when adding a missing implementation Step after closure findings.
 - Write each Step's own completion condition and required checks. Preserve or
   make them explicit during authorized repair and cleanup without inventing requirements.
 

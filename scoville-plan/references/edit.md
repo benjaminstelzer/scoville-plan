@@ -95,7 +95,7 @@ When an authorized Workflow closure review finds an omitted implementation
 with no existing matching Step, the manager may append one Step that fulfils
 a named, already binding unchanged Acceptance criterion or Work Item requirement.
 Preserve existing Step text, scope, order, completed effects and Acceptance.
-Run the new Step through execution, Step review and closure review. Changed
+Run the new Step through execution, required Step review and closure review. Changed
 scope, contradictory requirements or materially unclear meaning need the user.
 An explicit user choice may replace only the execution annotation of a named
 unperformed Step after start, preserving its action, route and execution history.
