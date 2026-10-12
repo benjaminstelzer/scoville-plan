@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased - 2026-10-12
+
+- Classify planning profiles before proposal inventory; preserve explicit
+  initialization and bounded field reviews without bypassing helper errors.
+- Remove obsolete preventive and ordered reading instructions from maintenance.
+
+## Unreleased - 2026-10-11
+
+- Make profile discovery and Work Item transition prerequisites explicit in decision tables.
+
+- Read required files completely with an agent-chosen method. Remove the document-reading helper and multipart protocol; keep output capture and result delivery separate.
+- Keep unsupported current-item statuses under their status diagnostic; reserve terminal-item selection guidance for done or cancelled work.
+- Define one bounded original Step for Workflow execution. Remove grouped-Workflow claims from planning and state-reading references; keep selector ranges as inspection data.
+- Allow one missing implementation Step for unchanged binding Acceptance after closure review, followed by normal execution, Step review and closure.
+
 ## Unreleased - 2026-10-10
 
 - Load command capture and large-result delivery only when needed; preserve complete outputs and role permissions.

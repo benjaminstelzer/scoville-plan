@@ -1863,7 +1863,7 @@ class Validator:
                     )
                 elif plan.current_item:
                     current = items[plan.current_item]
-                    if current.status not in {"todo", "in_progress", "paused"}:
+                    if current.status in TERMINAL_WORK_STATUSES:
                         self.add(
                             "PLAN_CURRENT_ITEM_STATUS",
                             plan.path,
