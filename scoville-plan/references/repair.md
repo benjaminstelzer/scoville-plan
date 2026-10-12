@@ -7,6 +7,15 @@ request authorizes bounded record corrections, not changes to work products.
 For cleanup of record text without reassessing progress, use Maintenance below
 instead of the progress inspection steps.
 
+For every Step in the requested repair or cleanup scope, preserve or make
+explicit its own observable completion condition and required checks in the
+Step text. Derive them only from that Step's original authorized action and
+binding requirements; current code, tests or agent assumptions create no new
+requirements. Do not copy the whole Work Item Acceptance into a Step. Preserve
+scope, guarantees, limits, negative criteria, order and completed effects. If a
+material choice is missing, retain the text and ask before the affected edit.
+Leave a Step unchanged while its execution or review is running.
+
 1. Read the requested Plan's complete Work Items, referenced Decisions and
    relevant proposals. Use the active Plan when none is named. Inspect existing
    Evidence and its relevant original reports first. Compare both Work Item
@@ -25,7 +34,8 @@ instead of the progress inspection steps.
    failed check is not cancellation. If facts are insufficient, retain unknown
    or the recorded status and report the specific uncertainty; never guess.
 4. For an authorized repair, load edit.md and correct only established progress,
-   Evidence and Instructions. Put additional binding conditions in Instructions,
+   Evidence, Instructions and the Step completion wording required above. Put
+   additional binding conditions in Instructions,
    results in Evidence and ordinary progression in Step status. Read legacy
    Next action too. Add missing Step status when established,
    including in retained terminal history without rewriting actions or original

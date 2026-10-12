@@ -110,14 +110,16 @@ Outcome: One independently resumable result.
 Acceptance: Distinct necessary observable conditions and required results; follow edit.md.
 Instructions: []
 Steps:
-1. [status: todo] Perform one coherent unit at the known repository-relative paths and verify its result.
+1. [status: todo] Perform one bounded action at the known repository-relative paths; name its own observable completion condition and the required checks that verify it.
 Evidence: []
 ```
 
 For each new Work Item, write Instructions on one line or use []. Include at
-least one Step with status and omit Next action. Work Item Status covers the
-whole outcome; Step status records observed progress. Steps have no independent
-acceptance or dependencies. See edit.md for fields and legacy continuation.
+least one Step with status and omit Next action. Work Item Status and Acceptance
+cover the whole outcome. For every Step, write its bounded action, its own
+observable completion condition and required checks in its text; its status
+records observed progress. Steps have no separate Acceptance field or
+dependencies. See edit.md for fields and legacy continuation.
 Use [granularity](references/planning-granularity.md) only when outcome or Step
 boundaries need judgment, not for a routine insertion with known boundaries.
 

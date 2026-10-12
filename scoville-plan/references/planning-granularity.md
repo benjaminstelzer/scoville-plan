@@ -25,7 +25,7 @@ Preserve existing `[route: ...]` and `[execute: ...]` annotations; Plan defines
 no route classes or inferred execution settings. Writing Steps does not activate
 Workflow.
 
-Make each Step one bounded result an executor can implement and check with its
+Make each Step one bounded result an executor can perform and check with its
 supplied context. Keep necessary intermediate actions and checks inside that
 Step. Host compaction continues the same assignment with its remaining work.
 A legacy item without Steps may be one default
