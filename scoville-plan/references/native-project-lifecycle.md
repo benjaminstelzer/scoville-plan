@@ -1,6 +1,6 @@
 # Plan lifecycle and special cases
 
-Use edit.md for writing and validation. Only PROJECT_INDEX.md selects the active Plan.
+Use progress.md for writing and validation. Only PROJECT_INDEX.md selects the active Plan.
 
 ## Create and refine
 
@@ -10,13 +10,10 @@ the supplied title, Goal, Non-goals and first Work Item with its acceptance;
 never invent missing direction. Select the initial todo W-001 without starting
 it. Write the index last. An existing partial or unsupported profile is not setup.
 
-Allocate the highest PLAN number plus one, never an interior gap; check ID and
-filename collisions. Use `docs/plans/0014-subject.md` for PLAN-0014. A later Plan
-may obtain its ID and filename pattern from `select_context.py --root
-"<project-root>" --next-id plan --format json`. The read-only result includes
-both filename and metadata numbers, exposes mismatches, and reserves nothing;
-recheck collisions immediately before manual creation. A later Plan
-starts draft with at least one todo item. Use this template with actual values:
+Use the entrypoint's ID-allocation rule. Store PLAN-0014 at
+`docs/plans/0014-subject.md`; obtain a later Plan's next ID and filename with
+`select_context.py --root "<project-root>" --next-id plan --format json`.
+A later Plan starts draft with at least one todo item. Use this template with actual values:
 
 ```text
 ---
@@ -31,15 +28,15 @@ updated: 2026-09-25
 
 ## Goal
 
-Current target, boundary and genuinely plan-wide constraints.
+Current target and boundary; each still-binding plan-wide constraint by its effect and Decision ID.
 
 ## Non-goals
 
-Explicit exclusions.
+Explicit exclusions, without reasons or drafting notes.
 
 ## Work items
 
-Insert the Work Item template from SKILL.md.
+Insert the Work Item template from authoring.md.
 ```
 
 An active Plan adds `current_item: W-001` after updated. The index uses:
@@ -55,16 +52,20 @@ Its optional body must not duplicate live state. Use `active_plan: null` when
 idle. A generic Plan edit changes only title, Goal and Non-goals, plus updated
 on real changes. Preserve identity, lifecycle and Work Items.
 
-Classify the whole proposed Goal before writing: target and plan-wide
-constraints stay there;
-exclusions belong to Non-goals, choices to Decisions, item-specific actions and
-checks to their Work Item, observations to Evidence, and policy to repository
-instructions. Messages about ongoing work do not authorize a Goal edit; leave
-the Goal text unchanged when processing them.
+Classify the whole proposed Goal before writing. Keep only the current target,
+boundary and still-binding plan-wide constraints, stated by their effect and
+Decision ID. The Goal must retain each effect: Workflow forwards only Decisions
+linked to the selected Work Item, not every ID cited in the Goal. Keep exclusions
+in Non-goals; choices in Decisions; item actions and checks in its Work Item;
+observations in Evidence; policy in repository instructions. Keep no dated
+steering, drafting notes, superseded entries, copied ADR rationale or progress
+history in Goal or Non-goals. No sentence or line quota applies.
 
-Move existing facts only with authorization. Every affected dispatch must
-still be able to read those facts through its Work Item, its Decisions or a
-repository contract that the dispatched agent has demonstrably loaded.
+Messages about ongoing work do not authorize Goal edits. When a Goal change is
+authorized, replace superseded constraint wording with the current binding effect;
+keep replacement history in its Decision. Move existing facts only with authority,
+keeping them readable through the dispatched Work Item, its Decisions or a
+repository contract that the agent has demonstrably loaded.
 
 ## Activate
 
@@ -78,7 +79,7 @@ Apply only the user's chosen action for its current item:
 
 - Keep a todo or paused item, or
 - pause an in_progress item, or
-- complete or cancel the item under edit.md.
+- complete or cancel the item under progress.md.
 
 Preserve every other item. Validate the complete resulting profile.
 
@@ -93,7 +94,7 @@ item is terminal, prepare one coherent update:
 | Plan | `status: completed`; no current_item. |
 | Index | `active_plan: null`. |
 
-Write the index last and validate the complete profile through edit.md.
+Write the index last and validate the complete profile through progress.md.
 Paused work must first resume. Create no placeholder work to avoid idle.
 
 Cancel a draft only on explicit direction. An active Plan cannot be cancelled
@@ -115,7 +116,7 @@ A confirmed unstarted Plan may have requested authored fields rewritten on
 todo or cancelled items, even in a cancelled Plan. Preserve IDs, references,
 Evidence, order and lifecycle. Cancelled items remain cancelled, with empty
 blockers and no Next action. This neither reopens work nor applies to executed
-history. Ordinary todo refinement remains governed by edit.md.
+history. Ordinary todo refinement uses authoring.md with progress.md permissions.
 
 Before authorized deletion inspect incoming references and validate the complete
 proposed remaining profile. Resolve invalid references without rewriting
@@ -140,21 +141,23 @@ Read existing Next-action returns as equally binding; never silently discard the
 An ordinary pause preserves the observed Step position and remaining constraints.
 Permit only one unambiguous paused return target per redirected item.
 
-Before completing current work, compare every paused return naming that item
-with every `Prioritized after <current-item>:` successor. Use the position
-helper's paused_context and historical_priorities; read legacy Next action and Evidence
-when Instructions was not captured. The helper does not interpret these texts.
+Before completing current work, inspect every paused return naming it and every
+historical priority. Use paused_context and historical_priorities; read legacy
+Next action and Evidence when Instructions was not captured. The helper does
+not interpret these texts.
 
-| Return or priority result | Action |
-| --- | --- |
-| Different targets | Keep current item nonterminal and both instructions. Ask which target follows; record observed Acceptance without selecting or resuming either target. |
-| Blocked, missing or dependency-invalid return | Retain return and obtain a choice; never skip to another item. |
-| Unambiguous paused return satisfying edit.md's resume prerequisites, and observed Acceptance | Complete current work and select/resume that return through the sequence below. |
+```mermaid
+flowchart TD
+  inspect["Current Acceptance observed; inspect returns and historical priorities"] --> conflict{"Missing or later anchor, duplicate priorities, ambiguous return or different targets?"}
+  conflict -->|yes| ask["Keep current item nonterminal and instructions; record Acceptance; ask for a choice"]
+  conflict -->|no| has_return{"Paused return names current item?"}
+  has_return -->|no| normal["Select eligible successor under progress.md; honor historical priority and deferred arrival order"]
+  has_return -->|yes| ready{"Return exists; dependencies done; no blockers or unresolved dependent Decision; resume prerequisites met?"}
+  ready -->|no| ask
+  ready -->|yes| complete["Complete current work and select return in one coherent update"]
+  complete --> resume["Resume return at recorded Step or legacy concrete action"]
+  resume --> consume["Remove consumed return from Instructions; record fulfilment in Evidence; validate"]
+```
 
-Historical priority without a paused return follows normal selection under
-[edit.md](edit.md). For the eligible unambiguous paused return only:
-
-1. Complete current work while selecting the return target.
-2. Resume it and restore its recorded Step position or legacy concrete action.
-3. Remove the consumed return from live Instructions; record fulfilment in Evidence.
-4. Validate the complete write operation.
+Normal selection alone never starts work; the eligible explicit return resumes
+as directed. Neither route extends authorized execution scope.

@@ -2,6 +2,9 @@
 
 ## Unreleased - 2026-10-13
 
+- Separate progress updates from authoring. Explicit maintenance can shorten old Goals and Decisions while preserving the choice, binding conditions and required checks.
+- Load detailed command capture and full-file delivery only when needed. Keep complete output, failure diagnostics and role permissions.
+
 - Keep saved oversized results out of Git status with `.scoville/temp/.gitignore`;
   existing ignore files and tracked files stay unchanged.
 - Send oversized results as a file path only; recipients read the whole file

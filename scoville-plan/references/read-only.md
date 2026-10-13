@@ -2,7 +2,7 @@
 
 Use this route to answer questions about existing project knowledge without
 changing canonical files. It does not require the native format guides.
-Run the commands below under SKILL.md's Proposal inventory capture rule.
+Run the commands below under SKILL.md's Helper invocations rule.
 A reviewer does not write source captures; report any required input that
 cannot be read completely through a permitted read.
 
@@ -11,12 +11,11 @@ cannot be read completely through a permitted read.
 Use the selector's position mode for a compact deterministic lookup:
 
 ```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --plan PLAN-0001 --position --format json
 ```
 
 Omit --plan to use the index's active Plan. The position response contains:
 
-- `work_item`: the Plan's stored current_item.
 - `current_steps`: only Steps explicitly marked in_progress.
 - `current_units`: adjacent active Step numbers compressed into ranges for position
   reporting. This representation does not authorize grouped execution.
@@ -32,8 +31,6 @@ Omit --plan to use the index's active Plan. The position response contains:
   the legacy Next action and Evidence fields.
 - `historical_priorities`: nonterminal items' historical priority headings.
 - `open_decisions`: proposed ADRs linked from the current item.
-- `acceptance`: the Work Item's requirements.
-- `evidence`: its recorded observations.
 - `legacy_next_action`: the old field, included only when it exists.
 
 The helper does not infer return targets, instruction fulfilment or acceptance.
@@ -53,7 +50,7 @@ never enables manual selection. The commands below specify the complete
 invocation; do not load the Python source just to call them. Run:
 
 ```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
 ```
 
 Add `--work-item W-001` to select that item. Add `--plan PLAN-0001` to select
@@ -62,9 +59,9 @@ from that named Plan instead of the index's active Plan; the two options may be 
 For exact unit inspection, select the unit instead:
 
 ```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-001 --format json
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/step-2 --format json
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/steps-2-3 --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-001 --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/step-2 --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-003/steps-2-3 --format json
 ```
 
 The success object contains exactly four top-level semantic areas:
