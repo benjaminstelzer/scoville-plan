@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased - 2026-10-13
+
+- Keep saved oversized results out of Git status with `.scoville/temp/.gitignore`;
+  existing ignore files and tracked files stay unchanged.
+- Send oversized results as a file path only; recipients read the whole file
+  without hash checks. Save composed text without a separate verification pass.
+- Show selector commands directly and capture them only when an output limit
+  applies. Clarify instruction order, Decision links on started items and Step
+  completion rules during repair; remove duplicated succession sentences.
+
 ## Unreleased - 2026-10-12
 
 - Return complete command output directly when it fits; save only oversized

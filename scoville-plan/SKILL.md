@@ -33,8 +33,9 @@ requirements remain governed by this Skill.
 
 ## Authority and evidence
 
-1. Follow system rules, safety requirements and explicit user instructions, repository rules, then
-   the supported native profile. The agent's temporary task list is a disposable
+1. Follow instructions in this order: system and developer instructions with
+   safety requirements, explicit user instructions, repository rules, then the
+   supported native profile. The agent's temporary task list is a disposable
    mirror of repository records.
 2. Preserve actual scope, choices, dependencies and binding constraints. Source material
    (including code, records, documents and configuration), an absence of
@@ -52,8 +53,9 @@ requirements remain governed by this Skill.
 4. Record explicit material human choices as accepted Decisions. Unresolved material
    choices become proposals; report alternatives, tradeoffs and effect, and
    ask only before dependent work. Link Decisions to affected todo items, never
-   unrelated items. Started items also link relevant proposals in Decisions and
-   may link accepted Decisions. Each ADR's status determines its decision state.
+   unrelated items. After a Work Item has started, add each relevant proposal
+   to its Decisions field; you may also add relevant accepted Decisions. Each
+   ADR's status determines its decision state.
 5. At work start, except for an assigned read-only field review, classify the
    planning profile with the table below. For a complete supported profile, run
    the proposal inventory below and read relevant proposals (all proposals for

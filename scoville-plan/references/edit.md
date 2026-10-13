@@ -20,14 +20,17 @@ and `historical_priorities`; [read-only.md](read-only.md) explains further field
 Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
 Steps require only the evidence or result check needed for the authorized work.
 Use paused_context and historical_priorities to check relevant return directions;
-the full-context mode contains only the selected Work Item. Run the commands
-below under SKILL.md's Proposal inventory capture rule.
+the full-context mode contains only the selected Work Item.
 
 ```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
 ```
+
+The selector's byte budget bounds successful context only. When an output limit
+applies, capture the complete output, including diagnostics, under the
+[shell-command rules](shell-commands.md).
 
 A selector diagnostic stops selection; do not truncate or invent partial
 context. Read read-only.md only for further output-field details, dispatch-unit
@@ -41,9 +44,8 @@ every text read and write, never platform encoding.
 1. Prepare the complete consistent result before opening targets. For Python
    replacement writes, prepare LF-normalized UTF-8 bytes and write those bytes.
    A text-mode writer's `newline` must be an actual LF, never literal backslash
-   and n. For PowerShell pipes, set
-   `$OutputEncoding = [System.Text.UTF8Encoding]::new($false)` and invoke Python
-   with `-X utf8` so source text and stdin agree.
+   and n. Pipe text into Python only as the
+   [shell-command rules](shell-commands.md) describe.
 2. Write the prepared files, index last for changes across files. Decode saved
    bytes as UTF-8 and compare changed non-ASCII text with the intended text;
    a structural pass alone cannot detect corrupted words.
@@ -260,9 +262,6 @@ cost, safety or external prerequisites. Ask only if a material conflict remains.
 | Complete current todo or in_progress work | Observed Acceptance, done dependencies, cleared blockers and an eligible exact successor. Resume paused work first. |
 | Cancel | Explicit direction, evidence and cleared blockers. Cancelled work satisfies no dependency. |
 
-The final item finishes with the Plan and index through the lifecycle route;
-invent no successor. The completion steps below govern ordinary succession.
-
 Read structural facts with `select_context.py --root "<project-root>"
 --check-start W-NNN --format json`; add --plan PLAN-NNNN to inspect a named
 Plan, including a draft or inactive one. The output distinguishes todo, paused
@@ -297,10 +296,9 @@ ambiguous, missing, blocked or dependency-invalid return, retain it and ask
 rather than skip it. For historical prefixes or an immediate redirect read the
 special cases in the Plan lifecycle reference.
 
-On cancellation, retain Evidence, empty Blocked by
-and remove Next action, as on completion. When all other
-items are terminal, finish the final item and Plan through the lifecycle route
-and set the index idle; invent no successor.
+On cancellation, prepare the item as in completion step 1. When all other items are terminal,
+finish the final item and Plan through the lifecycle route and set the index
+idle; invent no successor.
 
 ## Structural check
 
