@@ -1,12 +1,9 @@
 # Decisions
 
-Use edit.md for safe edits and validation. Allocate the highest ADR number plus
-one, without interior reuse or collisions. Read the next ID and filename pattern
-with `select_context.py --root "<project-root>" --next-id decision --format json`.
-The result considers filename and metadata numbers, reports mismatches and
-reserves nothing; recheck before creation.
-For example, store `ADR-0074` in
-`docs/decisions/0074-subject.md`. Use a lowercase slash-separated domain label
+Use [progress.md](progress.md) for safe edits and validation and the entrypoint's
+ID-allocation rule. Obtain the next ID and filename pattern with
+`select_context.py --root "<project-root>" --next-id decision --format json`.
+For example, store ADR-0074 in `docs/decisions/0074-subject.md`. Use a lowercase slash-separated domain label
 for `scope`, such as `product/import-pricing`. A new proposal follows this template:
 
 ```text
@@ -52,8 +49,10 @@ Concrete reconsideration trigger.
 Fenced code examples are literal content, including lines starting with `#`.
 Only headings outside backtick or tilde fences define the title and sections.
 
-Keep each section's distinct information without invented alternatives or
-repeated rationale. Keep reasons and tradeoffs only where they explain the
+State each binding condition self-contained in its owning section: the choice
+in Decision, implementation or verification effects in Consequences, required
+checks in Confirmation. Keep each section's distinct decision-relevant information without
+invented alternatives, repeated rationale or sentence quotas. Keep reasons, alternatives and tradeoffs only where they explain the
 choice, constrain implementation or determine when to revisit it; omit the
 discussion history. New Decisions use the owning Plan's language; without an
 owning Plan, use the task request's language. Preserve an existing record's
@@ -62,7 +61,7 @@ language unless explicitly changed.
 ## Links and transitions
 
 Record links to Decisions in each affected Work Item's Decisions field,
-following the entrypoint's linking policy and edit.md's edit permissions.
+following the entrypoint's linking policy and progress.md's edit permissions.
 A proposal blocks only dependent work; its concrete effect
 may be recorded in Instructions. Changing proposal status does not remove links.
 Create a new Decision as proposed unless explicit human direction already
@@ -80,17 +79,23 @@ Acceptance adds `accepted: YYYY-MM-DD` between created and scope. Deprecation
 retains it. Proposed and rejected Decisions omit the accepted date. Rejected
 and superseded Decisions are terminal.
 Use actual dates no earlier than creation. Generic content edits affect only
-proposals and preserve identity and lifecycle. Delete a proposal only after
+proposals and preserve identity and lifecycle. Explicit scoped maintenance under
+[repair.md](repair.md#maintenance-clean-up-existing-plans) also permits editorial
+shortening of accepted or deprecated Decisions to the writing rule above without
+supersession. It preserves identity, lifecycle, the choice, every binding condition,
+evidence status and authority, including reasons that explain the choice, constrain
+implementation or determine revisit. Delete a proposal only after
 checking that no Work Item or Decision links to it.
 
-Supersession preserves both records. An authorized change to accepted or
-deprecated content uses this route, never an in-place rewrite:
+Supersession preserves both records. A material change to accepted or
+deprecated content uses this route, never an in-place rewrite. Only equivalent
+editorial maintenance has the exception above:
 
 1. Create the accepted replacement with `supersedes: ADR-0001` after scope.
 2. Set old status superseded and reciprocal `superseded_by: ADR-0002` after any supersedes.
 3. Replace links in affected todo items. For started items, append the accepted
    replacement, retain the older link as history and explain the change.
-4. Validate the coherent transition through edit.md.
+4. Validate the coherent transition through progress.md.
 
 Terminal historical links alone do not block replacement. Rejection in favor
 of another proposal is not supersession.

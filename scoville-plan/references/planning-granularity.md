@@ -16,7 +16,7 @@
   and verification that needs interpretation. Resolve unknown owners before
   start when practical; otherwise retain the criterion and record the discovered
   path in Evidence without rewriting started Steps.
-- Include enough context to execute without chat history. Follow edit.md's field
+- Include enough context to execute without chat history. Follow authoring.md's field
   rules for Acceptance; Steps own execution, Evidence observations and Step status progression.
   Do not create duplicate testing or bookkeeping Steps.
 
@@ -25,8 +25,12 @@ Preserve existing `[route: ...]` and `[execute: ...]` annotations; Plan defines
 no route classes or inferred execution settings. Writing Steps does not activate
 Workflow.
 
-Make each Step one bounded result an executor can perform and check with its
-supplied context. Keep necessary intermediate actions and checks inside that
-Step. Host compaction continues the same assignment with its remaining work.
+Size planned Steps as manageable, checkable results, normally finishable within
+one executor context window with their necessary intermediate actions and checks.
+Before execution, split planned work whose required sources, checks or output would not fit,
+using progress.md's editing rights. Do not split by file, owner or sentence quotas
+or create separate bookkeeping or duplicate verification Steps.
+If compaction nevertheless occurs, continue the same original assignment with
+its remaining work. It triggers no manager change or automatic Step split.
 A legacy item without Steps may be one default
 execution unit.

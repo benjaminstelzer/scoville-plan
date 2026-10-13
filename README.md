@@ -132,7 +132,7 @@ application. An installed copy in a read-only folder uses the platform's user
 configuration directory. Skill and Viewer updates are independent; use a
 Viewer that supports the progress fields in your Plan records.
 
-The [record guide](scoville-plan/references/edit.md) covers Step annotations,
+The [authoring guide](scoville-plan/references/authoring.md) covers Step annotations,
 field formats and helper commands. Plan uses `format_version: 1`.
 
 ## Sources

@@ -93,7 +93,7 @@ Evidence is `[]`, a compatible list of unique entries or (for updated readers)
 one-line plain text unless its value begins `[`. Each entry is 1–200 Unicode
 scalar values without edge whitespace or ASCII controls. List entries contain
 no comma or brackets because commas delimit entries. Plain text permits them;
-quotes and backslashes remain literal. New writes follow edit.md compatibility.
+quotes and backslashes remain literal. New writes follow progress.md compatibility.
 
 Step annotations precede the action. Preserve an existing or explicitly
 supplied `[route: CLASS]` with CLASS ultra_low/low/medium/high/ultra_high.
@@ -105,7 +105,7 @@ high/xhigh/max/ultra. Route precedes execute; route never contains a model name.
 
 Check historical Deferred/Prioritized anchors and explicit paused returns
 through native-project-lifecycle.md. Those semantic order checks are not implied
-by a valid parser result. Authored-history permissions are in edit.md.
+by a valid parser result. Authored-history permissions are in progress.md.
 
 ## Decision shape and graph
 
@@ -140,4 +140,4 @@ metadata, never generate new batches, and never claim to recompute an old hash.
 
 After writes inspect the final unchanged profile. Report checked paths and
 invariants as native structural inspection. Separately assess authority,
-history, record meaning and evidence sufficiency under SKILL.md and edit.md.
+history, record meaning and evidence sufficiency under SKILL.md and progress.md.

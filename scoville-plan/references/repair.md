@@ -7,18 +7,13 @@ request authorizes bounded record corrections, not changes to work products.
 For cleanup of record text without reassessing progress, use Maintenance below
 instead of the progress inspection steps.
 
-For every Step in the requested repair or cleanup scope:
-
-- Preserve or make explicit its own observable completion condition and
-  required checks in the Step text.
-- Derive them only from that Step's original authorized action and binding
-  requirements. Current code, tests or agent assumptions create no new
-  requirements.
-- Do not copy the whole Work Item Acceptance into a Step.
-- Preserve scope, guarantees, limits, negative criteria, order and completed
-  effects. If a material choice is missing, retain the text and ask before the
-  affected edit.
-- Leave a Step unchanged while its execution or review is running.
+For a repair or cleanup of Step text, apply [authoring.md](authoring.md)'s
+bounded-action, observable-completion and required-check rules. Derive every
+condition only from the original authorized action and binding requirements,
+never current code, tests or assumptions. Do not copy whole-item Acceptance.
+Preserve scope, safeguards, negative criteria, order and completed effects.
+Keep uncertain meaning and ask before an affected edit. Leave a Step unchanged
+while its execution or review is running.
 
 1. Read the requested Plan's complete Work Items, referenced Decisions and
    relevant proposals. Use the active Plan when none is named. Inspect existing
@@ -37,7 +32,7 @@ For every Step in the requested repair or cleanup scope:
    only after explicit cancellation. An interruption or
    failed check is not cancellation. If facts are insufficient, retain unknown
    or the recorded status and report the specific uncertainty; never guess.
-4. For an authorized repair, load edit.md and correct only established progress,
+4. For an authorized repair, load progress.md and correct only established progress,
    Evidence, Instructions and the Step completion wording required above. Put
    additional binding conditions in Instructions,
    results in Evidence and ordinary progression in Step status. Read legacy
@@ -47,7 +42,7 @@ For every Step in the requested repair or cleanup scope:
    stops and due reviews. Record unresolved evidence limits once. A Work Item
    is done only after every Acceptance criterion and required review is observed;
    completed Steps or partial successful checks alone do not close it.
-5. Follow edit.md and the lifecycle route for Work Item, Plan and index transitions;
+5. Follow progress.md and the lifecycle route for Work Item, Plan and index transitions;
    prepare related changes together and validate the entire resulting profile.
    Reopening terminal work, removing blockers without proof, cancellation or
    changed scope still needs its applicable explicit decision. If an incorrect
@@ -82,21 +77,22 @@ as a new direction to return to and execute that work.
 
 Only an explicit cleanup request authorizes these edits, including in old,
 completed or cancelled Plans. Read the affected complete blocks and only the
-sources needed to distinguish live conditions from redundant text. Apply edit.md's
+sources needed to distinguish live conditions from redundant text. Apply progress.md's
 field rules to those records:
-- Replace Instructions with only additional, still-binding conditions. Remove
-  prose that repeats Steps, Outcome or Acceptance, ordinary next actions, copied
-  progress lists, results, reviews and obsolete conditions. Keep necessary actions
-  in their existing Steps; keep an unclear live condition briefly rather than
-  dropping it. Terminal Instructions normally become [] without reopening work;
-  report an apparent unmet condition instead of silently erasing it.
-- Shorten Evidence to the observed result and, where relevant, the fact that a
-  review occurred. Retain confirmed open defects and limits needed for further
-  development. Remove stored review text, run chronologies, duplicate summaries,
-  old counts and versions, and artifact inventories without a continuing purpose.
+| Field | Keep | Remove |
+| --- | --- | --- |
+| Instructions | Additional live conditions under progress.md; retain an unclear condition. | Repeated actions/criteria, progress, results and obsolete conditions. Terminal fields normally become []; report apparent unmet conditions without erasing them or reopening work. |
+| Evidence | Observed results, required review occurrence and open defects/limits needed for development. | Review text, chronology, duplicate summaries and counts, versions or inventories without continuing purpose. |
+| Goal | Current target, boundary and each binding constraint's effect plus Decision ID under the lifecycle route. | Superseded constraints, duplicated rationale and history; never replace an effect by an unreadable ID alone. |
+| Non-goals | Every still-binding exclusion. | Reasons and drafting notes. |
+| Decisions in the requested scope | Every condition in its owning section, including required checks and revisit triggers. Preserve identity, lifecycle, the choice, authority, evidence status and decision-relevant reasons. | Equivalent repetition, filler, discussion history, and reasons or alternatives that neither explain the choice, constrain implementation nor determine revisit. Material changes still require the Decision supersession route. |
+
 - Explicit cleanup also authorizes editorial shortening of Outcome, Acceptance
-  and Step text, including started and terminal items. Remove filler and redundant
-  wording; merge equivalent conditions. Every required result, case, value,
+  and Step text, plus Goal, Non-goals and accepted or deprecated Decisions within
+  the requested scope, including started and terminal history. Read the relevant
+  lifecycle/Decision contract for those fields. Remove filler and redundant
+  wording; merge equivalent conditions. For Decisions, apply the writing rule in
+  native-decision-format.md to nonbinding history and rationale. Every required result, case, value,
   limit, quantifier, negation, exception, action and verification obligation must
   retain its meaning. The same results must pass or fail before and after the edit.
   Keep required methods and checks even when new writing would place them in Steps.
@@ -121,5 +117,5 @@ field rules to those records:
 This is ordinary record maintenance, not a new worker or review phase. Do not
 repeat product tests, old reviews or a progress audit merely to shorten records.
 An independently required review or retention rule still applies. Validate once
-after the coherent profile edit under edit.md. Report the cleaned scope and any
+after the coherent profile edit under progress.md. Report the cleaned scope and any
 unresolved live condition briefly; no separate cleanup report is needed.

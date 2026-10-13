@@ -67,12 +67,30 @@ requirements remain governed by this Skill.
 7. Stop affected execution on an explicit stop or invalidating correction.
    Answer informational questions and continue. In a mixed message, separate
    the question from instructions that add or change work. Append additive work
-   through edit.md. Direct Plan maintenance never creates a Work Item about maintenance.
+   through authoring.md. Direct Plan maintenance never creates a Work Item about maintenance.
 8. Keep required facts once in their owning field. Preserve existing record
    language unless the user requests a change. New Plans use the task request's
    language; related Work Items and Decisions use the owning Plan's language.
    Unrelated later questions change no record language. Keep native labels, IDs,
    statuses and technical literals unchanged.
+
+## Helper invocations
+
+Use this capture pattern for every selector or validator invocation shown below
+or in a reference; substitute the named helper and its arguments. When no output
+limit applies, run the selected Python command directly with complete UTF-8
+output; --run requires an actual limit. Invent no budget. Read
+[shell output delivery](references/output-delivery.md) before capture.
+
+```text
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/<helper.py>" <arguments>
+```
+
+The selector's byte budget bounds successful context only, never diagnostics.
+Capture complete output; a diagnostic stops selection, never permits truncation.
+For all --next-id modes, use the highest ID plus one without interior reuse.
+The suggestion includes filename and metadata numbers, exposes mismatches and
+reserves nothing. Recheck ID and filename collisions immediately before creation.
 
 ## Proposal inventory
 
@@ -86,57 +104,29 @@ Report a missing runtime only when no suitable installed interpreter is found.
 
 Before helper calls, follow [shell command rules](references/shell-commands.md).
 
-Follow Runtime helpers below for availability and failures. Start Python with
-`-X utf8` and capture this invocation's complete output before display under the
-shared writing rules, including diagnostics. The selector's byte budget bounds
-successful context only. Run:
+Follow Runtime helpers below for availability and failures. Use the helper invocation pattern above:
 
 ```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
 ```
 
 Read relevant Decisions from the returned paths. The inventory includes unlinked
 proposals and works without an active Plan. Load [inventory details](references/read-only.md#surface-proposals)
 only for output fields or selection-mode constraints.
 
-## Work Item template
-
-```text
-### W-001 Observable outcome
-
-Status: todo
-Depends on: []
-Blocked by: []
-Decisions: []
-Outcome: One independently resumable result.
-Acceptance: Distinct necessary observable conditions and required results; follow edit.md.
-Instructions: []
-Steps:
-1. [status: todo] Perform one bounded action at the known repository-relative paths; name its own observable completion condition and the required checks that verify it.
-Evidence: []
-```
-
-For each new Work Item, write Instructions on one line or use []. Include at
-least one Step with status and omit Next action. Work Item Status and Acceptance
-cover the whole outcome. For every Step, write its bounded action, its own
-observable completion condition and required checks in its text; its status
-records observed progress. Steps have no separate Acceptance field or
-dependencies. See edit.md for fields and legacy continuation.
-Use [granularity](references/planning-granularity.md) only when outcome or Step
-boundaries need judgment, not for a routine insertion with known boundaries.
-
 ## Load only the current route
 
 | Operation | Additional reference |
 | --- | --- |
-| Insert, refine, order, select, progress, block, complete or cancel Work Items; ordinary recovery | [edit.md](references/edit.md) |
+| Select, progress, block, complete or cancel Work Items; ordinary recovery | [progress.md](references/progress.md) |
+| Insert, refine or order Work Items; author Step or execution annotations | [authoring.md](references/authoring.md) and progress.md |
 | Read direction, list records, select dispatch units | [read-only.md](references/read-only.md) |
-| Create or restructure, activate, finish, cancel or delete Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and edit.md |
-| Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and edit.md |
+| Create or restructure, activate, finish, cancel or delete Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and progress.md; authoring.md for Work Items |
+| Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and progress.md |
 | Explicit request to inspect or repair progress, migrate records, or maintain and clean up existing Plans; never ordinary recovery | [repair.md](references/repair.md) |
-| Review assigned native fields without maintenance | read-only.md and applicable field rules in edit.md; Decision reference for Decision sections. Respect the assigned source boundary; no proposal inventory, maintenance, selectors, validators or tests. Permitted file reads remain available. |
-| Audit wording | edit.md; Decision reference for Decision sections |
-| Validate or diagnose structure | edit.md; operation reference only if a diagnostic needs it |
+| Review assigned native fields without maintenance | read-only.md and applicable field rules in progress.md or authoring.md; Decision reference for Decision sections. Respect the assigned source boundary; no proposal inventory, maintenance, selectors, validators or tests. Permitted file reads remain available. |
+| Audit wording | authoring.md and progress.md; Decision reference for Decision sections |
+| Validate or diagnose structure | progress.md; operation reference only if a diagnostic needs it |
 
 If the planning profile is unknown, first list the project root to locate
 PROJECT_INDEX.md, docs/plans and docs/decisions:
@@ -153,7 +143,7 @@ reporting that update or starting dependent work. Related Plan, Decision and
 index edits form one update; do not validate intermediate field writes.
 Updating only an evidence report, without changing profile fields, structure
 or referenced paths, does not require profile validation.
-Use the command and diagnostic handling in edit.md.
+Use the command and diagnostic handling in progress.md.
 See Runtime helpers below for the profile-specific runtime rule.
 Report outcome, active or blocked work, actual evidence, unresolved choices and
 the next action. Direct file edits do not lock out another editor or guarantee
