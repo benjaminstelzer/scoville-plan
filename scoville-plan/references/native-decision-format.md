@@ -19,19 +19,21 @@ scope: project/concern
 
 ## Decision
 
-Recommended result, or the explicit human choice.
+Binding sections: complete
+
+Recommended result or explicit human choice, with necessary reasons.
 
 ## Problem
 
-The unresolved need.
+Background need.
 
 ## Drivers
 
-- Supplied or observed constraint.
+- Nonbinding background consideration.
 
 ## Considered alternatives
 
-- Option: material tradeoff.
+- Nonbinding alternative.
 
 ## Consequences
 
@@ -49,14 +51,22 @@ Concrete reconsideration trigger.
 Fenced code examples are literal content, including lines starting with `#`.
 Only headings outside backtick or tilde fences define the title and sections.
 
-State each binding condition self-contained in its owning section: the choice
-in Decision, implementation or verification effects in Consequences, required
-checks in Confirmation. Keep each section's distinct decision-relevant information without
-invented alternatives, repeated rationale or sentence quotas. Keep reasons, alternatives and tradeoffs only where they explain the
-choice, constrain implementation or determine when to revisit it; omit the
-discussion history. New Decisions use the owning Plan's language; without an
+New Decisions put every binding condition, exception, authority limit and reason
+needed for the choice, implementation, verification or revisit in Decision,
+Consequences, Confirmation or Revisit when. Keep each fact once in its owning
+section; Problem, Drivers and Considered alternatives add only background.
+Omit discussion history and unnecessary rationale. New Decisions use the owning Plan's language; without an
 owning Plan, use the task request's language. Preserve an existing record's
 language unless explicitly changed.
+
+Keep all seven template headings exactly once; use `[]` for an empty background section.
+The first non-blank content line under Decision is exactly
+`Binding sections: complete` only when this self-contained binding contract holds.
+Workflow may then deliver the four binding sections unchanged, with frontmatter
+and title, instead of background. Unmarked Decisions remain complete. A misplaced
+mark, code example or ambiguous section structure permits no projection. If an edit
+adds binding content to a background section, remove the mark or move that content
+to its binding owner. A mark does not change lifecycle, authority or format version.
 
 ## Links and transitions
 
@@ -81,8 +91,9 @@ and superseded Decisions are terminal.
 Use actual dates no earlier than creation. Generic content edits affect only
 proposals and preserve identity and lifecycle. Explicit scoped maintenance under
 [repair.md](repair.md#maintenance-clean-up-existing-plans) also permits editorial
-shortening of accepted or deprecated Decisions to the writing rule above without
-supersession. It preserves identity, lifecycle, the choice, every binding condition,
+shortening, equivalent relocation into the binding sections and adding the binding
+mark in accepted or deprecated Decisions without supersession. It preserves
+identity, lifecycle, the choice, every binding condition,
 evidence status and authority, including reasons that explain the choice, constrain
 implementation or determine revisit. Delete a proposal only after
 checking that no Work Item or Decision links to it.
