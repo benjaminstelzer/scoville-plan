@@ -12,8 +12,11 @@ check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
 Do not scan historical Plans without a concrete relevance reason.
 
-On recovery, use position mode to locate the recorded Work Item and Steps,
-then select its full context with the selector arguments below. All helper
+On recovery, select the recorded Work Item directly when its ID is known;
+check the Plan's current_item, the item's status and its block against the
+expected in_progress Work Item and active Step. Use position mode first when
+the ID is unknown, any of these disagree, or return directions from
+paused_context or historical_priorities matter. All helper
 calls use the entrypoint's [capture pattern](../SKILL.md#helper-invocations).
 Its key fields are `plan`, `plan_status`, `work_item`, `work_status`,
 `current_steps`, `current_units`, `next_step`, `instructions`, `paused_context`

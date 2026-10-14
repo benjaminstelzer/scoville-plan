@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased - 2026-10-14
+
+- Parse machine reports completely and display checked facts and all in-scope deviations. Reuse fully read shared rules across Skills without hiding required inputs.
+- Recover a known Work Item directly; look up position when current records disagree or return directions matter.
+
 ## Unreleased - 2026-10-13
 
 - Separate progress updates from authoring. Explicit maintenance can shorten old Goals and Decisions while preserving the choice, binding conditions and required checks.
