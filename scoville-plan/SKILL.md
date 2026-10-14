@@ -52,8 +52,9 @@ requirements remain governed by this Skill.
    communication requirement.
 4. Record explicit material human choices as accepted Decisions. Unresolved material
    choices become proposals; report alternatives, tradeoffs and effect, and
-   ask only before dependent work. Link Decisions to affected todo items, never
-   unrelated items. After a Work Item has started, add each relevant proposal
+   ask only before dependent work. Link Decisions only when they govern the item's
+   Outcome, Steps, Acceptance, Instructions, required checks or permission boundaries;
+   background or history alone does not make them applicable. After a Work Item has started, add each relevant proposal
    to its Decisions field; you may also add relevant accepted Decisions. Each
    ADR's status determines its decision state.
 5. At work start, except for an assigned read-only field review, classify the

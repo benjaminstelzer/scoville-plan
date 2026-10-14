@@ -100,6 +100,14 @@ field rules to those records:
   is uncertain or a requirement would change, keep that text and resolve only
   the material choice before the affected edit. Equivalent shortening needs no
   separate approval, old-text copy, note or report.
+- Explicit maintenance of existing Plans also covers their linked Decisions;
+  apply this to started and terminal Plans as well, within the requested scope.
+  Fully read each affected Decision and
+  place every binding condition, exception, authority limit and necessary reason
+  in the four binding sections under native-decision-format.md, without changing
+  meaning. Only then add `Binding sections: complete` as Decision's first non-blank
+  content line. Preserve identity and lifecycle. If equivalence is uncertain,
+  leave the Decision unmarked and fully readable. Do not migrate other records.
 - Apply the same future-use criterion to reports within the requested cleanup
   scope. Keep a report reference only when its detail remains useful or required.
   Reviews are temporary development input, not retained reports; remove their

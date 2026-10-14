@@ -319,6 +319,37 @@ def require_format_version(record: ParsedRecord, relative_path: str) -> None:
         )
 
 
+def project_decision_context(text: str) -> str:
+    """Project explicitly self-contained binding sections; otherwise retain all text."""
+    try:
+        record = parse_record(text, "Decision")
+        require_format_version(record, "Decision")
+    except SelectorError:
+        return text
+    prefix = len(record.raw_frontmatter)
+    body = text[prefix:]
+    structure = mask_fenced_code(body)
+    headings = list(re.finditer(r"^(#{1,2}) ([^\r\n]+)\r?$", structure, re.M))
+    expected = {"Decision", "Problem", "Drivers", "Considered alternatives",
+                "Consequences", "Confirmation", "Revisit when"}
+    if (len(headings) != 8 or headings[0][1] != "#"
+            or any(h[1] != "##" for h in headings[1:])
+            or {h[2] for h in headings[1:]} != expected
+            or body[:headings[0].start()].strip()
+            or body[headings[0].end():headings[1].start()].strip()):
+        return text
+    sections = [(h, headings[i + 1].start() if i + 1 < len(headings) else len(body))
+                for i, h in enumerate(headings) if i]
+    decision, end = next((h, end) for h, end in sections if h[2] == "Decision")
+    lines = body[decision.end():end].splitlines()
+    first = next((line for line in lines if line.strip()), "")
+    if first != "Binding sections: complete":
+        return text
+    binding = {"Decision", "Consequences", "Confirmation", "Revisit when"}
+    return (text[:prefix] + body[:headings[1].start()]
+            + "".join(body[h.start():end] for h, end in sections if h[2] in binding))
+
+
 def find_record_path(
     root: Path,
     directory: str,
