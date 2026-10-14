@@ -2,6 +2,10 @@
 
 ## Unreleased - 2026-10-14
 
+- Compare nested report data in code and display only decisive results and necessary diagnostics, including structured state stored in text fields.
+- Keep the original kind of work and full verification scope during Plan cleanup. Check all linked Decisions before marking their binding sections for compact delivery. Cleanup removes demonstrably irrelevant Decision links from unstarted items and adds none.
+
+
 - Mark self-contained Decision sections for compact Workflow delivery; preserve binding conditions during explicit maintenance and link only applicable Decisions.
 - Interpret actual report values through their documented meaning. Allow equivalent wording while preserving exact contracts and unresolved outcomes.
 - Process machine reports through code before displaying results. Avoid redundant shared-rule reads and keep check reports focused on decisive evidence.

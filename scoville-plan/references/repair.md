@@ -89,25 +89,51 @@ field rules to those records:
 
 - Explicit cleanup also authorizes editorial shortening of Outcome, Acceptance
   and Step text, plus Goal, Non-goals and accepted or deprecated Decisions within
-  the requested scope, including started and terminal history. Read the relevant
-  lifecycle/Decision contract for those fields. Remove filler and redundant
-  wording; merge equivalent conditions. For Decisions, apply the writing rule in
-  native-decision-format.md to nonbinding history and rationale. Every required result, case, value,
-  limit, quantifier, negation, exception, action and verification obligation must
-  retain its meaning. The same results must pass or fail before and after the edit.
-  Keep required methods and checks even when new writing would place them in Steps.
-  Do not replace historical conditions with a mutable reference. If equivalence
-  is uncertain or a requirement would change, keep that text and resolve only
-  the material choice before the affected edit. Equivalent shortening needs no
-  separate approval, old-text copy, note or report.
-- Explicit maintenance of existing Plans also covers their linked Decisions;
-  apply this to started and terminal Plans as well, within the requested scope.
-  Fully read each affected Decision and
-  place every binding condition, exception, authority limit and necessary reason
-  in the four binding sections under native-decision-format.md, without changing
-  meaning. Only then add `Binding sections: complete` as Decision's first non-blank
-  content line. Preserve identity and lifecycle. If equivalence is uncertain,
-  leave the Decision unmarked and fully readable. Do not migrate other records.
+  the requested scope, including started and terminal history. Apart from the
+  Decision relocation below, shortening only removes filler and redundant
+  wording and merges equivalent conditions. Leave other text unchanged. Read the
+  relevant lifecycle or Decision contract. Its authoring style
+  does not justify rewriting existing text. For Decisions, apply the writing
+  rule in native-decision-format.md to nonbinding history and rationale. Before
+  saving, compare each edited text with its original. It must keep the requested
+  act, such as investigation or implementation, every required result, case,
+  value, limit, quantifier, negation, exception and action, and the full
+  verification scope. The same results must pass or fail before and after the
+  edit. Wording that states an obligation is not filler, even when it is general
+  or repeated in other records. Do not replace a general check or condition with
+  selected cases or checks. Keep required methods and checks even when new
+  writing would place them in Steps. Do not replace historical conditions with a mutable reference. If
+  equivalence is uncertain or a requirement would change, keep the original
+  text and resolve only the material choice before the affected edit. Equivalent
+  shortening needs no separate approval, old-text copy, note or report.
+- Explicit maintenance of existing Plans includes their linked Decisions within
+  the requested scope, including started and terminal Plans. Shortening reduces
+  a full Decision; only a valid binding mark lets Workflow omit nonbinding
+  background. For every linked Decision in that scope, including already marked
+  ones, follow these steps in order:
+  1. Read the complete Decision.
+  2. Classify each statement by its meaning, not by its section. A requirement,
+     limit, exception, authority limit or necessary reason for the choice,
+     implementation, verification or revisit is binding, also when it stands
+     in Problem, Drivers or Considered alternatives.
+  3. Move all binding content into Decision, Consequences, Confirmation or
+     Revisit when without changing its meaning.
+  4. Reread Problem, Drivers and Considered alternatives. For each remaining
+     statement, ask whether omitting it would change the choice, its
+     implementation, verification or revisit. If yes, return to step 3. If
+     this is uncertain, the mark is blocked.
+  5. Only when those three sections contain background alone, add or keep
+     `Binding sections: complete` as Decision's first non-blank content line.
+     Otherwise remove an existing mark, keep the Decision fully readable and
+     name its ID and the remaining statement in the brief report.
+  Preserve identity, lifecycle, the accepted choice, authority and evidence
+  status. Assess each Work Item's Decision links under SKILL.md's linking
+  policy; shared subject matter or history alone makes no link relevant.
+  Change links only under existing edit permissions. Cleanup alone adds no
+  Decision links. Report a missing relevant link instead. Remove a link that
+  demonstrably governs nothing from an unstarted todo item; keep it when
+  relevance is uncertain. Preserve links of started and terminal items.
+  Do not migrate other records.
 - Apply the same future-use criterion to reports within the requested cleanup
   scope. Keep a report reference only when its detail remains useful or required.
   Reviews are temporary development input, not retained reports; remove their
@@ -117,7 +143,7 @@ field rules to those records:
   Do not create an archive, before-copy, hash chain, new report or Work Item for
   cleanup. No complete project history needs to be reconstructed or retained.
 - Preserve IDs, statuses, execution annotations, Step order, the meaning of
-  Step actions and Acceptance, dependencies,
+  Outcome, Step actions and Acceptance, dependencies,
   material Decisions, completed effects and live user permissions, limits and
   stops. Cleanup changes neither acceptance nor authorization. Do not delete
   files or alter Decisions outside the requested scope.
