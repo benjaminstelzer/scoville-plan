@@ -50,10 +50,14 @@ requirements remain governed by this Skill.
    state and next action and continue. Do not repeat an approval question or
    status report without a material change, a user request or a binding
    communication requirement.
-4. Record explicit material human choices as accepted Decisions. Unresolved material
-   choices become proposals; report alternatives, tradeoffs and effect, and
-   ask only before dependent work. Link Decisions only when they govern the item's
-   Outcome, Steps, Acceptance, Instructions, required checks or permission boundaries;
+4. Before creating a Decision, search existing Decision titles and scopes for
+   the same choice. Read plausible matches completely before reusing one that
+   already governs it. Keep temporary sequencing or execution
+   direction in Instructions unless it changes a material choice or authority.
+   Record explicit material human choices as accepted Decisions. Unresolved
+   material choices become proposals; report alternatives, tradeoffs and effect,
+   and ask only before dependent work. Link Decisions only when they govern
+   the item's Outcome, Steps, Acceptance, Instructions, required checks or permission boundaries;
    background or history alone does not make them applicable. After a Work Item has started, add each relevant proposal
    to its Decisions field; you may also add relevant accepted Decisions. Each
    ADR's status determines its decision state.
@@ -103,6 +107,9 @@ Use that executable wherever examples say `python` or `<verified-python>`,
 including Python commands after `--run --`.
 Report a missing runtime only when no suitable installed interpreter is found.
 
+Before processing machine reports or logs, use the [shared writing rules](references/writing.md).
+If their complete text is not loaded, read it in a separate call before reading
+the data. Reuse retained rules under their existing reload conditions.
 Before helper calls, follow [shell command rules](references/shell-commands.md).
 
 Follow Runtime helpers below for availability and failures. Use the helper invocation pattern above:

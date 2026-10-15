@@ -85,6 +85,17 @@ Apply only explicitly authorized transitions:
 | accepted | deprecated or superseded |
 | deprecated | superseded |
 
+During explicit maintenance under repair.md, that request authorizes these transitions:
+
+| Finding | Action |
+| --- | --- |
+| A temporary Decision's end or fulfilment is proved; no binding condition remains. | Deprecate it; no empty replacement is needed. |
+| Equivalent duplicate; every binding effect remains with its owning Decision. | Deprecate the duplicate and redirect its links to the owner. |
+| A binding condition remains or its end is uncertain. | Keep the conditions and status. |
+
+Age, a temporary title or cancellation alone proves no end. Preserve independent
+conditions and unknowns.
+
 Acceptance adds `accepted: YYYY-MM-DD` between created and scope. Deprecation
 retains it. Proposed and rejected Decisions omit the accepted date. Rejected
 and superseded Decisions are terminal.
@@ -93,9 +104,9 @@ proposals and preserve identity and lifecycle. Explicit scoped maintenance under
 [repair.md](repair.md#maintenance-clean-up-existing-plans) also permits editorial
 shortening, equivalent relocation into the binding sections and adding the binding
 mark in accepted or deprecated Decisions without supersession. It preserves
-identity, lifecycle, the choice, every binding condition,
-evidence status and authority, including reasons that explain the choice, constrain
-implementation or determine revisit. Delete a proposal only after
+identity, the choice, every binding condition, evidence status and authority,
+including reasons that explain the choice, constrain implementation or determine
+revisit. Lifecycle changes follow the transitions above. Delete a proposal only after
 checking that no Work Item or Decision links to it.
 
 Supersession preserves both records. A material change to accepted or
@@ -105,7 +116,8 @@ editorial maintenance has the exception above:
 1. Create the accepted replacement with `supersedes: ADR-0001` after scope.
 2. Set old status superseded and reciprocal `superseded_by: ADR-0002` after any supersedes.
 3. Replace links in affected todo items. For started items, append the accepted
-   replacement, retain the older link as history and explain the change.
+   replacement, retain the older link as history and explain the change, except
+   when explicit cleanup removes an irrelevant link under repair.md.
 4. Validate the coherent transition through progress.md.
 
 Terminal historical links alone do not block replacement. Rejection in favor

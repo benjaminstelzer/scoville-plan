@@ -83,9 +83,9 @@ field rules to those records:
 | --- | --- | --- |
 | Instructions | Additional live conditions under progress.md; retain an unclear condition. | Repeated actions/criteria, progress, results and obsolete conditions. Terminal fields normally become []; report apparent unmet conditions without erasing them or reopening work. |
 | Evidence | Observed results, required review occurrence and open defects/limits needed for development. | Review text, chronology, duplicate summaries and counts, versions or inventories without continuing purpose. |
-| Goal | Current target, boundary and each binding constraint's effect plus Decision ID under the lifecycle route. | Superseded constraints, duplicated rationale and history; never replace an effect by an unreadable ID alone. |
+| Goal | Current target, boundary and each binding constraint's effect plus Decision ID under the lifecycle route. | Superseded constraints or constraints whose binding effect has demonstrably ended under the Decision lifecycle rules; duplicated rationale and history; never replace an effect by an unreadable ID alone. |
 | Non-goals | Every still-binding exclusion. | Reasons and drafting notes. |
-| Decisions in the requested scope | Every condition in its owning section, including required checks and revisit triggers. Preserve identity, lifecycle, the choice, authority, evidence status and decision-relevant reasons. | Equivalent repetition, filler, discussion history, and reasons or alternatives that neither explain the choice, constrain implementation nor determine revisit. Material changes still require the Decision supersession route. |
+| Decisions in the requested scope | Every condition in its owning section, including required checks and revisit triggers. Preserve identity, the choice, authority, evidence status and decision-relevant reasons; apply the Decision lifecycle rules. | Equivalent repetition, filler, discussion history, and reasons or alternatives that neither explain the choice, constrain implementation nor determine revisit. Material changes still require the Decision supersession route. |
 
 - Explicit cleanup also authorizes editorial shortening of Outcome, Acceptance
   and Step text, plus Goal, Non-goals and accepted or deprecated Decisions within
@@ -116,23 +116,28 @@ field rules to those records:
      limit, exception, authority limit or necessary reason for the choice,
      implementation, verification or revisit is binding, also when it stands
      in Problem, Drivers or Considered alternatives.
-  3. Move all binding content into Decision, Consequences, Confirmation or
+  3. Apply native-decision-format.md's maintenance table and lifecycle rules.
+     Keep the choice stated in each Decision and redirect duplicate links to the
+     owner without widening its scope; keep historical files and IDs. Do not turn
+     cancellation or expiry into a passed check, waived independent condition or
+     new permission.
+  4. Assess each Work Item's Decision links under SKILL.md's linking policy;
+     shared subject matter or history alone makes no link relevant. Remove links
+     that demonstrably govern nothing, including in started and terminal items.
+     Keep a still-needed historical exception or missing review occurrence briefly
+     in Evidence, and retain uncertain links. Add no unrelated links; report a
+     missing relevant link instead.
+  5. Move all binding content into Decision, Consequences, Confirmation or
      Revisit when without changing its meaning.
-  4. Reread Problem, Drivers and Considered alternatives. For each remaining
+  6. Reread Problem, Drivers and Considered alternatives. For each remaining
      statement, ask whether omitting it would change the choice, its
-     implementation, verification or revisit. If yes, return to step 3. If
+     implementation, verification or revisit. If yes, return to step 5. If
      this is uncertain, the mark is blocked.
-  5. Only when those three sections contain background alone, add or keep
+  7. Only when those three sections contain background alone, add or keep
      `Binding sections: complete` as Decision's first non-blank content line.
      Otherwise remove an existing mark, keep the Decision fully readable and
      name its ID and the remaining statement in the brief report.
-  Preserve identity, lifecycle, the accepted choice, authority and evidence
-  status. Assess each Work Item's Decision links under SKILL.md's linking
-  policy; shared subject matter or history alone makes no link relevant.
-  Change links only under existing edit permissions. Cleanup alone adds no
-  Decision links. Report a missing relevant link instead. Remove a link that
-  demonstrably governs nothing from an unstarted todo item; keep it when
-  relevance is uncertain. Preserve links of started and terminal items.
+  Preserve identity, the choice, authority and evidence status.
   Do not migrate other records.
 - Apply the same future-use criterion to reports within the requested cleanup
   scope. Keep a report reference only when its detail remains useful or required.
@@ -142,10 +147,10 @@ field rules to those records:
   findings remain current work until resolved.
   Do not create an archive, before-copy, hash chain, new report or Work Item for
   cleanup. No complete project history needs to be reconstructed or retained.
-- Preserve IDs, statuses, execution annotations, Step order, the meaning of
-  Outcome, Step actions and Acceptance, dependencies,
-  material Decisions, completed effects and live user permissions, limits and
-  stops. Cleanup changes neither acceptance nor authorization. Do not delete
+- Preserve IDs, Plan and Work Item statuses, execution annotations, Step order,
+  the meaning of Outcome, Step actions and Acceptance, dependencies, material
+  Decisions under their lifecycle rules, completed effects and live user
+  permissions, limits and stops. Cleanup changes neither acceptance nor authorization. Do not delete
   files or alter Decisions outside the requested scope.
 
 This is ordinary record maintenance, not a new worker or review phase. Do not
