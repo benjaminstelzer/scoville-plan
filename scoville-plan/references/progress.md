@@ -72,9 +72,9 @@ condition and required checks under repair.md. This Step clarification permits
 no Outcome or Acceptance edits. Both exceptions need no old-text note, copy
 or separate approval.
 
-A started item may add a relevant proposed or accepted Decision, retaining older
-links as history. It may correct a stale path, version reference or other purely
-formal wording only when evidence shows unchanged behavior, compatibility,
+A started item may add a relevant proposed or accepted Decision. Retain older
+links unless explicit cleanup removes them under repair.md's relevance check.
+It may correct a stale path, version reference or other purely formal wording only when evidence shows unchanged behavior, compatibility,
 data, authority and verification scope. Retain the old wording and reason in
 one referenced note or existing Git history. A changed expected result or weaker
 Acceptance is material, not a formal correction; obtain the user's decision
