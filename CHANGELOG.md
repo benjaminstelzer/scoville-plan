@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - 2026-10-18
+
+- Reuse known results and request only the scope the next decision needs. Narrow direct tool requests before display when code preprocessing is unavailable.
+
 ## Unreleased - 2026-10-15
 
 - Reuse applicable Decisions before adding new ones. Explicit maintenance can consolidate equivalent Decisions and retire proved temporary conditions and irrelevant links while preserving live constraints and historical review limits.
