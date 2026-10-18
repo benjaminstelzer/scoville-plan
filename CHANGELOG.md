@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - 2026-10-19
+
+- Apply one shared evidence rule in user and agent exchanges: defend supported conclusions, correct demonstrated errors, and respect user decisions without treating them as factual proof.
+
 ## Unreleased - 2026-10-18
 
 - Reuse known results and request only the scope the next decision needs. Narrow direct tool requests before display when code preprocessing is unavailable.
