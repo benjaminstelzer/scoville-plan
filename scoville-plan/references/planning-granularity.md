@@ -27,11 +27,11 @@ no route classes or inferred execution settings. Writing Steps does not activate
 Workflow.
 
 Size planned Steps as manageable, checkable results, normally finishable within
-one executor context window with their necessary intermediate actions and checks.
+the executing agent's context window with their necessary intermediate actions and checks.
 Before execution, split planned work whose required sources, checks or output would not fit,
 using progress.md's editing rights. Do not split by file, owner or sentence quotas
 or create separate bookkeeping or duplicate verification Steps.
 If compaction nevertheless occurs, continue the same original assignment with
-its remaining work. It triggers no manager change or automatic Step split.
+its remaining work. It changes neither ownership nor the original Step boundaries.
 A legacy item without Steps may be one default
 execution unit.

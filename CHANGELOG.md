@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - 2026-10-28 - Review corrections
+
+- Describe execution and Plan ownership without legacy role names while preserving Step scope and continuation boundaries.
+
 ## Unreleased - 2026-10-28 - Instruction design
 
 - Keep the context a fresh agent needs to resume Plan work in its existing fields, including completed effects, live authority and evidence limits.

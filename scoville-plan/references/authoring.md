@@ -89,11 +89,11 @@ and section. Name an already fulfilled guarantee only when this work could
 plausibly break it; project rules and Decisions bind the rest without
 restatement. Steps hold takeover and remaining actions; Evidence records
 accepted source contributions and their limits. Do not copy completed actions or
-results into Acceptance. A manager or worker handoff of the same item changes no
+results into Acceptance. A change of the agent continuing the same item changes no
 fields or criteria.
 
 Preserve explicit route and execute annotations; Plan never infers them. For a todo
-item without Steps, an explicit executor choice may add one coherent annotated
+item without Steps, an explicit execution choice may add one coherent annotated
 Step. See granularity only when boundaries need judgment.
 Pin a version or count in Acceptance only when
 that exact value is itself required; record the tested candidate in Evidence.

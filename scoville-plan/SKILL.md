@@ -24,7 +24,7 @@ Relevant neighboring owners:
 
 Plan owns its records' wording and lifecycle. It does not start Workflow or
 choose dispatch routes. Run one editor at a time; do not change affected files
-or executor model or reasoning settings concurrently. Reads and Skill upgrades
+or required model and reasoning settings concurrently. Reads and Skill upgrades
 require no migration.
 
 Before writing Plans, Work Items, Decisions or reports, or assessing a disputed

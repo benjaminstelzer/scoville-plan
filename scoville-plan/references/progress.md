@@ -87,7 +87,7 @@ Step references so pending assignments still identify the remaining work.
 Other started fields remain fixed except for these explicit repair.md exceptions. Resume paused work to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
 When an authorized Workflow closure review finds an omitted implementation
-with no existing matching Step, the manager may append one Step that fulfils
+with no existing matching Step, the main thread may append one Step that fulfils
 a named, already binding unchanged Acceptance criterion or Work Item requirement.
 Preserve existing Step text, scope, order, completed effects and Acceptance.
 Run the new Step through execution, required Step review and closure review. Changed
@@ -126,7 +126,7 @@ outcome of effects that must not be repeated. Distinguish source review,
 structural checks, behavioral tests and runtime or publication evidence.
 Do not repeat an accepted effect merely to recreate evidence.
 Do not copy or archive reviews or a run chronology. Review texts serve only the
-development process; full worker results serve the running assessment and
+development process; full execution results serve the running assessment and
 correction. Keep only facts needed for further development or an independently
 binding retention requirement.
 
