@@ -45,7 +45,15 @@ work they explain, without turning routine updates into more work items.
 
 ## Compatibility
 
-Developed for Codex and Claude Code with repository read/write access, with Python 3.11+ required for the helpers. Manual alternatives apply only when suitable Python 3.11+ is unavailable. Fable, Astra, SOL or Opus (5.0+) are recommended. Luna 6 with High reasoning passed the selected comprehension and functional checks in Codex. Other routes and hosts remain unverified.
+Developed for Codex and Claude Code with repository read/write access and
+Python 3.11+ for helpers, with manual alternatives only when suitable Python is
+unavailable.
+Targeted candidate-path tests in Codex with gpt-6.1-sol / low produced and
+maintained valid native records, preserved open choices and non-repeatable
+evidence, honored an explicit opt-out, selected the initial todo item for a new
+profile and retained draft/idle state when explicitly requested, while broader
+lifecycle, implementation acceptance, other hosts and installed discovery remain
+unverified.
 
 ## Install
 
@@ -77,10 +85,11 @@ Install its released Skill packages, not development templates.
 
 ### Model choices for Workflow
 
-When using Scoville Workflow for Codex, you can request a model and reasoning
-level for a Step. Otherwise Workflow uses its configured routing. Scoville
-Setup shows or saves those settings. Unsupported model/effort combinations
-stop the affected operation instead of silently changing your choice.
+Scoville Workflow for Codex Mainloop uses fixed main, review and explore model
+and reasoning pairs. Setup shows or saves those project settings. An existing
+Step execute annotation is retained and compared with the main pair. A conflict
+requires a decision rather than dispatching that Step through a separate route.
+Unsupported choices stop the affected operation without silently changing them.
 
 ## How to use
 
@@ -151,6 +160,7 @@ field formats and helper commands. Plan uses `format_version: 1`.
 - [UI](https://github.com/benjaminstelzer/scoville-ui) covers UI implementation, information structure, accessibility and rendered checks, with an optional WordPress adapter.
 - [Handoff](https://github.com/benjaminstelzer/scoville-handoff) passes active work to another agent or session.
 - [Project Context Cleanup](https://github.com/benjaminstelzer/scoville-suite) keeps requested project rules and index text concise without losing required context.
+- [Skillwriter](https://github.com/benjaminstelzer/scoville-skillwriter) writes, simplifies and reviews Skills and reusable agent prompts.
 
 ## License
 

@@ -4,11 +4,15 @@ Use progress.md for writing and validation. Only PROJECT_INDEX.md selects the ac
 
 ## Create and refine
 
-Initialize only a wholly absent profile on explicit request. Prepare
-PROJECT_INDEX.md, docs/plans, docs/decisions and the first Plan together. Require
-the supplied title, Goal, Non-goals and first Work Item with its acceptance;
-never invent missing direction. Select the initial todo W-001 without starting
-it. Write the index last. An existing partial or unsupported profile is not setup.
+Initialize only a wholly absent profile when a durable Plan is explicitly
+requested. Prepare PROJECT_INDEX.md, docs/plans, docs/decisions and the first
+Plan together. Derive title, Goal, Non-goals and the first Work Item with
+Acceptance from the authorized request and binding repository context. Ask only
+for missing material direction; do not invent scope, exclusions or acceptance
+requirements. This initial durable-profile request selects the first Plan as
+active with current_item W-001 and initial W-001 todo, without starting execution.
+An explicit request for draft or idle instead leaves the Plan draft and index
+idle. Write the index last. An existing partial or unsupported profile is not setup.
 
 Use the entrypoint's ID-allocation rule. Store PLAN-0014 at
 `docs/plans/0014-subject.md`; obtain a later Plan's next ID and filename with
@@ -69,9 +73,10 @@ repository contract that the agent has demonstrably loaded.
 
 ## Activate
 
-To activate a Plan, require an explicit direction, a target draft Plan and a
-selected todo or paused item whose dependencies are done. Activation does not
-start execution. From idle, prepare the target Plan and index together.
+Outside the initial-profile selection above, activating a Plan requires an
+explicit direction, a target draft Plan and a selected todo or paused item whose
+dependencies are done. Activation does not start execution. From idle, prepare
+the target Plan and index together.
 
 When switching from an active Plan, prepare the outgoing Plan in the same
 change. Use the user's chosen draft, completed or cancelled Plan status.

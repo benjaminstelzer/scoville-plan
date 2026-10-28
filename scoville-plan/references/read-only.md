@@ -44,10 +44,9 @@ Position selects no work, changes no status and grants no start permission.
 
 ## Select Work Item or dispatch-unit context
 
-With a verified Python 3.11+, select the current or explicitly named Work Item
-with the bundled script. A missing script or script error is a blocker; it
-never enables manual selection. The commands below specify the complete
-invocation; do not load the Python source just to call them. Run:
+Select current or explicitly named Work Item context with the bundled script
+under SKILL.md's Runtime helpers and Helper invocations rules. The commands
+below are complete; no source read is needed to invoke them. Run:
 
 ```text
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json

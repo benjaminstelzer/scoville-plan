@@ -32,9 +32,8 @@ python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-ro
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
 ```
 
-A selector diagnostic stops selection; do not truncate or invent partial
-context. Read read-only.md only for further output-field details, dispatch-unit
-selection or wider read tasks.
+Apply the entrypoint's diagnostic and capture rules. Load read-only.md only
+for further output-field details, dispatch-unit selection or wider read tasks.
 
 Edit only owning records with uniquely anchored replacements. Reject redirected
 or out-of-project targets; preserve unrelated changes. Follow shared literal-safe
@@ -99,7 +98,8 @@ unperformed Step after start, preserving its action, route and execution history
 ## Step progress
 
 A Step without written status is legacy unknown, never assumed todo or done.
-Status comes first, as in `1. [status: todo] Verify the result.` It is todo,
+Status comes first, as in `1. [status: todo] <action>`. This shows annotation
+syntax only; authoring.md governs sufficient Step content. It is todo,
 in_progress, done or cancelled. Preserve explicit route and
 execution annotations; changing or authoring them loads
 [authoring.md](authoring.md#step-annotations). These formats prove no model availability.
@@ -120,6 +120,11 @@ All Steps done does not itself complete the Work Item or authorize repeating the
 
 Record the observed result briefly. For a required review, record that it took
 place. Keep confirmed open defects as current work, not as a review transcript.
+Keep facts and existing evidence references needed to establish accepted work,
+remaining defects and the next permitted action, including the identity and
+outcome of effects that must not be repeated. Distinguish source review,
+structural checks, behavioral tests and runtime or publication evidence.
+Do not repeat an accepted effect merely to recreate evidence.
 Do not copy or archive reviews or a run chronology. Review texts serve only the
 development process; full worker results serve the running assessment and
 correction. Keep only facts needed for further development or an independently

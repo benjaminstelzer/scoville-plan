@@ -120,9 +120,13 @@ Return the four semantic areas described in [read-only.md](../read-only.md):
 | Direct dependencies | Each ID and Status line. |
 | Decisions | Every complete Decision referenced by the Work Item. |
 
-Include source_text as the exact selected Step lines or complete item
-block without Steps, normalized to LF with one final newline and no trailing
-separator blank lines. For an item without Steps, retain Evidence and Next
-action. Exclude unselected Steps and Work Item-wide Next action from Step units. Resolve each
-reference from canonical records. If a record, boundary or reference is missing
-or ambiguous, stop without supplying a partial dispatch context.
+Return `context_text` as the complete unchanged parent Work Item block.
+For a whole-item unit, `source_text` is that complete block, including existing
+Steps, Evidence and legacy Next action. For a Step or range, `source_text`
+contains only the selected original Step lines; unselected Steps and Work
+Item-wide Next action remain background in `context_text`. Normalize both text
+fields to LF with one final newline and no trailing separator blank lines.
+When any selected Step has written status, return `step_statuses` with each
+selected Step's original number and status, using null for unmarked selected
+Steps; otherwise omit that field. Resolve references from canonical records
+and stop on missing or ambiguous context, without supplying partial context.

@@ -3,6 +3,8 @@
 Use [progress.md](progress.md) for safe edits and validation and the entrypoint's
 ID-allocation rule. Obtain the next ID and filename pattern with
 `select_context.py --root "<project-root>" --next-id decision --format json`.
+Apply [agent instruction design](instruction-design.md) when writing Decision
+text. This reference owns its schema, binding sections and lifecycle.
 For example, store ADR-0074 in `docs/decisions/0074-subject.md`. Use a lowercase slash-separated domain label
 for `scope`, such as `product/import-pricing`. A new proposal follows this template:
 
@@ -99,8 +101,23 @@ conditions and unknowns.
 Acceptance adds `accepted: YYYY-MM-DD` between created and scope. Deprecation
 retains it. Proposed and rejected Decisions omit the accepted date. Rejected
 and superseded Decisions are terminal.
-Use actual dates no earlier than creation. Generic content edits affect only
-proposals and preserve identity and lifecycle. Explicit scoped maintenance under
+Use actual dates no earlier than creation. For content changes, use this flow
+with the legal status pairs above and existing authority. Ask only for a missing
+material choice before dependent work.
+
+```mermaid
+flowchart TD
+  status{"Decision status?"}
+  status -->|proposed| proposal["Edit proposed content within authorized scope; preserve identity and lifecycle"]
+  status -->|accepted or deprecated| equivalent{"Authorized equivalent editorial maintenance?"}
+  status -->|rejected or superseded| terminal["Preserve terminal Decision"]
+  equivalent -->|yes| maintain["Use scoped maintenance under repair.md"]
+  equivalent -->|no| material{"Material change explicitly authorized?"}
+  material -->|yes| replace["Use supersession below"]
+  material -->|no or unclear| choice["Preserve content; resolve missing material choice"]
+```
+
+Explicit scoped maintenance under
 [repair.md](repair.md#maintenance-clean-up-existing-plans) also permits editorial
 shortening, equivalent relocation into the binding sections and adding the binding
 mark in accepted or deprecated Decisions without supersession. It preserves
@@ -109,9 +126,7 @@ including reasons that explain the choice, constrain implementation or determine
 revisit. Lifecycle changes follow the transitions above. Delete a proposal only after
 checking that no Work Item or Decision links to it.
 
-Supersession preserves both records. A material change to accepted or
-deprecated content uses this route, never an in-place rewrite. Only equivalent
-editorial maintenance has the exception above:
+Supersession preserves both records:
 
 1. Create the accepted replacement with `supersedes: ADR-0001` after scope.
 2. Set old status superseded and reciprocal `superseded_by: ADR-0002` after any supersedes.

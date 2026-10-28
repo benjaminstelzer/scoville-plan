@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased - 2026-10-28 - Instruction design
+
+- Keep the context a fresh agent needs to resume Plan work in its existing fields, including completed effects, live authority and evidence limits.
+- Clarify Decision maintenance and content changes with compact flows. Keep the same binding conditions, lifecycle and acceptance boundaries.
+- Align manual dispatch context with the selector contract, shorten the activation description and derive initial Plan wording from authorized direction without a separate field questionnaire.
+- Clarify that initial durable-profile authoring selects the first Plan and todo item without starting execution. An explicit draft or idle request takes precedence.
+
+## Unreleased - 2026-10-28
+
+- Keep Acceptance free of restated guarantees the work cannot plausibly break, and require a separate requirement before forbidding removal of an existing mechanism.
+
 ## Unreleased - 2026-10-20
 
 - Keep required text complete when choosing how to read it. File size and metadata remain optional, and completed reads need no verification reread.

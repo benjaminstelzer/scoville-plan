@@ -92,9 +92,8 @@ field rules to those records:
   the requested scope, including started and terminal history. Apart from the
   Decision relocation below, shortening only removes filler and redundant
   wording and merges equivalent conditions. Leave other text unchanged. Read the
-  relevant lifecycle or Decision contract. Its authoring style
-  does not justify rewriting existing text. For Decisions, apply the writing
-  rule in native-decision-format.md to nonbinding history and rationale. Before
+  relevant lifecycle contract for Goal or Non-goals edits. Authoring style
+  does not justify rewriting existing text. Before
   saving, compare each edited text with its original. It must keep the requested
   act, such as investigation or implementation, every required result, case,
   value, limit, quantifier, negation, exception and action, and the full
@@ -107,38 +106,39 @@ field rules to those records:
   text and resolve only the material choice before the affected edit. Equivalent
   shortening needs no separate approval, old-text copy, note or report.
 - Explicit maintenance of existing Plans includes their linked Decisions within
-  the requested scope, including started and terminal Plans. Shortening reduces
-  a full Decision; only a valid binding mark lets Workflow omit nonbinding
-  background. For every linked Decision in that scope, including already marked
-  ones, follow these steps in order:
-  1. Read the complete Decision.
-  2. Classify each statement by its meaning, not by its section. A requirement,
-     limit, exception, authority limit or necessary reason for the choice,
-     implementation, verification or revisit is binding, also when it stands
-     in Problem, Drivers or Considered alternatives.
-  3. Apply native-decision-format.md's maintenance table and lifecycle rules.
-     Keep the choice stated in each Decision and redirect duplicate links to the
-     owner without widening its scope; keep historical files and IDs. Do not turn
-     cancellation or expiry into a passed check, waived independent condition or
-     new permission.
-  4. Assess each Work Item's Decision links under SKILL.md's linking policy;
-     shared subject matter or history alone makes no link relevant. Remove links
-     that demonstrably govern nothing, including in started and terminal items.
-     Keep a still-needed historical exception or missing review occurrence briefly
-     in Evidence, and retain uncertain links. Add no unrelated links; report a
-     missing relevant link instead.
-  5. Move all binding content into Decision, Consequences, Confirmation or
-     Revisit when without changing its meaning.
-  6. Reread Problem, Drivers and Considered alternatives. For each remaining
-     statement, ask whether omitting it would change the choice, its
-     implementation, verification or revisit. If yes, return to step 5. If
-     this is uncertain, the mark is blocked.
-  7. Only when those three sections contain background alone, add or keep
-     `Binding sections: complete` as Decision's first non-blank content line.
-     Otherwise remove an existing mark, keep the Decision fully readable and
-     name its ID and the remaining statement in the brief report.
-  Preserve identity, the choice, authority and evidence status.
-  Do not migrate other records.
+  the requested scope, including started and terminal Plans. Before assessing
+  or editing them, read [native-decision-format.md](native-decision-format.md)
+  for its maintenance table, lifecycle and nonbinding-history writing rules.
+  Shortening reduces a full Decision; only a valid binding mark lets Workflow
+  omit nonbinding background. Apply this flow to every linked Decision in scope,
+  including already marked ones:
+
+  ```mermaid
+  flowchart TD
+    read["Read complete Decision"] --> classify["Classify statements by meaning"]
+    classify --> lifecycle["Apply Decision maintenance table and lifecycle"]
+    lifecycle --> links["Assess Work Item links under the linking policy"]
+    links --> move["Move binding content to its binding section without changing meaning"]
+    move --> reread["Reread Problem, Drivers and Considered alternatives"]
+    reread --> background{"Would omitting any remaining statement affect choice, implementation, verification or revisit?"}
+    background -->|yes| move
+    background -->|no| mark["Add or retain Binding sections: complete as Decision's first non-blank line"]
+    background -->|uncertain| unmark["Remove existing mark; report Decision ID and unresolved statement"]
+  ```
+
+  A requirement, limit, exception, authority limit or necessary reason for the
+  choice, implementation, verification or revisit is binding wherever it stands.
+  Binding sections are Decision, Consequences, Confirmation and Revisit when.
+  Preserve identity, the stated choice, authority, evidence status, historical
+  files and IDs. Redirect duplicate links to the owner without widening scope.
+  Cancellation or expiry grants no passed check, waived independent condition
+  or new permission. Keep an unmarked Decision fully readable.
+
+  Remove links only when they demonstrably govern nothing, including in started
+  or terminal items; shared subject matter or history alone proves no relevance.
+  Retain uncertain links. Keep a still-needed historical exception or missing
+  review occurrence briefly in Evidence. Add no unrelated links; report a
+  missing relevant link instead. Do not migrate other records or expand scope.
 - Apply the same future-use criterion to reports within the requested cleanup
   scope. Keep a report reference only when its detail remains useful or required.
   Reviews are temporary development input, not retained reports; remove their
