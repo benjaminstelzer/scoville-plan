@@ -57,8 +57,8 @@ idle. A generic Plan edit changes only title, Goal and Non-goals, plus updated
 on real changes. Preserve identity, lifecycle and Work Items.
 
 Keep Goal to the current target, boundary and each still-binding plan-wide
-constraint's effect and Decision ID. Retain the effect itself: Workflow forwards
-only Decisions linked to the selected item, not every ID in Goal. Keep exclusions
+constraint's effect and Decision ID. Retain the effect itself: recipients may
+receive only Decisions linked to the selected item, not every ID in Goal. Keep exclusions
 in Non-goals and facts in their owning fields under authoring.md and progress.md.
 Omit dated steering, drafting notes, superseded constraints, copied ADR rationale
 and progress history. No sentence or line quota applies.

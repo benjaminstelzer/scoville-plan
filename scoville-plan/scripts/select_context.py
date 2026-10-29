@@ -18,6 +18,8 @@ try:
     _markdown_module = importlib.util.module_from_spec(_markdown_spec)
     _markdown_spec.loader.exec_module(_markdown_module)
     mask_fenced_code = _markdown_module.mask_fenced_code
+    plan_sections = _markdown_module.plan_sections
+    PlanSectionsError = _markdown_module.PlanSectionsError
 except Exception as error:  # Report startup failures through the helper's diagnostic contract.
     _MARKDOWN_IMPORT_ERROR = error
 
@@ -290,20 +292,20 @@ def parse_record(text: str, relative_path: str) -> ParsedRecord:
     newline = "\r\n" if "\r\n" in text else "\n"
     text = text.replace("\r\n", "\n")
     if not text.startswith("---\n"):
-        raise SelectorError("FRONTMATTER_OPEN_MISSING", "record must start with frontmatter", path=relative_path)
+        raise SelectorError("FRONTMATTER_OPEN_MISSING", "line 1: Start the record with --- and its canonical frontmatter; preserve authored content.", path=relative_path)
     closing = re.compile(r"\n---(?:\n|\Z)").search(text, 4)
     if closing is None:
-        raise SelectorError("FRONTMATTER_CLOSE_MISSING", "record frontmatter is not closed", path=relative_path)
+        raise SelectorError("FRONTMATTER_CLOSE_MISSING", "line 1: Close the frontmatter with a separate --- line before the title; preserve all fields.", path=relative_path)
     close = closing.start()
     raw_frontmatter = text[: closing.end()]
     entries: dict[str, str] = {}
-    for line in text[4:close].split("\n"):
+    for line_number, line in enumerate(text[4:close].split("\n"), start=2):
         match = FRONTMATTER_ENTRY_RE.fullmatch(line)
         if match is None:
-            raise SelectorError("FRONTMATTER_ENTRY_INVALID", "frontmatter entry is malformed", path=relative_path)
+            raise SelectorError("FRONTMATTER_ENTRY_INVALID", f"line {line_number}: Use a canonical key: value frontmatter entry; correct only its syntax.", path=relative_path)
         key, value = match.groups()
         if key in entries:
-            raise SelectorError("FRONTMATTER_KEY_DUPLICATE", f"frontmatter key is repeated: {key}", path=relative_path)
+            raise SelectorError("FRONTMATTER_KEY_DUPLICATE", f"line {line_number}: Frontmatter key {key} is repeated; retain one authorized value and rerun the selector.", path=relative_path)
         entries[key] = value
     return ParsedRecord(entries, raw_frontmatter.replace("\n", newline), text[closing.end() :], newline)
 
@@ -507,38 +509,15 @@ def project_unit(
 
 
 def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict[str, WorkItem]]:
-    structural_body = mask_fenced_code(record.body)
-    match = re.fullmatch(
-        r"\n*# [^\n]+\n\n## Goal\n(?P<goal>.+?)\n\n## Non-goals\n(?P<non_goals>.+?)\n\n## Work items\n(?P<work_items>.*)",
-        structural_body,
-        re.DOTALL,
-    )
-    if match is None:
-        raise SelectorError(
-            "PLAN_SECTION_BOUNDARY_INVALID",
-            "Plan must contain one H1 followed by Goal, Non-goals, and Work items in exact order",
-            path=relative_path,
-        )
-    goal_body = record.body[slice(*match.span("goal"))]
-    non_goals_body = record.body[slice(*match.span("non_goals"))]
-    work_text = record.body[slice(*match.span("work_items"))]
-    if not goal_body.strip() or not non_goals_body.strip():
-        raise SelectorError("PLAN_SECTION_EMPTY", "Goal and Non-goals must be non-empty", path=relative_path)
-    if MARKDOWN_HEADING_RE.search(match.group("goal")) or MARKDOWN_HEADING_RE.search(match.group("non_goals")):
-        raise SelectorError(
-            "PLAN_SECTION_BOUNDARY_INVALID",
-            "Goal and Non-goals must not contain nested or duplicate Markdown headings",
-            path=relative_path,
-        )
-    headings = list(WORK_HEADING_RE.finditer(match.group("work_items")))
-    all_work_headings = list(MARKDOWN_HEADING_RE.finditer(match.group("work_items")))
-    if (
-        not headings
-        or work_text[: headings[0].start()].strip()
-        or [heading.start() for heading in all_work_headings]
-        != [heading.start() for heading in headings]
-    ):
-        raise SelectorError("WORK_BOUNDARY_INVALID", "Work items must contain canonical H3 blocks", path=relative_path)
+    try:
+        spans = plan_sections(record.body)
+    except PlanSectionsError as error:
+        line = record.raw_frontmatter.count('\n') + error.line
+        raise SelectorError(error.code, f'{relative_path}: line {line}: {error}', path=relative_path) from error
+    goal = record.body[slice(*spans['Goal'])].rstrip('\n')
+    non_goals = record.body[slice(*spans['Non-goals'])].rstrip('\n')
+    work_text = record.body[record.body.index('\n', spans['Work items'][0]) + 1:]
+    headings = list(WORK_HEADING_RE.finditer(mask_fenced_code(work_text)))
     items: dict[str, WorkItem] = {}
     for index, heading in enumerate(headings):
         item_id = heading.group(1)
@@ -553,7 +532,7 @@ def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict
         if instructions is not None and not instructions.strip():
             raise SelectorError("WORK_FIELD_INVALID", "Instructions must be one-line text or exactly `Instructions: []`; empty is invalid", path=relative_path)
         items[item_id] = WorkItem(item_id, block.replace("\n", record.newline), status, dependencies, decisions)
-    return ("## Goal\n" + goal_body).replace("\n", record.newline), ("## Non-goals\n" + non_goals_body).replace("\n", record.newline), items
+    return goal.replace("\n", record.newline), non_goals.replace("\n", record.newline), items
 
 
 def select_context(
@@ -577,10 +556,12 @@ def select_context(
     unit_match = UNIT_RE.fullmatch(unit) if unit is not None else None
     selected_id = unit_match.group("work_item") if unit_match is not None else requested_item or plan.frontmatter.get("current_item")
     if selected_id is None or WORK_ID_RE.fullmatch(selected_id) is None:
-        raise SelectorError("CURRENT_ITEM_INVALID", "selected Work Item must match W-NNN", path=plan_path)
+        raise SelectorError("CURRENT_ITEM_INVALID",
+            f'{plan_path}: line 1: Select an existing W-NNN with --work-item, or correct current_item only from the authorized Plan state; rerun the selector.', path=plan_path)
     selected = items.get(selected_id)
     if selected is None:
-        raise SelectorError("WORK_ITEM_MISSING", f"selected Work Item does not exist: {selected_id}", path=plan_path)
+        raise SelectorError("WORK_ITEM_MISSING",
+            f'{plan_path}: line 1: Selected Work Item {selected_id} does not exist. Check its original ID and pass the existing --work-item; do not invent or renumber work.', path=plan_path)
     dependency_statuses: list[dict[str, str]] = []
     for dependency_id in selected.dependencies:
         dependency = items.get(dependency_id)
@@ -849,6 +830,10 @@ def next_id(root: Path, kind: str, requested_plan: str | None) -> dict[str, obje
         for name in safe_directory_entries(root, directory):
             match = pattern.fullmatch(name)
             if match is None:
+                if name.endswith('.md'):
+                    raise SelectorError('RECORD_FILENAME_INVALID',
+                        'A record filename is not canonical; correct its existing ID/name before requesting the next ID.',
+                        path=f'{directory}/{name}', expected='NNNN-lowercase-subject.md', observed=name)
                 continue
             path = f'{directory}/{name}'
             record = parse_record(safe_read_text(root, path), path)

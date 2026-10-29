@@ -11,7 +11,7 @@ output or semantic acceptance. Leave acceptance open if a relation is unresolved
 ## Files and identity
 
 Write UTF-8 without BOM and LF. Readers also accept consistent CRLF, but not
-mixed endings, bare CR, NUL or invalid UTF-8. Reject redirected paths and
+mixed endings, bare CR or invalid UTF-8. Reject redirected paths and
 cross-project escapes. Use one record per Markdown file and forward-slash paths.
 Strictly decode bytes before displaying text; replacement decoding is no
 encoding check. Base each diagnosis on that profile's own files, including
@@ -83,7 +83,7 @@ ADR, PLAN and W are reserved prefixes.
 Done/cancelled work has nonempty Evidence, no blockers and no Next action.
 Todo/in_progress/paused needs a nonempty legacy Next action or at least one
 written Step status. New authors write every Step with status and no Next action.
-Evidence may be empty. Instructions is optional one-line text or exactly [];
+Evidence may be `[]`; an empty field value is invalid. Instructions is optional one-line text or exactly [];
 empty is invalid. Missing means unrecorded, not expressly none. New items write
 it explicitly. Keep extra binding conditions there and results in Evidence;
 ordinary progression is Steps. Proposed and accepted ADR links are allowed for

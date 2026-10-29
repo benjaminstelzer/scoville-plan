@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - 2026-10-29 - Consistent native records
+
+- Share Plan section boundaries between selector and validator; preserve nested Goal headings and diagnose unowned text and actual parse failures.
+- Keep malformed Markdown filenames visible during ID allocation and make selection diagnostics actionable.
+- Align General fallbacks, activation and profile wording with the native contracts; preserve new Decision binding markers.
+- Preserve failed capture bytes and bounded cleanup through the shared runtime helper.
+
 ## Unreleased - 2026-10-29 - Compatibility metadata
 
 - Remove wording that could imply completed host tests from the compatibility declaration.

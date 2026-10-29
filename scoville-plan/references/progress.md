@@ -85,11 +85,11 @@ authored order. Preserve completed parts and their Evidence, and update affected
 Step references so pending assignments still identify the remaining work.
 Other started fields remain fixed except for these explicit repair.md exceptions. Resume paused work to in_progress, never
 todo. The Plan lifecycle reference owns the explicit wholly-unstarted exception.
-When an authorized Workflow closure review finds an omitted implementation
-with no existing matching Step, the main thread may append one Step that fulfils
+When an authorized acceptance review finds an omitted implementation
+with no existing matching Step, the responsible agent may append one Step that fulfils
 a named, already binding unchanged Acceptance criterion or Work Item requirement.
 Preserve existing Step text, scope, order, completed effects and Acceptance.
-Run the new Step through execution, required Step review and closure review. Changed
+Run the new Step through implementation, required checks and acceptance reviews. Changed
 scope, contradictory requirements or materially unclear meaning need the user.
 An explicit user choice may replace only the execution annotation of a named
 unperformed Step after start, preserving its action, route and execution history.
@@ -102,8 +102,7 @@ annotations; load [authoring.md](authoring.md#step-annotations) when authoring
 or changing them. Annotation syntax proves no model availability.
 
 During ordinary work, add or update status only from observed progress. Begin
-in_progress when work starts, not on selection alone. Scoville Workflow starts
-exactly one Step at a time. Mark done when the
+in_progress when work starts, not on selection alone. Mark done when the
 Step's action and required checks are complete. Preserve due Work Item reviews
 and acceptance. Cancelled needs explicit direction and is never done.
 In a nonterminal item, a confirmed correction may return a done Step to

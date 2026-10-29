@@ -15,6 +15,8 @@ require an explicit Plan and its matching ID/file; inspect its canonical H3
 Work Item IDs. For Plan or Decision IDs inspect every canonical file in the
 corresponding docs directory, require format_version 1 and valid metadata IDs,
 and take the maximum of both filename and metadata numbers. Report mismatches.
+Stop on Markdown records outside the canonical filename pattern rather than
+silently excluding them from the ID inventory.
 Return `next ID = maximum + 1`, never an interior gap, and the required filename
 pattern for Plans/Decisions. Empty directories begin at 0001. Stop at W-999 or
 PLAN-/ADR-9999; obtain a format decision. Do not write or reserve anything;
@@ -39,7 +41,8 @@ Facts never authorize or accept work; make no writes or selections.
 Resolve `active_plan` and require exactly
 one matching active Plan with `format_version: 1`. For an explicit PLAN-NNNN,
 resolve that exact Plan instead, retaining its real lifecycle. With a null
-`active_plan` and no explicit Plan, report idle and no current Work Item.
+`active_plan` and no explicit Plan, stop position or context selection with
+`ACTIVE_PLAN_MISSING`; supply an explicit Plan to inspect it.
 Next-ID lookup and the project-wide proposal inventory also work when idle.
 
 ## Proposal inventory

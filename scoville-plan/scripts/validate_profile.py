@@ -20,6 +20,8 @@ try:
     _markdown_module = importlib.util.module_from_spec(_markdown_spec)
     _markdown_spec.loader.exec_module(_markdown_module)
     mask_fenced_code = _markdown_module.mask_fenced_code
+    plan_sections = _markdown_module.plan_sections
+    PlanSectionsError = _markdown_module.PlanSectionsError
 except Exception as error:  # Report startup failures through the helper's diagnostic contract.
     _MARKDOWN_IMPORT_ERROR = error
 
@@ -56,6 +58,7 @@ DECISION_STATUSES = {"proposed", "accepted", "rejected", "deprecated", "supersed
 TERMINAL_WORK_STATUSES = {"done", "cancelled"}
 
 DIAGNOSTIC_CODES = {
+    "PLAN_SECTION_BOUNDARY_INVALID",
     "DATE_INVALID",
     "DATE_ORDER_INVALID",
     "DECISION_ACCEPTED_FORBIDDEN",
@@ -281,6 +284,8 @@ class Validator:
         self.files_checked = 0
         self.format_version: int | None = None
         self.index_active_plan: str | None = None
+        self.index_parsed = False
+        self.plan_parse_failed = False
         self.plans: dict[str, PlanRecord] = {}
         self.decisions: dict[str, DecisionRecord] = {}
 
@@ -810,7 +815,7 @@ class Validator:
     ) -> dict[str, tuple[int, int]]:
         structural_lines = mask_fenced_code("\n".join(parsed.lines)).split("\n")
         body = parsed.lines[parsed.body_start :]
-        nonempty = [(index + parsed.body_start + 1, line) for index, line in enumerate(body) if line]
+        nonempty = [(index + parsed.body_start + 1, line) for index, line in enumerate(body) if line.strip()]
         h1 = [(i + 1, line[2:]) for i, line in enumerate(structural_lines) if i >= parsed.body_start and line.startswith("# ")]
         first = nonempty[0] if nonempty else (parsed.body_start + 1, "")
         if len(h1) != 1 or not first[1].startswith("# ") or not first[1][2:].strip():
@@ -1441,8 +1446,10 @@ class Validator:
         active = parsed.frontmatter.get("active_plan")
         if active == "null":
             self.index_active_plan = None
+            self.index_parsed = True
         elif active and PLAN_ID_RE.fullmatch(active):
             self.index_active_plan = active
+            self.index_parsed = True
         elif active is not None:
             self.add(
                 "INDEX_ACTIVE_PLAN_INVALID",
@@ -1459,9 +1466,11 @@ class Validator:
         logical = self.logical(path)
         text = self._read_file(path)
         if text is None:
+            self.plan_parse_failed = True
             return
         parsed = self._parse_frontmatter(logical, text)
         if parsed is None:
+            self.plan_parse_failed = True
             return
         plan_id = parsed.frontmatter.get("id", "")
         record = plan_id if PLAN_ID_RE.fullmatch(plan_id) else None
@@ -1565,7 +1574,19 @@ class Validator:
                 observed=current,
             )
 
+        heading_start = len(self.diagnostics)
         bounds = self._validate_headings(parsed, ["Goal", "Non-goals", "Work items"], record)
+        if any(d.code in {'SECTION_H1_INVALID', 'SECTION_H2_ORDER'} for d in self.diagnostics[heading_start:]):
+            self.plan_parse_failed = True
+            return
+        try:
+            plan_sections('\n'.join(parsed.lines[parsed.body_start:]))
+        except PlanSectionsError as error:
+            self.add(error.code if error.code in DIAGNOSTIC_CODES else 'PLAN_SECTION_BOUNDARY_INVALID', logical, str(error),
+                     'Correct the named section boundary, preserving its complete authored content, then rerun validation.',
+                     line=parsed.body_start + error.line, record=record)
+            self.plan_parse_failed = True
+            return
         items = self._parse_work_items(parsed, plan_id or logical, bounds.get("Work items"))
         if PLAN_ID_RE.fullmatch(plan_id):
             if plan_id in self.plans:
@@ -1790,7 +1811,7 @@ class Validator:
 
     def _validate_plans(self) -> None:
         active = [plan for plan in self.plans.values() if plan.status == "active"]
-        if self.index_active_plan is None:
+        if self.index_parsed and not self.plan_parse_failed and self.index_active_plan is None:
             if active:
                 self.add(
                     "PROFILE_ACTIVE_PLAN_COUNT",
@@ -1801,7 +1822,7 @@ class Validator:
                     observed=", ".join(plan.id for plan in active),
                     related=(plan.path for plan in active),
                 )
-        else:
+        elif self.index_parsed and not self.plan_parse_failed:
             selected = self.plans.get(self.index_active_plan)
             if selected is None:
                 self.add(

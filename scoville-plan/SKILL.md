@@ -1,6 +1,6 @@
 ---
 name: scoville-plan
-description: Maintain, resume and audit repository Plans, Work Items and Decisions for Scoville Plan requests, planning records in projects with PROJECT_INDEX.md and docs/plans, and durable work across interruptions or compaction. Handle changes to active Plan work; exclude informational questions without retained action, small tasks needing no durable Plan, explicit opt-out, and requested transfer prompts, which belong to Handoff.
+description: Maintain, resume and audit repository Plans, Work Items and Decisions for Scoville Plan requests, existing planning profiles with PROJECT_INDEX.md and docs/plans, or explicitly requested durable planning across interruptions. Handle changes to active Plan work; exclude informational questions without retained action, small tasks needing no durable Plan, explicit opt-out, and requested transfer prompts, which belong to Handoff.
 compatibility: "Any Agent Skills host with repository read and write access. Direct Markdown and YAML planning needs no service or network. Python helpers require Python 3.11+. Manual alternatives load only without suitable Python 3.11+. Helper errors remain errors. Developed for Codex and Claude Code."
 ---
 
@@ -23,8 +23,8 @@ Relevant neighboring owners:
 - `scoville-code`: implementation scope, risk, and validation outside Plan records.
 - `scoville-handoff`: active-work transfer snapshots.
 
-Plan owns its records' wording and lifecycle. It does not start Workflow or
-choose dispatch routes. Run one editor at a time; do not change affected files
+Plan owns its records' wording and lifecycle. It starts no execution workflow
+and chooses no dispatch routes. Run one editor at a time; do not change affected files
 or required model and reasoning settings concurrently. Reads and Skill upgrades
 require no migration.
 
