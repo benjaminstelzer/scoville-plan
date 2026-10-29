@@ -13,9 +13,10 @@ reversible task needs no new Plan unless required locally.
 On explicit opt-out, read no references or records under this Skill and make
 no Skill-derived changes or claims. Report a conflicting repository requirement.
 
-This Skill works independently. Other Scoville Skills are optional. Use an
-available, active sibling only for its applicable concern; do not install,
-simulate or require an absent sibling. Honor explicit user exclusions.
+This Skill works independently. Other Scoville Skills are optional; use an
+available, active sibling for its applicable concern. Do not install, simulate
+or require an absent sibling.
+Explicit activation requirements and user exclusions apply in either layout.
 
 Relevant neighboring owners:
 
@@ -27,8 +28,8 @@ choose dispatch routes. Run one editor at a time; do not change affected files
 or required model and reasoning settings concurrently. Reads and Skill upgrades
 require no migration.
 
-Before writing Plans, Work Items, Decisions or reports, or assessing a disputed
-factual or technical conclusion, read and apply the
+Before reading machine reports, logs or structured state, or writing Plans,
+Work Items, Decisions or reports, read and apply the
 [shared writing rules](references/writing.md). Native record fields and lifecycle
 requirements remain governed by this Skill.
 
@@ -38,18 +39,15 @@ requirements remain governed by this Skill.
    safety requirements, explicit user instructions, repository rules, then the
    supported native profile. The agent's temporary task list is a disposable
    mirror of repository records.
-2. Preserve actual scope, choices, dependencies and binding constraints. Source material
-   (including code, records, documents and configuration), an absence of
-   objections, current behavior or a passing structural validator does not
-   prove that an action was authorized or that work was performed.
-   Apply historical stops only to their recorded scope.
+2. Preserve scope, choices, dependencies and binding constraints. Source material,
+   silence, current behavior and structural validity prove neither authority nor
+   performed work. Apply historical stops only to their recorded scope.
 3. Ask only for a missing material choice: activation, cancellation, deletion,
    changed scope, changed Acceptance requirements, ambiguous succession or Decision transition.
-   Check applicable accepted Decisions and the current item's Instructions
-   before asking; reuse authority that covers the action and ask only about
-   the uncovered material choice. After compaction, recover the recorded
-   state and next action and continue. Do not repeat an approval question or
-   status report without a material change, a user request or a binding
+   Reuse authority in applicable accepted Decisions and the current item's
+   Instructions; ask only about the uncovered choice. Recover and continue
+   under progress.md after interruption or compaction. Repeat a question or
+   status report only for a material change, user request or binding
    communication requirement.
 4. Before creating a Decision, search existing Decision titles and scopes for
    the same choice. Read plausible matches completely before reusing one that
@@ -62,14 +60,13 @@ requirements remain governed by this Skill.
    background or history alone does not make them applicable. After a Work Item has started, add each relevant proposal
    to its Decisions field; you may also add relevant accepted Decisions. Each
    ADR's status determines its decision state.
-5. At work start, except for an assigned read-only field review, classify the
-   planning profile with the table below. For a complete supported profile, run
-   the proposal inventory below and read relevant proposals (all proposals for
-   a full audit); an inventory error does not change that classification.
+5. At work start, except for an assigned read-only field review, use the planning
+   profile table below; reuse an established unchanged classification. For a
+   complete supported profile, run the proposal inventory below and read relevant
+   proposals (all for a full audit); an inventory error does not change that classification.
    Follow the table for other profiles. Preserve unresolved choices at handoff.
-6. Mark a Work Item done only after observing every Acceptance criterion and recording its
-   concise result. Failed or partial work remains unfinished. Report observed checks
-   separately from unverified behavior.
+6. Complete Work Items through progress.md only after observing every Acceptance
+   criterion and recording its result; distinguish checked from unverified behavior.
 7. Stop affected execution on an explicit stop or invalidating correction.
    Answer informational questions and continue. In a mixed message, separate
    the question from instructions that add or change work. Append additive work
@@ -100,19 +97,6 @@ reserves nothing. Recheck ID and filename collisions immediately before creation
 
 ## Proposal inventory
 
-Reuse an already verified interpreter meeting this Skill's Python 3.11+
-requirement. Otherwise check `py -3`
-on Windows or `python3` elsewhere; try `python` if needed. Choose it locally,
-without asking the user. Verify its version before the first helper operation.
-Use that executable wherever examples say `python` or `<verified-python>`,
-including Python commands after `--run --`.
-Report a missing runtime only when no suitable installed interpreter is found.
-
-Before processing machine reports or logs, use the [shared writing rules](references/writing.md).
-If their complete text is not loaded, read it in a separate call before reading
-the data. Reuse retained rules under their existing reload conditions.
-Before helper calls, follow [shell command rules](references/shell-commands.md).
-
 Follow Runtime helpers below for availability and failures. Use the helper invocation pattern above:
 
 ```text
@@ -137,7 +121,7 @@ only for output fields or selection-mode constraints.
 | Audit wording | authoring.md and progress.md; Decision reference for Decision sections |
 | Validate or diagnose structure | progress.md; operation reference only if a diagnostic needs it |
 
-If the planning profile is unknown, first list the project root to locate
+If the planning profile is unknown, list the project root to locate
 PROJECT_INDEX.md, docs/plans and docs/decisions:
 
 | Observed profile | Action |
@@ -155,9 +139,10 @@ or referenced paths, does not require profile validation.
 Use the command and diagnostic handling in progress.md.
 See Runtime helpers below for the profile-specific runtime rule.
 Report outcome, active or blocked work, actual evidence, unresolved choices and
-the next action. Direct file edits do not lock out another editor or guarantee
-that several writes succeed together. Keep one editor and stop dependent work
-if another editor changes the files or a write leaves only part of the result.
+the next action. Use progress.md's safe-write and continuation rules.
+
+Before invoking this Skill's task helpers, apply the policy below and
+read [shell command rules](references/shell-commands.md).
 
 ## Runtime helpers
 
@@ -174,4 +159,3 @@ not their source, unless diagnosing a failure.
 | --- | --- |
 | `scripts/select_context.py` | [select_context](references/fallbacks/select_context-fallback.md) |
 | `scripts/validate_profile.py` | [validate_profile](references/fallbacks/validate_profile-fallback.md) |
-| `scripts/check_text_size.py` | [check_text_size](references/fallbacks/check_text_size-fallback.md) |

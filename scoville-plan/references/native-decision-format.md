@@ -53,13 +53,13 @@ Concrete reconsideration trigger.
 Fenced code examples are literal content, including lines starting with `#`.
 Only headings outside backtick or tilde fences define the title and sections.
 
-New Decisions put every binding condition, exception, authority limit and reason
-needed for the choice, implementation, verification or revisit in Decision,
-Consequences, Confirmation or Revisit when. Keep each fact once in its owning
-section; Problem, Drivers and Considered alternatives add only background.
-Omit discussion history and unnecessary rationale. New Decisions use the owning Plan's language; without an
-owning Plan, use the task request's language. Preserve an existing record's
-language unless explicitly changed.
+In new Decisions, put each binding condition, exception, authority limit and
+reason needed for the choice, implementation, verification or revisit once in
+Decision, Consequences, Confirmation or Revisit when. Problem, Drivers and Considered alternatives contain
+only background, without discussion history or unnecessary rationale.
+New Decisions use the owning Plan's language, or the task
+request's language without an owning Plan. Preserve existing language unless
+explicitly changed.
 
 Keep all seven template headings exactly once; use `[]` for an empty background section.
 The first non-blank content line under Decision is exactly
@@ -117,14 +117,12 @@ flowchart TD
   material -->|no or unclear| choice["Preserve content; resolve missing material choice"]
 ```
 
-Explicit scoped maintenance under
-[repair.md](repair.md#maintenance-clean-up-existing-plans) also permits editorial
-shortening, equivalent relocation into the binding sections and adding the binding
-mark in accepted or deprecated Decisions without supersession. It preserves
-identity, the choice, every binding condition, evidence status and authority,
-including reasons that explain the choice, constrain implementation or determine
-revisit. Lifecycle changes follow the transitions above. Delete a proposal only after
-checking that no Work Item or Decision links to it.
+Explicit maintenance under [repair.md](repair.md#maintenance-clean-up-existing-plans)
+permits equivalent shortening, relocation into binding sections and adding the
+binding mark in accepted or deprecated Decisions without supersession. Preserve
+identity, choice, binding conditions, evidence status, authority and necessary
+reasons; follow the transitions above. Proposal deletion requires checking that
+no Work Item or Decision links to it, plus the deletion safeguard below.
 
 Supersession preserves both records:
 
@@ -132,11 +130,34 @@ Supersession preserves both records:
 2. Set old status superseded and reciprocal `superseded_by: ADR-0002` after any supersedes.
 3. Replace links in affected todo items. For started items, append the accepted
    replacement, retain the older link as history and explain the change, except
-   when explicit cleanup removes an irrelevant link under repair.md.
+   when scoped cleanup below removes an irrelevant link.
 4. Validate the coherent transition through progress.md.
 
 Terminal historical links alone do not block replacement. Rejection in favor
 of another proposal is not supersession.
+
+## Scoped Decision cleanup
+
+This is an exception to ordinary retention of supersession records, available
+only within targeted new-Plan maintenance or expressly requested maintenance
+under repair.md. Remove a temporary Decision only when its end or fulfilment
+is proved and no binding condition remains. Remove a superseded Decision only
+when its current binding effects remain readable with their current owner.
+Age, status, filename or cancellation alone is insufficient.
+
+Check incoming references before removal. Preserve current constraints even
+when unlinked, other active Plans' dependencies and required historical facts.
+Remove a Work Item link only when it governs nothing under the entrypoint's
+linking policy. Clean obsolete links and reciprocal supersession links in the
+same coherent update; leave no missing reference or invalid lifecycle. Preserve
+existing batch metadata; keep a record when its removal would break that
+integrity. Keep uncertain meaning or relevance instead of assuming expiry.
+
+Delete a file only after verifying its current contents are committed, or
+with explicit user approval of that deletion. A tracked path or some older
+committed version does not suffice. Otherwise ask before deleting. Add no
+archive, replacement report or state registry. Validate the resulting profile
+under progress.md; structural validity proves no semantic or deletion authority.
 
 ## Existing batch metadata
 

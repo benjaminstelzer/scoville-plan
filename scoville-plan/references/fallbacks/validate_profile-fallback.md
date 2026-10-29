@@ -128,7 +128,7 @@ Revisit when, in that order.
 Supersession references resolve to other Decisions, are reciprocal and acyclic.
 A superseded record names its replacement; other statuses do not use
 superseded_by. A replacement is accepted/deprecated/superseded and names the old
-record in supersedes. Keep acceptance dates and immutable authored rationale.
+record in supersedes. Keep acceptance dates, the choice and its necessary reasons.
 A valid graph does not authorize a transition; use native-decision-format.md.
 
 Historical batch fields appear as a pair. The ID is 64 hex digits or

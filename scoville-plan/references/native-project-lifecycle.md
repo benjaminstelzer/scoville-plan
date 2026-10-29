@@ -56,20 +56,37 @@ Its optional body must not duplicate live state. Use `active_plan: null` when
 idle. A generic Plan edit changes only title, Goal and Non-goals, plus updated
 on real changes. Preserve identity, lifecycle and Work Items.
 
-Classify the whole proposed Goal before writing. Keep only the current target,
-boundary and still-binding plan-wide constraints, stated by their effect and
-Decision ID. The Goal must retain each effect: Workflow forwards only Decisions
-linked to the selected Work Item, not every ID cited in the Goal. Keep exclusions
-in Non-goals; choices in Decisions; item actions and checks in its Work Item;
-observations in Evidence; policy in repository instructions. Keep no dated
-steering, drafting notes, superseded entries, copied ADR rationale or progress
-history in Goal or Non-goals. No sentence or line quota applies.
+Keep Goal to the current target, boundary and each still-binding plan-wide
+constraint's effect and Decision ID. Retain the effect itself: Workflow forwards
+only Decisions linked to the selected item, not every ID in Goal. Keep exclusions
+in Non-goals and facts in their owning fields under authoring.md and progress.md.
+Omit dated steering, drafting notes, superseded constraints, copied ADR rationale
+and progress history. No sentence or line quota applies.
 
 Messages about ongoing work do not authorize Goal edits. When a Goal change is
 authorized, replace superseded constraint wording with the current binding effect;
 keep replacement history in its Decision. Move existing facts only with authority,
 keeping them readable through the dispatched Work Item, its Decisions or a
 repository contract that the agent has demonstrably loaded.
+
+## Maintain Decisions when creating a Plan
+
+When creating a later Plan, assess only Decisions the new Plan would link or
+supersede, or whose Work Items it replaces. Read those Decisions completely;
+do not scan the whole historical stock. The proposal inventory remains the
+entrypoint's metadata operation, not a cleanup of every Decision.
+
+Within this scope, remove temporary Decisions whose end or fulfilment is proved,
+superseded Decisions and obsolete links under
+[Decision cleanup](native-decision-format.md#scoped-decision-cleanup).
+Preserve every current constraint, including a binding condition not currently
+linked to a Work Item, and dependencies of other active Plans. Transfer a
+still-needed effect unchanged to its readable current owner before removing
+its old record; uncertain effects remain. A new Plan does not end a constraint.
+
+This targeted maintenance needs no separate whole-project audit. Comprehensive
+cleanup requires an explicit maintenance request through repair.md; ordinary
+reading or continuation performs no cleanup.
 
 ## Activate
 

@@ -2,6 +2,8 @@
 
 Before any write, read [progress.md](progress.md) for safe edits, field rights and
 validation. This route adds authoring rules; it grants no extra editing rights.
+Read Step annotations below only when authoring or changing route/execute
+settings; ordinary status updates use progress.md.
 
 For drafting or revising agent-facing record text, apply
 [agent instruction design](instruction-design.md). Native fields and lifecycle
@@ -24,12 +26,12 @@ Steps:
 Evidence: []
 ```
 
-For each new Work Item, write Instructions on one line or use []. Include at
-least one Step with status and omit Next action. Work Item Status and Acceptance
-cover the whole outcome. For every Step, write its bounded action, its own
-observable completion condition and required checks in its text; its status
-records observed progress. Steps have no separate Acceptance field or
-dependencies. See progress.md for fields and legacy continuation.
+New Work Items write Instructions on one line or use [], include at least one
+Step with status and omit Next action. Work Item Status and Acceptance cover
+the whole outcome. Each Step names its bounded action, its own observable
+completion condition and required checks; status records observed progress.
+Steps have no separate Acceptance or dependencies. See progress.md for field
+permissions and legacy continuation.
 Use [granularity](planning-granularity.md) only when outcome or Step
 boundaries need judgment, not for a routine insertion with known boundaries.
 
@@ -49,38 +51,32 @@ Acceptance, dependencies, Decisions, blockers, owner, timing, authority and risk
 Do not move an addition across a separate earlier outcome. Otherwise append a
 new item. New work must fit Goal and Non-goals; ask only about unresolved scope.
 
+Reuse established intent for lifespan, maintenance and further development. Ask
+only about uncertainty that materially affects the solution, and reuse the
+answer. Retain the intent and any clarification in the existing Goal or Non-goals
+so a fresh recipient can use it without chat history.
+
 Move whole todo blocks without renumbering. Delete only when another item
 remains and no incoming dependency targets it. Deleting the current item needs
 a dependency-ready todo or paused replacement in the same change.
 
-Write Outcome as one result sentence and Steps as the ordered mechanism under
-the template rule above. Distinguish investigation from implementation explicitly. Put known paths, interacting owners, discovery and methods in Steps.
-Keep enough context for a fresh agent to resume from repository records:
-current item and Step, remaining action, completed effects, governing Decisions
-and relevant unresolved proposals, live authority and stops, binding Acceptance,
-source owners, observed evidence and its limits, and the next permitted action.
-Keep each fact in its owning field rather than adding a recovery log. For a
-required accessible source, give its exact path and section with a reading
-instruction. State needed facts directly when the recipient cannot read it.
-Requested future outcomes are not observations. Evidence records only what was
-observed, and a proposal grants no authority.
+Write Outcome as one desired result sentence. Steps hold the ordered mechanism,
+known paths, interacting owners, discovery and methods; distinguish investigation
+from implementation. Use progress.md's continuation contract to keep the record
+independently resumable. Evidence states observations, not desired outcomes;
+proposals grant no authority.
 
-Derive Acceptance from the requested observable outcome. Keep each distinct,
-necessary condition once: the relevant case, required result and binding limits.
-A condition belongs here when its failure alone prevents acceptance, or when it
-is an explicitly binding verification requirement. Merge equivalent conditions.
-Do not add implementation recipes, full test matrices, reasons, history or
-copies of Outcome, Steps, Instructions or generic project rules. Methods belong
-here only when that method is itself required. Preserve required values,
-variants, exceptions, compatibility, must-not conditions and verification
-obligations; a condition that forbids removing an existing mechanism needs its
-own requirement. Cite an existing authoritative specification by exact path and
-section instead of copying it; the assigned agent must read that section. Create
-no document merely to move criteria out of the Plan. No character or criterion
-quota applies. A finding against an existing condition is a defect, not another
-criterion. When authorized changes add a condition, rewrite Acceptance
-coherently rather than appending history. Brevity never permits weaker
-acceptance.
+Derive Acceptance from the requested observable outcome. State each distinct
+necessary case, result and binding limit once: failure must prevent acceptance,
+or the check itself must be explicitly required. Merge equivalent conditions;
+omit recipes, matrices, reasons, history and copied fields or project rules.
+Retain required methods, values, variants, exceptions, compatibility, prohibitions
+and verification obligations. Keeping an existing mechanism needs its own
+requirement. Cite an accessible authoritative specification by exact path and
+section with a reading instruction instead of copying it. Create no document
+merely to move criteria out of the Plan. No character or criterion quota applies.
+A defect against an existing condition adds no criterion; authorized added
+conditions require a coherent rewrite, preserving the acceptance standard.
 
 When authorized remaining work moves to another Work Item or Plan, write the
 receiving item from the remaining outcome. Acceptance states each condition
@@ -108,10 +104,6 @@ Annotation syntax (see the [Plan template](native-project-lifecycle.md#create-an
 ```text
 1. [status: todo] Update the named parser; required invalid-input cases return the specified errors and existing valid-input checks pass.
 ```
-
-This illustrates annotation syntax. A real Step also names its known paths
-and the bounded action, completion condition and required checks under the
-authoring rule above.
 
 Status comes first: todo, in_progress, done or cancelled. A Step without status
 is legacy unknown; never treat it as todo or done. Route and execution annotations

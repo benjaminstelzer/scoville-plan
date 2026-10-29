@@ -1,5 +1,9 @@
 # Work Item and Step checklist
 
+Size and shape work for the maintenance and development intent retained in
+Goal/Non-goals under [authoring.md](authoring.md). Use the simplest sound solution
+at the responsible owner.
+
 - Use a Work Item for a result that can be accepted, blocked, resumed or handed
   off independently. Separate materially different acceptance, dependency,
   ownership, rollout or blocker boundaries.
@@ -16,9 +20,7 @@
   and verification that needs interpretation. Resolve unknown owners before
   start when practical; otherwise retain the criterion and record the discovered
   path in Evidence without rewriting started Steps.
-- Use [authoring.md](authoring.md)'s recovery-context and field rules so the
-  assignment can continue without chat history. Steps own execution, Evidence
-  observations and Step status progression.
+- Use progress.md's continuation contract and authoring.md's field rules.
   Do not create duplicate testing or bookkeeping Steps.
 
 Separate Steps with materially different consequence or reasoning demand.

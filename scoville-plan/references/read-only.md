@@ -33,14 +33,12 @@ Omit --plan to use the index's active Plan. The position response contains:
 - `open_decisions`: proposed ADRs linked from the current item.
 - `legacy_next_action`: the old field, included only when it exists.
 
-The helper does not infer return targets, instruction fulfilment or acceptance.
-Unknown progress never loads repair.md automatically. The helper selects no
-work and repairs nothing.
-All explicit active Steps are returned even around unknown gaps, with a warning
-in guidance. If all Steps are terminal, inspect outstanding Work Item Acceptance
-and Evidence; do not invent a next Step or repeat completed effects.
-No Steps means a whole-item unit; a Plan without current_item returns null.
-Position selects no work, changes no status and grants no start permission.
+The helper reports position without inferring returns, instruction fulfilment,
+acceptance or start permission; it selects and repairs nothing. All explicitly
+active Steps appear even around unknown gaps, with a guidance warning. Unknown
+progress uses progress.md's recovery route, not automatic repair. If all Steps
+are terminal, inspect outstanding Acceptance/Evidence without inventing a Step
+or repeating effects. No Steps means a whole-item unit; no current_item returns null.
 
 ## Select Work Item or dispatch-unit context
 
@@ -92,11 +90,11 @@ caller has an explicit bounded budget. A malformed profile, ambiguous record,
 redirected path, missing reference, or budget overflow returns one structured
 diagnostic and no partial context.
 
-This projection does not replace every read operation. Use the proposal
-inventory below and load relevant proposals separately, or all for a full audit.
-Read relevant dependency Evidence, bounded graph state, queued or paused return state, and complete
-relevant Work Items separately when the operation requires them. Keep those
-reads bounded and never widen the selector response. Use the profile-specific Runtime helpers rule in SKILL.md when no suitable Python 3.11+ is available. A helper failure stops selection; do not invent partial context.
+Load relevant proposals separately through the inventory below, all for a full
+audit. Read dependency Evidence, bounded graph state, queued/paused returns and
+other complete Work Items only as the operation needs; never widen the selector
+response. Apply SKILL.md's profile-specific Runtime helpers rule when Python
+3.11+ is unavailable. Helper failure stops selection, without invented partial context.
 
 ## Read state outside the selector
 

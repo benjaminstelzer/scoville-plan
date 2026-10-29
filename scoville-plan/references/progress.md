@@ -7,24 +7,19 @@ Without suitable Python, use the manual routes named there;
 do not invoke these commands.
 
 Read PROJECT_INDEX.md, the active Plan header and the complete affected blocks.
-Read referenced Decisions and relevant proposals. Before starting a todo item,
+Read referenced Decisions and relevant proposals; reuse complete relevant text
+already retained from the unchanged source. Before starting a todo item,
 check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
 Do not scan historical Plans without a concrete relevance reason.
 
-On recovery, select the recorded Work Item directly when its ID is known;
-check the Plan's current_item, the item's status and its block against the
-expected in_progress Work Item and active Step. Use position mode first when
-the ID is unknown, any of these disagree, or return directions from
-paused_context or historical_priorities matter. All helper
-calls use the entrypoint's [capture pattern](../SKILL.md#helper-invocations).
-Its key fields are `plan`, `plan_status`, `work_item`, `work_status`,
-`current_steps`, `current_units`, `next_step`, `instructions`, `paused_context`
-and `historical_priorities`; [read-only.md](read-only.md) explains further fields.
-Do not reconstruct the position or load repair.md for ordinary recovery. Unknown
-Steps require only the evidence or result check needed for the authorized work.
-Use paused_context and historical_priorities to check relevant return directions;
-the full-context mode contains only the selected Work Item.
+On recovery, select the known Work Item directly and compare current_item,
+item status and active Step with the recorded assignment. Use position mode
+first only when the ID is unknown, those facts disagree, or return/priority
+directions matter. Its paused_context and historical_priorities supply those
+directions; full context contains only the selected Work Item. Resolve unknown
+Steps from the evidence or result check needed for the authorized work.
+Ordinary recovery neither loads repair.md nor cleans up records.
 
 ```text
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
@@ -32,22 +27,25 @@ python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-ro
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
 ```
 
-Apply the entrypoint's diagnostic and capture rules. Load read-only.md only
-for further output-field details, dispatch-unit selection or wider read tasks.
+Use the entrypoint's capture and diagnostic rules. Load [read-only.md](read-only.md)
+only for output-field details, dispatch-unit selection or wider read tasks.
+
+Keep records independently resumable: current item and Step, remaining action,
+completed effects, governing Decisions and relevant proposals, live authority
+and stops, binding Acceptance, source owners, observations and their limits,
+and the next permitted action. Keep each fact in its owning field, without a
+recovery log. For a required accessible source, give its exact path and section
+with a reading instruction; state needed facts directly if it cannot be read.
 
 Edit only owning records with uniquely anchored replacements. Reject redirected
 or out-of-project targets; preserve unrelated changes. Follow shared literal-safe
 writing and shell rules. Read and write explicitly as UTF-8, without BOM, with LF.
 
-1. Prepare the complete consistent result before opening targets. Python replacement
-   writes use LF-normalized UTF-8 bytes; a text writer's newline is an actual LF,
-   never literal backslash and n. Use the shared rule before piping into Python.
-2. Write prepared files, index last for multi-file updates. Decode saved UTF-8 bytes
-   and compare changed non-ASCII text with its intended wording.
-3. Reread complete affected blocks and the scoped diff; assess meaning, authority,
-   current constraints and Acceptance evidence, then validate. Keep actions in Steps,
-   observations in Evidence and extra live conditions in Instructions. Remove finished
-   actions and history from Instructions; retain safeguards and due reviews.
+1. Prepare the complete consistent result before writing; save related files
+   together, index last.
+2. Check the saved affected blocks and scoped diff for meaning, authority,
+   current constraints and Acceptance evidence, then validate. Check encoding
+   where a warning or changed text gives a concrete concern.
 
 This covers only inspected contents. Reuse unchanged instructions without extra
 copies or receipts. Stop dependent work on concurrent changes or a partial write.
@@ -72,7 +70,8 @@ no Outcome or Acceptance edits. Both exceptions need no old-text note, copy
 or separate approval.
 
 A started item may add a relevant proposed or accepted Decision. Retain older
-links unless explicit cleanup removes them under repair.md's relevance check.
+links unless [scoped Decision cleanup](native-decision-format.md#scoped-decision-cleanup)
+removes them under its relevance and preservation rules.
 It may correct a stale path, version reference or other purely formal wording only when evidence shows unchanged behavior, compatibility,
 data, authority and verification scope. Retain the old wording and reason in
 one referenced note or existing Git history. A changed expected result or weaker
@@ -97,12 +96,10 @@ unperformed Step after start, preserving its action, route and execution history
 
 ## Step progress
 
-A Step without written status is legacy unknown, never assumed todo or done.
-Status comes first, as in `1. [status: todo] <action>`. This shows annotation
-syntax only; authoring.md governs sufficient Step content. It is todo,
-in_progress, done or cancelled. Preserve explicit route and
-execution annotations; changing or authoring them loads
-[authoring.md](authoring.md#step-annotations). These formats prove no model availability.
+A Step without written status is legacy unknown. Written status comes first:
+todo, in_progress, done or cancelled. Preserve explicit route and execution
+annotations; load [authoring.md](authoring.md#step-annotations) when authoring
+or changing them. Annotation syntax proves no model availability.
 
 During ordinary work, add or update status only from observed progress. Begin
 in_progress when work starts, not on selection alone. Scoville Workflow starts
@@ -118,37 +115,29 @@ All Steps done does not itself complete the Work Item or authorize repeating the
 
 ## Evidence
 
-Record the observed result briefly. For a required review, record that it took
-place. Keep confirmed open defects as current work, not as a review transcript.
-Keep facts and existing evidence references needed to establish accepted work,
-remaining defects and the next permitted action, including the identity and
-outcome of effects that must not be repeated. Distinguish source review,
-structural checks, behavioral tests and runtime or publication evidence.
-Do not repeat an accepted effect merely to recreate evidence.
-Do not copy or archive reviews or a run chronology. Review texts serve only the
-development process; full execution results serve the running assessment and
-correction. Keep only facts needed for further development or an independently
-binding retention requirement.
+Record observed results, required review occurrence, confirmed open defects
+and limits needed to establish accepted work and the next permitted action.
+Retain the identity and outcome of nonrepeatable effects; never repeat an
+accepted effect to recreate evidence. Distinguish source review, structural
+checks, behavioral tests, runtime and publication. Keep facts needed for further
+development or binding retention, not review transcripts or run chronology.
 
-The field is normally sufficient. Link an existing report only for needed detail;
-create or update a separate report only when the task requires that detail.
-Do not create archives, copies, hashes or inventories merely to document checks,
-reviews or cleanup. Progress and next actions belong in their Plan fields.
+The field is normally sufficient. Link existing reports for needed detail;
+create or update one only when the task requires that detail, never solely to
+fit the field limit. Create no archive, copy, hash or inventory merely to
+document checks, reviews or cleanup. Keep progression in its Plan fields.
 
 Prefer one-line plain text, for example:
 `Evidence: Unicode cases passed; Sol high review performed; open: installer ordering, Step 3.`
 Keep it within the supported 200 characters. Commas and brackets within the text
 are allowed; do not start plain text with `[`. Use `[]` when nothing was observed.
-Preserve existing supported lists without routine migration. Explicit cleanup
-uses repair.md; it needs no copy of the old Evidence or new report. New writes retain LF.
+Preserve supported existing lists; explicit cleanup uses repair.md.
 
 ## Instructions
 
-Use Instructions only for current binding conditions applying to the Work Item
-that are not already stated in its Steps, such as a user stop or limit, an
-explicit return or a required overall review. Do not repeat or paraphrase Steps,
-Outcome or Acceptance, or put status summaries, results, review text, versions,
-counts or history here. Ordinary actions remain in Steps; results belong in Evidence.
+Instructions holds additional current binding conditions: stops, limits,
+explicit returns or required overall reviews. Keep actions in Steps, observations
+in Evidence and status in its field; duplicate no Outcome, Acceptance or history.
 
 Use one short line or exactly []; absence is legacy unknown, not []. New items
 write it explicitly. When conditions change, replace the whole field with the
@@ -222,9 +211,8 @@ successful read and an empty violated_conditions list grant no permission or
 acceptance. Determine proposal relevance and actual authority yourself;
 the helper neither chooses a successor nor writes a start.
 
-Selecting current_item or an inspection range starts no Step. Read-only review
-does not restart completed Steps. These field edits need no separate named
-operation or extra progress record.
+Inspection ranges and read-only reviews start no Step. These field edits need
+no separate operation or progress record.
 
 Honor recorded returns and explicit historical priority before default document
 order; if those obligations conflict, ask for a choice. Inspect the records
@@ -243,9 +231,9 @@ python -X utf8 "<skill-directory>/scripts/validate_profile.py" --root "<project-
 
 Read warning diagnostics too: FILE_MOJIBAKE_SUSPECTED gives file, line and
 column for common misdecoding sequences in prose. Warnings alone retain
-valid=true and exit 0. Fenced/inline code is excluded; an unquoted literal
-encoding example may warn. This heuristic misses other damage. Compare changed
-non-ASCII text manually with intended wording and never repair it automatically.
+valid=true and exit 0. Fenced/inline code is excluded; unquoted encoding examples
+may warn. The heuristic misses other damage. Inspect suspicious text against
+its intended wording; never repair it automatically.
 
 Invoke helpers without loading their Python source. They inspect structure and
 references, not authorization, meaning or acceptance truth. No planning CLI is

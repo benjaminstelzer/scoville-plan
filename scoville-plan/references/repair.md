@@ -1,11 +1,9 @@
 # Inspect, repair and maintain Plans
 
-Load only for an explicit Plan-progress inspection, repair, migration or maintenance request, such as
-“Check and correct the Plan”. Ordinary editing and recovery do not load this
-route. Inspection alone is read-only; “correct”, “repair” or an equivalent
-request authorizes bounded record corrections, not changes to work products.
-For cleanup of record text without reassessing progress, use Maintenance below
-instead of the progress inspection steps.
+Load only for an explicit progress inspection, repair, migration or maintenance
+request. Inspection is read-only; a correction request authorizes bounded record
+corrections, not product changes. Ordinary editing and recovery do not load this
+route. For text cleanup without reassessing progress, use Maintenance below.
 
 For a repair or cleanup of Step text, apply [authoring.md](authoring.md)'s
 bounded-action, observable-completion and required-check rules. Derive every
@@ -16,9 +14,9 @@ Keep uncertain meaning and ask before an affected edit. Leave a Step unchanged
 while its execution or review is running.
 
 1. Read the requested Plan's complete Work Items, referenced Decisions and
-   relevant proposals. Use the active Plan when none is named. Inspect existing
-   Evidence and its relevant original reports first. Compare both Work Item
-   status and every Step, including unmarked Steps in historical Plans.
+   relevant proposals; use the active Plan if none is named. Start from Evidence
+   and relevant original reports. Inspect item status and every Step, including
+   unmarked historical Steps.
 2. When evidence is insufficient or conflicts, inspect the actual task results
    against the Step's action and Work Item Acceptance: code and tests, authored
    text, documents, configurations or other deliverables. Run only necessary
@@ -26,22 +24,18 @@ while its execution or review is running.
    completion. Preserve the result; product fixes are remaining work, not Plan
    repair. Historical acceptance is judged against its original requirements
    and evidence, not today's unrelated product state.
-3. Classify each Step from observed facts. Use todo for unstarted work and
-   in_progress for work that began but still has an unfinished action or checks.
-   Use done only after the action and required checks are complete. Use cancelled
-   only after explicit cancellation. An interruption or
-   failed check is not cancellation. If facts are insufficient, retain unknown
-   or the recorded status and report the specific uncertainty; never guess.
-4. For an authorized repair, load progress.md and correct only established progress,
-   Evidence, Instructions and the Step completion wording required above. Put
-   additional binding conditions in Instructions,
-   results in Evidence and ordinary progression in Step status. Read legacy
-   Next action too. Add missing Step status when established,
-   including in retained terminal history without rewriting actions or original
-   acceptance. Preserve completed effects, order, scope, execution choices,
-   stops and due reviews. Record unresolved evidence limits once. A Work Item
-   is done only after every Acceptance criterion and required review is observed;
-   completed Steps or partial successful checks alone do not close it.
+3. Classify Steps from observed facts: todo for unstarted work, in_progress for
+   begun but unfinished actions or checks, done only after both are complete,
+   cancelled only after explicit cancellation. Interruption or failure is no
+   cancellation. Insufficient facts leave unknown or recorded status unchanged;
+   report the specific uncertainty.
+4. For authorized repair, apply progress.md's field and continuation rules.
+   Correct established progress, Evidence, Instructions and the Step completion
+   wording permitted above; reconcile legacy Next action. Add proved missing
+   Step status even in terminal history without rewriting actions or original
+   acceptance. Preserve effects, order, scope, execution choices, stops and due
+   reviews. Complete items only after every Acceptance criterion and required
+   review is observed.
 5. Follow progress.md and the lifecycle route for Work Item, Plan and index transitions;
    prepare related changes together and validate the entire resulting profile.
    Reopening terminal work, removing blockers without proof, cancellation or
@@ -75,10 +69,10 @@ as a new direction to return to and execute that work.
 
 ## Maintenance: clean up existing Plans
 
-Only an explicit cleanup request authorizes these edits, including in old,
-completed or cancelled Plans. Read the affected complete blocks and only the
-sources needed to distinguish live conditions from redundant text. Apply progress.md's
-field rules to those records:
+Only explicit cleanup authorizes these edits, including in old, completed or
+cancelled Plans. Read complete affected blocks and the sources needed to separate
+live conditions from redundancy. Apply progress.md's field rules:
+
 | Field | Keep | Remove |
 | --- | --- | --- |
 | Instructions | Additional live conditions under progress.md; retain an unclear condition. | Repeated actions/criteria, progress, results and obsolete conditions. Terminal fields normally become []; report apparent unmet conditions without erasing them or reopening work. |
@@ -87,24 +81,19 @@ field rules to those records:
 | Non-goals | Every still-binding exclusion. | Reasons and drafting notes. |
 | Decisions in the requested scope | Every condition in its owning section, including required checks and revisit triggers. Preserve identity, the choice, authority, evidence status and decision-relevant reasons; apply the Decision lifecycle rules. | Equivalent repetition, filler, discussion history, and reasons or alternatives that neither explain the choice, constrain implementation nor determine revisit. Material changes still require the Decision supersession route. |
 
-- Explicit cleanup also authorizes editorial shortening of Outcome, Acceptance
-  and Step text, plus Goal, Non-goals and accepted or deprecated Decisions within
-  the requested scope, including started and terminal history. Apart from the
-  Decision relocation below, shortening only removes filler and redundant
-  wording and merges equivalent conditions. Leave other text unchanged. Read the
-  relevant lifecycle contract for Goal or Non-goals edits. Authoring style
-  does not justify rewriting existing text. Before
-  saving, compare each edited text with its original. It must keep the requested
-  act, such as investigation or implementation, every required result, case,
-  value, limit, quantifier, negation, exception and action, and the full
-  verification scope. The same results must pass or fail before and after the
-  edit. Wording that states an obligation is not filler, even when it is general
-  or repeated in other records. Do not replace a general check or condition with
-  selected cases or checks. Keep required methods and checks even when new
-  writing would place them in Steps. Do not replace historical conditions with a mutable reference. If
-  equivalence is uncertain or a requirement would change, keep the original
-  text and resolve only the material choice before the affected edit. Equivalent
-  shortening needs no separate approval, old-text copy, note or report.
+- Cleanup may shorten Outcome, Acceptance, Steps, Goal, Non-goals and accepted
+  or deprecated Decisions in scope, including started and terminal history.
+  Apply the lifecycle contract to Goal/Non-goals. Remove only filler and
+  redundancy or merge equivalent conditions, apart from Decision relocation
+  below; style alone permits no rewrite. Compare with the original: preserve
+  the requested act, every required result, case, value, limit, quantifier,
+  negation, exception, action, method and full verification scope. The same
+  results must pass or fail before and after. Obligations are not filler even
+  when general or repeated elsewhere; selected cases cannot replace a general
+  check. Keep required methods/checks in their historical field and replace no
+  historical condition with a mutable reference. Keep uncertain text and
+  resolve a material change before editing. Equivalent shortening needs no
+  extra approval, old-text copy, note or report.
 - Explicit maintenance of existing Plans includes their linked Decisions within
   the requested scope, including started and terminal Plans. Before assessing
   or editing them, read [native-decision-format.md](native-decision-format.md)
@@ -126,32 +115,32 @@ field rules to those records:
     background -->|uncertain| unmark["Remove existing mark; report Decision ID and unresolved statement"]
   ```
 
-  A requirement, limit, exception, authority limit or necessary reason for the
-  choice, implementation, verification or revisit is binding wherever it stands.
-  Binding sections are Decision, Consequences, Confirmation and Revisit when.
-  Preserve identity, the stated choice, authority, evidence status, historical
-  files and IDs. Redirect duplicate links to the owner without widening scope.
-  Cancellation or expiry grants no passed check, waived independent condition
-  or new permission. Keep an unmarked Decision fully readable.
+  Binding content includes requirements, limits, exceptions, authority and
+  necessary reasons wherever they stand. Its four owning sections are defined
+  in native-decision-format.md. Preserve identity, choice, authority, evidence
+  status, historical files and IDs except for scoped deletion under that
+  reference. Redirect duplicate links without widening scope. Cancellation or
+  expiry proves no passed check, waived independent condition or new permission.
+  Keep unmarked Decisions fully readable.
 
-  Remove links only when they demonstrably govern nothing, including in started
-  or terminal items; shared subject matter or history alone proves no relevance.
-  Retain uncertain links. Keep a still-needed historical exception or missing
-  review occurrence briefly in Evidence. Add no unrelated links; report a
-  missing relevant link instead. Do not migrate other records or expand scope.
-- Apply the same future-use criterion to reports within the requested cleanup
-  scope. Keep a report reference only when its detail remains useful or required.
-  Reviews are temporary development input, not retained reports; remove their
-  archived text within the requested cleanup scope. A passed review needs only
-  a short occurrence record, not its file list, checks or worker recap. Open
-  findings remain current work until resolved.
-  Do not create an archive, before-copy, hash chain, new report or Work Item for
-  cleanup. No complete project history needs to be reconstructed or retained.
+  Remove a link only when it demonstrably governs nothing, including in started
+  or terminal items; retain uncertain links. Shared topic or history alone
+  proves no relevance. Keep needed historical exceptions or missing reviews in
+  Evidence. Report missing relevant links; add no unrelated ones or migrations.
+- Apply progress.md's Evidence retention rule to reports in scope. Remove
+  archived review text; retain required review occurrence and unresolved
+  findings. Create no archive, before-copy, hash chain, report or Work Item for
+  cleanup, and reconstruct no complete project history.
 - Preserve IDs, Plan and Work Item statuses, execution annotations, Step order,
   the meaning of Outcome, Step actions and Acceptance, dependencies, material
   Decisions under their lifecycle rules, completed effects and live user
-  permissions, limits and stops. Cleanup changes neither acceptance nor authorization. Do not delete
-  files or alter Decisions outside the requested scope.
+  permissions, limits and stops. Cleanup changes neither acceptance nor
+  authorization. File deletion follows native-decision-format.md's deletion
+  safeguard; change nothing outside the requested scope.
+
+A comprehensive cleanup of Plans and Decisions requires an explicit maintenance
+request covering those records. New-Plan maintenance stays within the lifecycle
+route's targeted ADR set; ordinary reads and continuation do neither cleanup.
 
 This is ordinary record maintenance, not a new worker or review phase. Do not
 repeat product tests, old reviews or a progress audit merely to shorten records.

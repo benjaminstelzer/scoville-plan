@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased - 2026-10-29
+
+- Reuse known project lifetime and maintenance intent, and retain material clarifications in Goal or Non-goals for the next agent.
+- Consolidate continuation and field guidance. Keep desired outcomes separate from observed evidence, and create no report merely to fit the Evidence field limit.
+- Maintain only the relevant Decisions when creating a later Plan. Preserve live constraints and other active Plans; remove files only when their current contents are committed or deletion is explicitly approved. Broader cleanup remains an explicit maintenance task.
+- Load machine-data, interpreter and output-delivery rules for their operations. Structural validation remains separate from permission, meaning and acceptance evidence.
+- Align the Evidence repair diagnostic with its field rules, allow manual inspection of an explicitly named inactive Plan and clarify preservation of a Decision's necessary reasons.
+- Targeted gpt-6.1-sol / low tests in Codex covered saved maintenance intent, material clarification and scoped Decision cleanup, including protected Decisions, untracked content and ordinary continuation. These fixture results do not establish broader lifecycle or other-host behavior.
+
 ## Unreleased - 2026-10-28 - Review corrections
 
 - Describe execution and Plan ownership without legacy role names while preserving Step scope and continuation boundaries.

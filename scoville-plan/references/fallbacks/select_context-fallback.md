@@ -106,7 +106,7 @@ Never trim recovery to a dispatch unit or infer a missing field.
 3. Return complete context only; missing or ambiguous records, boundaries or
    references stop selection.
 
-Require one matching active Plan and one matching Work Item. `W-NNN` selects its whole
+Require the matching Plan resolved above and one matching Work Item. `W-NNN` selects its whole
 scope, including all existing Steps. With Steps, `W-NNN/step-N` or
 `W-NNN/steps-N-M` selects an existing Step or an ascending adjacent range of
 at least two Steps. Without Steps, require `W-NNN` alone.

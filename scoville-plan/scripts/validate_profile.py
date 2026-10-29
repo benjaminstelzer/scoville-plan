@@ -1318,7 +1318,7 @@ class Validator:
                 fixes: list[str] = []
                 if len(entry) > 200:
                     problems.append(f"Evidence entry has {len(entry)} characters; maximum is 200")
-                    fixes.append("Shorten this entry to at most 200 characters; preserve the observed result and decisive report reference, moving needed detail into that report")
+                    fixes.append("Shorten this entry to at most 200 characters while preserving the observed result, unresolved limits and any decisive existing report reference; follow references/progress.md's Evidence rules")
                 if entry != entry.strip():
                     problems.append("Evidence entry has leading or trailing whitespace")
                     fixes.append("Remove only leading and trailing whitespace")

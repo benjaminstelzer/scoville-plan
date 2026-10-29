@@ -19,12 +19,15 @@ shows these records on Windows, macOS and Linux.
 - Use the repository's existing planning system and relevant Plan, Work Items and Decisions.
 - Check current sources before starting the next item.
 - Edit Markdown and YAML records with observed Step progress and any additional Instructions.
-- Record concise acceptance results before completion and validate the records.
+- Record observed acceptance results before completion and validate record structure.
+
+The validator checks structure and references. It cannot establish permission,
+meaning or whether an acceptance result is true.
 
 ## What it enforces
 
 - **Resumable work.** Goals, ordered Steps, dependencies and the current position
-  stay explicit in the project's records.
+  stay explicit, together with live permissions, completed effects and evidence limits.
 - **Decisions with an owner.** Confirmed choices are recorded. Open questions
   remain proposals and block only the work that depends on them.
 - **Evidence before completion.** Finished means acceptance was checked.
@@ -36,6 +39,10 @@ See the [full instructions](https://github.com/benjaminstelzer/scoville-plan/blo
 ## What it costs
 
 - Maintaining records takes tokens and time. It pays for continuity on dependent work. A small fix rarely needs a large Plan.
+- Writing, machine-data and command rules load for the operation that needs them.
+  Required Plan and Decision text stays complete; source references and embedded
+  Decision text are separate parts of a prompt, so fewer rule words do not imply
+  smaller Decision records or a fixed token saving.
 
 ## How it was developed
 
@@ -43,18 +50,28 @@ Real project records shaped the resumable work units and progress checks.
 The useful lesson was to keep decisions and accepted results close to the
 work they explain, without turning routine updates into more work items.
 
+Targeted tests in Codex with gpt-6.1-sol / low preserved known maintenance
+intent, asked once about a material unknown and retained the answer in Goal,
+Non-goals and a Decision. Fresh agents recovered that intent from the saved
+fields. A separate fixture removed only an eligible committed temporary
+Decision, preserving another active Plan's Decisions, an untracked file and
+ordinary continuation without cleanup.
+
+Additional cases shortened Evidence without changing other Plan fields or
+creating a report, and selected an explicitly named draft Plan through the
+General no-Python route before resolving the active Plan without an explicit
+name. The Evidence case displayed an empty proposal inventory before code
+evaluation; full procedural compliance is not claimed.
+
+These synthetic cases establish the observed behavior in those fixtures.
+Broader lifecycle coverage, product acceptance, installed discovery and
+behavior on other hosts or model families remain unverified.
+
 ## Compatibility
 
 Developed for Codex and Claude Code with repository read/write access and
 Python 3.11+ for helpers, with manual alternatives only when suitable Python is
 unavailable.
-Targeted candidate-path tests in Codex with gpt-6.1-sol / low produced and
-maintained valid native records, preserved open choices and non-repeatable
-evidence, transferred remaining work with relevant regression guarantees,
-honored an explicit opt-out, selected the initial todo item for a new profile
-and retained draft/idle state when explicitly requested, while broader
-lifecycle, implementation acceptance, other hosts and installed discovery remain
-unverified.
 
 ## Install
 
@@ -103,9 +120,12 @@ Create a detailed repository-owned implementation plan for the billing migration
 ```
 
 State the result you want and the constraints that matter. Plan records the
-work, dependencies and acceptance criteria. It does not dispatch agents. New Plans use
-your task language; related records follow the Plan. An unrelated question does
-not change an existing record's language.
+work, dependencies and acceptance criteria. It reuses known expectations for
+the project's lifetime, maintenance and further development, and asks only when
+an unknown would materially change the solution. Those expectations stay in
+Goal or Non-goals so the next agent can use them without this conversation.
+Plan does not dispatch agents. New Plans use your task language; related records
+follow the Plan. An unrelated question does not change an existing record's language.
 
 ### Progress and decisions
 
@@ -124,6 +144,18 @@ Completed Steps still need the Plan point's acceptance checks.
 To correct an existing record, ask: "Review and correct PLAN-0001." The agent
 checks the evidence and actual result before changing progress. Inspection
 without a correction request stays read-only.
+
+### Keeping Decisions current
+
+When creating a later Plan, Plan checks only Decisions it would link or replace,
+or whose Work Items it replaces. It can remove expired temporary or superseded
+Decisions and obsolete links in that scope, preserving current constraints,
+including unlinked ones, and the needs of other active Plans.
+
+Deletion requires the file's current contents to be committed or your explicit
+approval. A tracked path with uncommitted changes is not enough. A comprehensive
+cleanup needs an explicit maintenance request; ordinary reading and resuming
+work do not clean up Decisions.
 
 ### Companion app
 
