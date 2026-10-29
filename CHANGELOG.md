@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - 2026-10-29 - Compatibility metadata
+
+- Remove wording that could imply completed host tests from the compatibility declaration.
+
 ## Unreleased - 2026-10-29 - Follow-up corrections
 
 - Restore early data and disputed-conclusion routes; link Goal constraints, protect non-terminal Plans and identify the owner of copied validator diagnostics.
