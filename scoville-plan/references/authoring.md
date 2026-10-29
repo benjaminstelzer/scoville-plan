@@ -54,7 +54,8 @@ new item. New work must fit Goal and Non-goals; ask only about unresolved scope.
 Reuse established intent for lifespan, maintenance and further development. Ask
 only about uncertainty that materially affects the solution, and reuse the
 answer. Retain the intent and any clarification in the existing Goal or Non-goals
-so a fresh recipient can use it without chat history.
+under the [Goal lifecycle](native-project-lifecycle.md#create-and-refine), so a
+fresh recipient can use it without chat history.
 
 Move whole todo blocks without renumbering. Delete only when another item
 remains and no incoming dependency targets it. Deleting the current item needs

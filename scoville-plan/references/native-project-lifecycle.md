@@ -80,7 +80,7 @@ Within this scope, remove temporary Decisions whose end or fulfilment is proved,
 superseded Decisions and obsolete links under
 [Decision cleanup](native-decision-format.md#scoped-decision-cleanup).
 Preserve every current constraint, including a binding condition not currently
-linked to a Work Item, and dependencies of other active Plans. Transfer a
+linked to a Work Item, and dependencies of other non-terminal Plans. Transfer a
 still-needed effect unchanged to its readable current owner before removing
 its old record; uncertain effects remain. A new Plan does not end a constraint.
 

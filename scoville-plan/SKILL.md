@@ -28,8 +28,9 @@ choose dispatch routes. Run one editor at a time; do not change affected files
 or required model and reasoning settings concurrently. Reads and Skill upgrades
 require no migration.
 
-Before reading machine reports, logs or structured state, or writing Plans,
-Work Items, Decisions or reports, read and apply the
+Before requesting or reading machine reports, logs or structured state, writing
+Plans, Work Items, Decisions or reports, or answering a disputed factual or
+technical conclusion, read and apply the
 [shared writing rules](references/writing.md). Native record fields and lifecycle
 requirements remain governed by this Skill.
 

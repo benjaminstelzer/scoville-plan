@@ -146,7 +146,7 @@ when its current binding effects remain readable with their current owner.
 Age, status, filename or cancellation alone is insufficient.
 
 Check incoming references before removal. Preserve current constraints even
-when unlinked, other active Plans' dependencies and required historical facts.
+when unlinked, other non-terminal Plans' dependencies and required historical facts.
 Remove a Work Item link only when it governs nothing under the entrypoint's
 linking policy. Clean obsolete links and reciprocal supersession links in the
 same coherent update; leave no missing reference or invalid lifecycle. Preserve

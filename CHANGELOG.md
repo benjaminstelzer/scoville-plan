@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - 2026-10-29 - Follow-up corrections
+
+- Restore early data and disputed-conclusion routes; link Goal constraints, protect non-terminal Plans and identify the owner of copied validator diagnostics.
+
 ## Unreleased - 2026-10-29
 
 - Reuse known project lifetime and maintenance intent, and retain material clarifications in Goal or Non-goals for the next agent.
