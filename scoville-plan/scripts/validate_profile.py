@@ -22,6 +22,8 @@ try:
     mask_fenced_code = _markdown_module.mask_fenced_code
     plan_sections = _markdown_module.plan_sections
     PlanSectionsError = _markdown_module.PlanSectionsError
+    FRONTMATTER_ENTRY_RE = _markdown_module.FRONTMATTER_ENTRY_RE
+    STEP_LINE_RE = _markdown_module.STEP_LINE_RE
 except Exception as error:  # Report startup failures through the helper's diagnostic contract.
     _MARKDOWN_IMPORT_ERROR = error
 
@@ -105,6 +107,8 @@ DIAGNOSTIC_CODES = {
     "PROFILE_ACTIVE_PLAN_COUNT",
     "PROFILE_PATH_MISSING",
     "PROFILE_PATH_NOT_DIRECTORY",
+    "PROFILE_PATH_NOT_FILE",
+    "RECORD_NESTED_UNSUPPORTED",
     "RECORD_FILENAME_INVALID",
     "RECORD_ID_DUPLICATE",
     "RECORD_ID_FILENAME_MISMATCH",
@@ -286,6 +290,7 @@ class Validator:
         self.index_active_plan: str | None = None
         self.index_parsed = False
         self.plan_parse_failed = False
+        self.decision_parse_failed = False
         self.plans: dict[str, PlanRecord] = {}
         self.decisions: dict[str, DecisionRecord] = {}
 
@@ -499,7 +504,7 @@ class Validator:
 
         if not stat.S_ISREG(before.st_mode):
             self.add(
-                "PROFILE_PATH_NOT_DIRECTORY",
+                "PROFILE_PATH_NOT_FILE",
                 logical,
                 "A canonical Markdown file path is not a regular file.",
                 "Restore the required regular file from known project facts without opening the unexpected path; do not invent its authored content.",
@@ -635,6 +640,23 @@ class Validator:
         paths: list[Path] = []
         for entry in sorted(entries, key=lambda item: item.name):
             if not entry.name.endswith(".md"):
+                # Non-native child directories are outside validation. Inspect only
+                # immediate regular record names to explain otherwise silent omissions.
+                try:
+                    info = entry.stat(follow_symlinks=False)
+                    if stat.S_ISDIR(info.st_mode) and not getattr(info, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0):
+                        with os.scandir(entry.path) as children:
+                            for child in children:
+                                if not PLAN_FILE_RE.fullmatch(child.name):
+                                    continue
+                                child_info = child.stat(follow_symlinks=False)
+                                if stat.S_ISREG(child_info.st_mode) and not getattr(child_info, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0):
+                                    self.add("RECORD_NESTED_UNSUPPORTED", self.logical(Path(child.path)),
+                                             "A record-named file is outside the native flat record directory.",
+                                             "Inspect it only if relevant; move it into the canonical directory only when authorized.",
+                                             severity="warning", observed="not included in profile validation")
+                except OSError:
+                    pass  # These non-native directories are not validation prerequisites.
                 continue
             path = Path(entry.path)
             if not self._check_canonical_path(path):
@@ -653,7 +675,7 @@ class Validator:
                 continue
             if not stat.S_ISREG(entry_info.st_mode):
                 self.add(
-                    "PROFILE_PATH_NOT_DIRECTORY",
+                    "PROFILE_PATH_NOT_FILE",
                     self.logical(path),
                     "A Markdown record path is not a regular file.",
                     "Restore a regular canonical Markdown file without following the unexpected path.",
@@ -693,7 +715,7 @@ class Validator:
         values: dict[str, str] = {}
         key_lines: dict[str, int] = {}
         for index, line in enumerate(lines[1:closing], 2):
-            match = re.fullmatch(r"([a-z_]+):(?: (.*))?", line)
+            match = FRONTMATTER_ENTRY_RE.fullmatch(line)
             if not match:
                 self.add(
                     "FRONTMATTER_ENTRY_INVALID",
@@ -840,15 +862,15 @@ class Validator:
                 "Restore the exact section names and order while preserving authored content.",
                 line=h2[0][0] if h2 else parsed.body_start + 1,
                 record=record,
-                expected=" | ".join(expected_h2),
-                observed=" | ".join(observed_h2),
+                expected=json.dumps(expected_h2, ensure_ascii=False),
+                observed=json.dumps(observed_h2, ensure_ascii=False),
             )
 
         bounds: dict[str, tuple[int, int]] = {}
         for position, (line_no, title) in enumerate(h2):
             end = h2[position + 1][0] - 1 if position + 1 < len(h2) else len(parsed.lines)
             bounds[title] = (line_no, end)
-            content = [line for line in parsed.lines[line_no:end] if line and not line.startswith("### ")]
+            content = [line for line in parsed.lines[line_no:end] if line.strip() and not line.startswith("### ")]
             if title in expected_h2 and title != "Work items" and not content:
                 self.add(
                     "SECTION_EMPTY",
@@ -1188,7 +1210,7 @@ class Validator:
                     continue
                 if in_steps:
                     saw_step_line = True
-                    step_match = re.fullmatch(r"([0-9]+)\. (.+)", line)
+                    step_match = STEP_LINE_RE.fullmatch(line)
                     if not step_match or int(step_match.group(1)) != expected_step:
                         self.add(
                             "WORK_STEPS_INVALID",
@@ -1615,9 +1637,11 @@ class Validator:
         logical = self.logical(path)
         text = self._read_file(path)
         if text is None:
+            self.decision_parse_failed = True
             return
         parsed = self._parse_frontmatter(logical, text)
         if parsed is None:
+            self.decision_parse_failed = True
             return
         decision_id = parsed.frontmatter.get("id", "")
         record = decision_id if DECISION_ID_RE.fullmatch(decision_id) else None
@@ -1757,7 +1781,13 @@ class Validator:
                 record=record,
                 observed=f"id={transition_batch is not None}, members={member_value is not None}",
             )
-        if transition_batch is not None and not BATCH_ID_RE.fullmatch(transition_batch):
+        batch_valid = transition_batch is None or bool(BATCH_ID_RE.fullmatch(transition_batch))
+        if batch_valid and transition_batch and transition_batch.startswith("batch-"):
+            try:
+                date(int(transition_batch[6:10]), int(transition_batch[10:12]), int(transition_batch[12:14]))
+            except ValueError:
+                batch_valid = False
+        if not batch_valid:
             self.add(
                 "DECISION_BATCH_HASH_INVALID",
                 logical,
@@ -1986,7 +2016,7 @@ class Validator:
                             related=(f"{plan.id}/{dependency}",),
                         )
                 for decision_id in item.decisions:
-                    if decision_id not in self.decisions:
+                    if decision_id not in self.decisions and not self.decision_parse_failed:
                         self.add(
                             "WORK_DECISION_MISSING",
                             plan.path,
@@ -2063,7 +2093,7 @@ class Validator:
                 )
             if decision.supersedes:
                 previous = self.decisions.get(decision.supersedes)
-                if previous is None:
+                if previous is None and not self.decision_parse_failed:
                     self.add(
                         "DECISION_SUPERSESSION_MISSING",
                         decision.path,
@@ -2073,7 +2103,7 @@ class Validator:
                         field_name="supersedes",
                         observed=decision.supersedes,
                     )
-                elif previous.superseded_by != decision.id:
+                elif previous is not None and previous.superseded_by != decision.id:
                     self.add(
                         "DECISION_SUPERSESSION_ASYMMETRIC",
                         decision.path,
@@ -2087,7 +2117,7 @@ class Validator:
                     )
             if decision.superseded_by:
                 replacement = self.decisions.get(decision.superseded_by)
-                if replacement is None:
+                if replacement is None and not self.decision_parse_failed:
                     self.add(
                         "DECISION_SUPERSESSION_MISSING",
                         decision.path,
@@ -2097,7 +2127,7 @@ class Validator:
                         field_name="superseded_by",
                         observed=decision.superseded_by,
                     )
-                elif replacement.supersedes != decision.id:
+                elif replacement is not None and replacement.supersedes != decision.id:
                     self.add(
                         "DECISION_SUPERSESSION_ASYMMETRIC",
                         decision.path,
@@ -2124,6 +2154,8 @@ class Validator:
                     )
                 for member_id in members:
                     member = self.decisions.get(member_id)
+                    if member is None and self.decision_parse_failed:
+                        continue
                     if member is None:
                         self.add(
                             "DECISION_BATCH_MEMBER_MISSING",
@@ -2182,9 +2214,15 @@ class Validator:
         plans_dir = self.root / "docs" / "plans"
         decisions_dir = self.root / "docs" / "decisions"
         self._parse_index(index_path)
-        for path in self._scan_markdown(plans_dir):
+        before = len(self.diagnostics)
+        plan_paths = self._scan_markdown(plans_dir)
+        self.plan_parse_failed |= any(d.severity == "error" for d in self.diagnostics[before:])
+        for path in plan_paths:
             self._parse_plan(path)
-        for path in self._scan_markdown(decisions_dir):
+        before = len(self.diagnostics)
+        decision_paths = self._scan_markdown(decisions_dir)
+        self.decision_parse_failed |= any(d.severity == "error" for d in self.diagnostics[before:])
+        for path in decision_paths:
             self._parse_decision(path)
         self._validate_plans()
         self._validate_decisions()
@@ -2323,7 +2361,7 @@ def main(argv: list[str] | None = None) -> int:
         output_format = arguments.format
     except UsageError as error:
         result = usage_result(str(error), root)
-        write_utf8(json.dumps(result, ensure_ascii=False, indent=2))
+        write_utf8(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
         return EXIT_INCOMPLETE
 
     try:
@@ -2344,7 +2382,7 @@ def main(argv: list[str] | None = None) -> int:
     if output_format == "text":
         write_utf8(render_text(result, exit_code))
     else:
-        write_utf8(json.dumps(result, ensure_ascii=False, indent=2))
+        write_utf8(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
     return exit_code
 
 

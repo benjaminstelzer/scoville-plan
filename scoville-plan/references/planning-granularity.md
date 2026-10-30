@@ -25,8 +25,8 @@ at the responsible owner.
 
 Separate Steps with materially different consequence or reasoning demand.
 Preserve existing `[route: ...]` and `[execute: ...]` annotations; Plan defines
-no route classes or inferred execution settings. Writing Steps does not activate
-Workflow.
+no route classes or inferred execution settings. Writing Steps does not start
+execution.
 
 Size planned Steps as manageable, checkable results, normally finishable within
 the executing agent's context window with their necessary intermediate actions and checks.

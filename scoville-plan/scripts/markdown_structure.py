@@ -4,6 +4,10 @@ from __future__ import annotations
 import re
 
 
+FRONTMATTER_ENTRY_RE = re.compile(r"([a-z_]+): (\S.*)\Z")
+STEP_LINE_RE = re.compile(r"([1-9][0-9]*)\. (.+)\Z")
+
+
 class PlanSectionsError(ValueError):
     def __init__(self, message: str, line: int, code: str = 'PLAN_SECTION_BOUNDARY_INVALID'):
         super().__init__(message)

@@ -98,7 +98,7 @@ live conditions from redundancy. Apply progress.md's field rules:
   the requested scope, including started and terminal Plans. Before assessing
   or editing them, read [native-decision-format.md](native-decision-format.md)
   for its maintenance table, lifecycle and nonbinding-history writing rules.
-  Shortening reduces a full Decision; only a valid binding mark lets Workflow
+  Shortening reduces a full Decision; only a valid binding mark lets a context consumer
   omit nonbinding background. Apply this flow to every linked Decision in scope,
   including already marked ones:
 

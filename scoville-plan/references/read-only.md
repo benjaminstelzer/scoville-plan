@@ -85,8 +85,10 @@ for Step units; they remain in context_text as background. Never rewrite source_
 
 The selector reads canonical files internally, emits no unrelated Work Item or
 Decision body, never truncates, and never falls back to raw files. Its default
-UTF-8 output budget is 65,536 bytes; use `--max-output-bytes` only when the
-caller has an explicit bounded budget. A malformed profile, ambiguous record,
+UTF-8 output budget is 65,536 bytes, an internal default. If this default or an
+agent-selected internal budget overflows, explicitly retry once with
+`--max-output-bytes <required_bytes>` from the diagnostic. Never raise a binding
+cap; capture complete output under the actual outer tool limit. A malformed profile, ambiguous record,
 redirected path, missing reference, or budget overflow returns one structured
 diagnostic and no partial context.
 

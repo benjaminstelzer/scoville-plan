@@ -20,6 +20,8 @@ try:
     mask_fenced_code = _markdown_module.mask_fenced_code
     plan_sections = _markdown_module.plan_sections
     PlanSectionsError = _markdown_module.PlanSectionsError
+    FRONTMATTER_ENTRY_RE = _markdown_module.FRONTMATTER_ENTRY_RE
+    STEP_LINE_RE = _markdown_module.STEP_LINE_RE
 except Exception as error:  # Report startup failures through the helper's diagnostic contract.
     _MARKDOWN_IMPORT_ERROR = error
 
@@ -34,7 +36,6 @@ PLAN_FILE_RE = re.compile(r"([0-9]{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\Z")
 DECISION_FILE_RE = re.compile(r"([0-9]{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\Z")
 WORK_HEADING_RE = re.compile(r"^### (W-[0-9]{3}) [^\n]+$", re.MULTILINE)
 MARKDOWN_HEADING_RE = re.compile(r"^#{1,6} [^\n]+$", re.MULTILINE)
-FRONTMATTER_ENTRY_RE = re.compile(r"([a-z_]+): (.*)\Z")
 REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
 DEFAULT_MAX_OUTPUT_BYTES = 65_536
 
@@ -79,6 +80,7 @@ class WorkItem:
     status: str
     dependencies: list[str]
     decisions: list[str]
+    line: int = 1
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -118,6 +120,10 @@ def is_redirect(info: os.stat_result) -> bool:
 
 
 def resolve_root(value: str) -> Path:
+    if ".." in Path(os.path.expanduser(value)).parts:
+        raise SelectorError(
+            "ROOT_TRAVERSAL", "Pass the exact project root without `..`; do not normalize an ambiguous target silently.",
+            path=value, expected="project root without parent traversal", observed=value, exit_code=2)
     raw = Path(os.path.abspath(os.path.expanduser(value)))
     try:
         info = os.lstat(raw)
@@ -378,23 +384,23 @@ def find_record_path(
     return f"{directory}/{matches[0]}"
 
 
-def parse_inline_ids(value: str, pattern: re.Pattern[str], field: str, relative_path: str) -> list[str]:
+def parse_inline_ids(value: str, pattern: re.Pattern[str], field: str, relative_path: str, source: str = "") -> list[str]:
     if value == "[]":
         return []
     if not value.startswith("[") or not value.endswith("]"):
-        raise SelectorError("WORK_LIST_INVALID", f"{field} must be an inline ID list", path=relative_path)
+        raise SelectorError("WORK_LIST_INVALID", f"{source}{field} must be an inline ID list", path=relative_path)
     items = value[1:-1].split(", ")
     if any(pattern.fullmatch(item) is None for item in items) or len(set(items)) != len(items):
-        raise SelectorError("WORK_LIST_INVALID", f"{field} contains invalid or duplicate IDs", path=relative_path)
+        raise SelectorError("WORK_LIST_INVALID", f"{source}{field} contains invalid or duplicate IDs", path=relative_path)
     return items
 
 
-def single_field(block: str, name: str, relative_path: str) -> str:
+def single_field(block: str, name: str, relative_path: str, line: int = 1) -> str:
     matches = re.findall(rf"^{re.escape(name)}: (.*)$", block, re.MULTILINE)
     if len(matches) != 1:
         raise SelectorError(
             "WORK_FIELD_INVALID",
-            f"selected Work Item must contain exactly one {name} field",
+            f"{block.splitlines()[0]}, line {line}: selected Work Item must contain exactly one {name} field",
             path=relative_path,
             expected=1,
             observed=len(matches),
@@ -402,27 +408,29 @@ def single_field(block: str, name: str, relative_path: str) -> str:
     return matches[0].rstrip("\r")
 
 
-def optional_field(block: str, name: str, relative_path: str) -> str | None:
+def optional_field(block: str, name: str, relative_path: str, line: int = 1) -> str | None:
     if not re.search(rf"^{re.escape(name)}:", block, re.MULTILINE):
         return None
-    return single_field(block, name, relative_path)
+    return single_field(block, name, relative_path, line)
 
 
-def parse_steps(block: str, relative_path: str) -> list[str]:
+def parse_steps(block: str, relative_path: str, start_line: int = 1) -> list[str]:
     block = block.replace("\r\n", "\n")
     match = re.search(r"^Steps:\n(?P<body>.*?)(?=^Evidence: )", block, re.MULTILINE | re.DOTALL)
     if match is None:
         if re.search(r"^Steps:", block, re.MULTILINE):
-            raise SelectorError("WORK_STEPS_INVALID", "selected Work Item Steps are malformed", path=relative_path)
+            raise SelectorError("WORK_STEPS_INVALID", f"{block.splitlines()[0]}, line {start_line}: selected Work Item Steps are malformed", path=relative_path)
         return []
     lines = match.group("body").splitlines()
     if not lines:
-        raise SelectorError("WORK_STEPS_INVALID", "selected Work Item Steps must not be empty", path=relative_path)
+        raise SelectorError("WORK_STEPS_INVALID", f"{block.splitlines()[0]}, line {start_line}: selected Work Item Steps must not be empty", path=relative_path)
     for expected, line in enumerate(lines, 1):
-        if re.fullmatch(rf"{expected}\. .+", line) is None:
+        step = STEP_LINE_RE.fullmatch(line)
+        if step is None or int(step.group(1)) != expected:
+            source_line = start_line + block[:match.start('body')].count('\n') + expected - 1
             raise SelectorError(
                 "WORK_STEPS_INVALID",
-                "selected Work Item Steps must be consecutive non-empty single lines",
+                f"{block.splitlines()[0]}, line {source_line}: selected Work Item Steps must be consecutive non-empty single lines",
                 path=relative_path,
             )
     for line in lines:
@@ -457,7 +465,7 @@ def project_unit(
     unit_match = UNIT_RE.fullmatch(unit)
     if unit_match is None:
         raise SelectorError("UNIT_INVALID", "--unit has an invalid shape; use W-NNN, W-NNN/step-N or W-NNN/steps-N-M, e.g. W-001/steps-1-3", exit_code=2)
-    steps = parse_steps(selected.block, relative_path)
+    steps = parse_steps(selected.block, relative_path, selected.line)
     requested_step = unit_match.group("step")
     requested_first = unit_match.group("first")
     requested_last = unit_match.group("last")
@@ -485,12 +493,12 @@ def project_unit(
         "unit": unit,
         "context_text": selected.block.replace("\r\n", "\n").rstrip("\n") + "\n",
         "header": lines[0],
-        "status": f"Status: {single_field(selected.block, 'Status', relative_path)}",
-        "depends_on": f"Depends on: {single_field(selected.block, 'Depends on', relative_path)}",
-        "blocked_by": f"Blocked by: {single_field(selected.block, 'Blocked by', relative_path)}",
-        "decisions": f"Decisions: {single_field(selected.block, 'Decisions', relative_path)}",
-        "outcome": f"Outcome: {single_field(selected.block, 'Outcome', relative_path)}",
-        "acceptance": f"Acceptance: {single_field(selected.block, 'Acceptance', relative_path)}",
+        "status": f"Status: {single_field(selected.block, 'Status', relative_path, selected.line)}",
+        "depends_on": f"Depends on: {single_field(selected.block, 'Depends on', relative_path, selected.line)}",
+        "blocked_by": f"Blocked by: {single_field(selected.block, 'Blocked by', relative_path, selected.line)}",
+        "decisions": f"Decisions: {single_field(selected.block, 'Decisions', relative_path, selected.line)}",
+        "outcome": f"Outcome: {single_field(selected.block, 'Outcome', relative_path, selected.line)}",
+        "acceptance": f"Acceptance: {single_field(selected.block, 'Acceptance', relative_path, selected.line)}",
         "steps": [steps[number - 1] for number in selected_numbers],
         "source_text": ("\n".join(steps[number - 1] for number in selected_numbers) + "\n"
                         if requested_step is not None or requested_first is not None else selected.block.replace("\r\n", "\n").rstrip("\n") + "\n"),
@@ -499,10 +507,10 @@ def project_unit(
                 for number in selected_numbers]
     if any(entry["status"] is not None for entry in progress):
         projection["step_statuses"] = progress
-    instructions = optional_field(selected.block, "Instructions", relative_path)
+    instructions = optional_field(selected.block, "Instructions", relative_path, selected.line)
     if instructions is not None:
         projection["instructions"] = instructions
-    legacy_action = optional_field(selected.block, "Next action", relative_path)
+    legacy_action = optional_field(selected.block, "Next action", relative_path, selected.line)
     if not steps and legacy_action is not None:
         projection["next_action"] = f"Next action: {legacy_action}"
     return projection
@@ -516,7 +524,10 @@ def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict
         raise SelectorError(error.code, f'{relative_path}: line {line}: {error}', path=relative_path) from error
     goal = record.body[slice(*spans['Goal'])].rstrip('\n')
     non_goals = record.body[slice(*spans['Non-goals'])].rstrip('\n')
-    work_text = record.body[record.body.index('\n', spans['Work items'][0]) + 1:]
+    work_start = record.body.index('\n', spans['Work items'][0]) + 1
+    work_text = record.body[work_start:]
+    line = record.raw_frontmatter.count('\n') + record.body[:work_start].count('\n') + 1
+    previous_heading = 0
     headings = list(WORK_HEADING_RE.finditer(mask_fenced_code(work_text)))
     items: dict[str, WorkItem] = {}
     for index, heading in enumerate(headings):
@@ -525,13 +536,19 @@ def parse_plan(record: ParsedRecord, relative_path: str) -> tuple[str, str, dict
             raise SelectorError("WORK_ITEM_ID_DUPLICATE", f"duplicate Work Item ID: {item_id}", path=relative_path)
         end = headings[index + 1].start() if index + 1 < len(headings) else len(work_text)
         block = work_text[heading.start() : end]
-        status = single_field(block, "Status", relative_path)
-        dependencies = parse_inline_ids(single_field(block, "Depends on", relative_path), WORK_ID_RE, "Depends on", relative_path)
-        decisions = parse_inline_ids(single_field(block, "Decisions", relative_path), DECISION_ID_RE, "Decisions", relative_path)
-        instructions = optional_field(block, "Instructions", relative_path)
+        line += work_text[previous_heading:heading.start()].count('\n')
+        previous_heading = heading.start()
+        status = single_field(block, "Status", relative_path, line)
+        def ids(field: str, pattern: re.Pattern[str]) -> list[str]:
+            value = single_field(block, field, relative_path, line)
+            field_line = line + block[:re.search(rf'^{re.escape(field)}:', block, re.MULTILINE).start()].count('\n')
+            return parse_inline_ids(value, pattern, field, relative_path, f"{item_id}, line {field_line}: ")
+        dependencies = ids("Depends on", WORK_ID_RE)
+        decisions = ids("Decisions", DECISION_ID_RE)
+        instructions = optional_field(block, "Instructions", relative_path, line)
         if instructions is not None and not instructions.strip():
             raise SelectorError("WORK_FIELD_INVALID", "Instructions must be one-line text or exactly `Instructions: []`; empty is invalid", path=relative_path)
-        items[item_id] = WorkItem(item_id, block.replace("\n", record.newline), status, dependencies, decisions)
+        items[item_id] = WorkItem(item_id, block.replace("\n", record.newline), status, dependencies, decisions, line)
     return goal.replace("\n", record.newline), non_goals.replace("\n", record.newline), items
 
 
@@ -555,13 +572,20 @@ def select_context(
     goal, non_goals, items = parse_plan(plan, plan_path)
     unit_match = UNIT_RE.fullmatch(unit) if unit is not None else None
     selected_id = unit_match.group("work_item") if unit_match is not None else requested_item or plan.frontmatter.get("current_item")
+    if unit is not None:
+        selection_source = "--unit argument"
+    elif requested_item is not None:
+        selection_source = "--work-item argument"
+    else:
+        current_line = next((i for i, value in enumerate(plan.raw_frontmatter.splitlines(), 1) if value.startswith('current_item:')), None)
+        selection_source = f"{plan_path}: line {current_line}" if current_line else f"{plan_path}: missing current_item frontmatter field"
     if selected_id is None or WORK_ID_RE.fullmatch(selected_id) is None:
         raise SelectorError("CURRENT_ITEM_INVALID",
-            f'{plan_path}: line 1: Select an existing W-NNN with --work-item, or correct current_item only from the authorized Plan state; rerun the selector.', path=plan_path)
+            f'{selection_source}: Select an existing W-NNN with --work-item, or correct current_item only from the authorized Plan state; rerun the selector.', path=plan_path)
     selected = items.get(selected_id)
     if selected is None:
         raise SelectorError("WORK_ITEM_MISSING",
-            f'{plan_path}: line 1: Selected Work Item {selected_id} does not exist. Check its original ID and pass the existing --work-item; do not invent or renumber work.', path=plan_path)
+            f'{selection_source}: Selected Work Item {selected_id} does not exist. Check its original ID and pass the existing --work-item; do not invent or renumber work.', path=plan_path)
     dependency_statuses: list[dict[str, str]] = []
     for dependency_id in selected.dependencies:
         dependency = items.get(dependency_id)
@@ -600,16 +624,16 @@ def continuation_context(item: WorkItem, items: dict[str, WorkItem], path: str) 
         if dependency not in items:
             raise SelectorError("WORK_DEPENDENCY_MISSING", f"dependency does not exist: {dependency}", path=path)
         dependencies.append({"id": dependency, "status": items[dependency].status})
-    instructions = optional_field(item.block, "Instructions", path)
+    instructions = optional_field(item.block, "Instructions", path, item.line)
     output: dict[str, object] = {
         "work_item": item.item_id, "heading": item.block.splitlines()[0],
         "status": item.status, "dependencies": dependencies,
-        "blocked_by": single_field(item.block, "Blocked by", path),
+        "blocked_by": single_field(item.block, "Blocked by", path, item.line),
         "instructions": instructions,
     }
     if instructions is None:
-        output["legacy_next_action"] = optional_field(item.block, "Next action", path)
-        output["evidence"] = single_field(item.block, "Evidence", path)
+        output["legacy_next_action"] = optional_field(item.block, "Next action", path, item.line)
+        output["evidence"] = single_field(item.block, "Evidence", path, item.line)
     return output
 
 
@@ -691,6 +715,8 @@ def plan_position(root: Path, requested_plan: str | None) -> dict[str, object]:
     require_format_version(record, path)
     if record.frontmatter.get("id") != plan_id:
         raise SelectorError("PLAN_ID_MISMATCH", f"{path} must contain id: {plan_id}", path=path)
+    if requested_plan is None and record.frontmatter.get("status") != "active":
+        raise SelectorError("ACTIVE_PLAN_INVALID", "index must reference one matching active Plan", path=path)
     _, _, items = parse_plan(record, path)
     current = record.frontmatter.get("current_item")
     output: dict[str, object] = {
@@ -707,13 +733,13 @@ def plan_position(root: Path, requested_plan: str | None) -> dict[str, object]:
     if record.frontmatter.get("status") != "active" or current not in items or items[current].status not in {"todo", "in_progress", "paused"}:
         raise SelectorError("CURRENT_ITEM_INVALID", f"{path}: current_item must name an existing todo/in_progress/paused item in an active Plan; correct the Plan and index together", path=path, observed=current)
     item = items[current]
-    steps = parse_steps(item.block, path)
+    steps = parse_steps(item.block, path, item.line)
     statuses = [step_status(line, path) for line in steps]
-    legacy_action = optional_field(item.block, "Next action", path)
+    legacy_action = optional_field(item.block, "Next action", path, item.line)
     if not any(status is not None for status in statuses) and not legacy_action:
         raise SelectorError("WORK_FIELD_INVALID", "nonterminal Work Item needs written Step status or nonempty legacy Next action; for new work use `1. [status: todo] Action.`", path=path)
-    output.update(acceptance=single_field(item.block, "Acceptance", path), evidence=single_field(item.block, "Evidence", path),
-                  instructions=optional_field(item.block, "Instructions", path), open_decisions=linked_open_decisions(root, item))
+    output.update(acceptance=single_field(item.block, "Acceptance", path, item.line), evidence=single_field(item.block, "Evidence", path, item.line),
+                  instructions=optional_field(item.block, "Instructions", path, item.line), open_decisions=linked_open_decisions(root, item))
     if legacy_action is not None:
         output["legacy_next_action"] = legacy_action
     active = [i for i, status in enumerate(statuses, 1) if status == "in_progress"]
@@ -729,7 +755,7 @@ def plan_position(root: Path, requested_plan: str | None) -> dict[str, object]:
                       if status not in {"done", "cancelled"}), None)
     output.update(work_status=item.status, current_steps=active, current_units=units,
                   untracked_steps=[i for i, status in enumerate(statuses, 1) if status is None],
-                  blocked_by=f"Blocked by: {single_field(item.block, 'Blocked by', path)}")
+                  blocked_by=f"Blocked by: {single_field(item.block, 'Blocked by', path, item.line)}")
     if output["untracked_steps"]:
         output["guidance"] = "1. Determine unmarked Step progress from Evidence, relevant original reports and actual task results or changes against requirements.\n2. Keep missing status unknown, never todo/done; do not repeat established completed effects.\n3. Record progress only within authorized Plan editing; load repair only for an explicit inspection/repair request."
     if active:
@@ -772,7 +798,7 @@ def check_start(root: Path, item_id: str, requested_plan: str | None) -> dict[st
         if dependency_id not in items:
             raise SelectorError('WORK_DEPENDENCY_MISSING', f'dependency does not exist: {dependency_id}', path=path)
         dependencies.append({'id': dependency_id, 'status': items[dependency_id].status})
-    blockers = parse_inline_ids(single_field(item.block, 'Blocked by', path),
+    blockers = parse_inline_ids(single_field(item.block, 'Blocked by', path, item.line),
                                re.compile(r'(?!ADR-|PLAN-|W-)[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}\Z'),
                                'Blocked by', path)
     other_started = [entry.item_id for entry in items.values() if entry.item_id != item_id and entry.status == 'in_progress']
@@ -795,7 +821,7 @@ def check_start(root: Path, item_id: str, requested_plan: str | None) -> dict[st
     if other_started:
         violations.append('other_item_in_progress')
     return {'plan': plan_id, 'plan_status': record.frontmatter.get('status'),
-            'index_active_plan': index.frontmatter.get('active_plan'), 'work_item': item_id,
+            'index_active_plan': None if index.frontmatter.get('active_plan') == 'null' else index.frontmatter.get('active_plan'), 'work_item': item_id,
             'work_status': item.status, 'current_item': current, 'matches_current_item': current == item_id,
             'start_state': {'todo': 'not_started', 'paused': 'resume', 'in_progress': 'already_started',
                             'done': 'terminal', 'cancelled': 'terminal'}[item.status],
@@ -921,7 +947,7 @@ def main(argv: list[str] | None = None) -> int:
         if len(encoded) > args.max_output_bytes:
             raise SelectorError(
                 "OUTPUT_BUDGET_EXCEEDED",
-                f"selected semantic context exceeds --max-output-bytes; no partial result is returned.\n1. Agent-selected internal budget: explicitly retry with at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}.\n2. Binding cap: do not raise it.\n3. Outer tool limit: capture complete output before display; the selection budget bounds successful context only",
+                f"selected semantic context exceeds --max-output-bytes; no partial result is returned.\n1. Default or agent-selected internal budget: explicitly retry once with at least {len(encoded)} bytes, e.g. --max-output-bytes {len(encoded)}.\n2. Binding cap: do not raise it.\n3. Outer tool limit: capture complete output before display; the selection budget bounds successful context only",
                 expected={"maximum_bytes": args.max_output_bytes},
                 observed={"required_bytes": len(encoded)},
             )

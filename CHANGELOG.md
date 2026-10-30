@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased - 2026-10-30 - Shared criteria and focused helper fixes
+
+- Align selector and validator grammar, active selection, root boundaries and actionable source diagnostics.
+- Keep recoverable full context, compact JSON and bounded nested-record warnings without promising a snapshot.
+- Use host-neutral General guidance and describe the development cycle.
+
 ## Unreleased - 2026-10-29 - Consistent native records
 
 - Share Plan section boundaries between selector and validator; preserve nested Goal headings and diagnose unowned text and actual parse failures.

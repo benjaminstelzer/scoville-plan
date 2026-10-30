@@ -127,7 +127,7 @@ fit the field limit. Create no archive, copy, hash or inventory merely to
 document checks, reviews or cleanup. Keep progression in its Plan fields.
 
 Prefer one-line plain text, for example:
-`Evidence: Unicode cases passed; Sol high review performed; open: installer ordering, Step 3.`
+`Evidence: Unicode cases passed; independent review performed; open: installer ordering, Step 3.`
 Keep it within the supported 200 characters. Commas and brackets within the text
 are allowed; do not start plain text with `[`. Use `[]` when nothing was observed.
 Preserve supported existing lists; explicit cleanup uses repair.md.
@@ -242,8 +242,12 @@ a write path. Read both exit code and JSON valid:
 | --- | --- |
 | 0 / true | Structural check passed for these bytes; assess semantics separately |
 | 1 / false | Follow ordered file and field diagnostics; repair only unambiguous representation defects and rerun |
-| 2 / null | Inspection incomplete (path, access, I/O or concurrent change); resolve the condition, claim no pass |
+| 2 / null | Inspection incomplete (path, access or I/O); resolve the condition, claim no pass |
 | 3 / null | Helper failure; report it and leave structural acceptance open |
+
+Validation is not a snapshot or a general before/after change detector. The
+Selector can report FILE_CHANGED_DURING_READ when an opened file is no longer
+regular; this does not detect all concurrent edits.
 
 Follow the [Runtime helpers rule](../SKILL.md#runtime-helpers). Never
 turn a helper error into a manual pass. Report a remaining lifecycle or scope

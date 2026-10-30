@@ -64,7 +64,7 @@ explicitly changed.
 Keep all seven template headings exactly once; use `[]` for an empty background section.
 The first non-blank content line under Decision is exactly
 `Binding sections: complete` only when this self-contained binding contract holds.
-Workflow may then deliver the four binding sections unchanged, with frontmatter
+A context consumer may then deliver the four binding sections unchanged, with frontmatter
 and title, instead of background. Unmarked Decisions remain complete. A misplaced
 mark, code example or ambiguous section structure permits no projection. If an edit
 adds binding content to a background section, remove the mark or move that content
