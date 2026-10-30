@@ -999,8 +999,8 @@ class Validator:
         if re.match(r"^\[status(?:\s|:|\])", remainder):
             self.add(
                 "WORK_STEP_STATUS_INVALID", parsed.logical_path,
-                "The Step status annotation is invalid, repeated or misplaced.",
-                "Use one optional `[status: todo|in_progress|done|cancelled]` first, before route/execute and non-empty action text; for example `1. [status: done] Verify the result.`",
+                "The Step line has trailing whitespace." if step != step.rstrip() else "The Step status annotation is invalid, repeated or misplaced.",
+                ("Remove trailing whitespace without changing the action or annotation. " if step != step.rstrip() else "") + "Use one optional `[status: todo|in_progress|done|cancelled]` first, before route/execute and non-empty action text; for example `1. [status: done] Verify the result.`",
                 line=line, record=record, field_name="Steps", observed=step,
             )
             return
@@ -1102,6 +1102,7 @@ class Validator:
         required_fields = [field for field in expected_fields if field not in {"Instructions", "Steps", "Next action"}]
 
         for index, (heading_line, match) in enumerate(starts):
+            item_diagnostics_start = len(self.diagnostics)
             item_id, title = match.group(1), match.group(2).strip()
             record = f"{plan_id}/{item_id}"
             block_end = starts[index + 1][0] - 1 if index + 1 < len(starts) else end
@@ -1424,7 +1425,9 @@ class Validator:
                         observed=next_action,
                     )
             elif status_value in WORK_STATUSES:
-                if (next_action is None or not next_action.strip()) and not any(
+                invalid_steps = any(d.code in {"WORK_STEPS_INVALID", "WORK_STEP_STATUS_INVALID", "WORK_STEP_EXECUTION_INVALID"}
+                                    for d in self.diagnostics[item_diagnostics_start:])
+                if not invalid_steps and (next_action is None or not next_action.strip()) and not any(
                     re.match(r"^\[status: (todo|in_progress|done|cancelled)\] ", step) for step in steps
                 ):
                     self.add(
@@ -1791,8 +1794,8 @@ class Validator:
             self.add(
                 "DECISION_BATCH_HASH_INVALID",
                 logical,
-                "The transition_batch value must be batch-YYYYMMDD-N or a historical 64-hex ID.",
-                "Use the same recorded batch identifier on every member.",
+                "The transition_batch value must be batch-YYYYMMDD-N with a valid calendar date, or a historical 64-hex ID.",
+                "Use the recorded batch identifier with a valid YYYYMMDD calendar date on every member; do not invent transition facts.",
                 line=parsed.key_lines.get("transition_batch"),
                 record=record,
                 field_name="transition_batch",

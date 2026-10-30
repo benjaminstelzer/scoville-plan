@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased - 2026-10-30 - Capture and diagnostic follow-up
+
+- Keep malformed Step diagnostics separate from legacy continuation and identify trailing whitespace and invalid batch dates.
+- Support complete command capture without a numeric token limit and retain primary failure diagnostics.
+
 ## Unreleased - 2026-10-30 - Shared criteria and focused helper fixes
 
 - Align selector and validator grammar, active selection, root boundaries and actionable source diagnostics.
