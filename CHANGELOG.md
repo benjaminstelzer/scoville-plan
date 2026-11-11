@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - 2026-11-11 - Size check for placed components and tested models
+
+- Name the tested models and the minimum reasoning effort in the README.
+
 ## Unreleased - 2026-11-10 - Leaner instructions and Plan validator fixes
 
 - Fix: a done or cancelled Work Item that depends on cancelled work no longer makes the profile invalid, so a Plan with cancelled dependent work can be closed.
