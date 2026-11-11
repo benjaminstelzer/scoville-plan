@@ -2006,11 +2006,13 @@ class Validator:
                             observed=dependency,
                             related=(f"{plan.id}/{dependency}",),
                         )
-                    if target.status == "cancelled":
+                    # A terminal dependent no longer waits on its dependencies; reporting it
+                    # would make a Plan with cancelled dependent work impossible to close.
+                    if target.status == "cancelled" and item.status not in TERMINAL_WORK_STATUSES:
                         self.add(
                             "WORK_DEPENDENCY_CANCELLED",
                             plan.path,
-                            "A Work Item depends on cancelled work, which never satisfies a dependency.",
+                            "A non-terminal Work Item depends on cancelled work, which never satisfies a dependency.",
                             "Ask whether the dependent outcome or dependency relation must change; do not select a replacement silently.",
                             line=item.field_lines.get("Depends on"),
                             record=record,
@@ -2216,14 +2218,21 @@ class Validator:
         index_path = self.root / "PROJECT_INDEX.md"
         plans_dir = self.root / "docs" / "plans"
         decisions_dir = self.root / "docs" / "decisions"
+        before = len(self.diagnostics)
         self._parse_index(index_path)
+        index_valid = not any(d.severity == "error" for d in self.diagnostics[before:])
         before = len(self.diagnostics)
         plan_paths = self._scan_markdown(plans_dir)
         self.plan_parse_failed |= any(d.severity == "error" for d in self.diagnostics[before:])
         for path in plan_paths:
             self._parse_plan(path)
         before = len(self.diagnostics)
-        decision_paths = self._scan_markdown(decisions_dir)
+        # Git stores no empty directories, so a clone of a profile without Decisions
+        # has no docs/decisions. Under a valid index that is an empty record set.
+        if index_valid and not os.path.lexists(decisions_dir):
+            decision_paths = []
+        else:
+            decision_paths = self._scan_markdown(decisions_dir)
         self.decision_parse_failed |= any(d.severity == "error" for d in self.diagnostics[before:])
         for path in decision_paths:
             self._parse_decision(path)

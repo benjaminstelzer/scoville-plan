@@ -1,10 +1,18 @@
 # Read-only project state
 
 Use this route to answer questions about existing project knowledge without
-changing canonical files. It does not require the native format guides.
-Run the commands below under SKILL.md's Helper invocations rule.
-A reviewer does not write source captures; report any required input that
-cannot be read completely through a permitted read.
+changing canonical files. It works without the native format guides. The
+commands below follow SKILL.md's Helper invocations rule. A read-only reviewer
+does not capture sources to files and reports any required input that a
+permitted read cannot deliver completely.
+
+## Contents
+
+- Locate the current Work Item and Steps
+- Select Work Item or dispatch-unit context
+- Read state outside the selector
+- Surface proposals
+- Report the boundary
 
 ## Locate the current Work Item and Steps
 
@@ -126,10 +134,11 @@ details when relevant; do not delete, summarize in place, or move them into an
 unsupported archive to shorten context. Use a successor Plan only when the old
 goal is actually complete and the ordinary lifecycle permits the transition.
 
-Do not infer status, completion, authority, or acceptance from filenames,
-directory presence, implementation files, Git history, or old audit evidence.
-Stop if the index is malformed, the declared version is unsupported, or a
-referenced record cannot be resolved unambiguously.
+Status, completion, authority and acceptance come from the records, not from
+filenames, directory presence, implementation files, Git history or old audit
+evidence. If the index is malformed, the declared version is unsupported or a
+referenced record cannot be resolved unambiguously, report that instead of
+answering from the remaining files.
 
 ## Surface proposals
 

@@ -226,6 +226,18 @@ def safe_directory_entries(root: Path, relative_value: str) -> list[str]:
     return names
 
 
+def decision_entries(root: Path) -> list[str]:
+    """List docs/decisions; a missing directory is an empty record set.
+
+    Git stores no empty directories, so a clone of a profile without Decisions
+    has no docs/decisions. Callers validate PROJECT_INDEX.md first.
+    """
+    if not os.path.lexists(root / "docs" / "decisions"):
+        inspect_path(root, PurePosixPath("docs"))
+        return []
+    return safe_directory_entries(root, "docs/decisions")
+
+
 def safe_read_text(root: Path, relative_value: str) -> str:
     relative = normalized_relative_path(relative_value)
     candidate, path_info = inspect_path(root, relative)
@@ -643,7 +655,7 @@ def proposal_inventory(root: Path) -> dict[str, object]:
     proposals = []
     seen = set()
     statuses = {"proposed", "accepted", "rejected", "deprecated", "superseded"}
-    for name in safe_directory_entries(root, "docs/decisions"):
+    for name in decision_entries(root):
         if not name.endswith(".md"):
             continue
         path = f"docs/decisions/{name}"
@@ -853,7 +865,7 @@ def next_id(root: Path, kind: str, requested_plan: str | None) -> dict[str, obje
         directory = 'docs/plans' if kind == 'plan' else 'docs/decisions'
         pattern = PLAN_FILE_RE if kind == 'plan' else DECISION_FILE_RE
         id_pattern = PLAN_ID_RE if kind == 'plan' else DECISION_ID_RE
-        for name in safe_directory_entries(root, directory):
+        for name in (decision_entries(root) if kind == 'decision' else safe_directory_entries(root, directory)):
             match = pattern.fullmatch(name)
             if match is None:
                 if name.endswith('.md'):

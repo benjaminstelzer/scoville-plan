@@ -7,6 +7,15 @@ supported profile and inspect all canonical records and relations after edits.
 Use full records when bounded reads cannot establish an invariant. Truncated
 output proves no absence. This is manual structural inspection, not validator
 output or semantic acceptance. Leave acceptance open if a relation is unresolved.
+A missing docs/decisions under a valid index is an empty set of Decisions,
+because Git stores no empty directory.
+
+## Contents
+
+- Files and identity
+- Index and Plan shape
+- Work Item shape
+- Decision shape and graph
 
 ## Files and identity
 
@@ -75,7 +84,9 @@ is unknown, not todo/done. Status-like prose within an action stays prose.
 
 Depends on and Decisions use `[]` or `[ID, ID]`, with unique correctly typed IDs.
 Dependencies resolve to earlier items in the same Plan and form no cycles.
-Cancelled dependencies satisfy no work. A current item's dependencies are done.
+A todo, in_progress or paused item must not depend on cancelled work; a done or
+cancelled dependent keeps such a link as history. A current item's dependencies
+are done.
 Decision references must resolve. Blocked by uses the same list syntax and
 unique labels matching `[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}`;
 ADR, PLAN and W are reserved prefixes.

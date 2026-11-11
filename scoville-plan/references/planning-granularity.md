@@ -21,7 +21,8 @@ at the responsible owner.
   start when practical; otherwise retain the criterion and record the discovered
   path in Evidence without rewriting started Steps.
 - Use progress.md's continuation contract and authoring.md's field rules.
-  Do not create duplicate testing or bookkeeping Steps.
+  Write no Step that only does bookkeeping or repeats another Step's testing;
+  it only adds a dispatch.
 
 Separate Steps with materially different consequence or reasoning demand.
 Preserve existing `[route: ...]` and `[execute: ...]` annotations; Plan defines
@@ -31,8 +32,8 @@ execution.
 Size planned Steps as manageable, checkable results, normally finishable within
 the executing agent's context window with their necessary intermediate actions and checks.
 Before execution, split planned work whose required sources, checks or output would not fit,
-using progress.md's editing rights. Do not split by file, owner or sentence quotas
-or create separate bookkeeping or duplicate verification Steps.
+using progress.md's editing rights. Split by result, not by file, owner or
+sentence quotas.
 If compaction nevertheless occurs, continue the same original assignment with
 its remaining work. It changes neither ownership nor the original Step boundaries.
 A legacy item without Steps may be one default

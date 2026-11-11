@@ -1,17 +1,29 @@
 # Progress and safe record edits
 
+## Contents
+
+- Read and write
+- Editable fields
+- Step progress
+- Evidence
+- Instructions
+- Legacy continuation
+- Blockers
+- Select and finish
+- Structural check
+
 ## Read and write
 
 Use the interpreter and [runtime rule](../SKILL.md#runtime-helpers) from the entrypoint.
-Without suitable Python, use the manual routes named there;
-do not invoke these commands.
+Without suitable Python, the manual routes named there replace the commands
+below.
 
 Read PROJECT_INDEX.md, the active Plan header and the complete affected blocks.
 Read referenced Decisions and relevant proposals; reuse complete relevant text
 already retained from the unchanged source. Before starting a todo item,
 check its premises, paths and checks against current sources and relevant
 completed dependencies in this Plan. Refine stale instructions before start.
-Do not scan historical Plans without a concrete relevance reason.
+Read a historical Plan only for a concrete relevance reason.
 
 On recovery, select the known Work Item directly and compare current_item,
 item status and active Step with the recorded assignment. Use position mode
@@ -19,7 +31,8 @@ first only when the ID is unknown, those facts disagree, or return/priority
 directions matter. Its paused_context and historical_priorities supply those
 directions; full context contains only the selected Work Item. Resolve unknown
 Steps from the evidence or result check needed for the authorized work.
-Ordinary recovery neither loads repair.md nor cleans up records.
+Ordinary recovery works from this reference alone; repair.md and record cleanup
+are for explicit requests.
 
 ```text
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
@@ -38,8 +51,9 @@ recovery log. For a required accessible source, give its exact path and section
 with a reading instruction; state needed facts directly if it cannot be read.
 
 Edit only owning records with uniquely anchored replacements. Reject redirected
-or out-of-project targets; preserve unrelated changes. Follow shared literal-safe
-writing and shell rules. Read and write explicitly as UTF-8, without BOM, with LF.
+or out-of-project targets and preserve unrelated changes. Read and write
+explicitly as UTF-8, without BOM, with LF, through a literal-safe write or
+patch rather than text interpolated into a shell command.
 
 1. Prepare the complete consistent result before writing; save related files
    together, index last.
@@ -48,10 +62,11 @@ writing and shell rules. Read and write explicitly as UTF-8, without BOM, with L
    where a warning or changed text gives a concrete concern.
 
 This covers only inspected contents. Reuse unchanged instructions without extra
-copies or receipts. Stop dependent work on concurrent changes or a partial write.
-An interrupted lifecycle transition needs user direction before completion or undo;
-existing direction suffices only for the same prepared, unambiguous result with
-unchanged sources. Otherwise ask.
+copies or receipts. On a concurrent change or a partial write, stop the
+dependent work until the affected records are consistent again. An interrupted lifecycle
+transition needs user direction before it is completed or undone, unless
+existing direction covers the same prepared, unambiguous result with unchanged
+sources.
 
 ## Editable fields
 
@@ -76,8 +91,9 @@ It may correct a stale path, version reference or other purely formal wording on
 data, authority and verification scope. Retain the old wording and reason in
 one referenced note or existing Git history. A changed expected result or weaker
 Acceptance is material, not a formal correction; obtain the user's decision
-before dependent work and record it in the existing Decision system. Do not
-create a replacement Work Item merely to add a Decision or fix formal wording.
+before dependent work and record it in the existing Decision system. Adding a
+Decision or fixing formal wording happens in the existing Work Item, not in a
+replacement.
 
 Remaining work in a started Step may be split into consecutive Steps
 in the same Work Item without changing its Outcome, Acceptance, constraints or
@@ -116,15 +132,15 @@ All Steps done does not itself complete the Work Item or authorize repeating the
 
 Record observed results, required review occurrence, confirmed open defects
 and limits needed to establish accepted work and the next permitted action.
-Retain the identity and outcome of nonrepeatable effects; never repeat an
-accepted effect to recreate evidence. Distinguish source review, structural
+Retain the identity and outcome of nonrepeatable effects; do not repeat an
+accepted effect to recreate its evidence. Distinguish source review, structural
 checks, behavioral tests, runtime and publication. Keep facts needed for further
 development or binding retention, not review transcripts or run chronology.
 
 The field is normally sufficient. Link existing reports for needed detail;
-create or update one only when the task requires that detail, never solely to
-fit the field limit. Create no archive, copy, hash or inventory merely to
-document checks, reviews or cleanup. Keep progression in its Plan fields.
+create or update one only when the task requires that detail, not to fit the
+field limit. Create no archive, copy, hash or inventory to document checks,
+reviews or cleanup. Keep progression in its Plan fields.
 
 Prefer one-line plain text, for example:
 `Evidence: Unicode cases passed; independent review performed; open: installer ordering, Step 3.`
@@ -140,11 +156,12 @@ in Evidence and status in its field; duplicate no Outcome, Acceptance or history
 
 Use one short line or exactly []; absence is legacy unknown, not []. New items
 write it explicitly. When conditions change, replace the whole field with the
-remaining conditions in current words. Drop fulfilled or superseded conditions;
-do not prepend new text to old instructions. Keep an unclear live condition
-briefly and ask only if the next action depends on its meaning. Before new
-terminal closure no unmet binding condition remains. Do not reinterpret terminal
-history as live instructions. Explicit cleanup of old fields uses repair.md.
+remaining conditions in current words, dropping fulfilled or superseded ones,
+so that old and new text cannot contradict each other. Keep an unclear live
+condition briefly and ask only if the next action depends on its meaning.
+Before new terminal closure no unmet binding condition remains. Instructions
+of a terminal item are history, not live direction. Explicit cleanup of old
+fields uses repair.md.
 
 ## Legacy continuation
 
@@ -157,15 +174,16 @@ progress. New work uses Steps instead.
 
 Blocked by is `[]` or a comma-space-separated list such as `[EXT-API-KEY]`.
 Labels match `[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}`; prefixes
-`ADR`, `PLAN` and `W` are reserved. Use unique labels for actual external
-prerequisites, never invent one to satisfy validation. Resolve only a named
-blocker with proof; retain unresolved prerequisites and their effect in Evidence.
+`ADR`, `PLAN` and `W` are reserved. Each label is unique and names an actual
+external prerequisite; one invented to satisfy validation would block real work.
+Resolve a named blocker with proof, and retain unresolved prerequisites and
+their effect in Evidence.
 
 ## Select and finish
 
 An explicit request to execute the whole Plan authorizes ordinary continuation
-within that scope; do not ask again after each item. Read older stops in their
-recorded scope. A newer explicit direction replaces an older instruction only
+within that scope, without a new question after each item. Read older stops in
+their recorded scope. A newer explicit direction replaces an older instruction only
 where they conflict; it does not satisfy dependencies, Acceptance or substantive
 cost, safety or external prerequisites. Ask only if a material conflict remains.
 
@@ -194,12 +212,15 @@ flowchart TD
   successor -->|no| retain["Keep item open; retain observed result in Evidence and unresolved succession in Instructions"]
 ```
 
-Resume paused work before completion. Cancelled work satisfies no dependency.
-No terminal state may be routinely reopened. Start a selected successor only after
-its pre-flight and within authorized scope; selection alone grants no execution.
-An ordinary successor may be blocked and selected without starting. An explicit
-return instead follows the lifecycle's stricter resume prerequisites. Completed
-work must not be repeated merely because succession remains unresolved.
+Resume paused work before completion. Cancelled work satisfies no dependency of
+unfinished work; a done or cancelled item may keep such a link as history.
+A terminal state is not reopened in routine work; reopening needs the explicit
+lifecycle direction that repair.md describes. Start a selected successor only
+after its pre-flight and within the authorized scope; selection is not an
+authorization to execute, and an ordinary successor may be selected while
+still blocked. An explicit return instead follows the lifecycle's
+stricter resume prerequisites. Unresolved succession is no reason to repeat
+completed work.
 
 Read structural facts with `select_context.py --root "<project-root>"
 --check-start W-NNN --format json`; add --plan PLAN-NNNN to inspect a named
@@ -232,7 +253,9 @@ Read warning diagnostics too: FILE_MOJIBAKE_SUSPECTED gives file, line and
 column for common misdecoding sequences in prose. Warnings alone retain
 valid=true and exit 0. Fenced/inline code is excluded; unquoted encoding examples
 may warn. The heuristic misses other damage. Inspect suspicious text against
-its intended wording; never repair it automatically.
+its intended wording; correct confirmed damage by hand within the editing
+rights above, never automatically, because an automatic repair would also
+rewrite intentional examples.
 
 Invoke helpers without loading their Python source. They inspect structure and
 references, not authorization, meaning or acceptance truth. No planning CLI is
@@ -249,6 +272,7 @@ Validation is not a snapshot or a general before/after change detector. The
 Selector can report FILE_CHANGED_DURING_READ when an opened file is no longer
 regular; this does not detect all concurrent edits.
 
-Follow the [Runtime helpers rule](../SKILL.md#runtime-helpers). Never
-turn a helper error into a manual pass. Report a remaining lifecycle or scope
-choice instead of inventing state to satisfy a diagnostic.
+Follow the [Runtime helpers rule](../SKILL.md#runtime-helpers): a helper error
+leaves structural acceptance open and is not replaced by a manual pass. Report
+a remaining lifecycle or scope choice instead of inventing state to satisfy a
+diagnostic.

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased - 2026-11-10 - Leaner instructions and Plan validator fixes
+
+- Fix: a done or cancelled Work Item that depends on cancelled work no longer makes the profile invalid, so a Plan with cancelled dependent work can be closed.
+- Fix: a profile without Decisions stays valid after a fresh clone, where Git drops the empty `docs/decisions` directory. Proposal inventory and next-ID lookup treat it as empty too.
+- Link the shared writing, machine-data, shell, output-delivery and Python references directly from SKILL.md, each with its reading condition, instead of chained read-first rules.
+- Shorten the shared rules: drop permission disclaimers that have no recorded incident and state scope and reason for the stop rules that remain.
+- Reduce output delivery to when the checker is needed, its three calls and how to read a result. Every capture failure now names its next step in the helper's `instruction` field.
+- Add contents lists to references over 100 lines.
+- Record requested work that conflicts with Goal, Non-goals or a Decision as a todo item that states the stop, and link the open choice as a proposed Decision, instead of asking before writing.
+
 ## Unreleased - 2026-10-30 - Source reading and UTF-8 diagnostics
 
 - Clarify direct source reading and producer-owned instruction-design loading while preserving report evaluation.

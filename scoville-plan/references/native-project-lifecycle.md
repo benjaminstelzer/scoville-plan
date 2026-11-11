@@ -2,6 +2,15 @@
 
 Use progress.md for writing and validation. Only PROJECT_INDEX.md selects the active Plan.
 
+## Contents
+
+- Create and refine
+- Maintain Decisions when creating a Plan
+- Activate
+- Complete or cancel a Plan
+- Rewrite or delete an unstarted Plan
+- Historical priority and explicit returns
+
 ## Create and refine
 
 Initialize only a wholly absent profile when a durable Plan is explicitly

@@ -1,13 +1,19 @@
 # Author Work Items
 
-Before any write, read [progress.md](progress.md) for safe edits, field rights and
-validation. This route adds authoring rules; it grants no extra editing rights.
-Read Step annotations below only when authoring or changing route/execute
-settings; ordinary status updates use progress.md.
+[progress.md](progress.md) owns safe edits, field rights and validation; the
+entrypoint's route loads it together with this file, and the authoring rules
+here work within those rights. Step annotations at the end matter only when
+authoring or changing route/execute settings.
 
-For drafting or revising agent-facing record text, apply
-[agent instruction design](instruction-design.md). Native fields and lifecycle
-rules below govern the records, not Skill-authoring procedures.
+Write agent-facing record text under
+[agent instruction design](instruction-design.md); the native fields and
+lifecycle rules below still decide what goes where.
+
+## Contents
+
+- Work Item template
+- Insert, refine and order
+- Step annotations
 
 ## Work Item template
 
@@ -32,8 +38,8 @@ the whole outcome. Each Step names its bounded action, its own observable
 completion condition and required checks; status records observed progress.
 Steps have no separate Acceptance or dependencies. See progress.md for field
 permissions and legacy continuation.
-Use [granularity](planning-granularity.md) only when outcome or Step
-boundaries need judgment, not for a routine insertion with known boundaries.
+[Granularity](planning-granularity.md) helps where outcome or Step boundaries
+need judgment; a routine insertion with known boundaries does not need it.
 
 ## Insert, refine and order
 
@@ -41,15 +47,24 @@ Use the entrypoint's ID-allocation rule with
 `select_context.py --root "<project-root>" --next-id work-item --plan PLAN-NNNN --format json`.
 Append new outcomes in arrival order. Only an explicit priority
 permits another position; dependencies still precede dependents. Keep the current
-item unchanged when queueing. Do not invent dependencies to force an order.
-Do not write new Deferred or Prioritized title prefixes. Preserve existing prefixes
+item unchanged when queueing. `Depends on` records real prerequisites; using it
+to force an order would block work that could proceed. Write no new Deferred
+or Prioritized title prefix, on new or existing items. Preserve existing prefixes
 and their historical priority; read special cases in the lifecycle reference
 when they affect selection. Persist and validate before acknowledging a queue.
 
 Combine only the last todo outcome when the new work shares its result,
-Acceptance, dependencies, Decisions, blockers, owner, timing, authority and risk.
-Do not move an addition across a separate earlier outcome. Otherwise append a
-new item. New work must fit Goal and Non-goals; ask only about unresolved scope.
+Acceptance, dependencies, Decisions, blockers, owner, timing, authority and risk;
+an addition is not moved across a separate earlier outcome. Otherwise append a
+new item. New work normally fits Goal and Non-goals. When the user asks to
+record work that conflicts with Goal, Non-goals or an accepted Decision, record
+it anyway: append the item as todo and state the stop in its Instructions, such
+as `Do not start before <choice> is decided: <conflict>`. Link the affected
+Decision where one exists; where the choice would change an accepted Decision,
+record it as a proposed Decision and link that too, so the start check sees it.
+Put the question in your report. The item is not started until the choice is
+made. Ask before recording only
+when it is unclear what to record.
 
 Reuse established intent for lifespan, maintenance and further development. Ask
 only about uncertainty that materially affects the solution, and reuse the
@@ -85,9 +100,9 @@ still binding that outcome once, or cites the source Acceptance by exact path
 and section. Name an already fulfilled guarantee only when this work could
 plausibly break it; project rules and Decisions bind the rest without
 restatement. Steps hold takeover and remaining actions; Evidence records
-accepted source contributions and their limits. Do not copy completed actions or
-results into Acceptance. A change of the agent continuing the same item changes no
-fields or criteria.
+accepted source contributions and their limits. Completed actions and results
+stay out of Acceptance, which states what must still hold. When another agent
+continues the same item, fields and criteria stay as they are.
 
 Preserve explicit route and execute annotations; Plan never infers them. For a todo
 item without Steps, an explicit execution choice may add one coherent annotated
@@ -107,10 +122,9 @@ Annotation syntax (see the [Plan template](native-project-lifecycle.md#create-an
 ```
 
 Status comes first: todo, in_progress, done or cancelled. A Step without status
-is legacy unknown; never treat it as todo or done. Route and execution annotations
-are optional;
-preserve explicit choices, never infer them. Order: status, route, execute,
-action. CLASS: ultra_low, low, medium, high, ultra_high. Execute may omit either
+is legacy unknown, which is neither todo nor done. Route and execution
+annotations are optional: preserve explicit choices and add none by inference,
+because they record an explicit choice. Order: status, route, execute, action. CLASS: ultra_low, low, medium, high, ultra_high. Execute may omit either
 property; if both exist, model comes first with exactly `; ` between them.
 MODEL_ID uses lowercase ASCII letters, digits, dots and hyphens and starts
 and ends with a letter or digit. LEVEL: none, minimal, low, medium, high, xhigh,

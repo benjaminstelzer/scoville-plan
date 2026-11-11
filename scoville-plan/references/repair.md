@@ -48,6 +48,11 @@ Report corrected items and Steps, actual checks, unresolved facts and the concre
 continuation. A code or text inspection is evidence only for what it established,
 not proof of unrun tests, missing reviews or external effects.
 
+## Contents
+
+- Migrate old records
+- Maintenance: clean up existing Plans
+
 ## Migrate old records
 
 Only an authorized correction or migration writes. Reconcile existing Next action,

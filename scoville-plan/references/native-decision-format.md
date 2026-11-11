@@ -70,6 +70,12 @@ mark, code example or ambiguous section structure permits no projection. If an e
 adds binding content to a background section, remove the mark or move that content
 to its binding owner. A mark does not change lifecycle, authority or format version.
 
+## Contents
+
+- Links and transitions
+- Scoped Decision cleanup
+- Existing batch metadata
+
 ## Links and transitions
 
 Record links to Decisions in each affected Work Item's Decisions field,

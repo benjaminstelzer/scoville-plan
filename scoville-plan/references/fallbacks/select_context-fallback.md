@@ -8,6 +8,16 @@ different Steps. Supply original records, not summaries. For saved JSON, use
 a native UTF-8 writer and serializer; read the complete saved result before
 dependent work. Do not implement a character-to-byte encoder yourself.
 
+## Contents
+
+- Next ID
+- Structural start check
+- Resolve the Plan for position or context
+- Proposal inventory
+- Position
+- Work Item recovery
+- Dispatch context
+
 ## Next ID
 
 For next-ID lookup, an active Plan is not required. Work Item IDs
@@ -18,7 +28,8 @@ and take the maximum of both filename and metadata numbers. Report mismatches.
 Stop on Markdown records outside the canonical filename pattern rather than
 silently excluding them from the ID inventory.
 Return `next ID = maximum + 1`, never an interior gap, and the required filename
-pattern for Plans/Decisions. Empty directories begin at 0001. Stop at W-999 or
+pattern for Plans/Decisions. An empty directory, or a docs/decisions that does
+not exist yet, begins at 0001. Stop at W-999 or
 PLAN-/ADR-9999; obtain a format decision. Do not write or reserve anything;
 recheck collisions immediately before manual creation. Do not combine this
 lookup with position, proposal or context selection.
@@ -46,6 +57,8 @@ resolve that exact Plan instead, retaining its real lifecycle. With a null
 Next-ID lookup and the project-wide proposal inventory also work when idle.
 
 ## Proposal inventory
+
+A missing docs/decisions under a valid index is an empty set of Decisions.
 
 Inspect every Decision file's
 frontmatter and H1 title. Require unique matching ADR/file IDs, format_version 1,
