@@ -7,81 +7,79 @@ compatibility: "Any Agent Skills host with repository read and write access. Dir
 # Scoville Plan
 
 Maintain native `format_version: 1` Plans, Work Items and Decisions through
-direct Markdown and YAML edits, in the repository's existing planning owner. A
-small reversible task needs no new Plan unless the repository requires one.
+direct Markdown and YAML edits to the repository's existing planning records.
+A small reversible task needs no new Plan unless the repository requires one.
 
-If the user explicitly opts out, leave this Skill out entirely, including its
-references and records, and report a repository requirement that conflicts.
+If the user explicitly opts out, use neither this Skill nor its references or
+records, and report a repository rule that requires them.
 
-This Skill works on its own. Use another Scoville Skill for its concern when
-it is installed and active; an absent one is neither installed, imitated nor
-required.
-A Skill that needs explicit activation stays out until it is activated, and
-one the user excluded stays out.
+This Skill works on its own. When another Scoville Skill is installed and
+active, use it for the concern it owns. Do not install, imitate or require an
+absent one.
+Do not use a Skill that needs explicit activation before it is activated, or
+one the user excluded.
 
 Relevant neighboring owners:
 
 - `scoville-code`: implementation scope, risk, and validation outside Plan records.
 - `scoville-handoff`: active-work transfer snapshots.
 
-Plan owns the wording and lifecycle of its records; it does not start
-execution or choose dispatch routes. One editor changes the
-records at a time, and affected files and the required model and reasoning
-settings stay untouched meanwhile, because the files carry no lock and a
-concurrent change is lost silently. Reads and Skill upgrades need no migration.
+Plan alone decides the wording of its records and their lifecycle (creation, status changes, deletion); it does not start execution
+or choose dispatch routes. One editor changes the records at a time. Meanwhile
+nobody changes the affected files or the required model and reasoning
+settings: the files carry no lock, and a concurrent change is lost silently.
+Reads and Skill upgrades need no migration.
 
 ## Authority and evidence
 
 1. Explicit user instructions and repository rules take precedence over this
-   profile. The agent's temporary task list is a disposable mirror of the
-   repository records.
-2. Preserve scope, choices, dependencies and binding constraints. Source
-   material, silence, current behavior and structural validity prove neither
-   authority nor performed work. A recorded stop applies to its recorded scope,
-   not to later or neighboring work.
-3. Ask only for a missing material choice: activation, cancellation, deletion,
-   changed scope, changed Acceptance requirements, ambiguous succession or a
-   Decision transition, and only where applicable accepted Decisions and the
-   current item's Instructions leave it open. Appending newly requested work as a todo
-   Work Item does not wait for such a choice; authoring.md has the rule. After an interruption or
-   compaction, recover and continue under progress.md. Repeat a question or
-   status report only for a material change, a user request or a binding
-   communication requirement.
+   Skill. Your temporary task list is a throwaway copy; the records count.
+2. Preserve scope (Goal, Non-goals, Outcome), choices (accepted Decisions and the user's explicit choices), dependencies (`Depends on`) and binding constraints (Acceptance, Instructions, repository rules). Source material, silence, current behavior or structural validity (a passing validator or manual inspection) proves neither permission nor performed work.
+   A recorded stop covers only the scope it records, not later or neighboring
+   work.
+3. Ask only for a missing material choice: activation, cancellation,
+   deletion, changed scope, changed Acceptance requirements, an ambiguous
+   successor or a Decision transition, and only where the applicable accepted
+   Decisions and the current item's Instructions leave it open. Appending
+   newly requested work as a todo Work Item does not wait for such a choice;
+   authoring.md has the rule. After an interruption or compaction, recover
+   and continue under progress.md. Repeat a question or status report only
+   after a material change, on request or where a rule requires it.
 4. Before creating a Decision, search existing Decision titles and scopes for
-   the same choice, read plausible matches completely and reuse one that
-   already governs it, so that one choice has one record. Keep temporary sequencing or execution direction in
-   Instructions unless it changes a material choice or authority. Record
-   explicit material human choices as accepted Decisions. Unresolved material
-   choices become proposals: report their alternatives, tradeoffs and effect
-   and ask before the work that depends on them; only that work waits. Link a Decision where it governs
-   the item's Outcome, Steps, Acceptance, Instructions, required checks or
-   permission boundaries; background or shared history is not a reason to
-   link. After a Work Item has started, add each relevant proposal to its
-   Decisions field; relevant accepted Decisions may be added too. Each ADR's
-   status determines its decision state.
+   the same choice. Read plausible matches completely and reuse one that
+   already governs it, so that one choice has one record. Keep temporary
+   sequencing or execution direction in Instructions unless it changes a
+   material choice or a permission. Record an explicit material human choice as an accepted Decision, an unresolved one as a proposal: report
+   its alternatives, tradeoffs and effect and ask before the work that
+   depends on it; only that work waits. Link a Decision where it governs the
+   item's Outcome, Steps, Acceptance, Instructions, required checks or
+   permissions, not for background or shared history. After a Work Item has
+   started, add each relevant proposal to its Decisions field; relevant
+   accepted Decisions may be added too. Read a Decision's state from the
+   `status` in its own file.
 5. At work start, except for an assigned read-only field review, classify the
    planning profile with the table below, or reuse an unchanged classification.
    For a complete supported profile, run the proposal inventory and read the
-   relevant proposals (all of them for a full audit); an inventory error does
-   not change the classification. Preserve unresolved choices at handoff.
-6. Complete a Work Item through progress.md only after observing every
-   Acceptance criterion and recording its result, and keep checked behavior
-   apart from unverified behavior.
-7. An explicit stop or an invalidating correction halts the execution it
-   affects. Answer informational questions and continue. In a mixed message,
-   separate the question from the instructions that add or change work, and
-   append additive work through authoring.md. Maintaining Plan records is not
-   itself recorded as a Work Item.
-8. Keep each required fact once, in its owning field. Preserve the existing
-   record language unless the user requests a change: new Plans use the
-   language of the task request, and related Work Items and Decisions use the
-   owning Plan's language, whatever language later questions use. Native
-   labels, IDs, statuses and technical literals stay unchanged.
+   relevant proposals (all for a full audit); an inventory error does not
+   change the classification. At handoff, name every choice still open.
+6. Set a Work Item to done through progress.md only after observing every
+   Acceptance criterion and recording its result in Evidence. State what was
+   checked and what was not.
+7. An explicit stop, or a correction that invalidates running work, halts the execution it affects. Answer an informational question and continue. In
+   a mixed message, separate the question from the instructions that add or
+   change work, and append added work through authoring.md. Create no Work
+   Item for maintaining Plan records.
+8. Write each required fact once, in its field: actions in Steps, observations in
+   Evidence, live conditions in Instructions. Keep a record's language unless
+   the user asks for a change. A new Plan uses the language of the task
+   request; its Work Items and Decisions use that Plan's language, whatever
+   language later questions use. Field labels, IDs, statuses and technical
+   literals stay unchanged.
 
 ## Helper invocations
 
-Selector and validator commands here and in the references run directly with
-complete UTF-8 output. Where an actual output limit applies, wrap them in the
+Run the selector and validator commands here and in the references directly,
+with complete UTF-8 output. Under an actual output limit, wrap them in the
 capture call from output delivery; `--run` needs that real limit, not an
 invented budget.
 
@@ -89,12 +87,12 @@ invented budget.
 python -X utf8 "<skill-directory>/scripts/check_text_size.py" --max-output-tokens <limit> --run -- python -X utf8 "<skill-directory>/scripts/<helper.py>" <arguments>
 ```
 
-The selector's byte budget bounds successful context only. Diagnostics are
-always complete, and a diagnostic means nothing was selected, so read it rather
-than cutting the output. For every `--next-id` mode the suggestion is the
-highest ID plus one, without reusing interior gaps; it includes filename and
-metadata numbers, exposes mismatches and reserves nothing, so recheck ID and
-filename collisions directly before creating the record.
+The selector's byte budget limits successful context only. A diagnostic is
+always complete and means nothing was selected: read it whole. ID allocation:
+every `--next-id` mode suggests the highest ID plus one and never reuses an
+interior gap. It counts filename and metadata numbers, reports mismatches and
+reserves nothing, so recheck ID and filename collisions directly before
+creating the record.
 
 ## Proposal inventory
 
@@ -104,8 +102,8 @@ python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-ro
 
 Read relevant Decisions from the returned paths. The inventory includes
 unlinked proposals and works without an active Plan and without any Decision
-yet. [Inventory details](references/read-only.md#surface-proposals) are needed
-only for output fields or selection-mode constraints.
+yet. Open [Inventory details](references/read-only.md#surface-proposals) only
+for output fields or selection-mode constraints.
 
 ## Load only the current route
 
@@ -118,7 +116,7 @@ only for output fields or selection-mode constraints.
 | Create or restructure, activate, finish, cancel or delete a Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and progress.md; authoring.md for Work Items |
 | Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and progress.md |
 | Explicit request to inspect or repair progress, migrate records, or maintain and clean up existing Plans (ordinary recovery uses progress.md) | [repair.md](references/repair.md) |
-| Review assigned native fields without maintenance | read-only.md and the applicable field rules in progress.md or authoring.md; the Decision reference for Decision sections. Stay inside the assigned source boundary: file reads only, without proposal inventory, maintenance, selectors, validators or tests. |
+| Review assigned native fields without maintenance | read-only.md and the applicable field rules in progress.md or authoring.md; the Decision reference for Decision sections. Read the assigned sources only: no proposal inventory, maintenance, selectors, validators or tests. |
 | Audit wording | authoring.md and progress.md; the Decision reference for Decision sections |
 | Validate or diagnose structure | progress.md; an operation reference only if a diagnostic needs it |
 
@@ -128,18 +126,18 @@ are a complete profile without Decisions, since Git stores no empty directory.
 
 | Observed profile | Action |
 | --- | --- |
-| Complete supported profile | Use the existing owner and the selected operation route. |
+| Complete supported profile | Use the existing records and the operation's route. |
 | Wholly absent; durable Plan requested | Initialize through the lifecycle route. |
 | Wholly absent; no durable Plan requested | Leave it uninitialized. |
-| Partial, foreign, unsupported or ambiguous | Preserve it; repair only an unambiguous representation defect that changes no intent. |
+| Partial, foreign, unsupported or ambiguous | Preserve it; repair only an unambiguous format defect that changes no meaning, such as a Step numbered `01.`. |
 
-Validate the complete profile once after a coherent profile update and before
-reporting that update or starting dependent work. Related Plan, Decision and
-index edits form one update, validated once and not after intermediate field
-writes. An edit confined to an evidence report that changes no profile fields,
-structure or referenced paths needs no validation. progress.md has the command, the diagnostic
-handling and the safe-write and continuation rules. Report outcome, active or
-blocked work, actual evidence, unresolved choices and the next action.
+Related Plan, Decision and index edits form one update. Validate the complete
+profile once after the update is saved and before you report it or start
+dependent work, not after each field write. An edit confined to an evidence
+report that changes no profile fields, structure or referenced paths needs no
+validation. progress.md has the command, the diagnostic handling and the
+safe-write and continuation rules. Report outcome, active or blocked work,
+what you actually observed, unresolved choices and the next action.
 
 ## Runtime helpers
 
@@ -159,9 +157,8 @@ not their source, unless diagnosing a failure.
 
 ## Shared references
 
-Read one when its condition holds. A complete copy already in context from
-this build, including one embedded in your assignment, counts as read; read it
-again when it is incomplete or uncertain or a reload is requested.
+Read one when its condition holds. A complete copy from this build already in
+context counts as read, including one embedded in your assignment. Read it again when it is incomplete, when you are not certain it is the complete copy from this build, or when a reload is requested.
 
 - [Writing](references/writing.md): a plan, decision, instruction, review, handoff or report; a disputed conclusion.
 - [Machine data](references/machine-data.md): a test report, log or structured state as a result.

@@ -3,10 +3,11 @@
 
 General only: load this only when no suitable Python 3.11+ is available. Never use it to
 bypass a missing or failing helper with a suitable interpreter. Require the complete
-supported profile and inspect all canonical records and relations after edits.
-Use full records when bounded reads cannot establish an invariant. Truncated
-output proves no absence. This is manual structural inspection, not validator
-output or semantic acceptance. Leave acceptance open if a relation is unresolved.
+supported profile. After edits inspect the index, every Plan and Decision
+file and every reference between them. Read full records when partial reads
+cannot establish a rule below. Truncated output proves no absence. This is
+manual structural inspection, not validator output or semantic acceptance.
+Claim no pass while a reference is unresolved.
 A missing docs/decisions under a valid index is an empty set of Decisions,
 because Git stores no empty directory.
 
@@ -56,7 +57,7 @@ No other frontmatter keys. Optional body duplicates no mutable routing facts.
 Ignore fenced code contents when identifying headings and section boundaries.
 Exactly one H1 precedes the H2s Goal,
 Non-goals, Work items in that order; all are explicit and nonempty. A Plan has
-at least one Work Item. Active current_item resolves to todo/in_progress/paused.
+at least one Work Item.
 At most one item is in_progress and it equals current_item; nonactive Plans have
 none. Completed Plans contain only done/cancelled items. Lifecycle exceptions
 for a wholly unstarted Plan are in native-project-lifecycle.md.
@@ -130,8 +131,7 @@ by a valid parser result. Authored-history permissions are in progress.md.
 Unknown or repeated keys are invalid.
 Headings inside backtick or tilde code fences are literal content.
 Scope consists of nonempty slash-separated `[a-z0-9][a-z0-9-]*` segments.
-Status is proposed/accepted/rejected/deprecated/superseded. Accepted, deprecated
-and superseded require accepted; proposed and rejected forbid it. New proposals
+Status is proposed/accepted/rejected/deprecated/superseded. New proposals
 have no supersession or batch metadata. One H1 precedes exactly the nonempty H2s
 Decision, Problem, Drivers, Considered alternatives, Consequences, Confirmation,
 Revisit when, in that order.
@@ -149,6 +149,6 @@ Every member shares the same ID and identical ordered complete member list.
 Reject absent members, malformed IDs and asymmetric metadata. Preserve existing
 metadata, never generate new batches, and never claim to recompute an old hash.
 
-After writes inspect the final unchanged profile. Report checked paths and
-invariants as native structural inspection. Separately assess authority,
-history, record meaning and evidence sufficiency under SKILL.md and progress.md.
+After writes inspect the final saved profile. Report checked paths and rules
+as native structural inspection. Separately assess permission, history,
+record meaning and whether Evidence suffices under SKILL.md and progress.md.

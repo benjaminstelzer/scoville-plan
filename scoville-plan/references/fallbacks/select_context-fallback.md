@@ -4,7 +4,7 @@
 Use this route only when no suitable Python 3.11+ is available. Read PROJECT_INDEX.md and
 require `format_version: 1`. Choose the requested operation below. If several
 are requested, keep their results separate; position and dispatch select
-different Steps. Supply original records, not summaries. For saved JSON, use
+different Steps. Return original record text, not summaries. For saved JSON, use
 a native UTF-8 writer and serializer; read the complete saved result before
 dependent work. Do not implement a character-to-byte encoder yourself.
 
@@ -29,8 +29,7 @@ Stop on Markdown records outside the canonical filename pattern rather than
 silently excluding them from the ID inventory.
 Return `next ID = maximum + 1`, never an interior gap, and the required filename
 pattern for Plans/Decisions. An empty directory, or a docs/decisions that does
-not exist yet, begins at 0001. Stop at W-999 or
-PLAN-/ADR-9999; obtain a format decision. Do not write or reserve anything;
+not exist yet, begins at 0001. At W-999 or PLAN-/ADR-9999 stop and ask the user for a format decision; the format has no higher ID. Do not write or reserve anything;
 recheck collisions immediately before manual creation. Do not combine this
 lookup with position, proposal or context selection.
 
@@ -45,7 +44,7 @@ dependency not done, external blockers and other in_progress items. Distinguish
 todo from paused resume; already started work is not a new start. Missing items,
 dependencies or malformed records stop the check. Do not inspect proposal
 contents to infer relevance, choose successors or interpret Returns/priorities.
-Facts never authorize or accept work; make no writes or selections.
+These facts permit and accept nothing; write and select nothing.
 
 ## Resolve the Plan for position or context
 
@@ -83,8 +82,8 @@ are only lines whose first annotation is `[status: in_progress]`. A `todo`,
 `done` or `cancelled` Step is never current, even when a dispatch selects it.
 Group adjacent current Step numbers only. With no active Step, choose the first unfinished
 written todo only if no earlier unfinished Step is unmarked. List unmarked
-Steps as unknown. Tell the agent to determine their progress from Evidence,
-relevant original reports and actual task results or changes against requirements;
+Steps as unknown. Determine their progress from Evidence, relevant original
+reports and actual task results or changes against requirements;
 never guess or repeat completed effects. Load repair.md only for an explicit
 inspect/repair request. Without Steps return a whole-item
 unit; without current_item return no selection. Selection grants no permission.

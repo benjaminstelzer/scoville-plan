@@ -16,12 +16,13 @@ Use progress.md for writing and validation. Only PROJECT_INDEX.md selects the ac
 Initialize only a wholly absent profile when a durable Plan is explicitly
 requested. Prepare PROJECT_INDEX.md, docs/plans, docs/decisions and the first
 Plan together. Derive title, Goal, Non-goals and the first Work Item with
-Acceptance from the authorized request and binding repository context. Ask only
+Acceptance from the authorized request and binding repository rules. Ask only
 for missing material direction; do not invent scope, exclusions or acceptance
-requirements. This initial durable-profile request selects the first Plan as
-active with current_item W-001 and initial W-001 todo, without starting execution.
-An explicit request for draft or idle instead leaves the Plan draft and index
-idle. Write the index last. An existing partial or unsupported profile is not setup.
+requirements. This first request makes the first Plan active with
+current_item W-001 and W-001 todo, without starting execution. An explicit
+request for draft or idle instead leaves the Plan draft and the index idle.
+An existing partial or unsupported profile is not set
+up this way.
 
 Use the entrypoint's ID-allocation rule. Store PLAN-0014 at
 `docs/plans/0014-subject.md`; obtain a later Plan's next ID and filename with
@@ -61,22 +62,23 @@ active_plan: PLAN-0014
 ---
 ```
 
-Its optional body must not duplicate live state. Use `active_plan: null` when
-idle. A generic Plan edit changes only title, Goal and Non-goals, plus updated
-on real changes. Preserve identity, lifecycle and Work Items.
+Its optional body must not repeat the active Plan, current item or any
+status. Use `active_plan: null` when idle. A generic Plan edit changes only
+title, Goal and Non-goals, plus updated on real changes; id, status,
+current_item and Work Items stay.
 
-Keep Goal to the current target, boundary and each still-binding plan-wide
-constraint's effect and Decision ID. Retain the effect itself: recipients may
-receive only Decisions linked to the selected item, not every ID in Goal. Keep exclusions
-in Non-goals and facts in their owning fields under authoring.md and progress.md.
-Omit dated steering, drafting notes, superseded constraints, copied ADR rationale
-and progress history. No sentence or line quota applies.
+Keep Goal to the current target, its boundary and, for each still-binding plan-wide constraint, what it requires plus its Decision ID, as in `No new runtime dependency (ADR-0031)`: an agent may receive only the
+Decisions linked to its item, not every ID in Goal. Keep exclusions in
+Non-goals and other facts in their fields under authoring.md and progress.md.
+Omit dated steering, drafting notes, superseded constraints, copied ADR
+rationale and progress history. No sentence or line quota applies.
 
-Messages about ongoing work do not authorize Goal edits. When a Goal change is
-authorized, replace superseded constraint wording with the current binding effect;
-keep replacement history in its Decision. Move existing facts only with authority,
-keeping them readable through the dispatched Work Item, its Decisions or a
-repository contract that the agent has demonstrably loaded.
+Messages about ongoing work do not authorize Goal edits. When a Goal change
+is authorized, replace superseded constraint wording with what binds now;
+keep replacement history in its Decision. Move existing facts only when
+authorized, to where the executing agent reads them: the dispatched Work
+Item, its Decisions or a repository rule file the agent has demonstrably
+loaded.
 
 ## Maintain Decisions when creating a Plan
 
@@ -88,10 +90,8 @@ entrypoint's metadata operation, not a cleanup of every Decision.
 Within this scope, remove temporary Decisions whose end or fulfilment is proved,
 superseded Decisions and obsolete links under
 [Decision cleanup](native-decision-format.md#scoped-decision-cleanup).
-Preserve every current constraint, including a binding condition not currently
-linked to a Work Item, and dependencies of other non-terminal Plans. Transfer a
-still-needed effect unchanged to its readable current owner before removing
-its old record; uncertain effects remain. A new Plan does not end a constraint.
+Transfer a still-needed effect
+unchanged into its replacement or another current record where it stays readable, before removing the old record; uncertain effects remain. A new Plan does not end a constraint.
 
 This targeted maintenance needs no separate whole-project audit. Comprehensive
 cleanup requires an explicit maintenance request through repair.md; ordinary
@@ -125,12 +125,12 @@ item is terminal, prepare one coherent update:
 | Plan | `status: completed`; no current_item. |
 | Index | `active_plan: null`. |
 
-Write the index last and validate the complete profile through progress.md.
+Validate the complete profile through progress.md.
 Paused work must first resume. Create no placeholder work to avoid idle.
 
 Cancel a draft only on explicit direction. An active Plan cannot be cancelled
-or completed with a standalone status edit: reconcile current work and index
-in the same prepared change.
+or completed by editing its status alone: update its current item and the
+index in the same prepared change.
 
 Cancelled and completed Plans are terminal; do not reactivate them. The
 wholly-unstarted exception below permits only its stated rewrite or deletion,
@@ -140,30 +140,31 @@ never a lifecycle transition.
 
 An explicit rewrite or deletion may use this exception only when the whole
 Plan has never executed. Activation alone is not execution. Any in_progress,
-paused or done item, or actual execution evidence, defeats the exception.
-Check cancelled-item Evidence; if start history is unclear, ask.
+paused or done item, or any actual evidence that work was performed (in an Evidence field or elsewhere), rules the exception out. Read the Evidence of cancelled items; if it is unclear whether work
+started, ask.
 
-A confirmed unstarted Plan may have requested authored fields rewritten on
-todo or cancelled items, even in a cancelled Plan. Preserve IDs, references,
-Evidence, order and lifecycle. Cancelled items remain cancelled, with empty
-blockers and no Next action. This neither reopens work nor applies to executed
-history. Ordinary todo refinement uses authoring.md with progress.md permissions.
+In a Plan confirmed as unstarted, the requested authored fields of todo or
+cancelled items may be rewritten, even in a cancelled Plan. Keep IDs,
+references, Evidence, order and every status. Cancelled items remain
+cancelled, with empty blockers and no Next action. Ordinary todo refinement
+uses authoring.md with progress.md permissions.
 
-Before authorized deletion inspect incoming references and validate the complete
-proposed remaining profile. Resolve invalid references without rewriting
-retained history or deleting linked Decisions. If active, set the index idle
-unless an eligible replacement was explicitly selected. Retain the index and
-canonical directories even when no Plans remain. No cancellation record or
-placeholder is required. Once execution began, retain the Plan and cancel
-through the ordinary route instead of deleting it.
+Before authorized deletion, search the other records for references to the
+Plan and validate the complete profile as it would remain. Resolve invalid
+references without rewriting retained history or deleting linked Decisions.
+If active, set the index idle unless an eligible replacement was explicitly
+selected. Retain the index, docs/plans and docs/decisions even when no Plans
+remain. No cancellation record or placeholder is required. Once execution
+began, retain the Plan and cancel through the ordinary route instead of
+deleting it.
 
 ## Historical priority and explicit returns
 
-Do not create new title prefixes. Read existing `Deferred after W-001:` as an
-anchored deferred segment in its stored arrival order, and `Prioritized after
+Do not create new title prefixes. Read existing `Deferred after W-001:` as
+work deferred until after W-001, in its stored arrival order, and `Prioritized after
 W-001:` as an explicitly chosen successor. Preserve that priority on recovery.
-A missing or later anchor, duplicate priorities for one anchor or a conflict with
-an explicit return requires a choice; never silently normalize history.
+A missing or later anchor, duplicate priorities for one anchor or a conflict
+with an explicit return requires a choice; without it, never rewrite, drop or reorder anything to make history consistent.
 
 Only when the user explicitly requests return after redirect, pause the outgoing
 started item and retain the binding return in Instructions:

@@ -1,9 +1,8 @@
 # Read-only project state
 
-Use this route to answer questions about existing project knowledge without
-changing canonical files. It works without the native format guides. The
-commands below follow SKILL.md's Helper invocations rule. A read-only reviewer
-does not capture sources to files and reports any required input that a
+Use this route to answer questions from PROJECT_INDEX.md and the existing Plans, Work Items and Decisions without changing any of them. It works without the native format guides.
+The commands below follow SKILL.md's Helper invocations rule. A read-only
+reviewer saves no source to a file and reports any required input that a
 permitted read cannot deliver completely.
 
 ## Contents
@@ -41,18 +40,18 @@ Omit --plan to use the index's active Plan. The position response contains:
 - `open_decisions`: proposed ADRs linked from the current item.
 - `legacy_next_action`: the old field, included only when it exists.
 
-The helper reports position without inferring returns, instruction fulfilment,
-acceptance or start permission; it selects and repairs nothing. All explicitly
-active Steps appear even around unknown gaps, with a guidance warning. Unknown
-progress uses progress.md's recovery route, not automatic repair. If all Steps
-are terminal, inspect outstanding Acceptance/Evidence without inventing a Step
-or repeating effects. No Steps means a whole-item unit; no current_item returns null.
+The helper only reports position: it infers no return, instruction
+fulfilment, acceptance or start permission and selects and repairs nothing.
+All explicitly active Steps appear even around unknown
+gaps, with a guidance warning. Settle unknown progress through progress.md's
+recovery rule, not by automatic repair. If all Steps are terminal, check
+which Acceptance criteria Evidence does not yet cover; invent no Step and
+repeat no effect. No Steps means a whole-item unit; no current_item returns null.
 
 ## Select Work Item or dispatch-unit context
 
-Select current or explicitly named Work Item context with the bundled script
-under SKILL.md's Runtime helpers and Helper invocations rules. The commands
-below are complete; no source read is needed to invoke them. Run:
+Select current or explicitly named Work Item context with the bundled script.
+The commands below are complete; no source read is needed to invoke them. Run:
 
 ```text
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
@@ -95,16 +94,18 @@ The selector reads canonical files internally, emits no unrelated Work Item or
 Decision body, never truncates, and never falls back to raw files. Its default
 UTF-8 output budget is 65,536 bytes, an internal default. If this default or an
 agent-selected internal budget overflows, explicitly retry once with
-`--max-output-bytes <required_bytes>` from the diagnostic. Never raise a binding
-cap; capture complete output under the actual outer tool limit. A malformed profile, ambiguous record,
+`--max-output-bytes <required_bytes>` from the diagnostic. Never raise a
+limit the host or task imposes; capture complete output under that actual
+outer tool limit. A malformed profile, ambiguous record,
 redirected path, missing reference, or budget overflow returns one structured
 diagnostic and no partial context.
 
-Load relevant proposals separately through the inventory below, all for a full
-audit. Read dependency Evidence, bounded graph state, queued/paused returns and
-other complete Work Items only as the operation needs; never widen the selector
-response. Apply SKILL.md's profile-specific Runtime helpers rule when Python
-3.11+ is unavailable. Helper failure stops selection, without invented partial context.
+Load relevant proposals separately through the inventory below. Read
+dependency Evidence, bounded graph state, queued/paused returns and other
+complete Work Items only as the operation needs; never add them to the
+selector response. Apply SKILL.md's profile-specific Runtime helpers rule
+when Python 3.11+ is unavailable. A helper failure stops selection; do not
+assemble partial context yourself.
 
 ## Read state outside the selector
 
@@ -134,7 +135,7 @@ details when relevant; do not delete, summarize in place, or move them into an
 unsupported archive to shorten context. Use a successor Plan only when the old
 goal is actually complete and the ordinary lifecycle permits the transition.
 
-Status, completion, authority and acceptance come from the records, not from
+Read status, completion, permission and acceptance from the records, not from
 filenames, directory presence, implementation files, Git history or old audit
 evidence. If the index is malformed, the declared version is unsupported or a
 referenced record cannot be resolved unambiguously, report that instead of
@@ -152,12 +153,13 @@ mode with --plan, --position, --work-item or --unit. The normal output budget
 and diagnostic handling apply. This is an inventory, not full profile validation.
 
 Use each returned path to read and report relevant proposals (all for a full
-audit), then apply the entrypoint's choice policy. Keep unrelated work moving.
+audit), then apply the entrypoint's rule for unresolved choices; unrelated
+work continues.
 Without suitable Python 3.11+, follow the selector's manual route named in
 SKILL.md.
 
 ## Report the boundary
 
-Name the canonical records that supplied the answer. Do not claim complete
+Name the record files that supplied the answer. Do not claim complete
 project validation when only the index, selected Work Item, and proposal
 summaries were inspected.
