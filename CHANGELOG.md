@@ -1,15 +1,15 @@
 # Changelog
 
-## Unreleased - 2026-11-12 - Concrete instructions and release command
+## 2026-11-12 - Concrete instructions and release command
 
 - State each rule as a trigger, an action and a result the agent can check itself, and remove statements that reach the same reader twice.
 - Reword the shared writing, machine-data, shell and output-delivery rules the same way.
 
-## Unreleased - 2026-11-11 - Size check for placed components and tested models
+## 2026-11-11 - Size check for placed components and tested models
 
 - Name the tested models and the minimum reasoning effort in the README.
 
-## Unreleased - 2026-11-10 - Leaner instructions and Plan validator fixes
+## 2026-11-10 - Leaner instructions and Plan validator fixes
 
 - Fix: a done or cancelled Work Item that depends on cancelled work no longer makes the profile invalid, so a Plan with cancelled dependent work can be closed.
 - Fix: a profile without Decisions stays valid after a fresh clone, where Git drops the empty `docs/decisions` directory. Proposal inventory and next-ID lookup treat it as empty too.
@@ -19,39 +19,39 @@
 - Add contents lists to references over 100 lines.
 - Record requested work that conflicts with Goal, Non-goals or a Decision as a todo item that states the stop, and link the open choice as a proposed Decision, instead of asking before writing.
 
-## Unreleased - 2026-10-30 - Source reading and UTF-8 diagnostics
+## 2026-10-30 - Source reading and UTF-8 diagnostics
 
 - Clarify direct source reading and producer-owned instruction-design loading while preserving report evaluation.
 - Explain retained bytes, child status and unresolved text interpretation after invalid UTF-8.
 - Remove redundant layout wording without changing activation or sibling requirements.
 
-## Unreleased - 2026-10-30 - Capture and diagnostic follow-up
+## 2026-10-30 - Capture and diagnostic follow-up
 
 - Keep malformed Step diagnostics separate from legacy continuation and identify trailing whitespace and invalid batch dates.
 - Support complete command capture without a numeric token limit and retain primary failure diagnostics.
 
-## Unreleased - 2026-10-30 - Shared criteria and focused helper fixes
+## 2026-10-30 - Shared criteria and focused helper fixes
 
 - Align selector and validator grammar, active selection, root boundaries and actionable source diagnostics.
 - Keep recoverable full context, compact JSON and bounded nested-record warnings without promising a snapshot.
 - Use host-neutral General guidance and describe the development cycle.
 
-## Unreleased - 2026-10-29 - Consistent native records
+## 2026-10-29 - Consistent native records
 
 - Share Plan section boundaries between selector and validator; preserve nested Goal headings and diagnose unowned text and actual parse failures.
 - Keep malformed Markdown filenames visible during ID allocation and make selection diagnostics actionable.
 - Align General fallbacks, activation and profile wording with the native contracts; preserve new Decision binding markers.
 - Preserve failed capture bytes and bounded cleanup through the shared runtime helper.
 
-## Unreleased - 2026-10-29 - Compatibility metadata
+## 2026-10-29 - Compatibility metadata
 
 - Remove wording that could imply completed host tests from the compatibility declaration.
 
-## Unreleased - 2026-10-29 - Follow-up corrections
+## 2026-10-29 - Follow-up corrections
 
 - Restore early data and disputed-conclusion routes; link Goal constraints, protect non-terminal Plans and identify the owner of copied validator diagnostics.
 
-## Unreleased - 2026-10-29
+## 2026-10-29
 
 - Reuse known project lifetime and maintenance intent, and retain material clarifications in Goal or Non-goals for the next agent.
 - Consolidate continuation and field guidance. Keep desired outcomes separate from observed evidence, and create no report merely to fit the Evidence field limit.
@@ -60,40 +60,40 @@
 - Align the Evidence repair diagnostic with its field rules, allow manual inspection of an explicitly named inactive Plan and clarify preservation of a Decision's necessary reasons.
 - Targeted gpt-6.1-sol / low tests in Codex covered saved maintenance intent, material clarification and scoped Decision cleanup, including protected Decisions, untracked content and ordinary continuation. These fixture results do not establish broader lifecycle or other-host behavior.
 
-## Unreleased - 2026-10-28 - Review corrections
+## 2026-10-28 - Review corrections
 
 - Describe execution and Plan ownership without legacy role names while preserving Step scope and continuation boundaries.
 
-## Unreleased - 2026-10-28 - Instruction design
+## 2026-10-28 - Instruction design
 
 - Keep the context a fresh agent needs to resume Plan work in its existing fields, including completed effects, live authority and evidence limits.
 - Clarify Decision maintenance and content changes with compact flows. Keep the same binding conditions, lifecycle and acceptance boundaries.
 - Align manual dispatch context with the selector contract, shorten the activation description and derive initial Plan wording from authorized direction without a separate field questionnaire.
 - Clarify that initial durable-profile authoring selects the first Plan and todo item without starting execution. An explicit draft or idle request takes precedence.
 
-## Unreleased - 2026-10-28
+## 2026-10-28
 
 - Keep Acceptance free of restated guarantees the work cannot plausibly break, and require a separate requirement before forbidding removal of an existing mechanism.
 
-## Unreleased - 2026-10-20
+## 2026-10-20
 
 - Keep required text complete when choosing how to read it. File size and metadata remain optional, and completed reads need no verification reread.
 
-## Unreleased - 2026-10-19
+## 2026-10-19
 
 - Write reports as compact lists of checked scope, results and relevant gaps. Group equivalent outcomes and refer to existing evidence instead of retelling the run.
 - Apply one shared evidence rule in user and agent exchanges: defend supported conclusions, correct demonstrated errors, and respect user decisions without treating them as factual proof.
 
-## Unreleased - 2026-10-18
+## 2026-10-18
 
 - Reuse known results and request only the scope the next decision needs. Narrow direct tool requests before display when code preprocessing is unavailable.
 
-## Unreleased - 2026-10-15
+## 2026-10-15
 
 - Reuse applicable Decisions before adding new ones. Explicit maintenance can consolidate equivalent Decisions and retire proved temporary conditions and irrelevant links while preserving live constraints and historical review limits.
 - Process complete reports in code, including saved captures and failures. Load the rules before data, preserve required original text, and keep parser errors from echoing stored state. Evaluate producer output before display, retain one-time results, and distinguish saved captures from missing output.
 
-## Unreleased - 2026-10-14
+## 2026-10-14
 
 - Compare nested report data in code and display only decisive results and necessary diagnostics, including structured state stored in text fields.
 - Keep the original kind of work and full verification scope during Plan cleanup. Check all linked Decisions before marking their binding sections for compact delivery. Cleanup removes demonstrably irrelevant Decision links from unstarted items and adds none.
@@ -105,7 +105,7 @@
 - Parse machine reports completely and display checked facts and all in-scope deviations. Reuse fully read shared rules across Skills without hiding required inputs.
 - Recover a known Work Item directly; look up position when current records disagree or return directions matter.
 
-## Unreleased - 2026-10-13
+## 2026-10-13
 
 - Separate progress updates from authoring. Explicit maintenance can shorten old Goals and Decisions while preserving the choice, binding conditions and required checks.
 - Load detailed command capture and full-file delivery only when needed. Keep complete output, failure diagnostics and role permissions.
@@ -118,7 +118,7 @@
   applies. Clarify instruction order, Decision links on started items and Step
   completion rules during repair; remove duplicated succession sentences.
 
-## Unreleased - 2026-10-12
+## 2026-10-12
 
 - Return complete command output directly when it fits; save only oversized
   captures. Verify supplied artifacts once and compare saved native Finals
@@ -132,7 +132,7 @@
   initialization and bounded field reviews without bypassing helper errors.
 - Remove obsolete preventive and ordered reading instructions from maintenance.
 
-## Unreleased - 2026-10-11
+## 2026-10-11
 
 - Make profile discovery and Work Item transition prerequisites explicit in decision tables.
 
@@ -141,7 +141,7 @@
 - Define one bounded original Step for Workflow execution. Remove grouped-Workflow claims from planning and state-reading references; keep selector ranges as inspection data.
 - Allow one missing implementation Step for unchanged binding Acceptance after closure review, followed by normal execution, Step review and closure.
 
-## Unreleased - 2026-10-10
+## 2026-10-10
 
 - Load command capture and large-result delivery only when needed; preserve complete outputs and role permissions.
 - Clarify task and owning-Plan language; unrelated questions do not translate records.
@@ -418,7 +418,7 @@
 - Made every Scoville Skill optional and independently usable. Discovering a
   sibling does not install or activate it.
 
-## 2026-08-08: Read-only native profile validator
+## 2026-08-08 - Read-only native profile validator
 
 - Added an optional read-only validator for complete native
   `format_version: 1` profiles with deterministic JSON or text diagnostics.
@@ -426,7 +426,7 @@
   lifecycles, and incomplete reads without modifying project records.
 - Keep manual inspection available when Python or the helper is unavailable.
 
-## 2026-08-08: Native Decisions and complete lifecycle
+## 2026-08-08 - Native Decisions and complete lifecycle
 
 - Added native Decision records and complete lifecycle guidance without adding
   a CLI dependency.
@@ -438,7 +438,7 @@
 - Store material inferred choices as proposals and require explicit acceptance,
   rejection, or revision before they become authoritative.
 
-## 2026-08-08: Initial release
+## 2026-08-08 - Initial release
 
 - Added repository-native Plans and Work Items for durable planning, recovery,
   progress tracking, audits, and handoffs.
