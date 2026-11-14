@@ -1,10 +1,11 @@
 <!-- helper-fallback: scripts/validate_profile.py -->
 # Inspect a profile without Python
 
-General only: load this only when no suitable Python 3.11+ is available. Never use it to
+Load this only when no suitable Python 3.11+ is available. Never use it to
 bypass a missing or failing helper with a suitable interpreter. Require the complete
-supported profile. After edits inspect the index, every Plan and Decision
-file and every reference between them. Read full records when partial reads
+supported profile. After edits inspect the changed files and the references
+they add or remove; inspect the whole profile only on a validation or audit
+request. Read full records when partial reads
 cannot establish a rule below. Truncated output proves no absence. This is
 manual structural inspection, not validator output or semantic acceptance.
 Claim no pass while a reference is unresolved.
@@ -149,6 +150,5 @@ Every member shares the same ID and identical ordered complete member list.
 Reject absent members, malformed IDs and asymmetric metadata. Preserve existing
 metadata, never generate new batches, and never claim to recompute an old hash.
 
-After writes inspect the final saved profile. Report checked paths and rules
-as native structural inspection. Separately assess permission, history,
-record meaning and whether Evidence suffices under SKILL.md and progress.md.
+Separately assess permission, history, record meaning and whether Evidence
+suffices under SKILL.md and progress.md.

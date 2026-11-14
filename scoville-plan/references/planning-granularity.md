@@ -1,7 +1,7 @@
 # Work Item and Step checklist
 
 Size and shape work for the maintenance and development intent retained in
-Goal/Non-goals under [authoring.md](authoring.md). Use the simplest sound solution
+the records under [authoring.md](authoring.md). Use the simplest sound solution
 in the responsible file or component.
 
 - Use a Work Item for a result that can be accepted, blocked, resumed or handed

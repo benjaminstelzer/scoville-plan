@@ -62,7 +62,7 @@ without discussion history or unnecessary rationale: the choice must be
 implementable and verifiable without them. A new Decision without a Plan uses
 the task request's language.
 
-Keep all seven template headings exactly once; use `[]` for an empty background section.
+Keep all seven template headings exactly once; write `[]` under any section with nothing to record rather than inventing a consequence, check or trigger.
 Write exactly `Binding sections: complete` as the first non-blank content line under Decision only when the four binding sections alone carry everything the choice, its implementation, verification and revisit need.
 A context consumer may then deliver the four binding sections unchanged, with frontmatter
 and title, without background. Unmarked Decisions are delivered complete.
@@ -136,8 +136,8 @@ Supersession preserves both records:
 1. Create the accepted replacement with `supersedes: ADR-0001` after scope.
 2. Set old status superseded and reciprocal `superseded_by: ADR-0002` after any supersedes.
 3. Replace links in affected todo items. For started items, append the accepted
-   replacement, retain the older link as history and explain the change, except
-   when scoped cleanup below removes an irrelevant link.
+   replacement and retain the older link as history, except when scoped
+   cleanup below removes an irrelevant link.
 4. Validate the coherent transition through progress.md.
 
 Links from terminal records (done or cancelled items, completed or cancelled Plans) alone do not block replacement. Rejecting
@@ -170,8 +170,9 @@ profile; a valid structure proves neither meaning nor permission to delete.
 
 ## Existing batch metadata
 
-Write new accept or reject transitions individually and validate after each
-completed operation. Never create transition_batch or transition_batch_members.
+Write each new accept or reject transition in its own Decision file and
+validate once after they are saved. Never create
+transition_batch or transition_batch_members.
 Preserve those fields when already present, including later lifecycle changes.
 Existing batch IDs are `batch-YYYYMMDD-N` (positive N) or 64 hexadecimal digits.
 Both fields occur together; members are existing unique ADR IDs, each lists

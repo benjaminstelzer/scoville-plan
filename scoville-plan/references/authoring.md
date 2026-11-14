@@ -28,20 +28,26 @@ Outcome: One independently resumable result.
 Acceptance: Distinct necessary observable conditions and required results; follow the Acceptance rules below.
 Instructions: []
 Steps:
-1. [status: todo] Perform one bounded action at the known repository-relative paths; name its own observable completion condition and the required checks that verify it.
+1. [status: todo] Perform one bounded action at the known repository-relative paths; add how to tell it is done only where the action leaves that unclear.
 Evidence: []
 ```
 
 New Work Items write Instructions on one line or use [], include at least one
 Step with status and omit Next action. Work Item Status and Acceptance cover
-the whole outcome. Each Step names its bounded action, its own observable
-completion condition and required checks; status records observed progress.
+the whole outcome. Each Step names its bounded action and, where the action
+does not make it evident, how to tell it is done and any check the Step
+itself requires; status records observed progress.
 Steps have no separate Acceptance or dependencies. See progress.md for legacy
 continuation.
 [Granularity](planning-granularity.md) helps where outcome or Step boundaries
 need judgment; a routine insertion with known boundaries does not need it.
 
 ## Insert, refine and order
+
+Added work that no Work Item covers, that the user did not ask to plan or
+track and that finishes in this session gets no Work Item unless a
+repository rule requires a record; do it directly under the entrypoint's
+rule 7.
 
 Use the entrypoint's ID-allocation rule with
 `select_context.py --root "<project-root>" --next-id work-item --plan PLAN-NNNN --format json`.
@@ -72,9 +78,10 @@ when it is unclear what to record.
 Reuse established intent for the result's lifespan, maintenance and further
 development. Ask only about uncertainty that would change the solution, such
 as a one-off script versus a maintained module, and reuse the answer. Retain
-the intent and any clarification in the existing Goal or Non-goals
-under the [Goal lifecycle](native-project-lifecycle.md#create-and-refine), so a
-fresh recipient can use it without chat history.
+the answer where a fresh recipient reads it without chat history: in the Work
+Item it governs (Outcome or Instructions of a todo item, Instructions of a
+started one), or in Goal or Non-goals when it binds the whole Plan and a Goal
+change is authorized under the [Goal lifecycle](native-project-lifecycle.md#create-and-refine).
 
 Move whole todo blocks without renumbering. Delete an item only when another
 item remains and no `Depends on` names it. Deleting the current item needs a

@@ -7,9 +7,9 @@ recovery do not load this route. For text cleanup without reassessing
 progress, use Maintenance below.
 
 When repairing or cleaning up Step text, apply [authoring.md](authoring.md):
-each Step names a bounded action, its observable completion condition and
-required checks. Take every condition only from the originally authorized
-action and its binding requirements, never current code, tests or
+each Step names a bounded action and, where the action leaves it unclear, its
+completion condition and required checks. Take every condition only from
+the originally authorized action and its binding requirements, never current code, tests or
 assumptions. Do not copy whole-item Acceptance. Keep scope, safeguards,
 prohibitions, order and completed effects. Keep text of uncertain meaning and
 ask before editing it. Leave a Step unchanged while its execution or review

@@ -43,10 +43,11 @@ only for output-field details, dispatch-unit selection or wider read tasks.
 Continuation contract: keep records resumable from the files alone, with
 current item and Step, remaining action, completed effects, governing
 Decisions and relevant proposals, live permissions and stops, binding
-Acceptance, the responsible source files, observations and their limits, and
-the next permitted action. Each fact stands once in its field, without a
-recovery log. For a required readable source, give its exact path and
-section with a reading instruction; otherwise state the needed facts.
+Acceptance, the responsible source files, and observations and their limits;
+the next action is the first unfinished Step. Each fact stands once in its
+field, without a recovery log. For a required readable source, give its
+exact path and section with a reading instruction; otherwise state the
+needed facts.
 
 Edit only the record that holds the field, replacing text that occurs once in
 the file. Reject redirected (symlink, junction or other reparse point) or out-of-project targets and leave
@@ -56,10 +57,12 @@ into a shell command.
 
 1. Prepare the complete consistent result before writing; save related files
    together, index last.
-2. Check the saved affected blocks and this edit's diff for meaning,
-   permissions, current conditions and recorded Acceptance results, then
-   validate. Check encoding where a warning or changed text gives a concrete
-   concern.
+2. After an update that changes a Work Item, Plan or Decision status, adds
+   or removes records or links, or spans several files, check the saved diff
+   for lost meaning, permissions, current conditions and recorded Acceptance
+   results, then validate once. A Step status or Evidence edit needs neither
+   until the Work Item's status changes or the work is handed off. Check
+   encoding where a warning or changed text gives a concrete concern.
 
 This check covers only inspected contents. Reuse unchanged instructions
 without extra copies or receipts. On a concurrent change or a partial write,
@@ -92,8 +95,7 @@ A started item permits these changes:
 - Correct a stale path, version reference or other purely formal wording only
   when evidence shows unchanged behavior, compatibility, data, permissions
   and verification scope, such as `docs/setup.md` renamed
-  `docs/install.md`. Keep the old wording and reason in one referenced note
-  or existing Git history. A changed expected result or weaker Acceptance is
+  `docs/install.md`. A changed expected result or weaker Acceptance is
   material, not formal: obtain the user's decision before dependent work and
   record it in the existing Decision system. Add a Decision link or correct formal wording in the existing Work Item, not in a replacement.
 - Split the remaining work of a started Step into consecutive Steps of the
@@ -137,13 +139,13 @@ repeating them.
 
 ## Evidence
 
-Record observed results, that a required review took place, confirmed open
-defects and the limits needed to establish accepted work and the next
-permitted action. For an effect that cannot be repeated, keep what it was and
-how it ended; do not repeat an accepted effect to recreate its evidence. Name
-the kind of check: source review, structural check, behavioral test, runtime
-or publication. Keep facts that further development or a retention rule
-needs, not review transcripts or run chronology.
+Record what you ran or inspected and what it showed, specific enough to
+repeat (the command, test, file or review), a required review's outcome,
+confirmed open defects and the limits of what was checked. For an effect
+that cannot be repeated, keep what it was and how it ended; do not repeat an
+accepted effect to recreate its evidence. Keep facts that further
+development or a retention rule needs, not review transcripts or run
+chronology.
 
 The field is normally sufficient. Link existing reports for needed detail;
 create or update one only when the task requires that detail, not to fit the
@@ -151,7 +153,7 @@ field limit. Create no archive, copy, hash or inventory to document checks,
 reviews or cleanup. Keep progression in its Plan fields.
 
 Prefer one-line plain text, for example:
-`Evidence: Unicode cases passed; independent review performed; open: installer ordering, Step 3.`
+`Evidence: pytest tests/test_thumbnails.py passed, 12 tests; required review found no defects; open: animated GIF input untested (Step 3).`
 Keep it within the supported 200 characters. Commas and brackets within the text
 are allowed; do not start plain text with `[`. Use `[]` when nothing was observed.
 Preserve supported existing lists.
@@ -204,7 +206,7 @@ flowchart TD
   select -->|yes| selected["Set current_item; blockers may remain; do not start"]
   select -->|no| stop["Stop dependent work; resolve the missing prerequisite or choice"]
   change -->|start or resume| ready{"Selected current todo or paused item; no blockers or unresolved dependent Decision?"}
-  ready -->|yes| started["Set item in_progress; record actually started Steps; save and validate before execution"]
+  ready -->|yes| started["Set item in_progress; record actually started Steps; save before execution"]
   ready -->|no| stop
   change -->|pause| pause{"Current in_progress item; explicit direction or authorized pause/return?"}
   pause -->|yes| paused["Set paused; preserve observed position and constraints"]

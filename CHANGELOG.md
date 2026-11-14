@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-14 - Goodhart corrections
+
+- Work that no Work Item covers, that you did not ask to plan and that finishes in the session is done directly, also during a running Work Item. A planning profile alone no longer makes work Plan work.
+- A Step status or Evidence edit needs no validator run of its own; validate once after an update that changes status, records or links.
+- Evidence names what was run or inspected and what it showed.
+- A Decision records a choice between design or product alternatives; activating, cancelling or deleting lives in status fields. An open question becomes a proposal only when the dependent work stops before you answer.
+- A Decision section with nothing to record holds `[]` instead of an invented consequence or trigger.
+- Shared rules: a final report after a small change no longer loads the writing reference, a test runner's console summary is not machine data, and a complete copy of a reference in context counts as read.
+
 ## 2026-11-12 - Concrete instructions and release command
 
 - State each rule as a trigger, an action and a result the agent can check itself, and remove statements that reach the same reader twice.
