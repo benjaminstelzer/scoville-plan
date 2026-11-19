@@ -8,12 +8,15 @@ compatibility: "Any Agent Skills host with repository read and write access. Dir
 
 Maintain native `format_version: 1` Plans, Work Items and Decisions through
 direct Markdown and YAML edits to the repository's existing planning records.
-Do work that no Work Item covers, that the user did not ask to plan and that
-finishes in this session directly, without a Plan record or helper run, unless
-a repository rule requires one. A planning profile alone does not make work
-Plan work. For uncovered work that needs a record under the request or project
-rules, or needs to continue across sessions, use authoring.md in an existing
-complete profile; without one, the profile table below decides.
+
+## Route new work
+
+Use the existing Work Item if it covers the request. Handle uncovered work
+directly when it fits this session, unless the user or project rules call for
+a Plan record. A planning profile on its own is no reason to create a record.
+For uncovered work that needs a record or must continue across sessions,
+use [Authoring](references/authoring.md) in a complete profile. Otherwise
+use the profile table below.
 
 If the user explicitly opts out, use neither this Skill nor its references or
 records, and report a repository rule that requires them.
@@ -45,40 +48,23 @@ Reads and Skill upgrades need no migration.
    deletion, changed scope, changed Acceptance requirements, an ambiguous
    successor or a Decision transition, and only where the applicable accepted
    Decisions and the current item's Instructions leave it open. New work
-   that the entrypoint routes to a todo Work Item does not wait for such a choice;
+   that [Route new work](#route-new-work) sends to authoring as a todo Work Item does not wait for such a choice;
    authoring.md has the rule. After an interruption or compaction, recover
    and continue under progress.md. Repeat a question or status report only
    after a material change, on request or where a rule requires it.
-4. Before creating a Decision, search existing Decision titles and scopes for
-   the same choice. Read plausible matches completely and reuse one that
-   already governs it, so that one choice has one record. Keep temporary
-   sequencing or execution direction in Instructions, and a user's model or
-   reasoning choice for a Step in its execution annotation, unless it changes
-   a material choice or a permission. Record a user's choice between design or
-   product alternatives as an accepted Decision when work beyond the current
-   Work Item must follow it; a choice that governs one Work Item stays in that
-   item under authoring.md. Lifecycle choices such as activation, cancellation
-   or deletion live in status fields. For an unresolved choice, report its
-   alternatives, tradeoffs and effect and ask before the work that depends on
-   it; only that work waits. Record it as a proposal only when that work stops
-   before the user answers. Link a Decision where it governs the
-   item's Outcome, Steps, Acceptance, Instructions, required checks or
-   permissions, not for background or shared history. After a Work Item has
-   started, add each relevant proposal to its Decisions field; relevant
-   accepted Decisions may be added too. Read a Decision's state from the
-   `status` in its own file.
-5. When you start or resume a Work Item, except for an assigned read-only
+   For choices that need a Decision, follow [Record and link Decisions](#record-and-link-decisions).
+4. When you start or resume a Work Item, except for an assigned read-only
    field review, classify the planning profile with the table below, or reuse
    an unchanged classification. For a complete supported profile, run the
    proposal inventory and read the relevant proposals (all for a full audit);
    an inventory error does not change the classification.
-6. Set a Work Item to done only through progress.md's Select and finish;
+5. Set a Work Item to done only through progress.md's Select and finish;
    Evidence names the observations that establish completion.
-7. An explicit stop, or a correction that invalidates running work, halts the execution it affects. Answer an informational question and continue. In
+6. An explicit stop, or a correction that invalidates running work, halts the execution it affects. Answer an informational question and continue. In
    a mixed message, separate the question from the instructions that add or
-   change work. Apply the entrypoint's work-routing rule to added work even
+   change work. Apply [Route new work](#route-new-work) to additions even
    during a running Work Item. Create no Work Item for maintaining Plan records.
-8. Write each required fact once, in its field: actions in Steps, observations in
+7. Write each required fact once, in its field: actions in Steps, observations in
    Evidence, live conditions in Instructions. Keep a record's language unless
    the user asks for a change. A new Plan uses the language of the task
    request; its Work Items and Decisions use that Plan's language, whatever
@@ -110,6 +96,33 @@ are a complete profile without Decisions, since Git stores no empty directory.
 | Wholly absent; durable Plan requested | Initialize through the lifecycle route. |
 | Wholly absent; no durable Plan requested | Leave it uninitialized. |
 | Partial, foreign, unsupported or ambiguous | Preserve it; repair only an unambiguous format defect that changes no meaning, such as a Step numbered `01.`. |
+
+## Record and link Decisions
+
+Before creating a Decision, search existing Decision titles and scopes for
+the same choice. Read plausible matches completely and reuse one that
+already governs it, so that one choice has one record. Keep temporary
+sequencing or execution direction in Instructions, and a user's model or
+reasoning choice for a Step in its execution annotation, unless it changes
+a material choice or a permission.
+
+Record a user's choice between design or
+product alternatives as an accepted Decision when work beyond the current
+Work Item must follow it; a choice that governs one Work Item stays in that
+item under authoring.md. Lifecycle choices such as activation, cancellation
+or deletion live in status fields.
+
+For an unresolved choice, report its
+alternatives, tradeoffs and effect and ask before the work that depends on
+it; only that work waits. Record it as a proposal only when that work stops
+before the user answers.
+
+Link a Decision where it governs the
+item's Outcome, Steps, Acceptance, Instructions, required checks or
+permissions, not for background or shared history. After a Work Item has
+started, add each relevant proposal to its Decisions field; relevant
+accepted Decisions may be added too. Read a Decision's state from the
+`status` in its own file.
 
 ## Runtime helpers
 

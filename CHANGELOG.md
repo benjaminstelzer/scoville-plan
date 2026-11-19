@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-19 - New work and Decisions
+
+The entry point groups the rules for routing new requests and for recording and linking Decisions. The authoring reference links directly to those rules.
+
 ## 2026-11-18 - Repeated completion and validation rules removed
 
 - Each rule is stated once. The final check asks whether the work does what the Skill requires instead of listing the rules again. Not tested with models yet.

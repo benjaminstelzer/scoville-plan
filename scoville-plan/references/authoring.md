@@ -44,7 +44,7 @@ need judgment; a routine insertion with known boundaries does not need it.
 
 ## Insert, refine and order
 
-Use the entrypoint's work-routing rule to decide whether added work needs
+Use [Route new work](../SKILL.md#route-new-work) to decide whether added work needs
 a record. This section governs work that belongs in the Plan.
 
 Use the entrypoint's ID-allocation rule with
