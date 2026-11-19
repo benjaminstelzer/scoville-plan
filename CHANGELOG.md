@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-11-18 - Repeated completion and validation rules removed
+
+- Each rule is stated once. The final check asks whether the work does what the Skill requires instead of listing the rules again. Not tested with models yet.
+
+## 2026-11-15 - Rules that contradicted each other
+
+- A Decision whose choice you have already made is recorded as accepted without a further question. A proposed Decision that turns out temporary or duplicate is rejected; an accepted one is deprecated.
+- A done or cancelled Work Item needs Evidence; a cancellation without observed work records your direction and its date. `[]` remains valid on an open item.
+- Cancelling a Work Item that is not the current one keeps `current_item`. Switching away from an active Plan removes its `current_item`, and a completed Plan requires every item to be terminal.
+- Your model or reasoning choice for a Step is kept in the Step's execution annotation.
+- The complete profile is validated after an update that adds or removes a Plan, Work Item, Decision or link; other record edits need no validator run.
+- Helper output that may exceed the display limit is captured with `--publish-full`; `--max-output-tokens` is added only with a declared limit.
+- Uncovered work that needs a record is authored in an existing complete profile; without one, the profile table decides.
+- Shared rules: a reply uses the language of the request, while a record or file you edit keeps the language it is written in. Files saved with `--publish-full` are delivered output, so cleanup leaves them in place. A rule that holds only until something happens states that end in the rule.
+
 ## 2026-11-14 - Goodhart corrections
 
 - Work that no Work Item covers, that you did not ask to plan and that finishes in the session is done directly, also during a running Work Item. A planning profile alone no longer makes work Plan work.

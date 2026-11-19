@@ -22,8 +22,6 @@ scope: project/concern
 
 ## Decision
 
-Binding sections: complete
-
 Recommended result or explicit human choice, with necessary reasons.
 
 ## Problem
@@ -83,8 +81,8 @@ Record links to Decisions in each affected Work Item's Decisions field,
 following the entrypoint's linking policy and progress.md's edit permissions.
 A proposal blocks only dependent work; its concrete effect
 may be recorded in Instructions. Changing proposal status does not remove links.
-Create a new Decision as proposed unless explicit human direction already
-authorizes its immediate acceptance. That direction needs no repeated question.
+Create a new Decision as proposed unless the user has already made the choice
+it records; record such a choice as accepted without asking again.
 
 Apply only explicitly authorized transitions:
 
@@ -98,11 +96,11 @@ During explicit maintenance under repair.md, that request authorizes these trans
 
 | Finding | Action |
 | --- | --- |
-| A temporary Decision's end or fulfilment is proved; no binding condition remains. | Deprecate it; no empty replacement is needed. |
-| Equivalent duplicate; every binding effect remains with its owning Decision. | Deprecate the duplicate and redirect its links to the owner. |
+| A temporary Decision's end or fulfilment is proved; no binding condition remains. | Deprecate it if accepted, reject it if proposed; no empty replacement is needed. |
+| Equivalent duplicate; every binding effect remains with its owning Decision. | Deprecate an accepted duplicate or reject a proposed one, and redirect its links to the owner. |
 | A binding condition remains or its end is uncertain. | Keep the conditions and status. |
 
-Age, a temporary title or cancellation alone proves no end. Keep independent
+Age, status, a temporary title, filename or cancellation alone proves no end. Keep independent
 conditions and anything whose end is unknown.
 
 Acceptance adds `accepted: YYYY-MM-DD` between created and scope. Deprecation
@@ -146,12 +144,11 @@ a proposal in favor of another is not supersession.
 ## Scoped Decision cleanup
 
 Supersession records are normally kept. This exception applies only within
-targeted new-Plan maintenance or expressly requested maintenance under
-repair.md. Remove a temporary Decision only when its end or
+expressly requested maintenance under repair.md that asks to remove records
+rather than shorten them; otherwise the table above applies. Remove a temporary Decision only when its end or
 fulfilment is proved and no binding condition remains. Remove a superseded
 Decision only when every still-binding effect is readable in its replacement
-or another current record. Age, status, filename or cancellation alone is
-insufficient.
+or another current record.
 
 Before removal, search all records for the Decision's ID. Keep
 constraints still in force even when unlinked, what other non-terminal Plans
@@ -166,7 +163,7 @@ Delete a file only after verifying its current contents are committed;
 otherwise ask and delete only with the user's explicit approval of that
 deletion. A tracked path or some older committed version does not suffice.
 Add no archive, replacement report or state registry. Validate the resulting
-profile; a valid structure proves neither meaning nor permission to delete.
+profile.
 
 ## Existing batch metadata
 

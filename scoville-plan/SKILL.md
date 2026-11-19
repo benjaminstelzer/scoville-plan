@@ -11,7 +11,9 @@ direct Markdown and YAML edits to the repository's existing planning records.
 Do work that no Work Item covers, that the user did not ask to plan and that
 finishes in this session directly, without a Plan record or helper run, unless
 a repository rule requires one. A planning profile alone does not make work
-Plan work.
+Plan work. For uncovered work that needs a record under the request or project
+rules, or needs to continue across sessions, use authoring.md in an existing
+complete profile; without one, the profile table below decides.
 
 If the user explicitly opts out, use neither this Skill nor its references or
 records, and report a repository rule that requires them.
@@ -43,21 +45,23 @@ Reads and Skill upgrades need no migration.
    deletion, changed scope, changed Acceptance requirements, an ambiguous
    successor or a Decision transition, and only where the applicable accepted
    Decisions and the current item's Instructions leave it open. New work
-   that rule 7 sends to a todo Work Item does not wait for such a choice;
+   that the entrypoint routes to a todo Work Item does not wait for such a choice;
    authoring.md has the rule. After an interruption or compaction, recover
    and continue under progress.md. Repeat a question or status report only
    after a material change, on request or where a rule requires it.
 4. Before creating a Decision, search existing Decision titles and scopes for
    the same choice. Read plausible matches completely and reuse one that
    already governs it, so that one choice has one record. Keep temporary
-   sequencing or execution direction in Instructions unless it changes a
-   material choice or a permission. Record a user's choice between design or
-   product alternatives that later work must follow as an accepted Decision;
-   lifecycle choices such as activation, cancellation or deletion live in
-   status fields. For an unresolved choice, report its alternatives,
-   tradeoffs and effect and ask before the work that depends on it; only that
-   work waits. Record it as a proposal only when that work stops before the
-   user answers. Link a Decision where it governs the
+   sequencing or execution direction in Instructions, and a user's model or
+   reasoning choice for a Step in its execution annotation, unless it changes
+   a material choice or a permission. Record a user's choice between design or
+   product alternatives as an accepted Decision when work beyond the current
+   Work Item must follow it; a choice that governs one Work Item stays in that
+   item under authoring.md. Lifecycle choices such as activation, cancellation
+   or deletion live in status fields. For an unresolved choice, report its
+   alternatives, tradeoffs and effect and ask before the work that depends on
+   it; only that work waits. Record it as a proposal only when that work stops
+   before the user answers. Link a Decision where it governs the
    item's Outcome, Steps, Acceptance, Instructions, required checks or
    permissions, not for background or shared history. After a Work Item has
    started, add each relevant proposal to its Decisions field; relevant
@@ -68,51 +72,18 @@ Reads and Skill upgrades need no migration.
    an unchanged classification. For a complete supported profile, run the
    proposal inventory and read the relevant proposals (all for a full audit);
    an inventory error does not change the classification.
-6. Set a Work Item to done through progress.md only after observing every
-   Acceptance criterion; Evidence names what you ran or inspected and what it
-   showed.
+6. Set a Work Item to done only through progress.md's Select and finish;
+   Evidence names the observations that establish completion.
 7. An explicit stop, or a correction that invalidates running work, halts the execution it affects. Answer an informational question and continue. In
    a mixed message, separate the question from the instructions that add or
-   change work. Do added work directly, also during a running Work Item, when
-   no Work Item covers it, the user did not ask to plan it and it finishes in
-   this session, unless a repository rule requires a record. Append it through
-   authoring.md only when the user wants it tracked or it will not finish now.
-   Create no Work Item for maintaining Plan records.
+   change work. Apply the entrypoint's work-routing rule to added work even
+   during a running Work Item. Create no Work Item for maintaining Plan records.
 8. Write each required fact once, in its field: actions in Steps, observations in
    Evidence, live conditions in Instructions. Keep a record's language unless
    the user asks for a change. A new Plan uses the language of the task
    request; its Work Items and Decisions use that Plan's language, whatever
    language later questions use. Field labels, IDs, statuses and technical
    literals stay unchanged.
-
-## Helper invocations
-
-Run the selector and validator commands here and in the references directly,
-with complete UTF-8 output. When their output may exceed the display limit,
-use output delivery's capture call; pass `--max-output-tokens` only with a
-declared token limit, never an invented one:
-
-```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" [--max-output-tokens <limit>] [--publish-full --project-root "<project-root>"] --run -- python -X utf8 "<skill-directory>/scripts/<helper.py>" <arguments>
-```
-
-The selector's byte budget limits successful context only. A diagnostic is
-always complete and means nothing was selected: read it whole. ID allocation:
-every `--next-id` mode suggests the highest ID plus one and never reuses an
-interior gap. It counts filename and metadata numbers, reports mismatches and
-reserves nothing, so recheck ID and filename collisions directly before
-creating the record.
-
-## Proposal inventory
-
-```text
-python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
-```
-
-Read relevant Decisions from the returned paths. The inventory includes
-unlinked proposals and works without an active Plan and without any Decision
-yet. Open [Inventory details](references/read-only.md#surface-proposals) only
-for output fields or selection-mode constraints.
 
 ## Load only the current route
 
@@ -140,14 +111,6 @@ are a complete profile without Decisions, since Git stores no empty directory.
 | Wholly absent; no durable Plan requested | Leave it uninitialized. |
 | Partial, foreign, unsupported or ambiguous | Preserve it; repair only an unambiguous format defect that changes no meaning, such as a Step numbered `01.`. |
 
-Related Plan, Decision and index edits form one update. Validate the complete
-profile once after the update is saved and before you report it or start
-dependent work, not after each field write. A Step status or Evidence edit
-needs no validation of its own until the Work Item's status changes or the
-work is handed off. progress.md has the command, the diagnostic handling and
-the safe-write and continuation rules. In the final report, also name active
-or blocked work and the next action.
-
 ## Runtime helpers
 
 Use the bundled helpers for their operations. Read their invocation instructions,
@@ -164,15 +127,57 @@ not their source, unless diagnosing a failure.
 | `scripts/select_context.py` | [select_context](references/fallbacks/select_context-fallback.md) |
 | `scripts/validate_profile.py` | [validate_profile](references/fallbacks/validate_profile-fallback.md) |
 
+## Helper invocations
+
+Verify the interpreter through [Python discovery](references/python-discovery.md)
+when you do not already have one. Select the route above before its call.
+
+Run the selector and validator commands here and in the references directly,
+with complete UTF-8 output. When their output may exceed the display limit,
+use output delivery's capture call with `--publish-full`; add
+`--max-output-tokens` only with a declared token limit, never an invented one:
+
+```text
+python -X utf8 "<skill-directory>/scripts/check_text_size.py" [--max-output-tokens <limit>] --publish-full --project-root "<project-root>" --run -- python -X utf8 "<skill-directory>/scripts/<helper.py>" <arguments>
+```
+
+The selector's byte budget limits successful context only. A diagnostic is
+always complete and means nothing was selected: read it whole. ID allocation:
+every `--next-id` mode suggests the highest ID plus one and never reuses an
+interior gap. It counts filename and metadata numbers, reports mismatches and
+reserves nothing, so recheck ID and filename collisions directly before
+creating the record.
+
+## Proposal inventory
+
+```text
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
+```
+
+Read relevant Decisions from the returned paths. The inventory includes
+unlinked proposals and works without an active Plan and without any Decision
+yet. Open [Inventory details](references/read-only.md#surface-proposals) only
+for output fields or selection-mode constraints.
+
+## Save and verify the result
+
+Related Plan, Decision and index edits form one update. After an update that
+changes a Work Item, Plan or Decision status, adds or removes a Plan, Work
+Item, Decision or link, or spans several files, validate the complete profile once, after it is
+saved and before you report it or start dependent work. A Step status or
+Evidence edit alone needs no validation. progress.md has the command, the
+diagnostic handling and the safe-write and continuation rules. When the update changes active or blocked
+work or the next action, name the new state in the final report.
+
 ## Shared references
 
-Read one when its condition holds. A complete copy already in context counts
-as read, including one embedded in your assignment. Read it again only when
-that copy is incomplete or a reload is requested.
+Read one when its condition holds. A complete, unchanged copy in context
+counts as read, including one embedded in your assignment. Fetch incomplete
+or changed passages, and reload when requested.
 
 - [Writing](references/writing.md): a plan, decision, instruction, review, handoff or a report the user asked for as the result; a disputed conclusion.
 - [Machine data](references/machine-data.md): a structured report, log file or saved state you must evaluate, such as JUnit XML or coverage data; a test runner's console summary is not one.
 - [Shell commands](references/shell-commands.md): composed text or scripts passed through a shell; quoting, PowerShell encoding, exact bytes or several exit statuses matter.
-- [Output delivery](references/output-delivery.md): before a command whose output may exceed the display limit; text that must fit a known limit; delivery as a file.
-- [Python discovery](references/python-discovery.md): a Python command or bundled helper, no interpreter verified this session.
+- [Output delivery](references/output-delivery.md): before a command whose output may exceed the display limit or is needed as evidence and cannot be reproduced; text that must fit a known limit; delivery as a file.
+- [Python discovery](references/python-discovery.md): a bundled helper or other Python you run, no interpreter verified this session.
 - [Instruction design](references/instruction-design.md): a reusable instruction, Skill rule or prompt template.

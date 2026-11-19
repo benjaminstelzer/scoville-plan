@@ -50,18 +50,16 @@ exact path and section with a reading instruction; otherwise state the
 needed facts.
 
 Edit only the record that holds the field, replacing text that occurs once in
-the file. Reject redirected (symlink, junction or other reparse point) or out-of-project targets and leave
-unrelated changes intact. Read and write explicitly as UTF-8, without BOM,
-with LF, through a literal-safe write or patch, never as text interpolated
-into a shell command.
+the file. Reject out-of-project targets and leave unrelated changes intact.
+Read and write explicitly as UTF-8, without BOM, with LF, through a
+literal-safe write or patch, never as text interpolated into a shell command.
 
 1. Prepare the complete consistent result before writing; save related files
    together, index last.
-2. After an update that changes a Work Item, Plan or Decision status, adds
-   or removes records or links, or spans several files, check the saved diff
-   for lost meaning, permissions, current conditions and recorded Acceptance
-   results, then validate once. A Step status or Evidence edit needs neither
-   until the Work Item's status changes or the work is handed off. Check
+2. After an update that SKILL.md's
+   [Save and verify](../SKILL.md#save-and-verify-the-result) requires
+   validated, check the saved diff for lost meaning, permissions, current
+   conditions and recorded Acceptance results, then validate once. Check
    encoding where a warning or changed text gives a concrete concern.
 
 This check covers only inspected contents. Reuse unchanged instructions
@@ -77,7 +75,7 @@ result with unchanged sources.
 | --- | --- |
 | todo in draft or active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
 | in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
-| done or cancelled | No routine edits or state transitions; explicit cleanup under repair.md may shorten Instructions and Evidence; the exceptions below apply |
+| done or cancelled | No routine edits or state transitions; explicit repair under repair.md may add proved Step status and correct established Evidence and Instructions; explicit cleanup under repair.md may shorten Instructions and Evidence; the exceptions below apply |
 
 IDs never change. In a started item, keep scope, dependencies, order and
 completed effects. For any status, explicit cleanup under repair.md may
@@ -96,8 +94,10 @@ A started item permits these changes:
   when evidence shows unchanged behavior, compatibility, data, permissions
   and verification scope, such as `docs/setup.md` renamed
   `docs/install.md`. A changed expected result or weaker Acceptance is
-  material, not formal: obtain the user's decision before dependent work and
-  record it in the existing Decision system. Add a Decision link or correct formal wording in the existing Work Item, not in a replacement.
+  material, not formal: obtain the user's decision before dependent work.
+  With that explicit decision, change the Acceptance in the Work Item and
+  state in its Evidence what the user changed and on which date; record a
+  Decision only when the change applies beyond this Work Item. Add a Decision link or correct formal wording in the existing Work Item, not in a replacement.
 - Split the remaining work of a started Step into consecutive Steps of the
   same item without changing Outcome, Acceptance, constraints or authored
   order. Keep completed parts and their Evidence, and update Step references
@@ -107,7 +107,8 @@ A started item permits these changes:
   named, already binding unchanged Acceptance criterion or Work Item
   requirement. Keep existing Step text, scope, order, completed effects and
   Acceptance.
-  Run the new Step through implementation, required checks and acceptance reviews. Changed
+  Run the new Step through implementation and the checks and acceptance reviews
+  required by the active execution route. Changed
   scope, contradictory requirements or materially unclear meaning need the
   user.
 - After start, an explicit user choice may replace only the execution
@@ -155,24 +156,27 @@ reviews or cleanup. Keep progression in its Plan fields.
 Prefer one-line plain text, for example:
 `Evidence: pytest tests/test_thumbnails.py passed, 12 tests; required review found no defects; open: animated GIF input untested (Step 3).`
 Keep it within the supported 200 characters. Commas and brackets within the text
-are allowed; do not start plain text with `[`. Use `[]` when nothing was observed.
+are allowed; do not start plain text with `[`. Use `[]` on a nonterminal item
+when nothing was observed. A done or cancelled item needs nonempty Evidence;
+for a cancellation without observed work, record the user's direction and
+its date.
 Preserve supported existing lists.
 
 ## Instructions
 
 Instructions holds the additional conditions binding the item now: stops,
-limits, explicit returns or required overall reviews. Actions go in Steps,
-observations in Evidence, status in its field; repeat no Outcome, Acceptance
-or history.
+limits, explicit returns or required overall reviews. Repeat no Outcome,
+Acceptance or history.
 
 Use one short line or exactly []; a missing field is legacy unknown, not [].
 New items write it explicitly. When conditions change, replace the whole
 field with the remaining conditions in current words, dropping fulfilled or
 superseded ones, so that old and new text cannot contradict each other. Keep
 an unclear live condition briefly and ask only if the next action depends on
-its meaning. Before setting an item done or cancelled, confirm that it
-holds no unmet condition. Instructions of a terminal item are history, not
-live direction.
+its meaning. Before completion, confirm that no binding condition remains
+unmet. For cancellation, fulfil the conditions that govern cancellation and
+retain outstanding execution and Acceptance conditions as history.
+Instructions of a terminal item are historical direction.
 
 ## Legacy continuation
 
@@ -187,8 +191,10 @@ Blocked by is `[]` or a comma-space-separated list such as `[EXT-API-KEY]`.
 Labels match `[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}`; prefixes
 `ADR`, `PLAN` and `W` are reserved. Each label is unique and names an actual
 external prerequisite; one invented to satisfy validation would block real work.
-Remove a named blocker only with proof; keep unresolved prerequisites and
-their effect in Evidence.
+Remove a named blocker from continuing work only with proof. On authorized
+cancellation, clear live blockers in the same update as cancellation and
+retain the unresolved prerequisites and their effects in Evidence. Resolve
+prerequisites of the cancellation itself before saving it.
 
 ## Select and finish
 
@@ -205,20 +211,22 @@ flowchart TD
   change -->|select| select{"Active Plan; todo or paused target; dependencies done; no other in_progress item?"}
   select -->|yes| selected["Set current_item; blockers may remain; do not start"]
   select -->|no| stop["Stop dependent work; resolve the missing prerequisite or choice"]
-  change -->|start or resume| ready{"Selected current todo or paused item; no blockers or unresolved dependent Decision?"}
+  change -->|start or resume| ready{"Selected current todo or paused item; dependencies met, no blockers or unresolved dependent Decision; start allowed by scope, Instructions and any legacy Next action?"}
   ready -->|yes| started["Set item in_progress; record actually started Steps; save before execution"]
   ready -->|no| stop
   change -->|pause| pause{"Current in_progress item; explicit direction or authorized pause/return?"}
   pause -->|yes| paused["Set paused; preserve observed position and constraints"]
   pause -->|no| stop
-  change -->|complete| accepted{"Current todo or in_progress; Acceptance observed; dependencies done; blockers cleared?"}
+  change -->|complete| accepted{"Current todo or in_progress; Acceptance observed; all due Steps, checks, reviews and binding conditions fulfilled; dependencies done; blockers cleared?"}
   accepted -->|no| stop
   accepted -->|yes| finish["Retain Evidence; empty Blocked by; remove Next action"]
-  change -->|cancel| cancel{"Explicit direction, evidence and cleared blockers?"}
+  change -->|cancel| cancel{"Explicit direction, observed evidence and cancellation prerequisites met?"}
   cancel -->|no| stop
-  cancel -->|yes| finish
+  cancel -->|authorized Plan cancellation too| cancelPlan["Apply the Plan cancellation through lifecycle without choosing a successor"]
+  cancel -->|authorized cancellation of the current item only| finish
+  cancel -->|authorized cancellation of a non-current item| other["Set cancelled; retain Evidence; empty Blocked by; remove Next action; keep current_item; validate"]
   finish --> last{"All other items terminal?"}
-  last -->|yes| terminal["Finish final item, Plan and index through lifecycle; invent no successor"]
+  last -->|yes| terminal["Apply the requested item status through the applicable Plan lifecycle path"]
   last -->|no| successor{"Eligible exact successor under return and priority rules?"}
   successor -->|yes| next["Set requested done/cancelled status and select successor in one update; validate"]
   successor -->|no| retain["Keep item open; retain observed result in Evidence and unresolved succession in Instructions"]
@@ -266,14 +274,13 @@ intended wording and correct confirmed damage by hand within the editing
 rights above, never automatically: an automatic repair would also rewrite
 intentional examples.
 
-Invoke helpers without loading their Python source. They inspect structure and
-references, not permission, meaning or whether Acceptance is met. No planning
-CLI writes records. Read both exit code and JSON valid:
+Invoke helpers without loading their Python source. No planning CLI writes
+records. Read both exit code and JSON valid:
 
 | Exit / valid | Action |
 | --- | --- |
 | 0 / true | Structural check passed for these bytes; assess semantics separately |
-| 1 / false | Follow ordered file and field diagnostics; repair only unambiguous representation defects and rerun |
+| 1 / false | Follow ordered file and field diagnostics; repair only unambiguous representation defects and departures from your prepared result, then rerun |
 | 2 / null | Inspection incomplete (path, access or I/O); resolve the condition, claim no pass |
 | 3 / null | Helper failure; report it and leave structural acceptance open |
 
@@ -281,5 +288,5 @@ Validation is not a snapshot or a general before/after change detector. The
 Selector can report FILE_CHANGED_DURING_READ when an opened file is no longer
 regular; this does not detect all concurrent edits.
 
-Under the [Runtime helpers rule](../SKILL.md#runtime-helpers), a failed helper leaves the structural check open; a manual pass never replaces it. Report a remaining lifecycle or scope choice
-instead of inventing state to satisfy a diagnostic.
+Report a remaining lifecycle or scope choice instead of inventing state to
+satisfy a diagnostic.

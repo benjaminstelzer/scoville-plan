@@ -3,9 +3,10 @@
 
 Load this only when no suitable Python 3.11+ is available. Never use it to
 bypass a missing or failing helper with a suitable interpreter. Require the complete
-supported profile. After edits inspect the changed files and the references
-they add or remove; inspect the whole profile only on a validation or audit
-request. Read full records when partial reads
+supported profile. Inspect the complete profile when the entrypoint requires
+validation after a saved edit, or the user requests validation or a structural
+audit. If a required inspection cannot be completed, report the missing check
+before dependent work. Read full records when partial reads
 cannot establish a rule below. Truncated output proves no absence. This is
 manual structural inspection, not validator output or semantic acceptance.
 Claim no pass while a reference is unresolved.
@@ -96,7 +97,7 @@ ADR, PLAN and W are reserved prefixes.
 Done/cancelled work has nonempty Evidence, no blockers and no Next action.
 Todo/in_progress/paused needs a nonempty legacy Next action or at least one
 written Step status. New authors write every Step with status and no Next action.
-Evidence may be `[]`; an empty field value is invalid. Instructions is optional one-line text or exactly [];
+Nonterminal Evidence may be `[]`; an empty field value is invalid. Instructions is optional one-line text or exactly [];
 empty is invalid. Missing means unrecorded, not expressly none. New items write
 it explicitly. Keep extra binding conditions there and results in Evidence;
 ordinary progression is Steps. Proposed and accepted ADR links are allowed for

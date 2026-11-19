@@ -45,8 +45,8 @@ fulfilment, acceptance or start permission and selects and repairs nothing.
 All explicitly active Steps appear even around unknown
 gaps, with a guidance warning. Settle unknown progress through progress.md's
 recovery rule, not by automatic repair. If all Steps are terminal, check
-which Acceptance criteria Evidence does not yet cover; invent no Step and
-repeat no effect. No Steps means a whole-item unit; no current_item returns null.
+which Acceptance criteria Evidence does not yet cover; add a Step only under
+progress.md's rule for an omitted implementation, and repeat no effect. No Steps means a whole-item unit; no current_item returns null.
 
 ## Select Work Item or dispatch-unit context
 
@@ -113,6 +113,8 @@ Use direct reads for Plan or Decision listings, relevant
 dependency Evidence, and graph inspection. These operations complement the
 selector; they never replace current-or-named Work Item or dispatch-unit
 selection when suitable Python 3.11+ is available.
+An assigned field review reads its assigned sources directly and runs no
+selector.
 
 For a Plan or Decision listing, read only frontmatter and the H1 title unless
 the request asks for record content. Read other Work Items only for the

@@ -6,9 +6,8 @@ corrections to the Plan records, not product changes. Ordinary editing and
 recovery do not load this route. For text cleanup without reassessing
 progress, use Maintenance below.
 
-When repairing or cleaning up Step text, apply [authoring.md](authoring.md):
-each Step names a bounded action and, where the action leaves it unclear, its
-completion condition and required checks. Take every condition only from
+When repairing or cleaning up Step text, apply [authoring.md](authoring.md)'s
+Step rule. Take every condition only from
 the originally authorized action and its binding requirements, never current code, tests or
 assumptions. Do not copy whole-item Acceptance. Keep scope, safeguards,
 prohibitions, order and completed effects. Keep text of uncertain meaning and
@@ -36,15 +35,11 @@ is running.
    wording permitted above; reconcile legacy Next action. Add proved missing
    Step status even in terminal history without rewriting actions or original
    acceptance. Preserve effects, order, scope, execution choices, stops and due
-   reviews. Complete items only after every Acceptance criterion and required
-   review is observed.
-5. Follow progress.md and the lifecycle route for Work Item, Plan and index transitions;
-   prepare related changes together and validate the entire resulting profile.
-   Reopening terminal work, removing blockers without proof, cancellation or
-   changed scope still needs its applicable explicit decision. If an incorrect
-   terminal closure requires reopening, report it and request that lifecycle
-   direction; do not silently rewrite historical acceptance. On concurrent
-   changes stop the affected write and retain the findings.
+   reviews.
+5. Apply progress.md and the lifecycle route to transitions, completion,
+   validation and concurrent changes. If an incorrect terminal closure
+   requires reopening, report it and request that lifecycle direction; do not
+   silently rewrite historical acceptance.
 
 Report corrected items and Steps, actual checks, unresolved facts and the concrete
 continuation. A code or text inspection is evidence only for what it established,
@@ -82,8 +77,8 @@ live conditions from redundancy. Apply progress.md's field rules:
 | Field | Keep | Remove |
 | --- | --- | --- |
 | Instructions | Additional live conditions under progress.md; retain an unclear condition. | Repeated actions/criteria, progress, results and obsolete conditions. Terminal fields normally become []; report apparent unmet conditions without erasing them or reopening work. |
-| Evidence | Observed results, required review occurrence and open defects/limits needed for development. | Review text, chronology, duplicate summaries and counts, versions or inventories without continuing purpose. |
-| Goal | Current target, boundary and each binding constraint's effect plus Decision ID under the lifecycle route. | Superseded constraints or constraints whose binding effect has demonstrably ended under the Decision lifecycle rules; duplicated rationale and history; never replace an effect by an unreadable ID alone. |
+| Evidence | Observed results, a required review's outcome and open defects/limits needed for development. | Review text, chronology, duplicate summaries and counts, versions or inventories without continuing purpose. |
+| Goal | Current target, boundary and each binding constraint's effect plus Decision ID where one exists, under the lifecycle route. | Superseded constraints or constraints whose binding effect has demonstrably ended under the Decision lifecycle rules; duplicated rationale and history; never replace an effect by an unreadable ID alone. |
 | Non-goals | Every still-binding exclusion. | Reasons and drafting notes. |
 | Decisions in the requested scope | Every condition in its owning section, including required checks and revisit triggers. Preserve identity, the choice, authority, evidence status and decision-relevant reasons; apply the Decision lifecycle rules. | Equivalent repetition, filler, discussion history, and reasons or alternatives that neither explain the choice, constrain implementation nor determine revisit. Material changes still require the Decision supersession route. |
 
@@ -118,7 +113,7 @@ live conditions from redundancy. Apply progress.md's field rules:
     move --> reread["Reread Problem, Drivers and Considered alternatives"]
     reread --> background{"Would omitting any remaining statement affect choice, implementation, verification or revisit?"}
     background -->|yes| move
-    background -->|no| mark["Add or retain Binding sections: complete as Decision's first non-blank line"]
+    background -->|no| mark["Add or retain Binding sections: complete on the first non-blank content line under ## Decision"]
     background -->|uncertain| unmark["Remove existing mark; report Decision ID and unresolved statement"]
   ```
 
@@ -135,7 +130,7 @@ live conditions from redundancy. Apply progress.md's field rules:
   proves no relevance. Keep needed historical exceptions or missing reviews in
   Evidence. Report missing relevant links; add no unrelated ones or migrations.
 - Apply progress.md's Evidence retention rule to reports in scope. Remove
-  archived review text; retain required review occurrence and unresolved
+  archived review text; retain a required review's outcome and unresolved
   findings. Create no archive, before-copy, hash chain, report or Work Item for
   cleanup, and reconstruct no complete project history.
 - Preserve IDs, Plan and Work Item statuses, execution annotations, Step order,
@@ -144,12 +139,11 @@ live conditions from redundancy. Apply progress.md's field rules:
   permissions, limits and stops. Cleanup changes neither what is accepted nor what is permitted. File deletion follows native-decision-format.md's deletion
   safeguard; change nothing outside the requested scope.
 
-A comprehensive cleanup of Plans and Decisions requires an explicit maintenance
-request covering those records. New-Plan maintenance stays within the lifecycle
-route's targeted ADR set.
+A cleanup of Plans and Decisions requires an explicit maintenance request
+covering those records. Creating a Plan cleans up nothing.
 
 This is ordinary record maintenance, not a new worker or review phase. Do not
 repeat product tests, old reviews or a progress audit merely to shorten records.
-An independently required review or retention rule still applies. Validate once
-after the coherent profile edit under progress.md. Report the cleaned scope and any
+An independently required review or retention rule still applies. After the
+coherent profile edit, validate once where progress.md's rule requires it. Report the cleaned scope and any
 unresolved live condition briefly; no separate cleanup report is needed.

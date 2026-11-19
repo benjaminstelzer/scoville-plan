@@ -5,7 +5,7 @@ Use progress.md for writing and validation. Only PROJECT_INDEX.md selects the ac
 ## Contents
 
 - Create and refine
-- Maintain Decisions when creating a Plan
+- Decisions when creating a Plan
 - Activate
 - Complete or cancel a Plan
 - Rewrite or delete an unstarted Plan
@@ -42,7 +42,7 @@ updated: 2026-09-25
 
 ## Goal
 
-Current target and boundary; each still-binding plan-wide constraint by its effect and Decision ID.
+Current target and boundary; each still-binding plan-wide constraint by its effect, with its Decision ID where a Decision records it.
 
 ## Non-goals
 
@@ -67,7 +67,7 @@ status. Use `active_plan: null` when idle. A generic Plan edit changes only
 title, Goal and Non-goals, plus updated on real changes; id, status,
 current_item and Work Items stay.
 
-Keep Goal to the current target, its boundary and, for each still-binding plan-wide constraint, what it requires plus its Decision ID, as in `No new runtime dependency (ADR-0031)`: an agent may receive only the
+Keep Goal to the current target, its boundary and, for each still-binding plan-wide constraint, what it requires plus its Decision ID where one exists, as in `No new runtime dependency (ADR-0031)`: an agent may receive only the
 Decisions linked to its item, not every ID in Goal. Keep exclusions in
 Non-goals and other facts in their fields under authoring.md and progress.md.
 Omit dated steering, drafting notes, superseded constraints, copied ADR
@@ -80,22 +80,18 @@ authorized, to where the executing agent reads them: the dispatched Work
 Item, its Decisions or a repository rule file the agent has demonstrably
 loaded.
 
-## Maintain Decisions when creating a Plan
+## Decisions when creating a Plan
 
 When creating a later Plan, assess only Decisions the new Plan would link or
 supersede, or whose Work Items it replaces. Read those Decisions completely;
 do not scan the whole historical stock. The proposal inventory remains the
 entrypoint's metadata operation, not a cleanup of every Decision.
 
-Within this scope, remove temporary Decisions whose end or fulfilment is proved,
-superseded Decisions and obsolete links under
-[Decision cleanup](native-decision-format.md#scoped-decision-cleanup).
-Transfer a still-needed effect
-unchanged into its replacement or another current record where it stays readable, before removing the old record; uncertain effects remain. A new Plan does not end a constraint.
-
-This targeted maintenance needs no separate whole-project audit. Comprehensive
-cleanup requires an explicit maintenance request through repair.md; ordinary
-reading or continuation performs no cleanup.
+Creating a Plan removes no Decision and no link, and a new Plan does not end a
+constraint. Decisions are cleaned up only on an explicit maintenance request
+through repair.md, under
+[Decision cleanup](native-decision-format.md#scoped-decision-cleanup);
+ordinary reading or continuation performs no cleanup either.
 
 ## Activate
 
@@ -105,8 +101,9 @@ dependencies are done. Activation does not start execution. From idle, prepare
 the target Plan and index together.
 
 When switching from an active Plan, prepare the outgoing Plan in the same
-change. Use the user's chosen draft, completed or cancelled Plan status.
-Apply only the user's chosen action for its current item:
+change. Use the user's chosen draft, completed or cancelled Plan status and
+remove its current_item; a completed status requires every item to be
+terminal. Apply only the user's chosen action for its current item:
 
 - Keep a todo or paused item, or
 - pause an in_progress item, or
@@ -116,8 +113,9 @@ Preserve every other item. Validate the complete resulting profile.
 
 ## Complete or cancel a Plan
 
-When final current todo or in_progress work meets Acceptance and every other
-item is terminal, prepare one coherent update:
+When the final current Work Item meets the completion conditions under
+[Select and finish](progress.md#select-and-finish) and every other item is
+terminal, prepare one coherent update:
 
 | Owner | Terminal fields |
 | --- | --- |
@@ -128,9 +126,21 @@ item is terminal, prepare one coherent update:
 Validate the complete profile through progress.md.
 Paused work must first resume. Create no placeholder work to avoid idle.
 
-Cancel a draft only on explicit direction. An active Plan cannot be cancelled
-or completed by editing its status alone: update its current item and the
-index in the same prepared change.
+Cancel a Plan only on explicit direction. When cancelling an active Plan,
+prepare its current item's authorized transition and set `status: cancelled`,
+remove current_item and set the index to `active_plan: null` in the same
+validated update. Keep the other items as recorded unless the request
+authorizes changes to them. Preserve their dependencies. If the requested
+transition would leave a nonterminal item depending on cancelled work, resolve
+that conflict under Plan's rules before saving. This route selects no successor.
+When cancelling a draft, preserve its items unless their changes are authorized.
+
+For an explicitly cancelled final current Work Item, keep its observed
+Evidence and apply `Status: cancelled`, empty Blocked by and no Next action
+under the cancellation prerequisites in progress.md and the authorized Plan
+end state. If the request does not decide the Plan's terminal state, retain
+the observed state and ask for that choice before the dependent record
+transition. Cancellation does not establish Acceptance.
 
 Cancelled and completed Plans are terminal; do not reactivate them. The
 wholly-unstarted exception below permits only its stated rewrite or deletion,
@@ -174,21 +184,24 @@ An ordinary pause preserves the observed Step position and remaining constraints
 Permit only one unambiguous paused return target per redirected item.
 
 Before completing current work, inspect every paused return naming it and every
-historical priority. Use paused_context and historical_priorities; read legacy
-Next action and Evidence when Instructions was not captured. The helper does
-not interpret these texts.
+historical priority. Use paused_context and historical_priorities. For possible
+returns, check the paused item's original Next action whenever the projection
+omits it, even if Instructions is present. Read Evidence where it records
+conditions needed to interpret a return. The helper interprets neither field.
+Completion through this return path requires all
+conditions under [Select and finish](progress.md#select-and-finish).
 
 ```mermaid
 flowchart TD
-  inspect["Current Acceptance observed; inspect returns and historical priorities"] --> conflict{"Missing or later anchor, duplicate priorities, ambiguous return or different targets?"}
+  inspect["Current completion conditions fulfilled; inspect returns and historical priorities"] --> conflict{"Missing or later anchor, duplicate priorities, ambiguous return or different targets?"}
   conflict -->|yes| ask["Keep current item nonterminal and instructions; record Acceptance; ask for a choice"]
   conflict -->|no| has_return{"Paused return names current item?"}
   has_return -->|no| normal["Select eligible successor under progress.md; honor historical priority and deferred arrival order"]
-  has_return -->|yes| ready{"Return exists; dependencies done; no blockers or unresolved dependent Decision; resume prerequisites met?"}
+  has_return -->|yes| ready{"Return exists and meets the start conditions in progress.md and the recorded return prerequisites?"}
   ready -->|no| ask
   ready -->|yes| complete["Complete current work and select return in one coherent update"]
   complete --> resume["Resume return at recorded Step or legacy concrete action"]
-  resume --> consume["Remove consumed return from Instructions; record fulfilment in Evidence; validate"]
+  resume --> consume["Remove the fulfilled return from its field; record fulfilment in Evidence; validate"]
 ```
 
 Normal selection alone never starts work; the eligible explicit return resumes

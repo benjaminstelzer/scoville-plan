@@ -44,10 +44,8 @@ need judgment; a routine insertion with known boundaries does not need it.
 
 ## Insert, refine and order
 
-Added work that no Work Item covers, that the user did not ask to plan or
-track and that finishes in this session gets no Work Item unless a
-repository rule requires a record; do it directly under the entrypoint's
-rule 7.
+Use the entrypoint's work-routing rule to decide whether added work needs
+a record. This section governs work that belongs in the Plan.
 
 Use the entrypoint's ID-allocation rule with
 `select_context.py --root "<project-root>" --next-id work-item --plan PLAN-NNNN --format json`.
@@ -57,7 +55,8 @@ item unchanged when queueing. `Depends on` records real prerequisites; using it
 to force an order would block work that could proceed. Write no new Deferred
 or Prioritized title prefix, on new or existing items. Preserve existing prefixes
 and their historical priority; read special cases in the lifecycle reference
-when they affect selection. Save and validate before acknowledging a queue.
+when they affect selection. Save, and validate where progress.md requires it,
+before acknowledging a queue.
 
 Combine new work only with the last todo outcome, and only when it shares
 that item's result, Acceptance, dependencies, Decisions, blockers, owner
