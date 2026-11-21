@@ -11,9 +11,9 @@
    unchanged file need not be reread. Read a completed or cancelled Plan only
    for a concrete reason it is relevant.
 3. Read the known Work Item's context directly and compare `current_item`,
-   item status and active Step with your assignment. Use position mode first
-   only when the ID is unknown, those facts disagree, or a recorded return
-   matters.
+   item status and active Step with your assignment. Use position mode
+   when the ID is unknown or a recorded return matters, and after that read
+   when those facts disagree.
 4. Before starting a todo item, compare its assumptions, paths and checks with
    the current files and its completed dependencies in this Plan, and refine
    stale instructions first.

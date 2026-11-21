@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-21 - Working conditions stay out of Goal and Non-goals
+
+Goal and Non-goals describe the result. A condition on the working process, such as when work may start or what a session may touch, is neither; where it binds later work it goes into the item's Instructions. In a test run a model had written "do not implement yet" and a limit on that session into Goal and Non-goals of a new Plan. The new sentence is not tested with a model.
+
+The progress reference asked for position mode first when the recorded facts disagree, which is known only after the direct read it was to precede. It now says: position mode when the ID is unknown or a recorded return matters, and after the direct read when the facts disagree.
+
+Two runs in Codex with `gpt-6.2-sol` covered everyday maintenance: adding a Work Item ahead of an existing one with a Decision, and creating the first Plan in a project without a profile. Both left a valid profile and touched no code.
+
 ## 2026-11-21 - The size checker works in a Windows sandbox
 
 The size checker gives a complete file its final name by rename on Windows. Codex's Windows sandbox refuses hard links in the project and in a temporary folder a helper creates, so saving a complete output as a file failed there. On Windows rename refuses an existing name, as the hard link does elsewhere. Checked inside that sandbox: the file is saved, and a second file under the same name is refused.
