@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-21 - The size checker works in a Windows sandbox
+
+The size checker gives a complete file its final name by rename on Windows. Codex's Windows sandbox refuses hard links in the project and in a temporary folder a helper creates, so saving a complete output as a file failed there. On Windows rename refuses an existing name, as the hard link does elsewhere. Checked inside that sandbox: the file is saved, and a second file under the same name is refused.
+
 ## 2026-11-21 - Example annotation names the current default
 
 The `[execute: ...]` example in the authoring reference names `gpt-6.2-sol`, the model Workflow's bundled pairs now use.
