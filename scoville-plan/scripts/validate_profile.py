@@ -51,8 +51,37 @@ EXECUTION_FORMAT = (
 )
 ROUTE_FORMAT = "[route: CLASS], CLASS: ultra_low, low, medium, high, ultra_high; after status and before execute/action"
 BLOCKER_FORMAT = "[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}; prefixes ADR, PLAN and W are reserved"
+EVIDENCE_LINE_FORMAT = (
+    "Evidence records observed results only (what was run or inspected and what it showed, open limits) on one line: "
+    "normally plain text of at most 200 characters that must not start with `[` (commas and brackets inside are fine), "
+    "or a bracketed list `[result, result]` whose entries have at most 200 characters each and no commas or brackets."
+)
+EVIDENCE_FORMAT = EVIDENCE_LINE_FORMAT[:-1] + "; write `Evidence: []` while nothing has been observed."
 STEP_ANNOTATION_LIKE_RE = re.compile(r"\[(?:route|execute)(?:\s|:|\])")
 MOJIBAKE_RE = re.compile(r'(?:Ã[\u0080-\u00bfŸ]|Â[\u0080-\u00bf]|â[\u0080-\u00bf€]|ðŸ)')
+
+VALIDATOR_EPILOG = """\
+Checks PROJECT_INDEX.md, docs/plans/*.md and docs/decisions/*.md against format_version 1.
+The script writes nothing.
+
+Exit codes:
+  0  VALID: no errors; valid is true. Warnings may be listed and valid stays true.
+  1  INVALID: at least one error; valid is false. Correct the records and rerun.
+  2  INCOMPLETE: validation could not finish (invalid arguments; --root missing, not a directory or containing
+     ..; a file or directory unreadable, redirected by a link or outside the root); valid is null. The absence
+     of other errors proves nothing. Fix the named cause and rerun.
+  3  INTERNAL ERROR: the validator itself failed; valid is null. Report it; do not edit records to bypass it.
+
+Each diagnostic has code, severity (error or warning), file, line, record (PLAN-NNNN/W-NNN or ADR-NNNN),
+field, message (what is wrong), expected (the required value or format), observed, suggestion (the smallest
+correction, or what to ask the user when the correction depends on facts only the user has) and related
+(other files involved). --format text prints the same: a VALID/INVALID/INCOMPLETE/INTERNAL ERROR line, a
+summary and per diagnostic its message with Expected, Observed and Next (the suggestion). Invalid arguments
+(exit 2, USAGE_ERROR) are always reported as JSON.
+
+A pass confirms structure only. It does not show that an edit was authorized, that work was accepted or
+that Evidence is true.
+"""
 
 PLAN_STATUSES = {"draft", "active", "completed", "cancelled"}
 WORK_STATUSES = {"todo", "in_progress", "paused", "done", "cancelled"}
@@ -876,10 +905,15 @@ class Validator:
                     "SECTION_EMPTY",
                     parsed.logical_path,
                     "A required section has no content.",
-                    "Add the known authored content; do not infer rationale, evidence, or intent.",
+                    "Add the known authored content; do not infer rationale, evidence, or intent."
+                    + (" In a Decision, write `[]` as the section's content when nothing applies; never invent content to fill it."
+                       if "Decision" in expected_h2 else
+                       " In a Plan, write `[]` under Non-goals when there are no exclusions; Goal needs authored content."),
                     line=line_no,
                     record=record,
                     field_name=title,
+                    expected="authored content, or `[]` when nothing applies" if "Decision" in expected_h2
+                    else "authored content; `[]` under Non-goals when there are no exclusions",
                     observed="empty",
                 )
         return bounds
@@ -1111,7 +1145,7 @@ class Validator:
                     "WORK_ITEM_ID_DUPLICATE",
                     parsed.logical_path,
                     "A Work Item ID occurs more than once in the Plan.",
-                    "Assign a new ID only through the Plan's allocation rule; do not renumber existing items.",
+                    "Give the duplicate item a new ID from `select_context.py --next-id work-item --plan PLAN-NNNN`; do not renumber existing items.",
                     line=heading_line,
                     record=record,
                     observed=item_id,
@@ -1242,6 +1276,7 @@ class Validator:
                     "Move known content into its canonical field; do not discard authored information silently.",
                     line=line_no,
                     record=record,
+                    expected="`Field: value` on one line; Steps as numbered lines",
                     observed=line,
                 )
 
@@ -1346,7 +1381,7 @@ class Validator:
                 fixes: list[str] = []
                 if len(entry) > 200:
                     problems.append(f"Evidence entry has {len(entry)} characters; maximum is 200")
-                    fixes.append("Shorten this entry to at most 200 characters while preserving the observed result, unresolved limits and any decisive existing report reference; follow Scoville Plan's references/progress.md Evidence rules")
+                    fixes.append("Shorten this entry to at most 200 characters while preserving the observed result, unresolved limits and any decisive existing report reference; link an existing report for further detail")
                 if entry != entry.strip():
                     problems.append("Evidence entry has leading or trailing whitespace")
                     fixes.append("Remove only leading and trailing whitespace")
@@ -1362,7 +1397,7 @@ class Validator:
                         "WORK_EVIDENCE_INVALID",
                         parsed.logical_path,
                         "; ".join(problems) + ".",
-                        ". ".join(fixes) + ". Do not invent evidence or remove an unresolved limitation.",
+                        ". ".join(fixes) + ". " + EVIDENCE_FORMAT + " Do not invent evidence or remove an unresolved limitation.",
                         line=field_lines.get("Evidence"),
                         record=record,
                         field_name="Evidence",
@@ -1396,10 +1431,14 @@ class Validator:
                         "WORK_TERMINAL_EVIDENCE_REQUIRED",
                         parsed.logical_path,
                         "A terminal Work Item has no Evidence.",
-                        "Stop and ask how to resolve invalid terminal history; do not invent Evidence or rewrite status.",
+                        "If you are setting this done or cancelled status now, record in Evidence what you observed; "
+                        "for a cancellation without observed work, record the user's direction and its date, e.g. "
+                        "`Evidence: Cancelled at the user's direction on YYYY-MM-DD.` If this is existing history, "
+                        "stop and ask how to resolve it; do not rewrite the status. Never invent Evidence. " + EVIDENCE_LINE_FORMAT,
                         line=field_lines.get("Evidence"),
                         record=record,
                         field_name="Evidence",
+                        expected="nonempty Evidence of observed results, or for a cancellation without observed work the user's direction and its date",
                         observed=fields.get("Evidence", "missing"),
                     )
                 if blockers:
@@ -1407,10 +1446,14 @@ class Validator:
                         "WORK_TERMINAL_BLOCKED",
                         parsed.logical_path,
                         "A terminal Work Item still has blockers.",
-                        "Stop and ask how the terminal transition should be reconciled; do not clear blockers retroactively.",
+                        "Complete an item only after its blockers are resolved. If you are setting this done or cancelled "
+                        "status now, write `Blocked by: []` in the same edit; when cancelling, keep each unresolved "
+                        "blocker and its effect in Evidence. If this is existing history, stop and ask how the terminal "
+                        "transition should be reconciled; do not clear blockers retroactively.",
                         line=field_lines.get("Blocked by"),
                         record=record,
                         field_name="Blocked by",
+                        expected="Blocked by: []",
                         observed=fields.get("Blocked by"),
                     )
                 if next_action is not None:
@@ -1509,8 +1552,11 @@ class Validator:
                 "RECORD_FILENAME_INVALID",
                 logical,
                 "The Plan filename is not numeric-ID plus lowercase ASCII kebab-case subject.",
-                "Rename it only through an authorized Plan edit after checking references and collisions.",
+                "If you are creating this Plan now, name the file from its id, e.g. PLAN-0001 in "
+                "docs/plans/0001-export-formats.md. Rename an existing Plan only through an authorized Plan edit "
+                "after checking references and collisions.",
                 record=record,
+                expected="NNNN-<lowercase-hyphenated-subject>.md, NNNN being the four digits of the Plan's id PLAN-NNNN",
                 observed=path.name,
             )
         if not PLAN_ID_RE.fullmatch(plan_id):
@@ -1571,9 +1617,14 @@ class Validator:
                 "PLAN_CURRENT_ITEM_REQUIRED",
                 logical,
                 "An active Plan has no current_item.",
-                "Ask the user which dependency-ready item is current before changing project state.",
+                "Add `current_item: W-NNN` after updated. If you are activating this Plan or finishing its current item now, "
+                "name the Work Item that the user or your authorized scope selects to continue; if that choice is not "
+                "evident, ask the user. If every item is terminal, complete the Plan instead; if open items remain but "
+                "none is eligible, ask the user. For existing history, ask the user which dependency-ready item is "
+                "current before changing project state.",
                 record=record,
                 field_name="current_item",
+                expected="current_item: W-NNN naming a todo, in_progress or paused Work Item of this Plan whose Depends on items are all done",
                 observed="missing",
             )
         if status_value != "active" and current is not None:
@@ -1581,10 +1632,14 @@ class Validator:
                 "PLAN_CURRENT_ITEM_FORBIDDEN",
                 logical,
                 "A non-active Plan contains current_item.",
-                "Reconcile the intended Plan lifecycle before removing or changing current work.",
+                "If you are completing, cancelling or deactivating this Plan now, remove its current_item line in the same edit "
+                "and, if PROJECT_INDEX.md names this Plan, set `active_plan: null` (or the Plan that becomes active); add current_item to a "
+                "draft only when activating it. For existing history, reconcile the intended Plan lifecycle before removing "
+                "or changing current work.",
                 line=parsed.key_lines.get("current_item"),
                 record=record,
                 field_name="current_item",
+                expected=f"no current_item while status is {status_value or 'missing'}",
                 observed=current,
             )
         if current is not None and not WORK_ID_RE.fullmatch(current):
@@ -1729,9 +1784,11 @@ class Validator:
                 "DECISION_ACCEPTED_REQUIRED",
                 logical,
                 "This Decision status requires an accepted date.",
-                "Ask for the actual authorized acceptance date; do not infer it from implementation or Git.",
+                "If you are recording the acceptance now, add `accepted:` with today's date between created and scope. "
+                "For an existing record, ask for the actual authorized acceptance date; do not infer it from implementation or Git.",
                 record=record,
                 field_name="accepted",
+                expected="accepted: YYYY-MM-DD between created and scope, not before created",
                 observed="missing",
             )
         if status_value in {"proposed", "rejected"} and "accepted" in parsed.frontmatter:
@@ -1850,8 +1907,13 @@ class Validator:
                     "PROFILE_ACTIVE_PLAN_COUNT",
                     "PROJECT_INDEX.md",
                     "The index is idle but one or more Plans are active.",
-                    "Ask which lifecycle result is intended before changing the index or Plan statuses.",
-                    expected="zero active Plans",
+                    "At most one Plan is active, and PROJECT_INDEX.md active_plan names it. If you are activating "
+                    + (f"{active[0].id} now, set `active_plan: {active[0].id}`" if len(active) == 1
+                       else "one of these Plans now, set active_plan to its ID and keep every other Plan non-active")
+                    + " in the same edit; if you are completing or cancelling it, set its status to completed or cancelled "
+                    "and remove its current_item. For existing history, ask which lifecycle result is intended before "
+                    "changing the index or Plan statuses.",
+                    expected="either `active_plan: null` with no Plan status active, or active_plan naming the one active Plan",
                     observed=", ".join(plan.id for plan in active),
                     related=(plan.path for plan in active),
                 )
@@ -1872,9 +1934,11 @@ class Validator:
                     "INDEX_ACTIVE_PLAN_STATUS",
                     "PROJECT_INDEX.md",
                     "active_plan references a Plan whose status is not active.",
-                    "Ask which lifecycle state is intended before aligning the index and Plan.",
+                    f"If you completed, cancelled or deactivated {selected.id} in this edit, set `active_plan: null` in "
+                    "PROJECT_INDEX.md (or the ID of the one Plan that is now active). For existing history, ask which "
+                    "lifecycle state is intended before aligning the index and Plan.",
                     field_name="active_plan",
-                    expected="referenced Plan status active",
+                    expected=f"active_plan: {selected.id} only while that Plan has status active; otherwise active_plan: null or the active Plan's ID",
                     observed=f"{selected.id} status {selected.status}",
                     related=(selected.path,),
                 )
@@ -1883,8 +1947,13 @@ class Validator:
                     "PROFILE_ACTIVE_PLAN_COUNT",
                     "PROJECT_INDEX.md",
                     "The set of active Plans does not match the index.",
-                    "Ask which single Plan is intended to be active before changing lifecycle state.",
-                    expected=self.index_active_plan,
+                    f"Only the Plan that active_plan names ({self.index_active_plan}) may have status active. If you are "
+                    "switching Plans in this edit, set active_plan to the incoming Plan's ID, give the outgoing Plan status "
+                    "draft, completed or cancelled and remove its current_item; after completing or cancelling the last active "
+                    "Plan, set `active_plan: null`. For existing "
+                    "history, ask which single Plan is intended to be active before changing lifecycle state.",
+                    expected=f"exactly one Plan with status active, {self.index_active_plan} (the index's active_plan); "
+                    "`active_plan: null` once no Plan is active",
                     observed=", ".join(plan.id for plan in active) or "none",
                     related=(plan.path for plan in active),
                 )
@@ -1971,9 +2040,12 @@ class Validator:
                         "PLAN_COMPLETED_NONTERMINAL",
                         plan.path,
                         "A completed Plan contains non-terminal Work Items.",
-                        "Ask how the completion transition should be reconciled; do not invent terminal Evidence.",
+                        "If you are completing this Plan now, first finish or cancel each listed item (Status done or cancelled, "
+                        "its observed Evidence, `Blocked by: []`), or keep the Plan active; completing also "
+                        "removes current_item and sets PROJECT_INDEX.md to `active_plan: null`. For existing history, ask how "
+                        "the completion transition should be reconciled. Do not invent terminal Evidence.",
                         record=plan.id,
-                        expected="only done or cancelled items",
+                        expected="every Work Item Status done or cancelled, each with nonempty Evidence",
                         observed=", ".join(nonterminal),
                     )
 
@@ -2349,9 +2421,15 @@ def internal_result(root: str, error: Exception) -> dict[str, Any]:
 
 
 def build_parser() -> Parser:
-    parser = Parser(add_help=True, description="Read-only validator for Scoville Plan format_version 1 profiles")
-    parser.add_argument("--root", default=".", help="project root containing PROJECT_INDEX.md")
-    parser.add_argument("--format", choices=("json", "text"), default="json", help="diagnostic output format")
+    parser = Parser(
+        add_help=True,
+        description="Read-only validator for Scoville Plan format_version 1 profiles",
+        epilog=VALIDATOR_EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("--root", default=".", help="project root containing PROJECT_INDEX.md, docs/plans and docs/decisions (default: .)")
+    parser.add_argument("--format", choices=("json", "text"), default="json",
+                        help="json (default): one object with valid, summary and diagnostics; text: the same as readable lines")
     return parser
 
 

@@ -38,6 +38,9 @@ WORK_HEADING_RE = re.compile(r"^### (W-[0-9]{3}) [^\n]+$", re.MULTILINE)
 MARKDOWN_HEADING_RE = re.compile(r"^#{1,6} [^\n]+$", re.MULTILINE)
 REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
 DEFAULT_MAX_OUTPUT_BYTES = 65_536
+ACTIVE_PLAN_FIX = ("align PROJECT_INDEX.md active_plan with the Plan's id and active status, "
+                   "or pass --plan PLAN-NNNN to read the Plan in any status")
+DEPENDENCY_FIX = "correct Depends on to existing Work Item IDs of this Plan, or ask which item was meant"
 
 
 class SelectorError(Exception):
@@ -83,34 +86,109 @@ class WorkItem:
     line: int = 1
 
 
+SELECTOR_EPILOG = f"""\
+Modes (one per call; --plan PLAN-NNNN reads that Plan, in any status, instead of the index's active Plan):
+
+default (no mode option, optionally --work-item W-NNN)
+  Context for working on one Work Item: plan.frontmatter (raw text), plan.goal, plan.non_goals; work_item,
+  the item's complete original text (current_item unless --work-item names another); direct_dependencies
+  [{{id, status_line}}]; decisions, the full text of each Decision the item links.
+
+--unit W-NNN | W-NNN/step-N | W-NNN/steps-N-M
+  The same context with work_item as an object for handing one unit of work on:
+  source_text  the exact original text of the selected Steps (of the whole item for W-NNN), never
+               rewritten; copy it verbatim.
+  context_text the complete Work Item, for reference only; the unit is source_text.
+  header, status, depends_on, blocked_by, decisions, outcome, acceptance: the item's lines as written;
+  steps: the selected Step lines; step_statuses: [{{number, status}}] when a selected Step has a written
+  status (null = no written status); instructions: present only when the item has the field;
+  next_action: a legacy item without Steps.
+
+--position
+  Where the current Work Item stands, without guessing progress:
+  work_item, work_status   current_item and its status (null when the Plan has none).
+  current_steps            Step numbers written in_progress.
+  current_units            those Steps grouped into --unit IDs; a grouping only, it grants no authority
+                           to start or continue anything.
+  next_step                the first remaining Step when it is written todo and no Step is in_progress,
+                           else null.
+  untracked_steps          Steps without a written status: progress unknown, never todo or done;
+                           guidance then says how to establish it.
+  instructions             null: the field is missing, so binding conditions are unknown (legacy item);
+                           "[]": written as no additional instructions; otherwise the binding conditions.
+  reason                   no_current_item | written_in_progress | written_in_progress_with_untracked |
+                           whole_work_item (no Steps; the item is one unit) | next_written_todo |
+                           untracked_progress_requires_inspection (the next Step has no written status) |
+                           steps_terminal_work_item_acceptance_pending (every Step is done or cancelled;
+                           the item still needs its acceptance check and a successor).
+  paused_context           every paused item with dependencies, blocked_by and instructions (plus legacy
+                           Next action and evidence when Instructions is missing); weigh them before
+                           choosing what continues.
+  historical_priorities    legacy: unfinished items titled "Prioritized after W-NNN:" or
+                           "Deferred after W-NNN:", in the same shape.
+  Also acceptance, evidence, blocked_by, open_decisions (linked proposed Decisions: id, title, path),
+  legacy_next_action when present, guidance when progress or succession needs a decision.
+
+--proposals
+  Every proposed Decision in the project, independent of any Plan: proposals [{{id, title, scope, path}}].
+
+--next-id plan | decision | work-item   (work-item requires --plan)
+  next_id and highest_number. reserved is always false: nothing is reserved, so recheck the ID and file
+  name right before creating the record. filename_pattern (plan, decision) is the file to create: replace
+  <lowercase-hyphenated-subject>. conflicts lists records whose file number differs from their id; both
+  numbers count toward next_id. guidance repeats the no-reservation rule.
+
+--check-start W-NNN
+  Structural start facts for one item. start_state: not_started (todo), resume (paused), already_started
+  (in_progress) or terminal (done, cancelled). Also current_item, matches_current_item, dependencies,
+  blocked_by, other_in_progress and open_decisions. violated_conditions lists any of plan_not_active,
+  plan_not_selected, item_not_current, item_terminal, item_already_started, dependencies_not_done,
+  external_blockers, other_item_in_progress. An empty list means no structural obstacle, not permission
+  to start; the mode selects, authorizes and starts nothing.
+
+Budget: --max-output-bytes caps the successful JSON (default {DEFAULT_MAX_OUTPUT_BYTES}, minimum 512). Larger
+output is never cut: the call fails with OUTPUT_BUDGET_EXCEEDED and observed.required_bytes. When the
+default or your own choice set the budget, retry once with at least that value; never raise a budget
+someone set as binding.
+
+Output and exit codes: the script reads PROJECT_INDEX.md, docs/plans and docs/decisions and writes nothing.
+It prints one JSON object. Exit 0: the payload above. On failure the object is {{"schema_version": 1,
+"valid": null, "diagnostics": [{{code, message, path, expected, observed}}]}} and message says what is
+wrong and, where needed, what to correct: exit 1 for a record or selection problem, 2 for invalid usage or a missing or unreadable --root or path,
+3 for an internal failure.
+"""
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = JsonArgumentParser(
-        description="Select deterministic read-only Scoville Plan context."
+        description="Select deterministic read-only Scoville Plan context.",
+        epilog=SELECTOR_EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--root", required=True, help="Project root containing PROJECT_INDEX.md.")
+    parser.add_argument("--root", required=True, help="Project root containing PROJECT_INDEX.md; pass it exactly, without '..'.")
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument(
         "--work-item",
-        help="Optional W-NNN item from the active or named Plan; defaults to current_item.",
+        help="Default mode: return this W-NNN instead of the Plan's current_item.",
     )
     selection.add_argument(
         "--unit",
-        help="Exact dispatch unit: W-NNN, W-NNN/step-N, or W-NNN/steps-N-M.",
+        help="Return one dispatch unit: W-NNN, W-NNN/step-N or W-NNN/steps-N-M (N < M), e.g. W-001/steps-1-3.",
     )
     selection.add_argument('--next-id', choices=('work-item', 'plan', 'decision'),
-                           help='Read highest ID/file number plus one; work-item requires --plan. No reservation or writes.')
+                           help='Return the highest ID plus one (and file name for plan/decision); work-item requires --plan. Reserves and writes nothing.')
     selection.add_argument('--check-start', metavar='W-NNN',
                            help='Return structural start facts for a named item; no selection, authorization or writes.')
     parser.add_argument(
         "--max-output-bytes",
         type=int,
         default=DEFAULT_MAX_OUTPUT_BYTES,
-        help=f"Maximum UTF-8 success payload size; default {DEFAULT_MAX_OUTPUT_BYTES}.",
+        help=f"Maximum size of the successful JSON in UTF-8 bytes (minimum 512, default {DEFAULT_MAX_OUTPUT_BYTES}); larger output fails with OUTPUT_BUDGET_EXCEEDED instead of being cut.",
     )
-    parser.add_argument("--plan", help="Named PLAN-NNNN instead of the active Plan.")
-    parser.add_argument("--position", action="store_true", help="Return current Work Item, written active Steps and next known Step without guessing unmarked progress.")
+    parser.add_argument("--plan", help="Read PLAN-NNNN (any status) instead of the index's active Plan; with --next-id only for work-item, where it is required; not with --proposals.")
+    parser.add_argument("--position", action="store_true", help="Return where the current Work Item stands: written in_progress Steps, the next written todo Step and Steps without written status; infers no unmarked progress.")
     parser.add_argument("--proposals", action="store_true", help="List all proposed Decisions with ID, title, scope and path; independent of the active Plan.")
-    parser.add_argument("--format", choices=("json",), default="json")
+    parser.add_argument("--format", choices=("json",), default="json", help="Output format; only json.")
     return parser
 
 
@@ -171,7 +249,8 @@ def inspect_path(root: Path, relative: PurePosixPath) -> tuple[Path, os.stat_res
             info = os.lstat(current)
         except FileNotFoundError as error:
             raise SelectorError(
-                "PATH_MISSING", "canonical path does not exist", path=relative.as_posix(), exit_code=2
+                "PATH_MISSING", "canonical path does not exist; check that --root is the project root and that the named record or directory exists",
+                path=relative.as_posix(), exit_code=2
             ) from error
         except OSError as error:
             raise SelectorError(
@@ -575,12 +654,12 @@ def select_context(
     require_format_version(index, index_path)
     active_plan = requested_plan or index.frontmatter.get("active_plan")
     if active_plan is None or active_plan == "null":
-        raise SelectorError("ACTIVE_PLAN_MISSING", "project has no active Plan", path=index_path)
+        raise SelectorError("ACTIVE_PLAN_MISSING", "project has no active Plan; pass --plan PLAN-NNNN to read a named Plan", path=index_path)
     plan_path = find_record_path(root, "docs/plans", active_plan, PLAN_ID_RE, PLAN_FILE_RE)
     plan = parse_record(safe_read_text(root, plan_path), plan_path)
     require_format_version(plan, plan_path)
     if plan.frontmatter.get("id") != active_plan or (requested_plan is None and plan.frontmatter.get("status") != "active"):
-        raise SelectorError("ACTIVE_PLAN_INVALID", "index must reference one matching active Plan", path=plan_path)
+        raise SelectorError("ACTIVE_PLAN_INVALID", "index must reference one matching active Plan; " + ACTIVE_PLAN_FIX, path=plan_path)
     goal, non_goals, items = parse_plan(plan, plan_path)
     unit_match = UNIT_RE.fullmatch(unit) if unit is not None else None
     selected_id = unit_match.group("work_item") if unit_match is not None else requested_item or plan.frontmatter.get("current_item")
@@ -602,7 +681,7 @@ def select_context(
     for dependency_id in selected.dependencies:
         dependency = items.get(dependency_id)
         if dependency is None:
-            raise SelectorError("WORK_DEPENDENCY_MISSING", f"dependency does not exist: {dependency_id}", path=plan_path)
+            raise SelectorError("WORK_DEPENDENCY_MISSING", f"dependency does not exist: {dependency_id}; {DEPENDENCY_FIX}", path=plan_path)
         dependency_statuses.append(
             {"id": dependency_id, "status_line": f"Status: {dependency.status}"}
         )
@@ -634,7 +713,7 @@ def continuation_context(item: WorkItem, items: dict[str, WorkItem], path: str) 
     dependencies = []
     for dependency in item.dependencies:
         if dependency not in items:
-            raise SelectorError("WORK_DEPENDENCY_MISSING", f"dependency does not exist: {dependency}", path=path)
+            raise SelectorError("WORK_DEPENDENCY_MISSING", f"dependency does not exist: {dependency}; {DEPENDENCY_FIX}", path=path)
         dependencies.append({"id": dependency, "status": items[dependency].status})
     instructions = optional_field(item.block, "Instructions", path, item.line)
     output: dict[str, object] = {
@@ -728,7 +807,7 @@ def plan_position(root: Path, requested_plan: str | None) -> dict[str, object]:
     if record.frontmatter.get("id") != plan_id:
         raise SelectorError("PLAN_ID_MISMATCH", f"{path} must contain id: {plan_id}", path=path)
     if requested_plan is None and record.frontmatter.get("status") != "active":
-        raise SelectorError("ACTIVE_PLAN_INVALID", "index must reference one matching active Plan", path=path)
+        raise SelectorError("ACTIVE_PLAN_INVALID", "index must reference one matching active Plan; " + ACTIVE_PLAN_FIX, path=path)
     _, _, items = parse_plan(record, path)
     current = record.frontmatter.get("current_item")
     output: dict[str, object] = {
@@ -769,14 +848,14 @@ def plan_position(root: Path, requested_plan: str | None) -> dict[str, object]:
                   untracked_steps=[i for i, status in enumerate(statuses, 1) if status is None],
                   blocked_by=f"Blocked by: {single_field(item.block, 'Blocked by', path, item.line)}")
     if output["untracked_steps"]:
-        output["guidance"] = "1. Determine unmarked Step progress from Evidence, relevant original reports and actual task results or changes against requirements.\n2. Keep missing status unknown, never todo/done; do not repeat established completed effects.\n3. Record progress only within authorized Plan editing; load repair only for an explicit inspection/repair request."
+        output["guidance"] = "1. Determine unmarked Step progress from Evidence, relevant original reports and actual task results or changes against requirements.\n2. Keep missing status unknown, never todo/done; do not repeat established completed effects.\n3. Write a Step status only when that evidence proves it and only within authorized Plan editing; correct other existing records only on an explicit inspection or repair request."
     if active:
         output["reason"] = "written_in_progress_with_untracked" if output["untracked_steps"] else "written_in_progress"
     elif not steps:
         output["reason"] = "whole_work_item"
     elif remaining is None:
         output["reason"] = "steps_terminal_work_item_acceptance_pending"
-        output["guidance"] = "All Steps are terminal; Work Item acceptance/succession is pending.\n1. Inspect outstanding Acceptance, Instructions, Evidence, paused_context, historical_priorities and legacy Next action if present.\n2. Resolve acceptance and succession under Plan rules; the helper neither interprets Instructions nor chooses a return.\n3. Do not repeat completed Steps."
+        output["guidance"] = "All Steps are terminal; Work Item acceptance/succession is pending.\n1. Inspect outstanding Acceptance, Instructions, Evidence and paused_context, and the legacy historical_priorities and Next action if present.\n2. If Acceptance is observed, every binding condition is met and completion is within your authorized scope, set the item done and name its successor as current_item in the same edit (or complete the Plan when every item is terminal); otherwise keep the item open with the observed result in Evidence. The helper neither interprets Instructions nor chooses a successor or return.\n3. Do not repeat completed Steps."
     elif remaining[1] is None:
         output["reason"] = "untracked_progress_requires_inspection"
     else:
@@ -808,7 +887,7 @@ def check_start(root: Path, item_id: str, requested_plan: str | None) -> dict[st
     dependencies = []
     for dependency_id in item.dependencies:
         if dependency_id not in items:
-            raise SelectorError('WORK_DEPENDENCY_MISSING', f'dependency does not exist: {dependency_id}', path=path)
+            raise SelectorError('WORK_DEPENDENCY_MISSING', f'dependency does not exist: {dependency_id}; {DEPENDENCY_FIX}', path=path)
         dependencies.append({'id': dependency_id, 'status': items[dependency_id].status})
     blockers = parse_inline_ids(single_field(item.block, 'Blocked by', path, item.line),
                                re.compile(r'(?!ADR-|PLAN-|W-)[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}\Z'),

@@ -60,8 +60,7 @@ intent, and what merely adds reading, guides the next revision.
 ## Compatibility
 
 Developed for Codex and Claude Code with repository read/write access and
-Python 3.11+ for helpers, with manual alternatives only when suitable Python is
-unavailable.
+Python 3.11+ for the bundled helpers.
 Tested with `gpt-6.1-sol` and Claude Opus 5.5; these models at medium reasoning effort are the minimum,
 because lower effort skips steps more often.
 
@@ -125,8 +124,8 @@ New Plan points use ordered Steps with explicit progress:
 ```
 
 The agent records observed progress, keeps open decisions visible and asks
-before dependent work. Older unmarked Steps remain valid, with unknown progress.
-Completed Steps still need the Plan point's acceptance checks.
+before dependent work. Completed Steps still need the Plan point's acceptance
+checks.
 
 To correct an existing record, ask: "Review and correct PLAN-0001." The agent
 checks the evidence and actual result before changing progress. Inspection
@@ -135,14 +134,14 @@ without a correction request stays read-only.
 ### Keeping Decisions current
 
 When creating a later Plan, Plan checks only Decisions it would link or replace,
-or whose Work Items it replaces. It can remove expired temporary or superseded
-Decisions and obsolete links in that scope, preserving current constraints,
-including unlinked ones, and the needs of other active Plans.
+or whose Work Items it replaces, and removes none of them. On an explicit
+cleanup request it can shorten old Plans and Decisions, and remove expired
+temporary or superseded Decisions and obsolete links in the requested scope,
+preserving current constraints, including unlinked ones, and the needs of
+other open Plans. Ordinary reading and resuming work clean up nothing.
 
 Deletion requires the file's current contents to be committed or your explicit
-approval. A tracked path with uncommitted changes is not enough. A comprehensive
-cleanup needs an explicit maintenance request; ordinary reading and resuming
-work do not clean up Decisions.
+approval. A tracked path with uncommitted changes is not enough.
 
 ### Companion app
 
@@ -161,8 +160,10 @@ application. An installed copy in a read-only folder uses the platform's user
 configuration directory. Skill and Viewer updates are independent; use a
 Viewer that supports the progress fields in your Plan records.
 
-The [authoring guide](scoville-plan/references/authoring.md) covers Step annotations,
-field formats and helper commands. Plan uses `format_version: 1`.
+The [authoring guide](scoville-plan/references/authoring.md) has the Plan and
+Work Item templates and Step annotations; the bundled validator explains field
+formats in its diagnostics. Plan uses `format_version: 1`. Records in the
+retired formats still validate, but the Skill no longer describes them.
 
 ## Sources
 

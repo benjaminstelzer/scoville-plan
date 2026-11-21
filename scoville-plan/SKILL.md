@@ -1,25 +1,34 @@
 ---
 name: scoville-plan
 description: Maintain, resume and audit repository Plans, Work Items and Decisions for Scoville Plan requests, work on an existing Work Item in a planning profile with PROJECT_INDEX.md and docs/plans, or explicitly requested durable planning across interruptions. Handle changes to active Plan work. Exclude work that no Work Item covers, that the user did not ask to plan and that finishes in this session; informational questions without retained action; explicit opt-out; and requested transfer prompts, which belong to Handoff.
-compatibility: "Any Agent Skills host with repository read and write access. Direct Markdown and YAML planning needs no service or network. Python helpers require Python 3.11+. Manual alternatives load only without suitable Python 3.11+. Helper errors remain errors. Developed for Codex and Claude Code."
+compatibility: "Any Agent Skills host with repository read and write access and Python 3.11+. Direct Markdown and YAML planning needs no service or network. Developed for Codex and Claude Code."
 ---
 
 # Scoville Plan
 
-Maintain native `format_version: 1` Plans, Work Items and Decisions through
-direct Markdown and YAML edits to the repository's existing planning records.
+Keep the plans for larger work in the repository as native `format_version: 1`
+Plans, Work Items and Decisions, edited directly as Markdown and YAML, so that
+an agent can resume after an interruption, knows what is done and what comes
+next, and finds the choices that were made.
 
-## Route new work
+## When work needs a Plan record
 
 Use the existing Work Item if it covers the request. Handle uncovered work
 directly when it fits this session, unless the user or project rules call for
 a Plan record. A planning profile on its own is no reason to create a record.
 For uncovered work that needs a record or must continue across sessions,
-use [Authoring](references/authoring.md) in a complete profile. Otherwise
+use [authoring.md](references/authoring.md) in a complete profile. Otherwise
 use the profile table below.
 
 If the user explicitly opts out, use neither this Skill nor its references or
 records, and report a repository rule that requires them.
+
+| Planning profile at the project root | Action |
+| --- | --- |
+| Complete: PROJECT_INDEX.md and docs/plans, with or without docs/decisions | Use the existing records. |
+| Wholly absent; durable Plan requested | Create it under authoring.md. |
+| Wholly absent; no durable Plan requested | Leave it uninitialized. |
+| Partial, foreign, unsupported or ambiguous | Preserve it; repair only an unambiguous format defect that changes no meaning, such as a Step numbered `01.`. |
 
 This Skill works on its own. When another Scoville Skill is installed and
 active, use it for the concern it owns. Do not install, imitate or require an
@@ -32,72 +41,54 @@ Relevant neighboring owners:
 - `scoville-code`: implementation scope, risk, and validation outside Plan records.
 - `scoville-handoff`: active-work transfer snapshots.
 
-Plan alone decides the wording of its records and their lifecycle (creation, status changes, deletion); it does not start execution
-or choose dispatch routes. One agent edits the records at a time: the files
-carry no lock, so a concurrent edit is lost silently.
-Reads and Skill upgrades need no migration.
+## Records and language
 
-## Authority and evidence
+Plan alone decides the wording of its records and their lifecycle (creation,
+status changes, deletion); it does not start execution or choose dispatch
+routes. One agent edits the records at a time: the files carry no lock, so a
+concurrent edit is lost silently.
+
+Write each required fact once, in its field: actions in Steps, observations in
+Evidence, live conditions in Instructions. Keep a record's language unless
+the user asks for a change. A new Plan, and a Decision created without a Plan,
+use the language of the task request; Work Items and Decisions of a Plan use
+that Plan's language, whatever language later questions use. Field labels, IDs,
+statuses and technical literals stay unchanged.
+
+## Authority and precedence
 
 1. Explicit user instructions and repository rules take precedence over this
    Skill. Your temporary task list is a throwaway copy; the records count.
-2. Preserve scope (Goal, Non-goals, Outcome), choices (accepted Decisions and the user's explicit choices), dependencies (`Depends on`) and binding constraints (Acceptance, Instructions, repository rules). Source material, silence, current behavior or structural validity (a passing validator or manual inspection) alone proves neither permission nor accepted work; settle a Step of unknown status under progress.md.
+2. Preserve scope (Goal, Non-goals, Outcome), choices (accepted Decisions and
+   the user's explicit choices), dependencies (`Depends on`) and binding
+   constraints (Acceptance, Instructions, repository rules). Source material,
+   silence, current behavior or structural validity (a passing validator)
+   alone proves neither permission nor accepted work; settle an in_progress
+   Step that may be partly done under
+   [progress.md](references/progress.md#after-an-interruption).
    A recorded stop covers only the scope it records, not later or neighboring
-   work.
+   work. A newer explicit direction replaces an older instruction only where
+   they conflict; it satisfies no dependency, Acceptance or substantive cost,
+   safety or external prerequisite. Ask only if a material conflict remains.
 3. Ask only for a missing material choice: activation, cancellation,
    deletion, changed scope, changed Acceptance requirements, an ambiguous
    successor or a Decision transition, and only where the applicable accepted
-   Decisions and the current item's Instructions leave it open. New work
-   that [Route new work](#route-new-work) sends to authoring as a todo Work Item does not wait for such a choice;
-   authoring.md has the rule. After an interruption or compaction, recover
-   and continue under progress.md. Repeat a question or status report only
-   after a material change, on request or where a rule requires it.
-   For choices that need a Decision, follow [Record and link Decisions](#record-and-link-decisions).
-4. When you start or resume a Work Item, except for an assigned read-only
-   field review, classify the planning profile with the table below, or reuse
-   an unchanged classification. For a complete supported profile, run the
-   proposal inventory and read the relevant proposals (all for a full audit);
-   an inventory error does not change the classification.
-5. Set a Work Item to done only through progress.md's Select and finish;
-   Evidence names the observations that establish completion.
-6. An explicit stop, or a correction that invalidates running work, halts the execution it affects. Answer an informational question and continue. In
-   a mixed message, separate the question from the instructions that add or
-   change work. Apply [Route new work](#route-new-work) to additions even
-   during a running Work Item. Create no Work Item for maintaining Plan records.
-7. Write each required fact once, in its field: actions in Steps, observations in
-   Evidence, live conditions in Instructions. Keep a record's language unless
-   the user asks for a change. A new Plan uses the language of the task
-   request; its Work Items and Decisions use that Plan's language, whatever
-   language later questions use. Field labels, IDs, statuses and technical
-   literals stay unchanged.
+   Decisions and the current item's Instructions leave it open. New work that
+   [When work needs a Plan record](#when-work-needs-a-plan-record) sends to
+   authoring as a todo Work Item does not wait for such a choice; authoring.md
+   has the rule. After an interruption or compaction, recover and continue
+   under [progress.md](references/progress.md#after-an-interruption). Repeat a
+   question or status report only after a material change, on request or where
+   a rule requires it. For choices that need a Decision, follow
+   [Decisions](#decisions).
+4. An explicit stop, or a correction that invalidates running work, halts the
+   execution it affects. Answer an informational question and continue. In a
+   mixed message, separate the question from the instructions that add or
+   change work. Apply [When work needs a Plan record](#when-work-needs-a-plan-record)
+   to additions even during a running Work Item. Create no Work Item for
+   maintaining Plan records.
 
-## Load only the current route
-
-| Operation | Reference |
-| --- | --- |
-| Select, progress, block, complete or cancel Work Items; ordinary recovery | [progress.md](references/progress.md) |
-| Insert, refine or order Work Items; author Step or execution annotations | [authoring.md](references/authoring.md) and progress.md |
-| Judge Work Item or Step boundaries where they are not obvious | [planning-granularity.md](references/planning-granularity.md) |
-| Read direction, list records, select dispatch units | [read-only.md](references/read-only.md) |
-| Create or restructure, activate, finish, cancel or delete a Plan; change Goal | [native-project-lifecycle.md](references/native-project-lifecycle.md) and progress.md; authoring.md for Work Items |
-| Create, audit or transition Decisions | [native-decision-format.md](references/native-decision-format.md) and progress.md |
-| Explicit request to inspect or repair progress, migrate records, or maintain and clean up existing Plans (ordinary recovery uses progress.md) | [repair.md](references/repair.md) |
-| Review assigned native fields without maintenance | read-only.md and the applicable field rules in progress.md or authoring.md; the Decision reference for Decision sections. Read the assigned sources only: no proposal inventory, maintenance, selectors, validators or tests. |
-| Audit wording | authoring.md and progress.md; the Decision reference for Decision sections |
-| Validate or diagnose structure | progress.md; an operation reference only if a diagnostic needs it |
-
-If the planning profile is unknown, list the project root to locate
-PROJECT_INDEX.md, docs/plans and docs/decisions. Index and docs/plans alone
-are a complete profile without Decisions, since Git stores no empty directory.
-
-| Observed profile | Action |
-| --- | --- |
-| Complete supported profile | Use the existing records and the operation's route. |
-| Wholly absent; durable Plan requested | Initialize through the lifecycle route. |
-| Wholly absent; no durable Plan requested | Leave it uninitialized. |
-| Partial, foreign, unsupported or ambiguous | Preserve it; repair only an unambiguous format defect that changes no meaning, such as a Step numbered `01.`. |
-
-## Record and link Decisions
+## Decisions
 
 Before creating a Decision, search existing Decision titles and scopes for
 the same choice. Read plausible matches completely and reuse one that
@@ -106,81 +97,79 @@ sequencing or execution direction in Instructions, and a user's model or
 reasoning choice for a Step in its execution annotation, unless it changes
 a material choice or a permission.
 
-Record a user's choice between design or
-product alternatives as an accepted Decision when work beyond the current
-Work Item must follow it; a choice that governs one Work Item stays in that
-item under authoring.md. Lifecycle choices such as activation, cancellation
-or deletion live in status fields.
+Record a user's choice between design or product alternatives as an accepted
+Decision when work beyond the current Work Item must follow it; a choice that
+governs one Work Item stays in that item under authoring.md. Lifecycle
+choices such as activation, cancellation or deletion live in status fields.
 
-For an unresolved choice, report its
-alternatives, tradeoffs and effect and ask before the work that depends on
-it; only that work waits. Record it as a proposal only when that work stops
-before the user answers.
+For an unresolved choice, report its alternatives, tradeoffs and effect and
+ask before the work that depends on it; only that work waits. Record it as a
+proposal only when that work stops before the user answers.
 
-Link a Decision where it governs the
-item's Outcome, Steps, Acceptance, Instructions, required checks or
-permissions, not for background or shared history. After a Work Item has
-started, add each relevant proposal to its Decisions field; relevant
-accepted Decisions may be added too. Read a Decision's state from the
-`status` in its own file.
+Link a Decision where it governs the item's Outcome, Steps, Acceptance,
+Instructions, required checks or permissions, not for background or shared
+history. After a Work Item has started, add each relevant proposal to its
+Decisions field; relevant accepted Decisions may be added too. Read a
+Decision's state from the `status` in its own file.
 
 ## Runtime helpers
 
 Use the bundled helpers for their operations. Read their invocation instructions,
-not their source, unless diagnosing a failure.
+not their source, unless diagnosing a failure. They require Python 3.11+.
+When Python discovery finds no suitable interpreter, a script or dependency is
+missing, or a helper reports an error its operation's instructions do not
+resolve, stop the affected operation and report the cause, with the
+helper's diagnostic where there is one. Never do a helper's work by hand.
 
-| Condition | Required route |
-| --- | --- |
-| Suitable Python 3.11+ is available | Use the bundled helper; do not load manual references. |
-| No suitable Python 3.11+ | Read only the matching optional reference below. |
-| Missing script, missing dependency or helper error | Stop the affected operation; this never enables the manual route. |
-
-| Helper | Optional no-Python reference |
-| --- | --- |
-| `scripts/select_context.py` | [select_context](references/fallbacks/select_context-fallback.md) |
-| `scripts/validate_profile.py` | [validate_profile](references/fallbacks/validate_profile-fallback.md) |
-
-## Helper invocations
-
-Verify the interpreter through [Python discovery](references/python-discovery.md)
-when you do not already have one. Select the route above before its call.
-
-Run the selector and validator commands here and in the references directly,
-with complete UTF-8 output. When their output may exceed the display limit,
-use output delivery's capture call with `--publish-full`; add
-`--max-output-tokens` only with a declared token limit, never an invented one:
+Helpers: `scripts/select_context.py`, `scripts/validate_profile.py`.
 
 ```text
-python -X utf8 "<skill-directory>/scripts/check_text_size.py" [--max-output-tokens <limit>] --publish-full --project-root "<project-root>" --run -- python -X utf8 "<skill-directory>/scripts/<helper.py>" <arguments>
-```
-
-The selector's byte budget limits successful context only. A diagnostic is
-always complete and means nothing was selected: read it whole. ID allocation:
-every `--next-id` mode suggests the highest ID plus one and never reuses an
-interior gap. It counts filename and metadata numbers, reports mismatches and
-reserves nothing, so recheck ID and filename collisions directly before
-creating the record.
-
-## Proposal inventory
-
-```text
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" [--plan PLAN-NNNN] [--work-item W-NNN] --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --unit W-NNN/step-N --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" [--plan PLAN-NNNN] --check-start W-NNN --format json
+python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --next-id <work-item|plan|decision> [--plan PLAN-NNNN] --format json
 python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --proposals --format json
+python -X utf8 "<skill-directory>/scripts/validate_profile.py" --root "<project-root>" --format json
 ```
 
-Read relevant Decisions from the returned paths. The inventory includes
-unlinked proposals and works without an active Plan and without any Decision
-yet. Open [Inventory details](references/read-only.md#surface-proposals) only
-for output fields or selection-mode constraints.
+`select_context.py --help` explains each mode and its output fields. When the
+output may exceed the display limit, capture it as
+[output delivery](references/output-delivery.md) describes.
 
-## Save and verify the result
+## Save and validate
 
-Related Plan, Decision and index edits form one update. After an update that
+Related Plan, Decision and index edits form one update: prepare the complete
+result, then save the related files together, index last; set a Plan's
+`updated` to the date of an update that changes the Plan. After an update that
 changes a Work Item, Plan or Decision status, adds or removes a Plan, Work
-Item, Decision or link, or spans several files, validate the complete profile once, after it is
-saved and before you report it or start dependent work. A Step status or
-Evidence edit alone needs no validation. progress.md has the command, the
-diagnostic handling and the safe-write and continuation rules. When the update changes active or blocked
-work or the next action, name the new state in the final report.
+Item, Decision or link, or spans several files, check the saved diff for lost
+meaning, permissions, live conditions and recorded Acceptance results, then
+validate the complete profile once, before you report it or start dependent
+work. A Step status or Evidence edit alone needs no validation. When the
+update changes active or blocked work or what comes next, name the new state
+in the final report.
+
+After a concurrent change or a partial write, stop the dependent work until
+the affected records are consistent again. An interrupted lifecycle transition
+needs user direction before it is completed or undone, unless existing
+direction covers the same prepared, unambiguous result with unchanged sources.
+
+Read the exit code and `valid`. Fix what departs from your prepared result.
+On older records, apply only a suggestion that corrects format without
+changing meaning; report the rest instead of inventing state to satisfy a
+diagnostic.
+
+## References
+
+| When | Read |
+| --- | --- |
+| Creating a profile or Plan; adding or refining Work Items, and Steps of todo items | [authoring.md](references/authoring.md) |
+| Starting, resuming, progressing, pausing or finishing a Work Item; after an interruption or compaction | [progress.md](references/progress.md) |
+| Creating, linking or changing the status of a Decision | [decisions.md](references/decisions.md) |
+| Changing a started item beyond progress fields; on explicit request: repairing progress, cleaning up old Plans or Decisions, cancelling or deleting work or a Plan, activating or switching Plans | [maintenance.md](references/maintenance.md) |
+| Reviewing or auditing records | The reference that owns the reviewed fields; a full audit reads every proposal; report findings against it; change nothing |
+| Status questions, listings, validator diagnostics | No reference: the Runtime helpers commands and Save and validate; read status from the records' frontmatter and Status fields, never from file names or Git |
 
 ## Shared references
 

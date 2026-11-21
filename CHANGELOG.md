@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-21 - The Evidence limit stands where Evidence is written
+
+The validator allows 200 characters for Evidence as plain text, or 200 per entry in a bracketed list. That limit stood only in the validator, and an Evidence edit alone needs no validation, so in a test a model wrote a longer entry and handed over an invalid profile. The progress reference now states the limit. In one later run per model the profile stayed valid, once as plain text and once as a list.
+
+## 2026-11-20 - Lean Plan
+
+Plan is the Skill I use most, and an everyday step loaded several thousand words to use a few hundred. I cut it down to what keeping a Plan needs: create it, resume after an interruption, finish a Step, record a Decision, validate.
+
+- The Skill now consists of SKILL.md and four references: authoring (create Plans and Work Items), progress (start, resume, finish), decisions, and maintenance. Maintenance loads for changes to a started item beyond its progress fields and, on request, for repair, cleanup, cancellation, deletion and activating or switching a Plan.
+- The references for reading, repair, the Plan lifecycle, granularity and the Decision format are merged into these files or removed.
+- Retired formats are no longer described: the `Next action` field, Steps without status, the `Deferred` and `Prioritized` title prefixes and Decision transition batches. Plans in the old format still validate, but the Skill no longer explains how to read or convert them.
+- The selector and validator explain their own output, options, exit codes and diagnostics; the instructions no longer repeat them.
+- Not tested with models yet.
+
+## 2026-11-20 - Python is required
+
+The selector, the validator and the text-size checker now always need Python 3.11+. The manual references for selecting context, inspecting a Plan and checking sizes without Python are gone: without a suitable Python the affected operation stops and says so, as it already did after a helper error. I removed the manual routes because a host without Python is rare, an agent following a prose copy of a helper makes mistakes the program does not, and every copy was one more wording of the same rules to keep in step.
+
+## 2026-11-20 - Clearer structure
+
+The progress reference has separate sections for reading, recovery after an interruption, the continuation contract and safe writing. Rules for recovery and for the precedence of a newer direction sit where an agent loads them in that situation. Cleaning up Decisions has one list of what is kept, with authority and permissions both on it. Procedures that stood without a heading at the top of a reference have one.
+
+## 2026-11-19 - One wording per rule
+
+Rules that stood in two or more places (the entry point and a reference, two references, or the shared references) now stand in one, with a link where a reader needs it. No rule was dropped. Where two wordings differed in content, both stay until I decide which one holds.
+
 ## 2026-11-19 - New work and Decisions
 
 The entry point groups the rules for routing new requests and for recording and linking Decisions. The authoring reference links directly to those rules.

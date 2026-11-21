@@ -1,142 +1,58 @@
-# Progress and safe record edits
+# Progress
 
-## Contents
+## Start or resume
 
-- Read and write
-- Editable fields
-- Step progress
-- Evidence
-- Instructions
-- Legacy continuation
-- Blockers
-- Select and finish
-- Structural check
+1. Classify the planning profile with SKILL.md's table, or reuse an unchanged
+   classification. For a complete profile, run the proposal inventory and read
+   the relevant proposals; an inventory error does not change the
+   classification.
+2. Read PROJECT_INDEX.md, the active Plan header and the complete affected
+   blocks, with the Decisions they reference; complete text held from an
+   unchanged file need not be reread. Read a completed or cancelled Plan only
+   for a concrete reason it is relevant.
+3. Read the known Work Item's context directly and compare `current_item`,
+   item status and active Step with your assignment. Use position mode first
+   only when the ID is unknown, those facts disagree, or a recorded return
+   matters.
+4. Before starting a todo item, compare its assumptions, paths and checks with
+   the current files and its completed dependencies in this Plan, and refine
+   stale instructions first.
+5. Before starting a todo item or resuming a paused one, run the start check
+   and apply [Status changes](#status-changes). An empty `violated_conditions`
+   grants no permission: judge proposal relevance and whether the start is
+   permitted yourself.
 
-## Read and write
+## After an interruption
 
-Use the interpreter and [runtime rule](../SKILL.md#runtime-helpers) from the entrypoint.
-Without suitable Python, the manual routes named there replace the commands
-below.
+An in_progress Step may be partly done. Settle it from the evidence (the
+Evidence field, original reports, actual results) or the result check the
+authorized work needs; repeat no completed effect.
 
-Read PROJECT_INDEX.md, the active Plan header and the complete affected
-blocks, the Decisions they reference and the relevant proposals; complete
-text held from an unchanged file need not be reread. Before starting a todo
-item, compare its assumptions, paths and checks with the current files and
-its completed dependencies in this Plan, and refine stale instructions first.
-Read a completed or cancelled Plan only for a concrete reason it is relevant.
+If compaction occurs, continue the same original assignment with its
+remaining work. Compaction changes neither assignee nor original Step
+boundaries.
 
-On recovery, select the known Work Item directly and compare current_item,
-item status and active Step with your assignment. Use position mode first
-only when the ID is unknown, those facts disagree, or a recorded return or
-priority matters. Its paused_context and historical_priorities list them;
-full context contains only the selected Work Item. Settle a Step of unknown status from the evidence (the Evidence field, original reports, actual results) or the result check the authorized work needs.
+## Continuation contract
 
-```text
-python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --position --format json
-python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --format json
-python -X utf8 "<skill-directory>/scripts/select_context.py" --root "<project-root>" --work-item W-001 --format json
-```
+Keep records resumable from the files alone, with current item and Step,
+remaining work, completed effects, governing Decisions and relevant
+proposals, live permissions and stops, binding Acceptance, the responsible
+source files, and observations and their limits; the first unfinished Step is
+what comes next. Write no recovery log.
 
-Use the entrypoint's capture and diagnostic rules. Load [read-only.md](read-only.md)
-only for output-field details, dispatch-unit selection or wider read tasks.
+## Step status
 
-Continuation contract: keep records resumable from the files alone, with
-current item and Step, remaining action, completed effects, governing
-Decisions and relevant proposals, live permissions and stops, binding
-Acceptance, the responsible source files, and observations and their limits;
-the next action is the first unfinished Step. Each fact stands once in its
-field, without a recovery log. For a required readable source, give its
-exact path and section with a reading instruction; otherwise state the
-needed facts.
-
-Edit only the record that holds the field, replacing text that occurs once in
-the file. Reject out-of-project targets and leave unrelated changes intact.
-Read and write explicitly as UTF-8, without BOM, with LF, through a
-literal-safe write or patch, never as text interpolated into a shell command.
-
-1. Prepare the complete consistent result before writing; save related files
-   together, index last.
-2. After an update that SKILL.md's
-   [Save and verify](../SKILL.md#save-and-verify-the-result) requires
-   validated, check the saved diff for lost meaning, permissions, current
-   conditions and recorded Acceptance results, then validate once. Check
-   encoding where a warning or changed text gives a concrete concern.
-
-This check covers only inspected contents. Reuse unchanged instructions
-without extra copies or receipts. On a concurrent change or a partial write,
-stop the dependent work until the affected records are consistent again. An
-interrupted lifecycle transition needs user direction before it is completed
-or undone, unless existing direction covers the same prepared, unambiguous
-result with unchanged sources.
-
-## Editable fields
-
-| Work Item status | Permitted changes |
-| --- | --- |
-| todo in draft or active Plan | Authored fields, Evidence and Next action; move or delete a whole block; change state by the rules below |
-| in_progress or paused | Status, Blocked by, Instructions, Evidence, legacy Next action and observed Step status; bounded amendments below |
-| done or cancelled | No routine edits or state transitions; explicit repair under repair.md may add proved Step status and correct established Evidence and Instructions; explicit cleanup under repair.md may shorten Instructions and Evidence; the exceptions below apply |
-
-IDs never change. In a started item, keep scope, dependencies, order and
-completed effects. For any status, explicit cleanup under repair.md may
-shorten Outcome, Acceptance and Step wording without changing requirements,
-actions or historical meaning. Explicit repair or cleanup may also clarify a
-Step's established completion condition and required checks under repair.md,
-without editing Outcome or Acceptance. Both exceptions need no old-text note,
-copy or separate approval.
-
-A started item permits these changes:
-
-- Add a relevant proposed or accepted Decision. Retain older links unless
-  [scoped Decision cleanup](native-decision-format.md#scoped-decision-cleanup)
-  removes them under its rules.
-- Correct a stale path, version reference or other purely formal wording only
-  when evidence shows unchanged behavior, compatibility, data, permissions
-  and verification scope, such as `docs/setup.md` renamed
-  `docs/install.md`. A changed expected result or weaker Acceptance is
-  material, not formal: obtain the user's decision before dependent work.
-  With that explicit decision, change the Acceptance in the Work Item and
-  state in its Evidence what the user changed and on which date; record a
-  Decision only when the change applies beyond this Work Item. Add a Decision link or correct formal wording in the existing Work Item, not in a replacement.
-- Split the remaining work of a started Step into consecutive Steps of the
-  same item without changing Outcome, Acceptance, constraints or authored
-  order. Keep completed parts and their Evidence, and update Step references
-  so pending assignments still identify the remaining work.
-- When an authorized acceptance review finds an omitted implementation with
-  no matching Step, the responsible agent may append one Step that fulfils a
-  named, already binding unchanged Acceptance criterion or Work Item
-  requirement. Keep existing Step text, scope, order, completed effects and
-  Acceptance.
-  Run the new Step through implementation and the checks and acceptance reviews
-  required by the active execution route. Changed
-  scope, contradictory requirements or materially unclear meaning need the
-  user.
-- After start, an explicit user choice may replace only the execution
-  annotation of a named unperformed Step, preserving its action, route and
-  execution history.
-
-Its other fields stay fixed, apart from the repair.md exceptions above. Resume paused work to in_progress, never todo.
-The Plan lifecycle reference has the explicit wholly-unstarted exception.
-
-## Step progress
-
-A Step without written status is legacy unknown, which is neither todo nor
-done. Written status comes first:
-todo, in_progress, done or cancelled. Preserve explicit route and execution
-annotations; load [authoring.md](authoring.md#step-annotations) when authoring
-or changing them. Annotation syntax proves no model availability or support.
-
-During ordinary work, add or update status only from observed progress. Begin
-in_progress when work starts, not on selection alone. Mark done when the
-Step's action and required checks are complete. Cancelled needs explicit
-direction and is never done. In a nonterminal item, a confirmed correction
-may return a done Step to in_progress; retain its completed effects and
-reason in Evidence. A status change does not rewrite the action, order, route
-or execution choice. Pause and blockers remain on the Work Item. Update
-observed Step status at start, completion, interruption and correction, and
-before handoff or compaction. Reviews and Acceptance due on the Work Item
-stay due: all Steps done neither completes the Work Item nor authorizes
-repeating them.
+Set Step status only from observed progress: at start, completion,
+interruption and correction, and before handoff or compaction. A Step begins
+in_progress when its work starts, not on selection; inspecting or reviewing
+starts none. It is
+done when its action and required checks are complete; cancelled needs explicit direction and is
+never done. In an open item, a confirmed correction may return a done Step to
+in_progress, with its completed effects and the reason in Evidence. A status
+change rewrites no action, order, route or execution choice; pause and
+blockers stay on the Work Item. Reviews and Acceptance due on the Work Item
+stay due: all Steps done neither completes the item nor authorizes repeating
+them.
 
 ## Evidence
 
@@ -149,18 +65,13 @@ development or a retention rule needs, not review transcripts or run
 chronology.
 
 The field is normally sufficient. Link existing reports for needed detail;
-create or update one only when the task requires that detail, not to fit the
-field limit. Create no archive, copy, hash or inventory to document checks,
-reviews or cleanup. Keep progression in its Plan fields.
+create or update one only when the task requires that detail. Keep
+progression in its Plan fields.
 
-Prefer one-line plain text, for example:
+Prefer one line of plain text. More than 200 characters of plain text, or
+more than 200 in one entry of a bracketed list `[a, b]`, makes the profile
+invalid. For example:
 `Evidence: pytest tests/test_thumbnails.py passed, 12 tests; required review found no defects; open: animated GIF input untested (Step 3).`
-Keep it within the supported 200 characters. Commas and brackets within the text
-are allowed; do not start plain text with `[`. Use `[]` on a nonterminal item
-when nothing was observed. A done or cancelled item needs nonempty Evidence;
-for a cancellation without observed work, record the user's direction and
-its date.
-Preserve supported existing lists.
 
 ## Instructions
 
@@ -168,125 +79,49 @@ Instructions holds the additional conditions binding the item now: stops,
 limits, explicit returns or required overall reviews. Repeat no Outcome,
 Acceptance or history.
 
-Use one short line or exactly []; a missing field is legacy unknown, not [].
-New items write it explicitly. When conditions change, replace the whole
-field with the remaining conditions in current words, dropping fulfilled or
-superseded ones, so that old and new text cannot contradict each other. Keep
-an unclear live condition briefly and ask only if the next action depends on
-its meaning. Before completion, confirm that no binding condition remains
-unmet. For cancellation, fulfil the conditions that govern cancellation and
-retain outstanding execution and Acceptance conditions as history.
-Instructions of a terminal item are historical direction.
-
-## Legacy continuation
-
-A legacy Next action can hold binding conditions too: read it for them and
-keep a return it grants. A nonterminal legacy item without written Step
-status still needs its nonempty Next action; while retained, keep it
-consistent with observed progress. New work uses Steps instead.
+When conditions change, replace the whole field with the remaining conditions
+in current words, dropping fulfilled or superseded ones, so that old and new
+text cannot contradict each other. Keep an unclear live condition briefly and
+ask only if the work at hand depends on its meaning. Before completion,
+confirm that no binding condition remains unmet. Instructions of a terminal
+item are historical direction.
 
 ## Blockers
 
-Blocked by is `[]` or a comma-space-separated list such as `[EXT-API-KEY]`.
-Labels match `[A-Z][A-Z0-9]{1,15}-[A-Z0-9][A-Z0-9._-]{0,47}`; prefixes
-`ADR`, `PLAN` and `W` are reserved. Each label is unique and names an actual
-external prerequisite; one invented to satisfy validation would block real work.
-Remove a named blocker from continuing work only with proof. On authorized
-cancellation, clear live blockers in the same update as cancellation and
-retain the unresolved prerequisites and their effects in Evidence. Resolve
-prerequisites of the cancellation itself before saving it.
+Each label in Blocked by names an actual external prerequisite; one invented
+to satisfy validation would block real work. Remove a named blocker from
+continuing work only with proof.
 
-## Select and finish
+## Status changes
 
 An explicit request to execute the whole Plan authorizes continuing item by
-item within that scope, without asking again after each. An older stop
-applies only to its recorded scope. A newer explicit direction replaces
-an older instruction only where they conflict; it satisfies no dependency,
-Acceptance or substantive cost, safety or external prerequisite. Ask only if
-a material conflict remains.
+item within that scope, without asking again after each.
 
-```mermaid
-flowchart TD
-  change{"Requested change?"}
-  change -->|select| select{"Active Plan; todo or paused target; dependencies done; no other in_progress item?"}
-  select -->|yes| selected["Set current_item; blockers may remain; do not start"]
-  select -->|no| stop["Stop dependent work; resolve the missing prerequisite or choice"]
-  change -->|start or resume| ready{"Selected current todo or paused item; dependencies met, no blockers or unresolved dependent Decision; start allowed by scope, Instructions and any legacy Next action?"}
-  ready -->|yes| started["Set item in_progress; record actually started Steps; save before execution"]
-  ready -->|no| stop
-  change -->|pause| pause{"Current in_progress item; explicit direction or authorized pause/return?"}
-  pause -->|yes| paused["Set paused; preserve observed position and constraints"]
-  pause -->|no| stop
-  change -->|complete| accepted{"Current todo or in_progress; Acceptance observed; all due Steps, checks, reviews and binding conditions fulfilled; dependencies done; blockers cleared?"}
-  accepted -->|no| stop
-  accepted -->|yes| finish["Retain Evidence; empty Blocked by; remove Next action"]
-  change -->|cancel| cancel{"Explicit direction, observed evidence and cancellation prerequisites met?"}
-  cancel -->|no| stop
-  cancel -->|authorized Plan cancellation too| cancelPlan["Apply the Plan cancellation through lifecycle without choosing a successor"]
-  cancel -->|authorized cancellation of the current item only| finish
-  cancel -->|authorized cancellation of a non-current item| other["Set cancelled; retain Evidence; empty Blocked by; remove Next action; keep current_item; validate"]
-  finish --> last{"All other items terminal?"}
-  last -->|yes| terminal["Apply the requested item status through the applicable Plan lifecycle path"]
-  last -->|no| successor{"Eligible exact successor under return and priority rules?"}
-  successor -->|yes| next["Set requested done/cancelled status and select successor in one update; validate"]
-  successor -->|no| retain["Keep item open; retain observed result in Evidence and unresolved succession in Instructions"]
-```
+| Change | Only when | Record |
+| --- | --- | --- |
+| Select | Active Plan; target todo or paused; its dependencies done; no other item in_progress | Set `current_item`; blockers may remain. Selecting starts nothing. |
+| Start or resume | Selected current todo or paused item; dependencies done; no blockers or unresolved Decision the work depends on; scope and Instructions allow it | Set in_progress (paused work never returns to todo), mark the Steps actually started, and save before execution. |
+| Pause | Current in_progress item; explicit direction or an authorized pause or return | Set paused; keep the observed Step position and constraints. For a requested return, add it to Instructions, such as `After W-004 completes, resume W-001 at Step 3.` |
+| Complete | Current todo or in_progress item (resume paused work first); Acceptance observed; all due Steps, checks, reviews and binding conditions fulfilled; dependencies done; blockers cleared | Set done with Evidence naming the observations that establish completion, and select the successor in the same update. |
 
-Resume paused work before completing it. Cancelled work satisfies no
-dependency of unfinished work; a done or cancelled item may keep such a link
-as history. Reopening a terminal item needs the explicit lifecycle direction
-that repair.md describes. Selecting an ordinary successor, which may still be blocked, does not authorize executing it. Start it only after its pre-start checks (the comparison under Read and write and the start conditions in the flowchart) and within the authorized scope. An explicit return instead
-follows the lifecycle's stricter resume prerequisites. Unresolved succession
-is no reason to repeat completed work.
+Before selecting the successor, check paused items' Instructions for a
+return to the finished item. A recorded return comes before document order:
+select that item, resume it at its recorded Step, and move the fulfilled
+return from its Instructions to its Evidence. Ask about an ambiguous,
+missing, blocked or dependency-invalid return instead of skipping it.
+Otherwise select the first eligible item in document order; if open items
+remain but none is eligible, keep the finished item open with its result in
+Evidence and the open succession in Instructions, and ask. Repeat no
+completed work for it. Start a selected successor only after the checks under
+[Start or resume](#start-or-resume) and within the authorized scope.
 
-Read structural facts with `select_context.py --root "<project-root>"
---check-start W-NNN --format json`; add --plan PLAN-NNNN to inspect a named
-Plan, including a draft or inactive one. The output distinguishes todo, paused
-resume, already started and terminal work, checks current_item and lists
-dependencies, blockers, other started items and linked open proposals. A
-successful read and an empty violated_conditions list grant no permission or
-acceptance. Judge proposal relevance and whether the action is actually permitted
-yourself; the helper neither chooses a successor nor writes a start.
+When the completed item was the last nonterminal one, complete the Plan in
+the same update: `status: completed` without `current_item`, and the index
+`active_plan: null`. Create no placeholder work to avoid idle.
 
-Inspection ranges and read-only reviews start no Step. These field edits need
-no separate operation or progress record.
+## Started items
 
-Before selecting a successor, inspect the records for recorded returns and
-explicit historical priority. Both come before default document order; if
-they conflict, ask for a choice. Keep an ambiguous, missing, blocked or
-dependency-invalid return and ask; do not skip it. For historical prefixes
-or an immediate redirect read the special cases in the Plan lifecycle
-reference.
-
-## Structural check
-
-Use the entrypoint's [helper invocation pattern](../SKILL.md#helper-invocations):
-
-```text
-python -X utf8 "<skill-directory>/scripts/validate_profile.py" --root "<project-root>" --format json
-```
-
-Read warning diagnostics too: FILE_MOJIBAKE_SUSPECTED gives file, line and
-column for common misdecoding sequences in prose. Warnings alone retain
-valid=true and exit 0. Fenced/inline code is excluded; unquoted encoding examples
-may warn. The heuristic misses other damage. Compare suspicious text with its
-intended wording and correct confirmed damage by hand within the editing
-rights above, never automatically: an automatic repair would also rewrite
-intentional examples.
-
-Invoke helpers without loading their Python source. No planning CLI writes
-records. Read both exit code and JSON valid:
-
-| Exit / valid | Action |
-| --- | --- |
-| 0 / true | Structural check passed for these bytes; assess semantics separately |
-| 1 / false | Follow ordered file and field diagnostics; repair only unambiguous representation defects and departures from your prepared result, then rerun |
-| 2 / null | Inspection incomplete (path, access or I/O); resolve the condition, claim no pass |
-| 3 / null | Helper failure; report it and leave structural acceptance open |
-
-Validation is not a snapshot or a general before/after change detector. The
-Selector can report FILE_CHANGED_DURING_READ when an opened file is no longer
-regular; this does not detect all concurrent edits.
-
-Report a remaining lifecycle or scope choice instead of inventing state to
-satisfy a diagnostic.
+In an in_progress or paused item, change only Status, Blocked by,
+Instructions, Evidence, observed Step status and added Decision links; leave
+done and cancelled items unchanged. Any other change follows
+[maintenance.md](maintenance.md).
