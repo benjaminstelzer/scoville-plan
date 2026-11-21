@@ -156,7 +156,7 @@ authorized, in Goal or Non-goals.
 
 Route and execution annotations are optional and record an explicit choice;
 infer none. They follow the status, as in
-`1. [status: todo] [route: medium] [execute: model=gpt-6.1-sol; reasoning=high] Update the parser.`;
+`1. [status: todo] [route: medium] [execute: model=gpt-6.2-sol; reasoning=high] Update the parser.`;
 the validator names malformed annotations and permitted values.
 
 ## Hand remaining work to another item

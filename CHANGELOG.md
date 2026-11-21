@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-21 - Example annotation names the current default
+
+The `[execute: ...]` example in the authoring reference names `gpt-6.2-sol`, the model Workflow's bundled pairs now use.
+
 ## 2026-11-21 - The Evidence limit stands where Evidence is written
 
 The validator allows 200 characters for Evidence as plain text, or 200 per entry in a bracketed list. That limit stood only in the validator, and an Evidence edit alone needs no validation, so in a test a model wrote a longer entry and handed over an invalid profile. The progress reference now states the limit. In one later run per model the profile stayed valid, once as plain text and once as a list.
