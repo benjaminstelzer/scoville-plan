@@ -1,6 +1,14 @@
 # Changelog
 
-## 2026-11-23 - The Goal rule names no examples; validator advice that can be followed
+## 2026-11-23 - The duplicate-ID advice names the next free ID; a Goal of `[]` is rejected
+
+After a duplicate Work Item ID the validator now names the next free ID itself and says that the marked line is the second occurrence in the file, not necessarily the newer item. The advice of the entry below left the calculation to the agent and could be read as pointing at the older item.
+
+A Goal that holds only `[]` is rejected like an empty one. The earlier advice for an empty Goal had recommended that marker, and a Plan saved that way passed the check without a Goal.
+
+The heading of the entry below said "The Goal rule names no examples". Only the sentence on working conditions lost its examples; I corrected the heading.
+
+## 2026-11-23 - The sentence on working conditions names no examples; validator advice that can be followed
 
 The sentence that keeps conditions on the working process out of Goal and Non-goals no longer names examples. The two it named, when work may start and what a session may touch, were the conditions of the test task, so the run after the change showed little. One run with `gpt-6.2-sol` on the sentence without examples created a first Plan from the same request: the result limit stands in Goal, the exclusion in Non-goals, "do not implement yet" appears nowhere, and the limit on what to access stands in the Instructions of both items. That is one run; it fits the sentence and does not prove it.
 

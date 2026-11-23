@@ -32,10 +32,11 @@ def plan_sections(text: str) -> dict[str, tuple[int, int]]:
     spans = {}
     for index, heading in enumerate(roots):
         end = roots[index + 1].start() if index + 1 < len(roots) else len(text)
-        if heading[2] != 'Work items' and not text[heading.end():end].strip():
+        content = text[heading.end():end].strip()
+        if heading[2] != 'Work items' and (not content or heading[2] == 'Goal' and content == '[]'):
             fail('Restore the known content of the empty section; do not invent it. '
                  + ('Write `[]` under Non-goals when there are no exclusions.' if heading[2] == 'Non-goals'
-                    else 'Goal needs authored content.'), heading.start())
+                    else 'Goal needs authored content, not `[]`.'), heading.start())
         spans[heading[2]] = (heading.start(), end)
     work_start = roots[-1].end()
     work_headings = [h for h in headings if h.start() >= work_start]

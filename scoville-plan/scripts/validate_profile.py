@@ -1134,6 +1134,7 @@ class Validator:
             "Next action",
         ]
         required_fields = [field for field in expected_fields if field not in {"Instructions", "Steps", "Next action"}]
+        next_free = f"W-{max(int(match.group(1)[2:]) for _, match in starts) + 1:03d}"
 
         for index, (heading_line, match) in enumerate(starts):
             item_diagnostics_start = len(self.diagnostics)
@@ -1145,7 +1146,8 @@ class Validator:
                     "WORK_ITEM_ID_DUPLICATE",
                     parsed.logical_path,
                     "A Work Item ID occurs more than once in the Plan.",
-                    "Give the duplicate item the ID one above the highest `W-NNN` in this Plan; do not renumber existing items.",
+                    "This line is the second occurrence in the file, not necessarily the newer item. Give the item "
+                    f"added later the ID `{next_free}`, the next free one in this Plan; do not renumber existing items.",
                     line=heading_line,
                     record=record,
                     observed=item_id,
