@@ -16,59 +16,54 @@ shows these records on Windows, macOS and Linux.
 
 ## How it works
 
-- Use the repository's existing planning system and relevant Plan, Work Items and Decisions.
-- Check current sources before starting the next item.
-- Edit Markdown and YAML records with observed Step progress and any additional Instructions.
-- Record observed acceptance results before completion and validate record structure.
-
-The validator checks structure and references. It cannot establish permission,
-meaning or whether an acceptance result is true.
-Selector and validator share Plan section boundaries; diagnostics identify
-the location and correction without imposing blank-line layout.
-
-## What it enforces
-
-- **Resumable work.** Goals, ordered Steps, dependencies and the current position
-  stay explicit, together with live permissions, completed effects and evidence limits.
-- **Decisions with an owner.** Confirmed choices are recorded. Open questions
-  remain proposals and block only the work that depends on them.
-- **Evidence before completion.** Finished means acceptance was checked.
-  Changes of direction preserve completed work, binding constraints and material decisions.
-
-Edit records from one session at a time. Concurrent edits need reconciliation.
-See the [full instructions](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md).
+- Plan keeps a Plan, its Work Items and your Decisions as Markdown files in
+  the repository: `PROJECT_INDEX.md`, `docs/plans` and `docs/decisions`. A
+  Work Item has ordered Steps with a status, dependencies and acceptance
+  criteria.
+- Before the next item starts, the agent checks the current sources and not
+  only the record.
+- Progress is recorded as it is observed. Finished means the acceptance was
+  checked.
+- Confirmed choices become Decisions. Open questions stay proposals and block
+  only the work that depends on them.
+- A bundled validator checks structure and references. It can't tell whether
+  an acceptance result is true.
+- Edit Plan records from one session at a time.
 
 ## What it costs
 
-- Maintaining records takes tokens and time. It pays for continuity on dependent work. A small fix rarely needs a large Plan.
-- Writing, machine-data and command rules load for the operation that needs them.
-  Required Plan and Decision text stays complete; source references and embedded
-  Decision text are separate parts of a prompt, so fewer rule words do not imply
-  smaller Decision records or a fixed token saving.
+Maintaining the records takes tokens and time.
 
-## How it was developed
+## How to use
 
-Long-running projects shaped Plan's resumable work units and progress records.
-As the records grew, keeping every old note became a problem of its own.
-Maintenance became part of the design: retain current decisions and accepted
-results without turning routine updates into more work.
+```text
+Use Scoville Plan to create an implementation plan for migrating the billing schema, including dependencies and acceptance criteria.
+```
 
-Changes are tested and examined in real project workflows, especially where
-work resumes after an interruption. What helps an agent recover the project's
-intent, and what merely adds reading, guides the next revision.
+```text
+Plan the billing migration in the repository so another session can carry out each step without this conversation.
+```
 
-## Compatibility
+State the result you want and the constraints that matter. Plan asks only when
+an unknown would materially change the solution. It writes the records and
+doesn't start agents to do the work. New Plans use the language of your task.
 
-Developed for Codex and Claude Code with repository read/write access and
-Python 3.11+ for the bundled helpers.
-Tested with `gpt-6.1-sol` and Claude Opus 5.5; these models at medium reasoning effort are the minimum,
-because lower effort skips steps more often.
+To correct a record, ask "Review and correct PLAN-0001". Without such a
+request, inspection stays read-only. On an explicit cleanup request Plan
+shortens old Plans and Decisions and, if you ask for removal, deletes expired
+or superseded Decisions. Deleting a file needs its contents committed or your
+approval.
+
+The [authoring guide](scoville-plan/references/authoring.md) has the templates
+if you write Plans by hand.
 
 ## Install
 
-This Skill works independently. Other Scoville Skills are optional.
+Works in Codex and Claude Code. It needs read and write access to the repository
+and Python 3.11+ for its bundled helpers.
 
-### Install this Skill
+Use `gpt-6.2-sol` or Claude Opus 5.5 at medium reasoning effort or higher. Below
+that, steps get skipped more often.
 
 Ask your agent host:
 
@@ -79,109 +74,23 @@ Preserve personal settings and unrelated Skills. Report the installed location
 and whether the host discovers the Skill.
 ```
 
-The host needs permission to write to its Skills directory. The
-[Codex Skills guide](https://learn.chatgpt.com/docs/build-skills) and the
-[Claude Code Skills guide](https://code.claude.com/docs/en/skills)
-list the locations for each host.
+The host needs write access to its Skills directory. The
+[Codex](https://learn.chatgpt.com/docs/build-skills) and
+[Claude Code](https://code.claude.com/docs/en/skills) Skills guides say where
+that is. This Skill works on its own. The other Scoville Skills are in the
+[Scoville Suite](https://github.com/benjaminstelzer/scoville-suite).
 
-### Install the complete Scoville suite
+## Background
 
-The complete suite is in the
-[Scoville Suite monorepo](https://github.com/benjaminstelzer/scoville-suite).
-Install its released Skill packages, not development templates.
+Long-running projects shaped Plan. As the records grew, keeping every old note
+became a problem of its own, so maintenance became part of the design: keep
+current decisions and accepted results without turning routine updates into
+more work.
 
-## Configuration
-
-Plan uses the repository's Markdown planning records. It selects no
-model settings and starts no execution workflow.
-
-## How to use
-
-```text
-Use Scoville Plan to create an implementation plan for migrating the billing schema, including dependencies and acceptance criteria.
-```
-
-```text
-Create a detailed repository-owned implementation plan for the billing migration so workers can execute each point without this conversation.
-```
-
-State the result you want and the constraints that matter. Plan records the
-work, dependencies and acceptance criteria. It reuses known expectations for
-the project's lifetime, maintenance and further development, and asks only when
-an unknown would materially change the solution. Those expectations stay in
-Goal or Non-goals so the next agent can use them without this conversation.
-Plan does not dispatch agents. New Plans use your task language; related records
-follow the Plan. An unrelated question does not change an existing record's language.
-
-### Progress and decisions
-
-New Plan points use ordered Steps with explicit progress:
-
-```text
-1. [status: done] Write the draft.
-2. [status: in_progress] Review it against the brief.
-3. [status: todo] Deliver the reviewed text.
-```
-
-The agent records observed progress, keeps open decisions visible and asks
-before dependent work. Completed Steps still need the Plan point's acceptance
-checks.
-
-To correct an existing record, ask: "Review and correct PLAN-0001." The agent
-checks the evidence and actual result before changing progress. Inspection
-without a correction request stays read-only.
-
-### Keeping Decisions current
-
-When creating a later Plan, Plan checks only Decisions it would link or replace,
-or whose Work Items it replaces, and removes none of them. On an explicit
-cleanup request it can shorten old Plans and Decisions, and remove expired
-temporary or superseded Decisions and obsolete links in the requested scope,
-preserving current constraints, including unlinked ones, and the needs of
-other open Plans. Ordinary reading and resuming work clean up nothing.
-
-Deletion requires the file's current contents to be committed or your explicit
-approval. A tracked path with uncommitted changes is not enough.
-
-### Companion app
-
-[Plan Viewer downloads](https://github.com/benjaminstelzer/scoville-plan-viewer/releases/latest)
-include a portable EXE and installers for Windows x64, DMGs and zipped apps for
-macOS Apple Silicon and Intel, and a portable binary, AppImage, DEB and RPM for
-Linux x64.
-
-Open a project containing `PROJECT_INDEX.md`, `docs/plans` and `docs/decisions`.
-The read-only Viewer shows current work, Step progress and decisions, refreshing
-automatically while active. Removing a project from its list leaves the
-repository untouched.
-
-Portable copies keep the project list in `scoville-plan-viewer.xml` beside the
-application. An installed copy in a read-only folder uses the platform's user
-configuration directory. Skill and Viewer updates are independent; use a
-Viewer that supports the progress fields in your Plan records.
-
-The [authoring guide](scoville-plan/references/authoring.md) has the Plan and
-Work Item templates and Step annotations; the bundled validator explains field
-formats in its diagnostics. Plan uses `format_version: 1`. Records in the
-retired formats still validate, but the Skill no longer describes them.
-
-## Sources
-
-- [Agent Skills specification](https://agentskills.io/specification) for the
-  portable package and progressive disclosure.
-- [OpenAI coding-agent best practices](https://developers.openai.com/codex/learn/best-practices)
-  for explicit outcomes, constraints, planning, and completion evidence.
-- [Michael Nygard's architecture decision records](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
-  for durable decisions and rationale in reviewable project files.
-
-## Family
-
-- [Code](https://github.com/benjaminstelzer/scoville-code) covers engineering scope, implementation, risk and validation.
-- [Plan](https://github.com/benjaminstelzer/scoville-plan) keeps Plans, Work Items, Decisions and their status in the repository.
-- [UI](https://github.com/benjaminstelzer/scoville-ui) covers UI implementation, information structure, accessibility and rendered checks, with an optional WordPress adapter.
-- [Handoff](https://github.com/benjaminstelzer/scoville-handoff) passes active work to another agent or session.
-- [Project Context Cleanup](https://github.com/benjaminstelzer/scoville-suite) keeps requested project rules and index text concise without losing required context.
-- [Skillwriter](https://github.com/benjaminstelzer/scoville-skillwriter) writes, simplifies and reviews Skills and reusable agent prompts.
+The [full instructions](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md) are what the agent reads.
+Sources: the [Agent Skills specification](https://agentskills.io/specification),
+[OpenAI's coding-agent best practices](https://developers.openai.com/codex/learn/best-practices)
+and [Michael Nygard's architecture decision records](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions).
 
 ## License
 

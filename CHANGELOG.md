@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-23 - A shorter README
+
+I rewrote the README. It now says what the Skill does, how to call it, what it needs and where it stops, and leaves out how the suite is built. The Skill itself is unchanged. The requirements name `gpt-6.2-sol` instead of `gpt-6.1-sol`.
+
 ## 2026-11-23 - The duplicate-ID advice names the next free ID; a Goal of `[]` is rejected
 
 After a duplicate Work Item ID the validator now names the next free ID itself and says that the marked line is the second occurrence in the file, not necessarily the newer item. The advice of the entry below left the calculation to the agent and could be read as pointing at the older item.
