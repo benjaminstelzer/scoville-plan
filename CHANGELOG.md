@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-23 - The Goal rule names no examples; validator advice that can be followed
+
+The sentence that keeps conditions on the working process out of Goal and Non-goals no longer names examples. The two it named, when work may start and what a session may touch, were the conditions of the test task, so the run after the change showed little. One run with `gpt-6.2-sol` on the sentence without examples created a first Plan from the same request: the result limit stands in Goal, the exclusion in Non-goals, "do not implement yet" appears nowhere, and the limit on what to access stands in the Instructions of both items. That is one run; it fits the sentence and does not prove it.
+
+After a duplicate Work Item ID the validator advised the next-ID helper, which stops on the same duplicate; it now says to take the ID one above the highest in the Plan. For an empty Goal one helper message advised `[]` while the validator says that Goal needs authored content; both now say the latter. A Decision is deleted only when no kept Decision names it in `superseded_by`; deleting it left that Decision without the link the validator requires.
+
+The size checker names the process ID when a capture was interrupted and its cleanup is unconfirmed, as it did after a timeout. The delivery reference now says what that ID is for: resolve the state of that process before a rerun.
+
 ## 2026-11-21 - Working conditions stay out of Goal and Non-goals
 
 Goal and Non-goals describe the result. A condition on the working process, such as when work may start or what a session may touch, is neither; where it binds later work it goes into the item's Instructions. In a test run a model had written "do not implement yet" and a limit on that session into Goal and Non-goals of a new Plan. One run with `gpt-6.2-sol` after the change created a first Plan from a request that named a result limit, an exclusion and the same two working conditions: the limit stands in Goal, the exclusion in Non-goals, and the working conditions appear nowhere in the Plan. The defect had appeared in one run, so one clean run fits the sentence and does not prove it.

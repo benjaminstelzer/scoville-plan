@@ -34,7 +34,8 @@ def plan_sections(text: str) -> dict[str, tuple[int, int]]:
         end = roots[index + 1].start() if index + 1 < len(roots) else len(text)
         if heading[2] != 'Work items' and not text[heading.end():end].strip():
             fail('Restore the known content of the empty section; do not invent it. '
-                 'Write `[]` where the section has nothing to record.', heading.start())
+                 + ('Write `[]` under Non-goals when there are no exclusions.' if heading[2] == 'Non-goals'
+                    else 'Goal needs authored content.'), heading.start())
         spans[heading[2]] = (heading.start(), end)
     work_start = roots[-1].end()
     work_headings = [h for h in headings if h.start() >= work_start]

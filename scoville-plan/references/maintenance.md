@@ -165,9 +165,10 @@ Age, status, a temporary title, filename or cancellation alone proves no end;
 cancellation or expiry proves no passed check, waived condition or new
 permission.
 
-Delete a Decision file only when the request asks to remove records: a
-temporary one whose end is proved, or a superseded one whose still-binding
-effects are readable in a current record. First search all records for its
+Delete a Decision file only when the request asks to remove records and no
+kept Decision names it in `superseded_by`: a temporary one whose end is
+proved, or a superseded one whose still-binding effects are readable in a
+current record. First search all records for its
 ID; keep constraints still in force, even unlinked, and what other open Plans
 depend on. Remove its links and reciprocal supersession links in the same
 update. Keep a record of uncertain meaning or relevance.

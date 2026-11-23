@@ -60,9 +60,9 @@ Keep Goal to the current target, its boundary and, for each still-binding
 plan-wide constraint, what it requires plus its Decision ID where one exists,
 as in `No new runtime dependency (ADR-0031)`: an agent may receive only the
 Decisions linked to its item, not every ID in Goal. Keep exclusions in
-Non-goals. Both describe the result: a condition on the working process, such
-as when work may start or what a session may touch, is neither, and where it
-binds later work it goes into the item's Instructions. Omit dated steering,
+Non-goals. Both describe the result: a condition on the working process is
+neither, and where it binds later work it goes into the item's Instructions.
+Omit dated steering,
 drafting notes, superseded constraints, copied ADR rationale and progress
 history. Messages about ongoing work do not
 authorize Goal edits; an authorized change replaces superseded constraint

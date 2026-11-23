@@ -1145,7 +1145,7 @@ class Validator:
                     "WORK_ITEM_ID_DUPLICATE",
                     parsed.logical_path,
                     "A Work Item ID occurs more than once in the Plan.",
-                    "Give the duplicate item a new ID from `select_context.py --next-id work-item --plan PLAN-NNNN`; do not renumber existing items.",
+                    "Give the duplicate item the ID one above the highest `W-NNN` in this Plan; do not renumber existing items.",
                     line=heading_line,
                     record=record,
                     observed=item_id,
