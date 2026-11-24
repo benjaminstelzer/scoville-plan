@@ -87,6 +87,9 @@ became a problem of its own, so maintenance became part of the design: keep
 current decisions and accepted results without turning routine updates into
 more work.
 
+On ten everyday planning tasks, `gpt-6.2-sol` completed all ten with Plan and
+Claude Opus 5.5 nine, with one run per task.
+
 The [full instructions](https://github.com/benjaminstelzer/scoville-plan/blob/main/scoville-plan/SKILL.md) are what the agent reads.
 Sources: the [Agent Skills specification](https://agentskills.io/specification),
 [OpenAI's coding-agent best practices](https://developers.openai.com/codex/learn/best-practices)
